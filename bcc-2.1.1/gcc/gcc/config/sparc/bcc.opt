@@ -1,0 +1,16 @@
+qbsp=
+Driver
+Select BSP
+
+qnano
+Driver
+Enable libc-nano
+
+qsvt
+Driver
+Enable single vector trapping
+
+qfix-tn0018
+Driver
+Enable workarounds for the GRLIB-TN-0018 errata
+

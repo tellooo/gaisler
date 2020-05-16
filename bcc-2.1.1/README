@@ -1,0 +1,20 @@
+See BCC User's Manual for information on how to build the toolchain and libbcc.
+
+The source code is based on the following commits:
+
+binutils:
+git://sourceware.org/git/binutils-gdb.git
+a9d9a104dde6a749f40ce5c4576a0042a7d52d1f
+
+newlib:
+git://sourceware.org/git/newlib-cygwin.git
+411882e2faba331120ca9d82e4422216ddfb5e3b
+
+gcc:
+git://gcc.gnu.org/git/gcc.git
+1bd23ca8c30f4827c4bea23deedf7ca33a86ffb5
+
+gdb:
+git://sourceware.org/git/binutils-gdb.git
+15146ff7370d5abad01dbecfacb0bf0e66a93cd6
+
