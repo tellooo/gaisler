@@ -1,0 +1,4 @@
+leon/mfix-at697f;@mcpu=leon@mfix-at697f
+leon/mfix-at697f/soft;@mcpu=leon@mfix-at697f@msoft-float
+leon/mfix-at697f/flat;@mcpu=leon@mfix-at697f@mflat
+leon/mfix-at697f/soft/flat;@mcpu=leon@mfix-at697f@msoft-float@mflat

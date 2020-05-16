@@ -1,0 +1,100 @@
+# Using
+This directory contains benchmark programs and short examples on how to use BCC
+API.
+
+To build all examples for all BSP:s, issue
+
+    $ make
+
+To build for specific BSP, set the BSPS make variable. For example:
+
+    $ make BSPS="gr712rc gr716"
+
+
+Examples are built with typical compiler options for the target BSP. This is
+defined by configuration files in the bspopts/<BSP> directory. The format is
+
+    DIR;@opt0@opt1@...
+
+It is also possible to build a single example by calling make <example>. The
+executables will be stored in the examples root directory. When building
+individual examples it is possible to control the behaviour by setting the
+following variables.
+
+CFLAGS      - Override common compilation flags
+
+
+# List of examples
+
+## hello.elf
+"Hello world" according to K&R.
+
+## mainarg.elf
+Demonstration on how to specify argc and argv parameters to main(), either
+at link time or load time. See the GRMON script mainarg.grmon.
+
+## dhrystone.elf
+Dhrystone C version 2.1, May 1988 benchmark which has been adapted to execute
+with BCC2.  It runs in non-interactive mode, 100000 runs throuth Dhrystone. The
+original unmodified Dhrystone C version 2.1 source is provided for reference in
+the directory dhrystone/reference.
+
+## stanford.elf
+Stanford benchmark version 4.2.
+
+## whetstone.elf
+Whestone benchmark, 21 November 1997
+
+## paranoia.elf
+Paranoia FPU test version 1.4
+
+## prime.elf
+Print prime numbers up to 113. This is a C++ example
+
+## timestamp.elf
+Example on how to use the BCC interrupt timestamp API.
+
+## ambapp.elf
+Example on how to use the <bcc/ambapp.h> interface for probing AMBA Plug&Play
+devices.
+
+## bcc_pil.elf
+Exercise the bcc_get_pil() and bcc_set_pil() user functions.
+
+## fast_interrupt.elf
+Demonstrates how to implement and install and trace a "fast interrupt handler"
+with bcc_set_trap().
+
+## bcc_fpu_state.elf
+Example on how to use bcc_fpu_save() and bcc_fpu_restore() for explicit FPU
+context management in nested ISR.
+
+## bcc_amp<index>.elf
+Demonstrates BCC AMP functionality:
+- Count CPU:s in system
+- Get own CPU ID
+- Start another CPU
+This example should be started with the script bcc_amp.grmon2 on AMP systems.
+
+# AMP message example
+Instructions for building the AMP message example are available in the file
+ampmsg/README.
+
+# GR716 ROM resident example
+Instructions for building the GR716 ROM resident example utilizing the GR716
+BOOTPROM are available in the file gr716_romres/README.
+
+# MKPROM+BCC2 example
+An example on how create a bootable ROM image from a BCC2 application is
+available in the directory mkprom-hello. The file mkprom-hello/README contains
+instructions on how to configure, build and debug the bootable image.
+
+# Register window accellerated flat interrupt
+Example interrupt trap handler which provides very low interrupt response time
+and a C compliant run-time environment. Instructions for building are available
+in the file flat_interrupt/README.
+
+# Software memory scrubber
+Demonstration on how to use AHBSTAT to detect and correct correctable RAM EDAC
+errors.
+

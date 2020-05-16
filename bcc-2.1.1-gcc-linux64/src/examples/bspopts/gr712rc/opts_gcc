@@ -1,0 +1,4 @@
+leon3/mfix-gr712rc;@mcpu=leon3@mfix-gr712rc
+leon3/mfix-gr712rc/soft;@mcpu=leon3@mfix-gr712rc@msoft-float
+leon3/mfix-gr712rc/flat;@mcpu=leon3@mfix-gr712rc@mflat
+leon3/mfix-gr712rc/soft/flat;@mcpu=leon3@mfix-gr712rc@msoft-float@mflat

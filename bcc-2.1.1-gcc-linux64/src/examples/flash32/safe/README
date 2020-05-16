@@ -1,0 +1,129 @@
+# ABOUT
+This directory contains an example on how to setup an execution environment
+with predicatable access to external memory. It can be used for example to
+avoid RAM accesses when manipulating the FTMCTRL checkbit bus using the EDAC
+diagnostic read/write bypass interface.
+
+The purpose is to demonstrate how the data bus (32-bit) and checkbit bus
+(8-bit) of external memories (MRAM, flash, etc) can be accessed on the FTMCTRL
+PROM bank. One use case is programming of 5 individual 8-bit flash memories
+connected in parallell to make up 32-bit + 8-bit checkbit bus.
+
+
+## ISOLATED EXECUTION ENVIRONMENT
+In a typical LEON system with external SRAM or SDRAM, the following (not
+complete list) can generate accesses to the external memory bus.
+1) CPU write
+2) CPU data cache miss
+3) CPU instruction fetch (IC)
+4) MMU lookup
+5) DMA from non-CPU devices (RMAP, GRSPW, GRETH, PCI, etc)
+
+With the "safe" environment executing in an on-chip RAM (FTAHBRAM in GR712RC),
+points 1), 2) and 3) above can be avoided. 4) and 5) can be avoided by
+disabling the corresponding functionality.
+
+It is assumed in the following that the safe environment is available in a
+memory not connected on the FTMCTRL memory controller.
+
+The user application can execute an operation in the safe environment by
+generating a software trap. The software trap handler sets up the new
+environment for executing in on-chip RAM by doing the following:
+- Install a trap table (%tbr) located in on-chip RAM
+- Sets stack pointer (%sp) to point into on-chip RAM
+- Call a user function, typically with its .text and .data in on-chip RAM.
+
+For the purpose of this example, a set of routines are prepared for operating
+the external checkbit (TCB) bus by using the FTMCTRL EDAC diagnostic bypass
+interface.
+
+
+## PROM EDAC ACCESS
+The main purpose of this example is to provide routines which can be used to
+read and write PROM EDAC data and checkbits in a controlled manner.
+
+The file safe_ops.c contains an implementation of the mbdrv interface. It is
+assumed that PROM bank is write enabled (mcfg1.pwen=1) and that PROM EDAC is
+enabled (mcfg3.pe=1) when using these functions.
+
+All read are performed with data cache forced miss so that data is read from
+external memory and not cache.
+
+### safe_write32plus8()
+This function can be used by the user to force write of both 32-bit data and
+8-bit TCB. FTMCTRL automatic generation of TCB is overridden with the EDAC
+diagnostic write bypass.
+
+### safe_read32plus8()
+EDAC read bypass is enabled and the data word is read. If a trap is generated
+by the read access, then the user gets an indication in the trap parameter. It
+is important to note that the data value may or may not correspond to what is
+in memory, since the memory controller can have tried to correct it. The tcb
+value is always correct however.
+
+### safe_write32data()
+TCB are generated and written automatically by the memory controller. No EDAC
+diagnostic operation.
+
+### safe_read32()
+This function can be used to read the raw data available on the 32-bit data
+bus, not taking TCB into account. EDAC is disabled before the read.
+
+
+## ENTRY POINTS
+The functions above are entry points internal to the safe environment. The
+application enters via the functions prefixed with trap_. The trap_ versions
+generate a software trap where the trap handler sets up the isolated
+environment before calling the "internal" functions above.
+
+
+# REQUIREMENTS
+This example requires BCC 2.0.2 or later.
+
+
+# BUILD
+  $ make
+This creates an elf file, safe.elf, which is linked to address 0xa0000000
+corresponding with the GR712RC on-chip RAM.
+
+
+# LOAD
+grmon2> load safe.elf
+  A0000000 .text                      4.9kB /   4.9kB   [===============>] 100%
+  A00013B0 .data                       40B              [===============>] 100%
+  Total size: 4.96kB (1.77Mbit/s)
+  Entry point 0xa0000000
+  Image safe.elf loaded
+
+
+# USAGE
+The image safe.elf is not a self-standing application, It is a run-time library
+which the main application can trap into.
+
+In this particular example, the safe.elf image has been prepared with functions
+for operating the FTMCTRL memory controller EDAC bypass interface. Connection
+between safe.elf and the main application, executing in SRAM/SDRAM, is
+available via the following definitions.
+
+  struct safe_info {
+          void (*trap_soft)(void);
+          struct mbdrv_ops *ops;
+  };
+  static struct safe_info **sinfo = (struct safe_info **) 0xa000000c;
+
+Memory for one safe_info record is allocated and set in safe.elf. The record is
+pointed to by the third word in on-chip RAM.
+
+The first entry is a trap handler suitable for using with the BCC function
+bcc_set_trap(). For example:
+
+  bcc_set_trap(255, (*sinfo)->trap_soft);
+
+The ops field of safe_info contains in this example a table of function
+pointers to use with the memory bus access interface (mbdrv.h).
+
+
+# EXAMPLE
+An example on how to use the "safe" environment is available in the 32+7-bit
+flash programming routines.
+

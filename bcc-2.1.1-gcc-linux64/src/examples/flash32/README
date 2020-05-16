@@ -1,0 +1,217 @@
+# ABOUT
+This is an example for the application note GRLIB-AN-0011:
+  FTMCTRL: 32-bit (P)ROM EDAC Checksum Programming.
+
+The example demonstrates how to program flash memories connected to the FTMCTRL
+PROM bank in 32-bit data + 8-bit checkbit configuration.  In particular, the
+solution mentioned for GR712RC in the application note is considered.
+
+For programming checkbits, the FTMCTRL EDAC diagnostic bypass interface is
+used. As noted in GRLIB-AN-0011, this is a globally activated interface which
+requires care to prevent other memory areas from being affected.
+
+The solution in this example is to access the PROM bank with diagnostic bypass
+interface only from a controlled "safe" environment. While the main application
+executes from external RAM and has its data in external RAM, the safe
+environment is installed in on-chip FTAHBRAM.
+
+When the flash program routines need to write or read the PROM bank, the safe
+environment will be engaged and the operation performed there. In summary it
+guarantees that no external RAM accesses are performed during the EDAC bypass
+operations on the PROM bank.
+
+This example could be adapted for custom GRLIB systems which have on-chip RAM
+or some other means of separate memory bus, like a second FTMCTRL.
+
+The example is divided into separate components as described below.
+
+
+## safe execution environment
+location: safe/
+
+This directory contains routines which set up an execution environment with
+predicatable access to external memory. It is used to avoid RAM accesses when
+manipulating the FTMCTRL checkbit bus with EDAC diagnostic bypass interface.
+
+See safe/README for more information.
+
+
+## bus access interface and implementation
+location: include/mbdrv.h, safe/safe_ops.c
+
+The header file mbdrv.h defines an interface for operating on a 32+8 bit data
+bus, with the FTMCTRL as model.
+
+In safe/safe_ops.c, there is an implementation of the interface which allows
+for safe access to FTMCTRL PROM bus. When the user calls the mbdrv.h interface
+routines, the implementation will generate the appropriate trap and continue
+execution in the memory bus operations from on-chip RAM.
+
+See safe/README for more information.
+
+
+## flash memory driver
+location: fl/
+
+The fl_ library is a library for operating on flash memory devices. It has
+support for different memory topology configurations. Actual bus access is
+performed via callbacks, and the library does not depend on any specific memory
+controller or flash device.
+
+For access to flash devices on EDAC checkbit buses, the user supplies the
+necessary memory bus access routines.
+
+See fl/README for more information.
+
+
+## main
+location: main.c
+
+The main program of the example ties the above components together. It allows
+the user to specify bus topology and performs some flash erasing and
+programming.
+
+Flash operations are demonstrated using the fl_ interface. All memory bus
+accesses and the EDAC specific management are abstracted in the fl_ and mbdrv
+interface.
+
+See the "USER CONFIGURATION" section in main.c for more information on how to
+customize the example.
+
+## PORTABILITY
+- fl_ library is not tied to any specific run-time.
+- safe execution environment depends on BCC 2.0.x.
+- main.c is a BCC 2.0.x application.
+
+
+# REQUIREMENTS
+This example has been developed for the following environment:
+  * GR712RC
+  * Flash memory on PROM bank
+      configurations: 1x8, 2x16, 3x16, 5x8
+  * BCC 2.0.2 or later.
+
+The following flash devices have been tested with this example
+  * UT8QNF8M8 64Mbit NOR Flash Memory
+    - config: 1x8, 2x16, 3x16, 5x8
+  * Intel style 64Mbit NOR Flash Memory (manuf 137, device 23)
+    - config: 1x8
+
+
+# BUILD
+  $ make -C safe/
+  $ make
+
+
+# LOAD
+Start GRMON with the -nb option to prevent execution to break at data access
+exception trap:
+
+  $ grmon -ftdi -u -nb
+
+The "safe" execution environment is loaded to AHBRAM and the example
+application to S(D)RAM.
+
+  grmon2> load safe/safe.elf
+  grmon2> load ex.elf
+  grmon2> run
+
+NOTE: It is the entry point of ex.elf S(D)RAM that is started. The AHBRAM
+routines are invoked typically by software traps from the main application.
+
+
+# LOGGING
+Debug logging can be enabled in both the main.c application and the fl_
+library. See the symbols MAIN_DEBUG and FL_DEBUG.
+
+
+# EXAMPLE
+Below is a transcript of the example in 3x16 bit flash configuration with flash
+memory starting at address 0. A sector is erased and then 13 data words are
+programmed at the start of the same sector. The program then print the written
+words.
+
+A "mem" command after the execution indicates that the 13 recently written
+words are read without error. Words 14 is read with error bus responde which is
+expected because both data and TCB bus is erased to all ones.
+
+
+grmon2> load safe/safe.elf
+  A0000000 .text                      4.9kB /   4.9kB   [===============>] 100%
+  A00013B0 .data                       40B              [===============>] 100%
+  Total size: 4.96kB (1.63Mbit/s)
+  Entry point 0xa0000000
+  Image /mnt/old/home/maberg/repos/flash32/src/safe/safe.elf loaded
+  
+grmon2> load ex.elf 
+  40000000 .text                     66.2kB /  66.2kB   [===============>] 100%
+  400108F0 .rodata                    2.2kB /   2.2kB   [===============>] 100%
+  400111C0 .data                      1.7kB /   1.7kB   [===============>] 100%
+  Total size: 70.17kB (1.46Mbit/s)
+  Entry point 0x40000000
+  Image /mnt/old/home/maberg/repos/flash32/src/ex.elf loaded
+
+grmon2> run
+---- EXAMPLE BEGIN ----
+CFI info for one device:
+family:    2 (AMD)
+size:      64 Mbit
+regions:   3 erase block regions
+region 1
+  blocks:  8
+  size:    8 KiB
+region 2
+  blocks:  126
+  size:    64 KiB
+region 3
+  blocks:  8
+  size:    8 KiB
+
+Erasing the sector 123 at address 00e80000 ...
+Programming data at address 0x00e80000 ...
+Programming data at address 0x00e80004 ...
+Programming data at address 0x00e80008 ...
+Programming data at address 0x00e8000c ...
+Programming data at address 0x00e80010 ...
+Programming data at address 0x00e80014 ...
+Programming data at address 0x00e80018 ...
+Programming data at address 0x00e8001c ...
+Programming data at address 0x00e80020 ...
+Programming data at address 0x00e80024 ...
+Programming data at address 0x00e80028 ...
+Programming data at address 0x00e8002c ...
+Programming data at address 0x00e80030 ...
+Reading back the programmed data ...
+0x00e80000: 00000000
+0x00e80004: 00000004
+0x00e80008: 00000008
+0x00e8000c: 0000000c
+0x00e80010: 00000010
+0x00e80014: 00000014
+0x00e80018: 00000018
+0x00e8001c: 0000001c
+0x00e80020: 00000020
+0x00e80024: 00000024
+0x00e80028: 00000028
+0x00e8002c: 0000002c
+0x00e80030: 00000030
+---- EXAMPLE END ----
+  
+  CPU 0:  Program exited normally.
+  CPU 1:  Power down mode
+  
+grmon2> set ::ahbstat0::status 0
+  
+grmon2> mem 0x00e80000 68
+  0x00e80000  00000000  00000004  00000008  0000000c    ................
+  0x00e80010  00000010  00000014  00000018  0000001c    ................
+  0x00e80020  00000020  00000024  00000028  0000002c    ... ...$...(...,
+  0x00e80030  00000030  ffffffff  ffffffff  ffffffff    ...0............
+  0x00e80040  ffffffff                                  ....
+  
+grmon2> info sys ahbstat0
+  ahbstat0  Cobham Gaisler  AHB Status Register    
+            APB: 80000F00 - 80001000
+            IRQ: 1
+            non-correctable read error of size 2 by master 2 at 0x00e80034
+

@@ -1,0 +1,115 @@
+# ABOUT
+This directory contains an example on how a BCC2 application can be embedded
+into a bootable ROM image with the MKPROM boot loader.
+
+MKPROM2 is documented in the MKPROM2 User's Manual.
+
+NOTE: MKPROM2 has a "rom resident" mode. It is currently not compatible with
+BCC2 applications.
+
+
+# BUILD
+  $ make MKPROMOPT=<options>
+
+A starting point for MKPROM options can be extracted with GRMON2 with the
+command 'info mkprom2'.
+
+
+## OUTPUT FILES
+- hello.elf
+  is a RAM loadable image which does not contain the boot loader. It is linked
+  for execution in RAM. This RAM image does not configure the memory
+  controller.
+
+- hello.prom
+  contains the boot loader and a compressed version of hello.elf. It is linked
+  for storage in non-volatile memory, typically on address 0x00000000. The
+  embedded boot loader configures the memory controller and other peripherals
+  and then extracts the RAM image (hello.elf) to its designated RAM location
+  where it is executed.
+
+
+# LOAD
+The procedure for loading the application into non-volatile memory depends on
+the target system. The GRMON 'flash' command is typically used. For an MRAM
+memory connected to a PROM bank, loading is done with 'load -wprot'.
+
+
+# RUN
+A PROM application starts at power-on or system reset.
+
+
+# DEBUGGING
+For debugging of the boot loader or application, the bootable image can also be
+started from within GRMON2.
+
+The following assumes that the bootable image (hello.prom) has been preloaded
+to the target in a non-volatile memory at address 0x00000000.
+
+Symbol information can be loaded into GRMON from the RAM image for later
+symbolic debugging. Note that loading symbols does not affect the target memory
+content.
+
+grmon2> symbols hello.elf
+  Loaded 404 symbols
+
+Likewise the boot loader symbols can be loaded into GRMON.
+
+grmon2> symbols hello.prom
+  Loaded 214 symbols
+
+UART forwarding can be enabled with the command 'forward enable uart0'. The
+boot loader will disable the UART hardware debug feature as part of its
+initialization. There is a "trick" around this: reenable the forwarding after
+it is disabled by the boot loader. Set a hard breakpoint on the symbol putsx, which
+is part of the MKPROM console printout.
+
+grmon2> bp hard putsx
+  Hardware breakpoint 1 at <putsx>
+
+To boot the image, we redirect execution to address 0x00000000. Note that 'go'
+is used instead of 'run' since GRMON target initialization is not wanted.
+
+grmon2> go 0
+
+  CPU 0:  breakpoint 1 hit
+          0x00001118: 03000005  sethi  %hi(0x1400), %g1  <putsx+4>
+  CPU 1:  Power down mode
+
+grmon2> bp del
+
+grmon2> cont
+
+
+  MKPROM2 boot loader v2.0.61
+  Copyright Cobham Gaisler AB - all rights reserved
+
+  system clock   : 50.0 MHz
+  baud rate      : 19171 baud
+  prom           : 512 K, (2/2) ws (r/w)
+  sdram          : 262144 M, 1 bank(s), 11-bit column
+  sdram          : cas: 2, trp: 40 ns, trfc: 100 ns, refresh 7.8 us
+
+  decompressing .text to 0x40000000
+  decompressing .rodata to 0x40005530
+  decompressing .data to 0x40005630
+
+  starting hello.elf
+
+--- EXAMPLE BEGIN ---
+
+Hello World!
+[... application continues here ...]
+
+
+The breakpoint at putsx will trig just before the first boot loader character
+is printed.  UART forwarding is reactivated automatically when execution is
+resumed with the 'cont' command.
+
+The example output above comes from an MKPROM image which was configured for
+SDRAM, with parameters extracted from the GRMON command 'info mkprom2'.
+
+It is possible to investigate how the boot loader configures the system by
+setting watchpoints on register addresses. The memory controller values set by
+the boot loader can be listed with 'info reg -v mctrl0', etc.
+

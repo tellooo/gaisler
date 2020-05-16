@@ -1,0 +1,77 @@
+# ABOUT
+This directory contains a BCC2 ROM resident example for GR716.
+
+GR716 includes an on-chip Boot loader "BOOTPROM" which allows for booting from
+different sources. This example demonstrates booting from an external memory
+mapped non-volatile memory, such as external ROM or SPI memory. It is called
+"direct boot", as compared to network boot where the application is first
+loaded to volatile memory.
+
+The following is demonstrated by this example:
+- How to create a BCC application for use with the GR716 BOOTPROM.
+- How to link the application to execute from external ROM.
+- How to do GR716 chip specific configurations with BCC.
+
+This example uses the linkcmds-extprom linker script. Application is linked to
+external ROM starting at address 0x01000000.
+
+- ".text" is linked to ROM and application executes from there.
+- ".rodata" is linked to ROM and is referenced from there by application.
+- ".data" section is copied from ROM to on-chip data RAM at BCC run-time
+  initialization.
+- ".bss" is allocated to on-chip data RAM. ".bss" is never stored in persistent
+  memory.
+
+See the BCC User's Manual for more information on different linker scripts.
+
+This example provides its own SVT tables instead of using the ones from
+libbcc.a. The reason is that we want to link them to .rodata space instead of
+.data. At reset time, the .data space is not yet ready so the trap handler can
+not reference SVT tables in .data.
+
+# TARGET HARDWARE
+This example is customized for GR716 with 20 MHz system clock and an external
+ROM connected on the memory bus. System frequency can be adapted for other
+systems by modifying the variable __bsp_sysfreq in the file main.c.
+
+By specifying __bsp_sysfreq, the GPTIMER0 and APBUART0 are configured with
+appropriate values. The UART BAUD is set to 38400 and the timer scaler is set
+for 1 Hz tick.
+
+
+# BUILD
+
+  $ make
+
+A memory map is generated in the file named romres.map. For an overview of LMA
+(Load Memory Address) VMA (Virtual Memory Address) for the different sections,
+the "objdump" utility can be used:
+
+  $ sparc-gaisler-elf-objdump -h romres.elf
+
+
+# LOAD
+Information on how to load the application and configure the GR716 for boot
+from non-volatile memory is available in the GR716 Data Sheet and User's
+Manual. GRMON is typically used to load the image.
+
+
+# RUN
+The application executes on reset according to the GR716 reset strap signals.
+It is also possible to start the application via BOOTPROM boot loader with
+GRMON.
+
+  $ grmon <debuglink> -u
+  [...]
+  grmon2> symbols romres.elf
+  grmon2> go 0
+  [...]
+
+
+# DEBUG
+
+When debugging with GRMON, hardware breakpoints can be used on the ROM resident
+code. They are inserted with 'bp hard <symbol>'. Software breakpoints rely on
+the ability to inject data in the instruction memory and is not possible on
+read-only instruction memory.
+

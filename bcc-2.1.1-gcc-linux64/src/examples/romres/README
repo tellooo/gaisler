@@ -1,0 +1,50 @@
+Build
+=====
+
+  $ make
+
+Run in TSIM
+===========
+
+Requirements: TSIM3
+
+  $ tsim-leon3 -ut700
+
+   TSIM3 LEON3 SPARC simulator
+
+   Copyright (C) 2019, Cobham Gaisler - all rights reserved.
+   For latest updates, go to https://www.gaisler.com/
+   Comments or bug-reports to support@gaisler.com
+
+  Number of CPUs: 1
+  system frequency: 50.000 MHz
+  using 64-bit time
+  Allocated 4096 KiB SRAM memory, in 1 bank at 0x40000000
+  Allocated 32 MiB SDRAM memory, in 1 bank at 0x60000000
+  Allocated 2048 KiB ROM memory at 0x00000000
+  icache: 4 * 4 KiB, 32 bytes/line (16 KiB total)
+  dcache: 4 * 4 KiB, 16 bytes/line (16 KiB total)
+  tsim> load ex.elf 
+    section: .text, addr: 0x0, size 21136 bytes
+    section: .rodata, addr: 0x5290, size 256 bytes
+    section: .data, addr: 0x5390, size 152 bytes
+    Read 371 symbols
+  tsim> boot
+    Cold booting from 0x00000000
+
+  --- EXAMPLE BEGIN ---
+  tick   1 | 
+  tick   2 | 
+  tick   3 | 
+  tick   4 | 
+  tick   5 | 
+  tick   6 | 
+  tick   7 | 
+
+    
+    
+    Interrupt!
+    
+     Stopped at time 957731108 (19.154622 s)
+  tsim> q
+

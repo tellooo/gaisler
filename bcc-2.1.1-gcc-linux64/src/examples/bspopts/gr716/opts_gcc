@@ -1,0 +1,5 @@
+leon3_svt;@mcpu=leon3@qsvt@qnano@Wl,-u,_printf_float
+leon3;@mcpu=leon3@qnano@Wl,-u,_printf_float
+leon3v7;@mcpu=leon3v7@qnano@Wl,-u,_printf_float
+leon3/soft;@mcpu=leon3@msoft-float@qnano@Wl,-u,_printf_float
+leon3v7/soft;@mcpu=leon3v7@msoft-float@qnano@Wl,-u,_printf_float

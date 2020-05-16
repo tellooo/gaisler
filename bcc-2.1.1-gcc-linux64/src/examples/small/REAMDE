@@ -1,0 +1,16 @@
+# ABOUT
+This example demonstrates how to build a program with small footprint.
+
+
+# BUILD
+
+  $ make
+
+Memory map is in the file named small.map.
+Disassembly is in the file named small.dis.
+
+Typical size budget is less than 4 KiB.
+  $ sparc-gaisler-elf-size small.elf
+     text    data     bss     dec     hex filename
+     3184     496     344    4024     fb8 small.elf
+

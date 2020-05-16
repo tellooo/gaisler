@@ -1,0 +1,15 @@
+load main.elf
+puts ""
+puts "main() parameters set at link time"
+run
+puts ""
+
+load main.elf
+puts ""
+set some_addr [silent symbols lookup some_other_strings]
+wmem __bcc_argc 3
+wmem __bcc_argvp $some_addr
+puts "main() parameters set at load time"
+run
+puts ""
+

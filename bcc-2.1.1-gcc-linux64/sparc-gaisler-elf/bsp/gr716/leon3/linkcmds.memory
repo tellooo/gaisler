@@ -1,0 +1,17 @@
+/*
+ * GR716 memory map
+ *
+ * LENGTH values represent the maximum possible. All memory regions may not be
+ * available on all systems. bootprom, dram and iram are always available.
+ */
+MEMORY
+{
+  bootprom      : ORIGIN = 0x00000000, LENGTH = 4K
+  extprom       : ORIGIN = 0x01000000, LENGTH = 16M
+  spi0          : ORIGIN = 0x02000000, LENGTH = 32M
+  spi1          : ORIGIN = 0x04000000, LENGTH = 32M
+  dram          : ORIGIN = 0x30000000, LENGTH = 64K
+  iram          : ORIGIN = 0x31000000, LENGTH = 128K
+  extram        : ORIGIN = 0x40000000, LENGTH = 256M
+}
+

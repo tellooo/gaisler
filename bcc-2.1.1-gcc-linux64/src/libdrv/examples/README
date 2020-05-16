@@ -1,0 +1,40 @@
+HOW TO COMPILE
+==============
+Make sure that sparc-gaisler-elf-gcc can be found in the PATH (or modify variablei. Then call 'make' to build all tests. It is also possible to build the test in a single directory. 
+
+TARGETS
+-------
+
+all         - Build all tests
+clean       - Clean
+<directory> - Build the examples in directory
+
+VARIABLES
+---------
+
+CFLAGS      - Add extra compiler flags
+LDFLAGS     - Add extra linker flags
+BSP         - Select BSP
+BINDIR      - Directory to put all executables
+OBJDIR      - Directory to put all compiled object files
+
+EXAMPLE
+-------
+
+$ make BSP=gr716 all
+...
+
+HOW TO RUN
+==========
+Use GRMON 3 to load and run the applications. See README in each directory for additional requirments.
+
+EXAMPLE
+-------
+
+$ grmon -xilusb -u
+...
+grmon3> load bin/uart.elf
+...
+grmon3> run
+
+

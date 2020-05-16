@@ -1,0 +1,43 @@
+# ABOUT
+This directory contains a BCC2 AMP example which demonstrates:
+
+- How to provide AMP related information to a BCC2 application
+- Multi-processor lock using SPARC ldstub on shared memory location
+- Simple job dispatching on other in-system processors
+- GRMON2 setup for running AMP application
+- BCC2 functionality for processor start and power down
+
+For more information on messages and ports, see msg.h.
+
+
+# BUILD
+GR712RC and GR740 is supported. Two processors are used in both cases. In the
+ampmsg directory, issue:
+
+  $ make BSP=gr712rc clean all
+OR 
+  $ make BSP=gr740 clean all
+
+
+# RUN
+A GRMON2 script is created as part of building the example. It is named
+ampmsg.tcl and can be used like this:
+
+  $ grmon <debuglink> -u
+  [...]
+  grmon2> batch ampmsg.tcl
+  [...]
+  grmon2> run
+  [...]
+
+
+# DEBUG
+Mutex debugging can be enabled by setting the define "MUTEX_DEBUG" to 1 (in
+mutex.c or with gcc -DMUTEX_DEBUG=1).
+
+Interesting places to put breakpoints are
+  - mutex_lock()
+  - mutex_lock()
+Note that these symbols appear once per CPU, so use the GRMON2 commands 'cpu
+<index>' and 'bp hard <symbol> cpux'.
+

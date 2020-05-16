@@ -1,0 +1,39 @@
+# ABOUT
+This directory contains a library for operating on flash memory devices. It has
+support for different topology configurations.
+
+The library is portable across LEON systems. It does not depend on any specific
+memory controller or flash device. For access to flash devices on EDAC checkbit
+buses, the user shall supply the necessary memory bus access routines. The
+library itself provides built-in access for non-EDAC bus topologies.
+
+Supported configurations:
+  NAME     DATA BUS   EDAC
+  "1x8"    1x8  bit   no EDAC bus (but 8-bit EDAC should work)
+  "2x16"   2x16 bit   no EDAC bus
+  "5x8"    4x8  bit   1x8 bit EDAC bus
+  "3x16"   2x16 bit   1x8 bit EDAC bus
+
+AMD style flash devices are supported in all configurations above. Intel style
+flash is supported in "1x8".
+
+Most of the code in this library is for handling bus operations and generating
+the correct addressing. The actul flash operations are isolated into the files:
+- fl_amd32.c    AMD style flash on 32-bit (plus EDAC) bus
+- fl_amd8.c     AMD style flash on 8-bit bus
+- fl_i8.c       Intel style flash on 8-bit bus
+
+Adding new flash operations can be done by extending the operation files above
+and the struct fl_ops data type.
+
+
+# USAGE
+This library is designed to be linked with an application. The file
+include/fl.h is the public interface containing data types and function
+prototypes.
+
+
+# EXAMPLE
+A demonstration on how to use this library is available in the
+flash programming example.
+

@@ -1,0 +1,276 @@
+---------------- 2.0.8 ------------------------------------------
+
+2019-10-09      doc: renamed spi_read() -> spi_read32() and
+                spi_write() -> spi_write32()
+
+2019-10-09      drv/spi: implemented spi_read32() and spi_write32()
+
+2019-10-09      drv/spi: Fixed an issue with 16-bit reads in spi_read()
+
+2019-06-14      drv/grspw: corrected link state enums
+
+2019-05-13      GR716 examples are built with floating point number string
+                format support
+
+---------------- 2.0.7 ------------------------------------------
+
+2019-04-30      doc: added table "GR716 BSP feateure support in BCC"
+
+2019-04-29      bsp/gr716: added api for configuring PLL and pin configuration
+                See BCC-UM section "Board Support Packages" -> "GR716"
+
+2019-04-26      drv/grcan: example allows to configure bus selection
+
+2019-04-26      drv/grspw: example has got improved GR716 initialization
+                Clock gating, LVDS and PLL is configured
+
+2019-04-16      bsp/gr716: default BAUD is now 38400 (was 19200)
+
+2019-04-10      drv/memprot: fixed incorrect register base for GR716 memprot0
+
+2019-04-10      Added example for clock gating driver.
+
+                Available in libdrv/examples/clkgate
+
+2019-04-09      examples/svt-custom: Added example on how to install custom
+                handler for trap 0x2b when SVT is used.
+
+                Available in examples/svt-custom
+
+2019-04-03      _exit() always does move 1,%1,; ta 0
+
+2019-04-03      examples/trap-budget: Makefile fixup
+
+---------------- 2.0.6 ------------------------------------------
+
+2019-03-19      Relocated SVT tables .rodata to simplify ROM resident
+                booting on GR716.
+                - Does not affect MVT operation
+                - Does not affect SVT operation when linking program to RAM.
+
+2019-03-18      Added memory scrubber (MEMSCRUB) driver
+
+2019-03-15      examples/mkprom-hello updated to include mkprom -freq option.
+
+2019-03-05      Updated GR716 APBUART init behavior: When -qbsp=gr716
+                is used, the APBUART is NOT initialized if UART debug
+                forwarding is enabled. This is determined based on the
+                current values of APBUART_CTRL_DB AND APBUART_CTRL_FL.
+
+                The behavior is described in BCC User's Manual, section 7.4.2.
+
+                Custom UART initialization behavior can be defined
+                in the application by implementing a function named
+                __bcc_con_init().  See the BCC User's Manual for more
+                information.
+
+2019-02-12      Added GR716 memory protection unit (MEMPROT) driver
+
+2019-02-07      Added I2C master driver
+
+2019-02-01      Added clock gating unit driver
+
+2019-01-31      Updated GR716 static Plug&Play information
+
+2019-01-14      Do not distribute libg.a and libg_nano.a
+
+---------------- 2.0.5 ------------------------------------------
+
+2018-12-17      New peripheral drivers for BCC:
+                  - SpaceWire packet driver (GRSPW)
+                  - GR1553 (bus controller, remote terminal, bus monitor)
+                  - GRCAN
+                  - GPIO
+                  - AHBSTAT
+
+                * Documentation is available in the BCC User's Manual, chapter
+                named "Device driver reference".
+
+                * Header files (C API) are installed in
+                    src/libdrv/src/include/drv
+
+                * Examples are installed in
+                    src/libdrv/examples
+
+
+2018-12-03      ambapp_ids.h has been updated and is now generated from GRLIB
+                device.vhd.
+
+
+2018-11-23      Added example on how to measure time budgets:
+                  - window_overflow and window_underflow trap handlers
+                  - interrupt disable and interrupt enable
+
+                The example is installed in src/examples/trap-budget.
+
+
+2018-11-20      SPI driver updated with improved slave select control. Added:
+                  - automatic slave select
+                  - clock gap and automatic slave select during gap
+                  - automatic slave select delay (ASELDEL)
+                  - configuring "ignore SPISEL input" functionality
+
+
+2018-11-20      Added bcc_timer_tick_init_period(uint32_t usec_per_tick) which
+                is similar to bcc_timer_tick_init() and takes a parameter
+                specifying number of microseconds per tick.
+
+
+2018-11-14      The interrupt controller timestamp API now has the control
+                and access functions as inline C functions. No API change.
+
+
+2018-11-08      Improved interrupt disable performance. The functions
+                bcc_int_disable() and bcc_int_enable() now inlines the trap
+                instruction. For BPS:s supporting partial write PSR, the
+                PSR is updated inline without taking the trap. No API change.
+
+---------------- 2.0.4 ------------------------------------------
+
+2018-10-31      Fixed an issue with GDB on Windows printing "socket: No error".
+
+2018-10-23      Fixed an issue with probing the base address
+                for IRQ(A)MP interrupt controllers. Only affects applications
+                where the CPU has been preassigned a non-zero interrupt
+                controller base.
+
+2018-09-27      Added software scrub example: AHBSTAT is used to detect
+                correctable errors, which are corrected by performing
+                atomic write. The example is installed in src/examples/swscrub.
+
+---------------- 2.0.3 ------------------------------------------
+
+2018-09-20      argc and argv parameters to main can be set at link or
+                load time via __bcc_argc and __bcc_argvp. See the BCC User's
+                Manual section named "Parameters to main()".
+
+2018-09-20      ambapp: The user function "fn" given to ambapp_visit() has got
+                an updated definition for the "depth" parameter: the first
+                bridge depth is 0 and the depth increments with one for each
+                recursed bridge.
+
+2018-09-19      ambapp scan now recurses into buses behind L2CACHE and GRIOMMU.
+
+2018-09-18      struct ambapp_{ahb,apb}_info now has an entry fields pointing
+                to the corresponding Plug&Play configuration record.
+
+2018-09-18      Fixed ambapp.h AHB membar mask: a disabled AHB memory bank now
+                has mask 0 in the amba_ahb->mask field.
+
+2018-09-13      Added interrupt timestamp API. See
+                <bcc/timestamp.h> and the bcc_timestamp_* functions in the
+                BCC User's Manual. An example using the interrupt timestamp
+                API is available in src/examples/timestamp.
+
+2018-09-11      Availability of IRQMP interrupt remap support is probed by
+                the leon3 BSP. It is known at link-time for the other BSP:s.
+
+2018-09-10      Added driver library for programming GRLIB peripherals.
+                Provided as target library and in source code. See the
+                "Device drivers reference" in the BCC User's Manual.
+
+2018-08-29      sparc-gaisler-elf-clang uses dwarf 2 debug by default.
+
+2018-08-29      Added support for libatomic. This means that programs using the
+                <stdatomic.h> interface should link, independent of hardware
+                support for atomic instructions. (Note however that BCC is
+                still single-threaded.)
+
+2018-08-27      Cleaned up the "ampmsg" example.
+
+2018-04-17      Added example on how to program flash memories configured in
+                32-bit data + 7 bit BCH.  See src/examples/flash32
+
+2018-03-05      Make sure CLOCKS_PER_SEC is 1000000.
+
+2018-01-05      GCC is compiled with support for link-time optimization.
+                Link-time optimization is activated with the GCC -flto option.
+
+2018-01-04      Relaxed LLVM host requirements. (Linux-3.5.x, glibc-2.15 or
+                higher)
+
+---------------- 2.0.2 ------------------------------------------
+
+2017-12-15      Updated examples/gr716_romres to use SVT tables in .rodata
+                instead of .data. This is because .data is not ready at reset trap time.
+
+2017-12-15      Moved SVT lookup-tables to libbcc.a so application can override
+                them. Useful for some ROM resident applications.
+
+2017-12-15      Added functions for LEON2/LEON3/LEON4 cache control register access:
+                bcc_set_ccr() and bcc_get_ccr(). Bit definitions are available in <bcc/leon.h>
+
+2017-12-15      Added linkcmds-any for linking application to any address,
+                overriding BSP knowledge of memory regions.  Useful for
+                memory controllers mapped to non-nominal locations and
+                executing RAM image from MRAM.
+
+2017-12-14      Updated multilib definitions for the binary distribution
+                (GCC version). See
+                  * BCC User's Manual, Appendix A
+                and for details:
+                  * $ sparc-gaisler-elf-gcc -print-multi-lib
+
+2017-12-14      Upgraded GCC to version 7.2.0. The major user level changes
+                for this compiler upgrade is the addition of the following
+                GCC compiler options:
+                  -mfix-gr712rc
+                  -mfix-ut700
+                  -mfix-tn0013
+                These new options select appropriate code generation for
+                respective LEON components and are described in the BCC
+                User's Manual. The Appendix named "Recommended GCC options
+                for LEON systems" has also been updated to reflect the options.
+
+                With the upgrade to GCC 7.2.0, BCC version 2.0.2 adds
+                workarounds for the following techincal notes in addition
+                to the ones already available in earlier versions.
+                - GRLIB-TN-0010
+                - GRLIB-TN-0011
+                - GRLIB-TN-0012
+                - GRLIB-TN-0013
+                NOTE: The LLVM version of BCC 2.0.2 does currently not
+                include the workarounds.
+
+                For general information on changes in GCC 7.2.0 compared to
+                GCC 4.9.4, see the corresponding GCC release change notes
+                at http://gcc.gnu.org/.
+
+2017-06-28      Added example on how to achieve very low interrupt response times by utilising
+                multiple register windows in FLAT register window model. Described in
+                examples/flat_interrupt.
+
+2017-06-28      Application is free to use %g6 and %g7 for any purpose. %g5 can
+                also be used by application if -mflat is not used. See section
+                "Register usage" in User's Manual.
+
+---------------- 2.0.1 ------------------------------------------
+
+2017-06-16      Allow the application to configure heap memory location and
+                size. Described in User's Manual section "Heap memory
+                configuration".
+
+2017-06-15      Generate and distribute .md5 files with BCC archives.
+
+2017-06-15      Fixed ambapp.h masks (was mask+1).
+
+2017-06-13      Added BCC run-time support and multilibs for GCC -mflat. This
+                enables the single register window model where the compiler
+                does not generate save/restore instructions, and eliminates
+                window overflow/underflow at run-time.
+
+2017-06-13      GCC: Enable -mfix-b2bst with -mfix-ut699. This prevents B2BST
+                errata sequences in the mfix-ut699 multilibs.
+
+2017-06-13      GCC: Fix B2BST issue in function prologues when using -mflat.
+
+2017-06-09      Do not store %psr on stack at interrupt entry.
+
+2017-06-07      Include clang-format
+
+2017-06-07      Reduce size of LLVM binary archives
+
+---------------- 2.0.0 ------------------------------------------
+
+2017-05-29      First public release of BCC 2
+

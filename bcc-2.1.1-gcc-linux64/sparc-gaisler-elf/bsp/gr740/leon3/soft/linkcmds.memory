@@ -1,0 +1,6 @@
+MEMORY
+{
+  rom     : ORIGIN = 0xc0000000, LENGTH = 256M
+  ram     : ORIGIN = 0x00000000, LENGTH = 2048M
+}
+

@@ -1,0 +1,33 @@
+HDSW_ROOT        = src
+
+BUILDDIR        ?= build
+DESTDIR         ?= dest
+
+OUTDIR           = $(BUILDDIR)/$(ml_dir)
+DRV_LIBDIR       = $(DESTDIR)/lib/$(ml_dir)
+OPTFLAGS         = $(ml_opt)
+
+HOST=sparc-gaisler-elf
+CC=$(HOST)-gcc
+CFLAGS  =
+CFLAGS += -std=c99 -Wall -Wextra -pedantic
+CFLAGS += -O2
+CFLAGS += $(OPTFLAGS)
+
+AS=$(HOST)-as
+AR=$(HOST)-ar
+ARFLAGS=rv
+OBJDUMP=$(HOST)-objdump
+SIZE=$(HOST)-size
+
+DRV_OSAL_BACKEND=bcc2
+
+all:
+
+include $(HDSW_ROOT)/drv.mk
+
+all: $(LIBDRV)
+
+.PHONY: clean
+clean: drvclean
+

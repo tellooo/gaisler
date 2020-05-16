@@ -1,0 +1,26 @@
+2.1.1
+ - Support for PSR.VER=5 (LEON5)
+ - Added ROM resident application example
+ - Added workaround for GRLIB-TN-0018. The workaround is enabled by GCC and
+   Clang if one of the following options is given when linking:
+   * -qfix-tn0018
+   * -mfix-gr712rc
+   * -mfix-ut700
+   * -mfix-ut699 (GCC only)
+ - The recommended compile and link options for LEON systems have been updated
+   in the BCC User's Manual, Appendix A and B.
+
+2.1.0 (2019-11-06)
+ - BCC 2.1.0 starts a new minor release series after BCC 2.0.8. The major new
+   features are:
+   * Updated to Clang 8.0.0
+   * Updated to GDB 8.2.1
+   * Updated to Binutils 2.32
+   * GCC generates debug information in dwarf-4 format by default.
+   * All prebuilt target libraries have dwarf-4 debug information.
+ - Fixed typos in timer driver documentation
+ - Updated User Manual appendix "Recommended Clang options"
+ - GDB 6.8 can be found in bin/sparc-gaisler-elf-gdb-6.8
+ - GRCAN driver documentation describes grcan_txint(), grcan_rxint() and
+   grcan_set_isr().
+

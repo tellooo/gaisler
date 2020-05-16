@@ -1,0 +1,20 @@
+This is an example on how to read blocks of RAM and rewriting when a
+correctable error is detected.
+
+The example demonstrates how the AHBSTAT can be used to monitor and detect
+errors and also how a memory location can be rewritten to RAM in a safe
+(atomic) way.
+
+AMBA Plug&Play is used to discover the AHBSTAT peripheral.
+
+Included in this directory is also a GRMON script which can be used to inject
+single bit error in RAM.
+
+The example reads/writes with MMU and cache bypass (ASI 0x1C), which means that
+it operates on physical addresses and there is not need to temporarily disable
+MMU or cache.
+
+The example should work on UT699E, UT700, GR712RC and more components out of
+the box. But it is not compatible with UT699, due to lack of the casa
+instruction.
+

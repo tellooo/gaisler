@@ -1,0 +1,3 @@
+Generic BSP for LEON3 systems
+Uses AMBA Plug & Play to scan for devices etc.
+

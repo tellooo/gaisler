@@ -1,0 +1,120 @@
+# ABOUT
+This directory contains an example on how to to override the BCC default
+interrupt trap handler.
+
+## ASSUMPTIONS
+- Application is compiled with the GCC -mflat option
+- Number of register windows in the system is more than number of unmasked
+  SPARC interrupt request levels. This is always true for GR716.
+
+# IDEA
+An application compiled with the single register window model (FLAT) using GCC
+option -mflat does not issue any SAVE or RESTORE instructions so it executes
+inside a single window.  When a trap is taken (interrupt trap), the current
+window is decremented with one.
+
+The idea of the example interrupt trap handler is to execute each level of the
+interrupt nest hierarchy in its own window. Since the FLAT ABI preserves local
+and input registers as needed, there is no need for the interrupt trap handler
+to store these. The output registers become the next interrupts input registers
+and are thus "protected" by the ABI. Only the global registers have to be
+stored/restored when jumping between interrupt nest levels. There is room to
+temporarily store the global registers in the local registers of the trap
+window.
+
+## FEATURES
+- Interrupt ack to ISR is 22 cycles (constant)
+- Interrupt exit is 15 cycles
+- No registers stored to memory in interrupt trap
+- No registers loaded from memory in interrupt trap (except to get ISR handler)
+- Supports interrupt nesting
+- ABI (C) functions can be registered as interrupt handler using the
+  application specific function fl_isr_register()
+- No application specific considerations
+
+## LIMITATIONS
+- If SVT is used, then 11 cycles have to be added for the ack to ISR cycles
+- Requires one register window per nested interrupt request level
+
+# INSTRUCTION TRACE ANALYSIS AND RESULTS
+The following instruction trace demonstrates how an interrupt trap is taken and
+a user ISR handler is executed. The user ISR handler increments a variable in
+memory and then returns.
+
+Output from GRMON2 'hist' command.
+
+TIME ADDR      INSTRUCTION / AHB             RESULT
+838  400017CC  mov  0, %g1                   [00000000]
+839  400017D0  st  %o0, [%g2 + 0x8]          [80000208 00000002]
+841  400017D4  retl                          [400017D4]
+842  400017D8  mov  %g1, %o0                 [00000000]
+842  80000208  AHB write  mst=0  size=2      [00000002]
+845  400013CC  add  %i5, %i1, %i5            [  TRAP  ] # Interrupted instruction
+851  40000110  mov  %psr, %l0                [F34000C0] # intack (execute in trap table. add around 10 cycles for SVT)
+852  40000114  sethi  %hi(0x40001400), %l4   [40001400]
+853  40000118  jmp  %l4 + 0x24               [40000118]
+854  4000011C  mov  1, %l3                   [00000001]
+857  40001424  andn  %l0, 0xF00, %o0         [F34000C0] # interrupt trap handler entry
+858  40001428  sll  %l3, 8, %l4              [00000100]
+859  4000142C  or  %l4, %o0, %o0             [F34001C0]
+860  40001430  mov  %o0, 0x20, %psr          [F34001E0] # Enable higher level interrupts (ET=1, PIL=level)
+861  40001434  sll  %l3, 3, %o5              [00000008]
+862  40001438  mov  %y, %l3                  [00000000]
+863  4000143C  mov  %g4, %l4                 [FFFFFC00] # Start storing globals in locals of interrupt window
+864  40001440  ldd  [%g7 + %o5], %o0         [00000001 400012F0] # Load user handler and its argument
+866  40001444  mov  %g1, %l5                 [00000000] # Interleaved global save to limit effect of load dependency
+867  40001448  mov  %g2, %l6                 [80000200]
+868  4000144C  mov  %g3, %l7                 [0000FFFE]
+869  40001450  call  %o1                     [40001450]
+870  40001454  add  %fp, -96, %sp            [40FFFED0]
+873  400012F0  sll  %o0, 2, %o0              [  TRAP  ]
+879  400012F0  sll  %o0, 2, %o0              [00000004] # First instruction of user handler (ISR)
+880  400012F4  sethi  %hi(0x40004400), %g1   [  TRAP  ]
+886  400012F4  sethi  %hi(0x40004400), %g1   [40004400]
+887  400012F8  or  %g1, 0x360, %g1           [40004760]
+888  400012FC  ld  [%g1 + %o0], %g2          [00000004]
+890  40001300  add  %g2, 1, %g2              [00000005]
+891  40001304  retl                          [40001304]
+892  40001308  st  %g2, [%g1 + %o0]          [40004764 00000005] # Last instruction of user handler
+895  40001458  mov  %l0, %psr                [F34000C0] # Disable higher level interrupts (ET=0, PIL=from prev. nest level)
+896  4000145C  mov  %l3, %y                  [00000000] # restore globals from interrupt window locals
+897  40001460  mov  %l4, %g4                 [FFFFFC00]
+897  40004764  AHB write  mst=0  size=2      [00000005] # (this is the write from the user handler st function)
+898  40001464  mov  %l5, %g1                 [00000000]
+899  40001468  mov  %l6, %g2                 [80000200]
+900  4000146C  mov  %l7, %g3                 [0000FFFE]
+901  40001470  jmp  %l1                      [40001470] # Trap handler exit. Will return to previous interrupt handler
+902  40001474  rett  %l2                     [400013D0]
+905  400013CC  add  %i5, %i1, %i5            [004E6CFD] # Instruction which was originally interrupted
+906  400013D0  cmp  %i5, %i3                 [  TRAP  ]
+
+Comments on trace:
+  * All memory accesses hits cache
+  * The entries marked as [  TRAP  ] represents hardware breakpoints inserted
+    with GRMON2.
+  * Instructions have been scheduled to prevent LEON3 pipeline stalls
+
+The above trace gives the following numbers:
+* 22 cycles from interrupt ack to ISR (constant)
+* 28 cycles from interrupt ass to ISR "best case"
+* 13 (10) cycles from last instruction of user handler until interrupted instruction continues
+
+* Interrupts for higher (nested) levels are enabled 10 cycles after interrupt
+  assert (ET=1, PIL=level)
+* ~10 cycles of global interrupt disable (ET=0) in interrupt exit sequence
+
+If the single vector trap model (SVT) is used, 11 cycles have to be added to
+the interrupt assert numbers.
+
+
+# SETUP
+The BCC provided interrupt trap handler is overridden by a new implementation
+in the file ll.S.
+
+In ll.S, the run-time initialization function __bcc_init50() is also
+overridden:
+- %g7 is setup to point to user ISR handler array (vectors).
+- %wim is set to 4. (Default value (1) of PSR.CWP is not changed).
+
+The ISR vectors are configured in main() before interrupts are unmasked.
+

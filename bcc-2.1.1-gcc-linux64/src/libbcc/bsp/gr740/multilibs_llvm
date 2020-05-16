@@ -1,0 +1,4 @@
+.;
+soft;@msoft-float
+gr740/soft;@mcpu=gr740@msoft-float
+gr740;@mcpu=gr740
