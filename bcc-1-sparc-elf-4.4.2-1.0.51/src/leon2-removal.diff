@@ -1,0 +1,492 @@
+Index: /binutils-2.19.51/ld/scripttempl/sparcleon.sc
+===================================================================
+--- /binutils-2.19.51/ld/scripttempl/sparcleon.sc	(revision 587)
++++ /binutils-2.19.51/ld/scripttempl/sparcleon.sc	(revision 690)
+@@ -6,8 +6,4 @@
+ 
+ ENTRY(${ENTRY})
+-
+-/* Base address of the on-CPU peripherals */
+-LEON_REG  = 0x80000000;
+-_LEON_REG = 0x80000000;
+ 
+ MEMORY
+Index: /binutils-2.19.51/ld/scripttempl/sparcleon0.sc
+===================================================================
+--- /binutils-2.19.51/ld/scripttempl/sparcleon0.sc	(revision 587)
++++ /binutils-2.19.51/ld/scripttempl/sparcleon0.sc	(revision 690)
+@@ -6,8 +6,4 @@
+ 
+ ENTRY(${ENTRY})
+-
+-/* Base address of the on-CPU peripherals */
+-LEON_REG  = 0x80000000;
+-_LEON_REG = 0x80000000;
+ 
+ MEMORY
+Index: /Changelog.txt
+===================================================================
+--- /Changelog.txt	(revision 676)
++++ /Changelog.txt	(revision 690)
+@@ -1,2 +1,10 @@
++--------- BCC 1.0.38 -----------
++
++2010-12-01    Remove Leon2 code
++
++--------- BCC 1.0.37 -----------
++
++2010-11-01    4.4.2 failed with FP_REGS not found error for -msoft-float 
++
+ --------- BCC 1.0.36b -----------
+ 
+Index: /newlib-1.13.0/libgloss/sparc_leon/locore_var.S
+===================================================================
+--- /newlib-1.13.0/libgloss/sparc_leon/locore_var.S	(revision 318)
++++ /newlib-1.13.0/libgloss/sparc_leon/locore_var.S	(revision 690)
+@@ -40,5 +40,5 @@
+ 	srl	%l3, 24, %g5
+ 	and  	%g5, 3, %g5
+-	subcc	%g5, 3, %g0             ! leon2: 0 or 2, leon3:	3
++	subcc	%g5, 3, %g0             ! leon3:	3
+ 	bne	1f
+ 	nop
+@@ -49,10 +49,5 @@
+ 	ba	2f
+ 1:
+-	set     _leon_version,%l0
+-	set     2,%l1
+-	st      %l1,[%l0]
+-	set     0x80000000, %l0         ! leon2 on-chip register base
+-	ld	[%l0+0x24], %l3
+-	srl	%l3, 20, %g5
++	/* other version */
+ 2:
+ 	and	%g5, 0x1f, %g5
+Index: /newlib-1.13.0/libgloss/sparc_leon/nocache.S
+===================================================================
+--- /newlib-1.13.0/libgloss/sparc_leon/nocache.S	(revision 387)
++++ /newlib-1.13.0/libgloss/sparc_leon/nocache.S	(revision 690)
+@@ -12,7 +12,4 @@
+ 	FUNC_EXPORT(leonbare_leon23_loadnocache8)
+ 
+-	FUNC_EXPORT(leonbare_leon2_loadnocache)
+-	FUNC_EXPORT(leonbare_leon2_loadnocache16)
+-	FUNC_EXPORT(leonbare_leon2_loadnocache8)
+ 	FUNC_EXPORT(leonbare_leon3_loadnocache)
+ 	FUNC_EXPORT(leonbare_leon3_loadnocache16)
+@@ -32,11 +29,6 @@
+ /* load with forceing cache miss */	
+ FUNC_BEGIN(leonbare_leon23_loadnocache)		/* use only %o0,%o1,%o7 */	
+-	sethi 	%hi(_leon_version),%o1
+-	ld 	[%o1+%lo(_leon_version)],%o1
+-	subcc 	%o1,3,%o1
+-	 beq,a 	1f
+ 	lda 	[%o0] ASI_LEON3_CACHEMISS, %o0
+-	lda 	[%o0] ASI_LEON2_CACHEMISS, %o0
+-1:	retl
++	retl
+ 	 nop
+ FUNC_END(leonbare_leon23_loadnocache)
+@@ -44,11 +36,6 @@
+ /* load with forceing cache miss */	
+ FUNC_BEGIN(leonbare_leon23_loadnocache16)
+-	sethi 	%hi(_leon_version),%o1
+-	ld 	[%o1+%lo(_leon_version)],%o1
+-	subcc 	%o1,3,%o1
+-	 be,a 	1f
+ 	lduha 	[%o0] ASI_LEON3_CACHEMISS, %o0
+-	lduha 	[%o0] ASI_LEON2_CACHEMISS, %o0
+-1:	retl
++	retl
+ 	 nop
+ FUNC_END(leonbare_leon23_loadnocache16)
+@@ -56,11 +43,6 @@
+ /* load with forceing cache miss */	
+ FUNC_BEGIN(leonbare_leon23_loadnocache8)
+-	sethi 	%hi(_leon_version),%o1
+-	ld 	[%o1+%lo(_leon_version)],%o1
+-	subcc 	%o1,3,%o1
+-	 be,a 	1f
+ 	lduba 	[%o0] ASI_LEON3_CACHEMISS, %o0
+-	lduba 	[%o0] ASI_LEON2_CACHEMISS, %o0
+-1:	retl
++	retl
+ 	 nop
+ FUNC_END(leonbare_leon23_loadnocache8)
+@@ -88,23 +70,4 @@
+ 
+ 
+-/* =================================== */	
+-/* LEON2 only */
+-/* load with forceing cache miss */	
+-FUNC_BEGIN(leonbare_leon2_loadnocache)		/* use only %o0,%o1,%o7 */	
+-	retl
+-	 lda 	[%o0] ASI_LEON2_CACHEMISS, %o0
+-FUNC_END(leonbare_leon2_loadnocache)
+-
+-/* load with forceing cache miss */	
+-FUNC_BEGIN(leonbare_leon2_loadnocache16)
+-	retl
+-	 lduha 	[%o0] ASI_LEON2_CACHEMISS, %o0
+-FUNC_END(leonbare_leon2_loadnocache16)
+-
+-/* load with forceing cache miss */	
+-FUNC_BEGIN(leonbare_leon2_loadnocache8)
+-	retl	
+-	 lduba 	[%o0] ASI_LEON2_CACHEMISS, %o0
+-FUNC_END(leonbare_leon2_loadnocache8)
+ 
+ /* =================================== */	
+Index: /newlib-1.13.0/libgloss/sparc_leon/gettimeofday.c
+===================================================================
+--- /newlib-1.13.0/libgloss/sparc_leon/gettimeofday.c	(revision 457)
++++ /newlib-1.13.0/libgloss/sparc_leon/gettimeofday.c	(revision 690)
+@@ -114,16 +114,4 @@
+   //---------------------
+   switch (LEONCOMPAT_VERSION) {
+-  case 2:
+-    LEON_REG.Timer_Counter_1 = 0;
+-    LEON_REG.Timer_Reload_1 = (((CLOCK_TICK_RATE / hz) - 1));
+-    LEON_REG.Timer_Control_1 = 0;
+-    LEON_REG.Timer_Control_1 = 
+-	LEON_REG_TIMER_COUNTER_ENABLE_COUNTING |
+-	LEON_REG_TIMER_COUNTER_RELOAD_AT_ZERO |
+-	LEON_REG_TIMER_COUNTER_LOAD_COUNTER | LEON_REG_TIMER_COUNTER_IRQEN;
+-    irq1 = LEON2_INTERRUPT_TIMER1;
+-    irq2 = LEON2_INTERRUPT_TIMER2;
+-    noalarm = 0;
+-    break;
+   case 3:
+   default:
+@@ -166,8 +154,4 @@
+   //---------------------
+   switch (LEONCOMPAT_VERSION) {
+-  case 2:
+-    usec =  ((LEON_REG.Timer_Reload_1&0x7fffff) - 
+-	     (LEON_REG.Timer_Counter_1&0x7fffff));
+-    break;
+   case 3:
+   default:
+Index: /newlib-1.13.0/libgloss/sparc_leon/cacheA.S
+===================================================================
+--- /newlib-1.13.0/libgloss/sparc_leon/cacheA.S	(revision 345)
++++ /newlib-1.13.0/libgloss/sparc_leon/cacheA.S	(revision 690)
+@@ -37,64 +37,15 @@
+ 	
+ /* use only %o7 */	
++sparc_leon23_icache_flush:
+ sparc_leon3_icache_flush:
+ 	retl
++sparc_leon23_cache_flush:	
+ sparc_leon3_cache_flush:
+ 	sta %g0, [%g0] ASI_LEON3_IFLUSH
++sparc_leon23_dcache_flush:	
+ sparc_leon3_dcache_flush:
+ 	retl
+ 	 sta %g0, [%g0] ASI_LEON3_DFLUSH
+ 
+-/* use only %o7 */	
+-sparc_leon2_icache_flush:
+-	retl
+-sparc_leon2_cache_flush:
+-	sta %g0, [%g0] ASI_LEON2_IFLUSH
+-sparc_leon2_dcache_flush:
+-	retl
+-	 sta %g0, [%g0] ASI_LEON2_DFLUSH 
+-
+-/* =============================================== */
+-	
+-sparc_leon23_cache_flush:	
+-         sethi	%hi(_leon_version),%o1
+-	ld	[%o1+%lo(_leon_version)],%o1
+-	cmp     %o1,2
+-	bne     loadleon3
+-loadleon2:
+-	 set	sparc_leon2_cache_flush,%o1
+-	jmp	%o1
+-	 nop
+-loadleon3:
+-	set	sparc_leon3_cache_flush,%o1
+-	jmp	%o1
+-	 nop
+-		
+-sparc_leon23_icache_flush:	
+-         sethi	%hi(_leon_version),%o1
+-	ld	[%o1+%lo(_leon_version)],%o1
+-	cmp     %o1,2
+-	bne     iloadleon3
+-iloadleon2:
+-	 set	sparc_leon2_icache_flush,%o1
+-	jmp	%o1
+-	 nop
+-iloadleon3:
+-	set	sparc_leon3_icache_flush,%o1
+-	jmp	%o1
+-	 nop
+-	
+-sparc_leon23_dcache_flush:	
+-         sethi	%hi(_leon_version),%o1
+-	ld	[%o1+%lo(_leon_version)],%o1
+-	cmp     %o1,2
+-	bne     dloadleon3
+-dloadleon2:
+-	 set	sparc_leon2_dcache_flush,%o1
+-	jmp	%o1
+-	 nop
+-dloadleon3:
+-	set	sparc_leon3_dcache_flush,%o1
+-	jmp	%o1
+-	 nop
+ 
+ 	
+Index: /newlib-1.13.0/libgloss/sparc_leon/locore.S
+===================================================================
+--- /newlib-1.13.0/libgloss/sparc_leon/locore.S	(revision 536)
++++ /newlib-1.13.0/libgloss/sparc_leon/locore.S	(revision 690)
+@@ -111,5 +111,5 @@
+ 	! -------------------------------
+ 	! only cpu 0 initializes
+-	mov	%psr, %g5
++/*	mov	%psr, %g5
+ 	srl	%g5, 24, %g5
+ 	and  	%g5, 3, %g5
+@@ -117,4 +117,5 @@
+ 	bne	callcpuinit
+ 	nop
++*/
+ 	
+ 	rd     %asr17,%g5
+Index: /newlib-1.13.0/libgloss/sparc_leon/lcpuinit.S
+===================================================================
+--- /newlib-1.13.0/libgloss/sparc_leon/lcpuinit.S	(revision 445)
++++ /newlib-1.13.0/libgloss/sparc_leon/lcpuinit.S	(revision 690)
+@@ -42,10 +42,7 @@
+ 	subcc	%g5, 3, %0
+ 	be	1f
+-	set 	console, %g5
+-	set	0x80000070, %g4
+-	st	%g4, [%g5]
+-	set 	rtc, %g5
+-	set	0x80000040, %g4
+-	st	%g4, [%g5]
++
++	/* other versions */
++	
+         ba 2f  	
+ 
+Index: /newlib-1.13.0/libgloss/sparc_leon/console_dbg.c
+===================================================================
+--- /newlib-1.13.0/libgloss/sparc_leon/console_dbg.c	(revision 463)
++++ /newlib-1.13.0/libgloss/sparc_leon/console_dbg.c	(revision 690)
+@@ -272,14 +272,4 @@
+   //---------------------
+   switch (LEONCOMPAT_VERSION) {
+-  case 2:
+-    while (printed_len-- != 0) {
+-      ch = *p++;
+-      i = 1000000;
+-      loops = 0;
+-      while ((LEON_REG.UART_Status_1  & LEON_REG_UART_STATUS_THE) == 0 && (loops < UART_TIMEOUT)) 
+-	loops++;
+-      LEON_REG.UART_Channel_1 = ch;
+-    }
+-    break;
+   case 3:
+   default: 
+Index: /newlib-1.13.0/libgloss/sparc_leon/timer.c
+===================================================================
+--- /newlib-1.13.0/libgloss/sparc_leon/timer.c	(revision 510)
++++ /newlib-1.13.0/libgloss/sparc_leon/timer.c	(revision 690)
+@@ -63,12 +63,4 @@
+ 	  //---------------------
+ 	  switch (LEONCOMPAT_VERSION) {
+-	  case 2:
+-	    LEON_REG.Timer_Counter_2 = 0;
+-	    LEON_REG.Timer_Reload_2 = te.tv_usec-1;
+-	    LEON_REG.Timer_Control_2 = 0;
+-	    LEON_REG.Timer_Control_2 = 
+-	      LEON_REG_TIMER_COUNTER_ENABLE_COUNTING |
+-	      LEON_REG_TIMER_COUNTER_LOAD_COUNTER | LEON_REG_TIMER_COUNTER_IRQEN;
+-	    break;
+ 	  case 3:
+ 	  default:
+@@ -98,9 +90,4 @@
+   //---------------------
+   switch (LEONCOMPAT_VERSION) {
+-  case 2:
+-    *count = (unsigned int *)&(LEON_REG.Timer_Counter_1);
+-    *reload = (unsigned int *)&(LEON_REG.Timer_Reload_1);
+-    *ctrl = (unsigned int *)&(LEON_REG.Timer_Control_1);
+-    break;
+   case 3:
+   default:
+@@ -119,9 +106,4 @@
+   //---------------------
+   switch (LEONCOMPAT_VERSION) {
+-  case 2:
+-    *count = (unsigned int *)&(LEON_REG.Timer_Counter_2);
+-    *reload = (unsigned int *)&(LEON_REG.Timer_Reload_2);
+-    *ctrl = (unsigned int *)&(LEON_REG.Timer_Control_2);
+-    break;
+   case 3:
+   default:
+Index: /newlib-1.13.0/libgloss/sparc_leon/asm-leon/irq.h
+===================================================================
+--- /newlib-1.13.0/libgloss/sparc_leon/asm-leon/irq.h	(revision 476)
++++ /newlib-1.13.0/libgloss/sparc_leon/asm-leon/irq.h	(revision 690)
+@@ -49,7 +49,4 @@
+ 	//---------------------
+ 	switch (LEONCOMPAT_VERSION) {
+-	case 2:
+-	  LEON_REG.Interrupt_Mask = LEON_REG.Interrupt_Mask | irqmask;
+-	  break;
+ 	case 3:
+ 	default:
+Index: /newlib-1.13.0/libgloss/sparc_leon/asm-leon/leon.h
+===================================================================
+--- /newlib-1.13.0/libgloss/sparc_leon/asm-leon/leon.h	(revision 387)
++++ /newlib-1.13.0/libgloss/sparc_leon/asm-leon/leon.h	(revision 690)
+@@ -78,120 +78,7 @@
+     (_trap) <= LEON_TRAP_TYPE( LEON_INTERRUPT_EMPTY6 ) )
+ 
+-/*
+- *  Structure for LEON memory mapped registers.  
+- *
+- *  Source: Section 6.1 - On-chip registers
+- *
+- *  NOTE:  There is only one of these structures per CPU, its base address 
+- *         is 0x80000000, and the variable LEON_REG is placed there by the 
+- *         linkcmds file.
+- */
+-
+-typedef struct {
+-	volatile unsigned int Memory_Config_1;
+-	volatile unsigned int Memory_Config_2;
+-	volatile unsigned int Edac_Control;
+-	volatile unsigned int Failed_Address;
+-	volatile unsigned int Memory_Status;
+-	volatile unsigned int Cache_Control;
+-	volatile unsigned int Power_Down;
+-	volatile unsigned int Write_Protection_1;
+-	volatile unsigned int Write_Protection_2;
+-	volatile unsigned int Leon_Configuration;
+-	volatile unsigned int dummy2;
+-	volatile unsigned int dummy3;
+-	volatile unsigned int dummy4;	
+-	volatile unsigned int dummy5;
+-	volatile unsigned int dummy6;
+-	volatile unsigned int dummy7;
+-	volatile unsigned int Timer_Counter_1;
+-	volatile unsigned int Timer_Reload_1;
+-	volatile unsigned int Timer_Control_1;
+-	volatile unsigned int Watchdog;
+-	volatile unsigned int Timer_Counter_2;
+-	volatile unsigned int Timer_Reload_2;
+-	volatile unsigned int Timer_Control_2;
+-	volatile unsigned int dummy8;
+-	volatile unsigned int Scaler_Counter;
+-	volatile unsigned int Scaler_Reload;
+-	volatile unsigned int dummy9;
+-	volatile unsigned int dummy10;
+-	volatile unsigned int UART_Channel_1;
+-	volatile unsigned int UART_Status_1;
+-	volatile unsigned int UART_Control_1;
+-	volatile unsigned int UART_Scaler_1;
+-	volatile unsigned int UART_Channel_2;
+-	volatile unsigned int UART_Status_2;
+-	volatile unsigned int UART_Control_2;
+-	volatile unsigned int UART_Scaler_2;
+-	volatile unsigned int Interrupt_Mask;
+-	volatile unsigned int Interrupt_Pending;
+-	volatile unsigned int Interrupt_Force;
+-	volatile unsigned int Interrupt_Clear;
+-	volatile unsigned int PIO_Data;
+-	volatile unsigned int PIO_Direction;
+-	volatile unsigned int PIO_Interrupt;
+-} LEON_Register_Map;
+ 
+ #endif
+ 
+-/*
+- *  The following constants are intended to be used ONLY in assembly
+- *  language files.
+- *
+- *  NOTE:  The intended style of usage is to load the address of LEON REGS
+- *         into a register and then use these as displacements from
+- *         that register.
+- */
+-
+-#ifdef  __ASSEMBLER__
+-
+-#define  LEON_REG_MEMCFG1_OFFSET                                  0x00
+-#define  LEON_REG_MEMCFG2_OFFSET                                  0x04
+-#define  LEON_REG_EDACCTRL_OFFSET                                 0x08
+-#define  LEON_REG_FAILADDR_OFFSET                                 0x0C
+-#define  LEON_REG_MEMSTATUS_OFFSET                                0x10
+-#define  LEON_REG_CACHECTRL_OFFSET                                0x14
+-#define  LEON_REG_POWERDOWN_OFFSET                                0x18
+-#define  LEON_REG_WRITEPROT1_OFFSET                               0x1C
+-#define  LEON_REG_WRITEPROT2_OFFSET                               0x20
+-#define  LEON_REG_LEONCONF_OFFSET                                 0x24
+-#define  LEON_REG_UNIMPLEMENTED_2_OFFSET                          0x28
+-#define  LEON_REG_UNIMPLEMENTED_3_OFFSET                          0x2C
+-#define  LEON_REG_UNIMPLEMENTED_4_OFFSET                          0x30
+-#define  LEON_REG_UNIMPLEMENTED_5_OFFSET                          0x34
+-#define  LEON_REG_UNIMPLEMENTED_6_OFFSET                          0x38
+-#define  LEON_REG_UNIMPLEMENTED_7_OFFSET                          0x3C
+-#define  LEON_REG_TIMERCNT1_OFFSET                                0x40
+-#define  LEON_REG_TIMERLOAD1_OFFSET                               0x44
+-#define  LEON_REG_TIMERCTRL1_OFFSET                               0x48
+-#define  LEON_REG_WDOG_OFFSET                                     0x4C
+-#define  LEON_REG_TIMERCNT2_OFFSET                                0x50
+-#define  LEON_REG_TIMERLOAD2_OFFSET                               0x54
+-#define  LEON_REG_TIMERCTRL2_OFFSET                               0x58
+-#define  LEON_REG_UNIMPLEMENTED_8_OFFSET                          0x5C
+-#define  LEON_REG_SCALERCNT_OFFSET                                0x60
+-#define  LEON_REG_SCALER_LOAD_OFFSET                              0x64
+-#define  LEON_REG_UNIMPLEMENTED_9_OFFSET                          0x68
+-#define  LEON_REG_UNIMPLEMENTED_10_OFFSET                         0x6C
+-#define  LEON_REG_UARTDATA1_OFFSET                                0x70
+-#define  LEON_REG_UARTSTATUS1_OFFSET                              0x74
+-#define  LEON_REG_UARTCTRL1_OFFSET                                0x78
+-#define  LEON_REG_UARTSCALER1_OFFSET                              0x7C
+-#define  LEON_REG_UARTDATA2_OFFSET                                0x80
+-#define  LEON_REG_UARTSTATUS2_OFFSET                              0x84
+-#define  LEON_REG_UARTCTRL2_OFFSET                                0x88
+-#define  LEON_REG_UARTSCALER2_OFFSET                              0x8C
+-#define  LEON_REG_IRQMASK_OFFSET                                  0x90
+-#define  LEON_REG_IRQPEND_OFFSET                                  0x94
+-#define  LEON_REG_IRQFORCE_OFFSET                                 0x98
+-#define  LEON_REG_IRQCLEAR_OFFSET                                 0x9C
+-#define  LEON_REG_PIODATA_OFFSET                                  0xA0
+-#define  LEON_REG_PIODIR_OFFSET                                   0xA4
+-#define  LEON_REG_PIOIRQ_OFFSET                                   0xA8
+-#define  LEON_REG_SIM_RAM_SIZE_OFFSET                             0xF4
+-#define  LEON_REG_SIM_ROM_SIZE_OFFSET                             0xF8
+-
+-#endif
+ 
+ /*
+@@ -277,7 +164,4 @@
+ unsigned int leonbare_leon23_storenocache8(unsigned int addr,unsigned int value);
+     
+-unsigned int leonbare_leon2_loadnocache(unsigned int addr);
+-unsigned int leonbare_leon2_loadnocache16(unsigned int addr);
+-unsigned int leonbare_leon2_loadnocache8(unsigned int addr);
+ unsigned int leonbare_leon3_loadnocache(unsigned int addr);
+ unsigned int leonbare_leon3_loadnocache16(unsigned int addr);
+@@ -291,6 +175,4 @@
+  *  to the correct location.
+  */
+-
+-extern LEON_Register_Map LEON_REG;
+ 
+ extern unsigned long *LEON23_IRQ_mask_addr;    /* in peripherals.h */
+@@ -318,7 +200,4 @@
+     (*LEON23_IRQ_force_addr) = (1 << (_source)); \
+   } while (0)
+- 
+-#define LEON_Is_interrupt_pending( _source ) \
+-  (LEON_REG.Interrupt_Pending & (1 << (_source)))
+  
+ #define LEON_Is_interrupt_masked( _source ) \

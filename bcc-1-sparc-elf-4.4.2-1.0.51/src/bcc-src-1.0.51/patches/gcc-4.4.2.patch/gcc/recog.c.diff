@@ -1,0 +1,21 @@
+--- gcc-4.4.2.old/./gcc/recog.c	2020-02-28 17:30:31.515417198 +0100
++++ gcc-4.4.2.new/./gcc/recog.c	2014-03-11 16:04:36.380531000 +0100
+@@ -2806,6 +2806,8 @@
+   sbitmap_free (blocks);
+ }
+ 
++extern int sparc_fpstore_after_final_split (void);
++
+ /* Same as split_all_insns, but do not expect CFG to be available.
+    Used by machine dependent reorg passes.  */
+ 
+@@ -2839,6 +2841,9 @@
+ 	    split_insn (insn);
+ 	}
+     }
++
++  sparc_fpstore_after_final_split ();
++
+   return 0;
+ }
+ 

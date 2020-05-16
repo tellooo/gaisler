@@ -1,0 +1,13 @@
+--- gcc-4.4.2.old/./gcc/c-opts.c	2020-02-28 17:30:31.501417363 +0100
++++ gcc-4.4.2.new/./gcc/c-opts.c	2013-09-12 09:40:14.323199000 +0200
+@@ -702,6 +702,10 @@
+       flag_implicit_templates = value;
+       break;
+ 
++    case OPT_fnullify_allnop:
++      flag_fnullify_allnop = value;
++      break;
++
+     case OPT_flax_vector_conversions:
+       flag_lax_vector_conversions = value;
+       break;

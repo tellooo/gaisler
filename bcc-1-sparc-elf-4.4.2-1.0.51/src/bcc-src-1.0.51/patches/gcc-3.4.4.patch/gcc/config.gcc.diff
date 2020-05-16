@@ -1,0 +1,106 @@
+--- gcc-3.4.4.old/./gcc/config.gcc	2020-02-28 17:30:18.110574847 +0100
++++ gcc-3.4.4.new/./gcc/config.gcc	2014-03-12 16:49:48.580994000 +0100
+@@ -2024,8 +2024,30 @@
+ 	gas=yes gnu_ld=yes
+ 	with_cpu=ultrasparc
+ 	;;
+-sparc-*-elf*)
++sparc-*-uclinux*)		# sparc running uClinux with uClibc
++	tm_file="${tm_file} dbxelf.h elfos.h svr4.h sparc/sysv4.h sparc/elf.h sparc/uclinux.h "
++	#tm_file="${tm_file} dbxelf.h elfos.h svr4.h sparc/sysv4.h sol2.h sparc/sol2.h sparc/sol2-gld.h sparc/elf.h"
++	tmake_file="sparc/t-elf sparc/t-crtfm"
++	extra_parts="crti.o crtn.o crtbegin.o crtend.o"
++	use_fixproto=yes
++	#use_fixproto=no
++	;;
++
++sparc-*-elf* | sparc*-lynxos*)
+ 	tm_file="${tm_file} dbxelf.h elfos.h svr4.h sparc/sysv4.h sol2.h sparc/sol2.h sparc/sol2-gld.h sparc/elf.h"
++
++	case $target_alias in
++	     sparc*-threadx*)
++	     tm_file="${tm_file} sparc/threadx.h"
++	     ;;
++	     sparc*-nucleus*)
++	     tm_file="${tm_file} sparc/nucleus.h"
++	     ;;
++	     sparc*-lynxos*)
++	     tm_file="${tm_file} sparc/lynxos.h"
++	     ;;
++	esac
++	
+ 	tmake_file="sparc/t-elf sparc/t-crtfm"
+ 	extra_parts="crti.o crtn.o crtbegin.o crtend.o"
+ 	use_fixproto=yes
+@@ -2639,9 +2661,33 @@
+ 			"" | sparc | sparcv9 | sparc64 | sparc86x \
+ 			| v7 | cypress | v8 | supersparc | sparclite | f930 \
+ 			| f934 | hypersparc | sparclite86x | sparclet | tsc701 \
+-			| v9 | ultrasparc | ultrasparc3)
++			| v9 | ultrasparc | ultrasparc3  )
+ 				# OK
+ 				;;
++			leon*)
++				echo "Using leon cpu for ${target}" 1>&2
++				tmake_file="sparc/t-leon ${tmake_file} " # build lib for softfloat with option -msoft-float
++				case "${target}" in
++					sparc*-elf*)
++						echo "Using leon spec file  ${tmake_file}" 1>&2
++						tm_file="${tm_file} sparc/leon.h"
++						;;
++					sparc*-linux-* | sparc-*-uclinux*)
++						tmake_file="${tmake_file} sparc/t-sparcbare" # build lib for softfloat with option -msoft-float
++						echo "Adding multilib sparc/t-sparcbare to leon-sparc-linux: ${tmake_file} " 1>&2
++						;;
++					*)
++						;;
++				esac
++				target_cpu_default2=TARGET_CPU_"`echo $machine | sed 's/-.*$//'`"
++				;;
++			ut699)
++				if [ "x$which" = xtune ]
++				then
++					tm_file="sparc/leon_ut699.h ${tm_file} "
++				fi
++				;;
++
+ 			*)
+ 				echo "Unknown cpu used in --with-$which=$val" 1>&2
+ 				exit 1
+@@ -2649,6 +2695,16 @@
+ 			esac
+ 		done
+ 
++		case "${with_pagesize}" in
++			*16*)
++				tm_file="sparc/leon_16k.h ${tm_file} "
++				;;
++			*16*)
++				tm_file="sparc/leon_8k.h ${tm_file} "
++				;;
++			*)	;;
++			esac
++		
+ 		case ${with_float} in
+ 		"" | soft | hard)
+ 			# OK
+@@ -2805,11 +2861,16 @@
+ 			;;
+ 		esac
+ 
+-		if test "x$t" = x
++		if [ "x$option" = xcpu ] && [ "x$val" = xleon ]
+ 		then
+-			t="{ \"$option\", \"$val\" }"
++			echo "Getting cpu=leon, not registering it as mcpu option" 2>&1
+ 		else
+-			t="${t}, { \"$option\", \"$val\" }"
++			if test "x$t" = x
++			then
++				t="{ \"$option\", \"$val\" }"
++			else
++				t="${t}, { \"$option\", \"$val\" }"
++			fi
+ 		fi
+ 	fi
+ done

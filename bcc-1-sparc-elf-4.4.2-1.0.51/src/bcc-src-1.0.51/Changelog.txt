@@ -1,0 +1,230 @@
+--------- BCC 1.0.51 -----------
+2020-02-27   Updated documentation on BCC 1.0.x life cycle status.
+2020-02-27   Added workaround for GRLIB technical note GRLIB-TN-0018 in
+	     GCC 3.4.4 and GCC 4.4.2. The workaround is enabled if
+	     the option -qfix-tn0018 is given when linking.
+
+--------- BCC 1.0.50 -----------
+2017-12-12   Align atomic instructions in stdlibc++ to avoid sequence in
+	     technical note GRLIB-TN-0011
+2017-12-12   Add NOPs in setjmp to prevent sequence matching UT699 nullify
+	     errata
+
+--------- BCC 1.0.49 -----------
+2017-11-17   Updated the table "Recommended compiler options for LEON systems"
+	     in BCC User's Manual.
+2017-11-17   New compiler options -mfix-gr712rc,
+	     -mfix-ut700 and -mfix-tn0013 added to BCC User's Manual.
+2017-11-16   Added workaround for GRLIB technical note GRLIB-TN-0013 in
+	     GCC 3.4.4 and GCC 4.4.2. The workaround is enabled by
+	     -mfix-tn0013. The workaround is also enabled by -mfix-gr712rc,
+	     -mfix-ut700 and -mtune=ut699.
+2017-11-08   Added workaround for GRLIB technical note GRLIB-TN-0012 in
+	     GCC 3.4.4 and GCC 4.4.2. The workaround is enabled by
+	     -mfix-gr712rc.
+
+--------- BCC 1.0.48 -----------
+2017-08-24   Assemble FreeRTOS with multilib options
+2017-08-24   Improved the UT699 and B2BST errata fixes for GCC 4.4.2.
+             GCC 4.4.2 delay-slot optimizations are enabled regardless of if
+             LEON work arounds are enabled of not. The -fdelayed-branch
+             optimization is application dependent and by generally improves
+             instruction foot print and code execution slightly.  This
+             improvement affects UT699 and B2BST (GRLIB-TN-0009) targets
+             (UT699e, UT700 and GR712RC).
+             NOTE: This change affects GCC 4.4.2 only.
+
+--------- BCC 1.0.47 -----------
+2017-06-15   Build libstdc++.a with optimization for GCC 4.4.2 / Linux
+2017-06-07   Support -mfix-b2bst -mflat combination in GCC 3.4.4
+2017-04-05   Eliminated unreachable code in libleonbare
+
+--------- BCC 1.0.46 -----------
+2016-10-19   Make mcpu=v8 select same SPARCv8 multilib as -mv8 flag.
+2016-09-15   Back-to-Back Store Errata workaround implemented, enabled by
+            -mfix-b2bst and is always included when -mtune=ut699 is used.
+2016-09-02   Updated GLIBC host requirements to GLIBC 2.11
+
+--------- BCC 1.0.45 -----------
+2014-03-10   FPStore errata workaround implemented, enabled by default using
+             the mtune=ut699 flag or -mfpstore-errata.
+2014-03-03   -mtune=socc3 removed (same at ut699)
+
+--------- BCC 1.0.44 ----------- 
+2013-09-12   -mtune=[ut699,socc3] improve nop insertion after [ld,st] sequence,
+	     backport 4.9 data-nullify errata fix. Add switch -fnullify-allnop 
+	     to reactivate old fix with nop insertion at every [ld,st] sequence
+
+--------- BCC 1.0.43 ----------- 
+2013-06-11   add trap handler install routine traptable_genjmp()
+2013-06-3    -mtune=[ut699,socc3] fix for nop insertion after [ld,st] sequence 
+	     (data-nullify errata)
+
+--------- BCC 1.0.42 ----------- 
+2012-11-27    Declare jiffies volatile
+
+--------- BCC 1.0.41 -----------
+2012-08-13    Change -qambapp to -qnoambapp to enables scanning across
+	      AHB2AHB bridges by default
+
+--------- BCC 1.0.40 -----------
+2012-07-05    Fix -mtune=ut699 to save to %sp-8
+
+--------- BCC 1.0.38 -----------
+
+2010-12-20    add -ffloat-int-mode to avoid FPU register use for -msoft-float 
+
+2010-12-01    Remove Leon2 code
+
+--------- BCC 1.0.37 -----------
+
+2010-11-01    4.4.2 failed with FP_REGS not found error for -msoft-float 
+
+--------- BCC 1.0.36b -----------
+
+2010-09-28    Re-add linkprom lnker script
+
+--------- BCC 1.0.36 -----------
+
+2010-09-28    Remove sparc-elk-mkprom
+
+--------- BCC 1.0.35 -----------
+
+2010-08-02    Always suppress fsmuld generation
+
+2010-07-10    Add FreeRtos port http://www.freertos.org/
+
+
+--------- BCC 1.0.34 -----------
+
+2010-05-24    add ut699 cpu multlib build    
+
+2010-03-09    memblock move inline limit increased to 64 bytes for 4.1.2
+
+2010-03-09    optimized memcpy.S
+
+--------- BCC 1.0.33 -----------
+
+2010-02-24    set psr.pil correctly for nestedirq 
+
+2010-02-08    3.4.4: Add -mv8 as flag (dont use -mcpu=v8 anymore)
+	      3.4.4: leon.md machine descrition
+
+2010-01-20    Mark flush phase in regwin.S
+
+2009-12-10    Add -qambapp option that enables scanning across
+	      AHB2AHB bridges
+
+2009-10-22    Fix addtimer() forever-loop bug
+
+2009-08-27    times() always returned number of ticks for HZ=60
+	      even though HZ=100
+
+2009-02-01    Add support for multiple APB bridges
+
+2009-01-07    avoid fpu disable exception after irq
+
+2008-09-10    remove unused pbuf array in mkprom
+
+2008-09-01    expand inirq variable to array for nested irq
+
+2008-06-12    Added support for extended interrupts.
+
+--------- BCC 1.0.30 -----------
+
+2007-10-11    Make times() and clock() work with leonbare_init_ticks().
+
+2007-08-13    mvtlolevelirqinstall(): Mask last trap on tbr on read 
+
+2007-05-21    Updated manual with information about MinGW
+
+2007-05-10    small fix in prom_load3.c initializing %sp before jumping
+              into the application
+
+2007-04-26    added leonbare_init_ticks prototype to asm-leon/timer.h
+
+2007-04-23    pthread's task terminate had problems with lock of
+              newlibcs malloc-free
+
+2007-04-10    switch to sparc-threadx toolchain
+ 
+2007-03-05    Additions in order to get threadX running
+
+--------- BCC 1.0.29c -----------
+		
+2007-02-28    Change order of -lmkprom2 and -lleonbare
+
+2007-02-28    newlib: change from %g6 to %g7 in contextswtich_asm.S
+              (-qsvt clash)
+
+2007-02-27    threadctx_t align attribute moved in newlib
+
+--------- BCC 1.0.29b -----------
+
+2007-02-27    mkprom bootmsg wasn't always word aligned which would
+              cause an error when running.
+
+--------- BCC 1.0.29a -----------
+
+2007-02-22    smac/umac added in gdb
+
+--------- BCC 1.0.29 ------------
+
+2007-02-19    mkprom shows usages when no arguments is given
+
+2007-02-19    -qsvt's flush_window_svt lacked a wim load
+
+2007-02-19    mkprom: reset %asr17 on reset + %fsr flush cleared _stack (fixed)
+              newlibc: reset %asr17 in mvt case (if svt was enabled before)
+
+--------- BCC 1.0.28 ------------	
+
+2007-02-14    crt_cpdata.S tried to copy .bss from prom to ram, but
+              only .data should be copied
+
+2007-02-12    for svt and prom there where some data sections symbols
+              linked in by accident (creating 0x40000000 section).
+              mkprom register wash did clear %fsr from stack without
+              clearing the poition. Therefore fpu exceptions  where
+              enabled on random basis.
+
+--------- BCC 1.0.27 ------------
+
+2007-01-07    fixed libgloss irq trap handling
+
+-------- pre BCC 1.0.27 ---------
+
+2006-12-18    mkprom ported to mingw (MSYS not required...)
+
+2006-12-18    fixed decompress header
+
+2006-12-18    allow up to 4 sdram banks in mkprom
+
+2006-12-14    trap install for -qsvt case
+
+2006-11-23    add lolevelirqinstall, installs a lolevel irq handler
+
+2006-11-23    fast version of irq processing, out and locals not saved when not needed
+
+2006-11-23    psr et enabled too early when returning from interrupt
+
+2006-11-06    make patchfiles for insight and binutils-2.16.1
+
+2006-10-31    change mkprom link library order to make sure that memory
+              controller init code is below 8 kbyte
+
+2006-10-20    interrupt handler corrupted ICC when executed in prom
+
+2006-06-08    MKPROM zerobss function extended to clear even.jcr section
+
+2006-05-03    re-entrant interrupts did not work
+
+2005-05-02    Added new manual
+
+2005-05-02    Switched to binutils-2.16.1 on recommendation
+              from Mike Dalton
+
+2006-05-01    Added gdb-6.4 with Insight GUI
+
+
+

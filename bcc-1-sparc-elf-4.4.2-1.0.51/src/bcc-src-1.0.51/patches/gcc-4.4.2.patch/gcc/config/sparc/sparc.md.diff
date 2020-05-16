@@ -1,0 +1,281 @@
+--- gcc-4.4.2.old/./gcc/config/sparc/sparc.md	2020-02-28 17:30:30.931424066 +0100
++++ gcc-4.4.2.new/./gcc/config/sparc/sparc.md	2017-11-16 16:06:30.489833000 +0100
+@@ -85,9 +85,10 @@
+ 
+ ;; Attribute for cpu type.
+ ;; These must match the values for enum processor_type in sparc.h.
+-(define_attr "cpu"
++(define_attr "cpu" 
+   "v7,
+    cypress,
++   leon,
+    v8,
+    supersparc,
+    sparclite,f930,f934,
+@@ -150,6 +151,23 @@
+ (define_attr "delayed_branch" "false,true"
+   (symbol_ref "flag_delayed_branch != 0"))
+ 
++(define_attr "fix_b2bst" "false,true"
++(symbol_ref "(sparc_fix_b2bst != 0
++         ? FIX_B2BST_TRUE : FIX_B2BST_FALSE)"))
++
++(define_attr "fix_tn0013" "false,true"
++   (symbol_ref "(sparc_fix_tn0013 != 0
++		 ? FIX_TN0013_TRUE : FIX_TN0013_FALSE)"))
++
++(define_attr "fix_gr712rc" "false,true"
++(symbol_ref "(sparc_fix_gr712rc != 0
++         ? FIX_GR712RC_TRUE : FIX_GR712RC_FALSE)"))
++
++(define_attr "load_in_delay" "false,true"
++  (if_then_else (and (eq_attr "type" "load,sload") (eq (symbol_ref "sparc_fix_load_in_delay") (const_int 1)))
++	 	(const_string "false")
++	 	(const_string "true")))
++
+ ;; Length (in # of insns).
+ ;; Beware that setting a length greater or equal to 3 for conditional branches
+ ;; has a side-effect (see output_cbranch and output_v9branch).
+@@ -244,11 +262,32 @@
+ (define_attr "tls_call_delay" "false,true"
+   (symbol_ref "tls_call_delay (insn)"))
+ 
++(define_attr "fpsingle_in_delay" "false,true"
++  (cond [(eq (symbol_ref "fpstore_errata") (const_int 0))
++		(const_string "false")
++	 (eq_attr "type" "fpload")
++		(const_string "true")
++	 (and (eq_attr "type" "fpmove,fpmul,fpdivs,fpsqrts") (eq_attr "fptype" "single"))
++		(const_string "true")
++	 (eq_attr "type" "fp")
++		(const_string "true")]
++	(const_string "false")))
++
++(define_attr "fpsingle_in_branch_delay" "false,true"
++  (if_then_else (and (eq_attr "fpsingle_in_delay" "true")
++		     (eq (symbol_ref "fpstore_branch_slots") (const_int 1)))
++		(const_string "true")
++		(const_string "false")))
++
+ (define_attr "in_call_delay" "false,true"
+   (cond [(eq_attr "type" "uncond_branch,branch,call,sibcall,call_no_delay_slot,multi")
+ 	 	(const_string "false")
+-	 (eq_attr "type" "load,fpload,store,fpstore")
+-	 	(if_then_else (eq_attr "length" "1")
++	(and (eq_attr "fix_b2bst" "true") (eq_attr "type" "store,fpstore"))
++		(const_string "false")
++	 (eq_attr "fpsingle_in_delay" "true")
++	 	(const_string "false")
++	 (eq_attr "type" "sload,load,fpload,store,fpstore")
++	 	(if_then_else (and (eq_attr "length" "1") (eq_attr "load_in_delay" "true"))
+ 			      (const_string "true")
+ 			      (const_string "false"))]
+ 	(if_then_else (and (eq_attr "length" "1")
+@@ -257,10 +296,18 @@
+ 		      (const_string "false"))))
+ 
+ (define_attr "eligible_for_sibcall_delay" "false,true"
+-  (symbol_ref "eligible_for_sibcall_delay (insn)"))
++  (cond [(eq_attr "fpsingle_in_delay" "true")
++		(const_string "false")
++	(and (eq_attr "fix_b2bst" "true") (eq_attr "type" "store,fpstore"))
++		(const_string "false")]
++	(symbol_ref "eligible_for_sibcall_delay (insn)")))
+ 
+ (define_attr "eligible_for_return_delay" "false,true"
+-  (symbol_ref "eligible_for_return_delay (insn)"))
++  (cond [(eq_attr "fpsingle_in_delay" "true")
++		(const_string "false")
++	(and (eq_attr "fix_b2bst" "true") (eq_attr "type" "store,fpstore"))
++		(const_string "false")]
++	(symbol_ref "eligible_for_return_delay (insn)")))
+ 
+ ;; ??? !v9: Should implement the notion of predelay slots for floating-point
+ ;; branches.  This would allow us to remove the nop always inserted before
+@@ -275,22 +322,44 @@
+ ;; because it prevents us from moving back the final store of inner loops.
+ 
+ (define_attr "in_branch_delay" "false,true"
+-  (if_then_else (and (eq_attr "type" "!uncond_branch,branch,call,sibcall,call_no_delay_slot,multi")
+-		     (eq_attr "length" "1"))
+-		(const_string "true")
+-		(const_string "false")))
++  (cond [(and (eq_attr "fix_b2bst" "true") (eq_attr "type" "store,fpstore"))
++           (const_string "false")
++	 (and (eq_attr "fix_tn0013" "true")
++	      (eq_attr "type" "fpdivs,fpsqrts,fpdivd,fpsqrtd"))
++	   (const_string "false")
++	     (and (and (and (eq_attr "type" "!uncond_branch,branch,call,sibcall,call_no_delay_slot,multi")
++		    (eq_attr "length" "1"))  (eq_attr "load_in_delay" "true"))
++		    (eq_attr "fpsingle_in_branch_delay" "false"))
++           (const_string "true")
++        ] (const_string "false")))
+ 
+ (define_attr "in_uncond_branch_delay" "false,true"
+-  (if_then_else (and (eq_attr "type" "!uncond_branch,branch,call,sibcall,call_no_delay_slot,multi")
+-		     (eq_attr "length" "1"))
+-		(const_string "true")
+-		(const_string "false")))
++  (cond [(and (eq_attr "fix_b2bst" "true") (eq_attr "type" "store,fpstore"))
++           (const_string "false")
++	 (and (eq_attr "fix_tn0013" "true")
++	      (eq_attr "type" "fpdivs,fpsqrts,fpdivd,fpsqrtd"))
++	   (const_string "false")
++	     (and (and (and (eq_attr "type" "!uncond_branch,branch,call,sibcall,call_no_delay_slot,multi")
++		    (eq_attr "length" "1"))  (eq_attr "load_in_delay" "true"))
++		    (eq_attr "fpsingle_in_branch_delay" "false"))
++           (const_string "true")
++        ] (const_string "false")))
+ 
+ (define_attr "in_annul_branch_delay" "false,true"
+-  (if_then_else (and (eq_attr "type" "!uncond_branch,branch,call,sibcall,call_no_delay_slot,multi")
+-		     (eq_attr "length" "1"))
+-		(const_string "true")
+-		(const_string "false")))
++  (cond [(and (eq_attr "fix_gr712rc" "true")
++            (eq_attr "type" "fp,fpcmp,fpmove,fpcmove,fpmul,
++                              fpdivs,fpsqrts,fpdivd,fpsqrtd"))
++                (const_string "false")
++	 (and (eq_attr "fix_tn0013" "true")
++	      (eq_attr "type" "fpdivs,fpsqrts,fpdivd,fpsqrtd"))
++	   (const_string "false")
++         (and (eq_attr "fix_b2bst" "true") (eq_attr "type" "store,fpstore"))
++           (const_string "false")
++	     (and (and (and (eq_attr "type" "!uncond_branch,branch,call,sibcall,call_no_delay_slot,multi")
++		    (eq_attr "length" "1"))  (eq_attr "load_in_delay" "true"))
++		    (eq_attr "fpsingle_in_branch_delay" "false"))
++           (const_string "true")
++        ] (const_string "false")))
+ 
+ (define_delay (eq_attr "type" "call")
+   [(eq_attr "in_call_delay" "true") (nil) (nil)])
+@@ -311,6 +380,7 @@
+ 
+ 
+ ;; Include SPARC DFA schedulers
++(automata_option "v")
+ 
+ (include "cypress.md")
+ (include "supersparc.md")
+@@ -320,7 +390,7 @@
+ (include "ultra3.md")
+ (include "niagara.md")
+ (include "niagara2.md")
+-
++(include "leon.md") 
+ 
+ ;; Operand and operator predicates and constraints
+ 
+@@ -5921,7 +5991,7 @@
+   [(set (match_operand:DF 0 "register_operand" "=e")
+ 	(mult:DF (float_extend:DF (match_operand:SF 1 "register_operand" "f"))
+ 		 (float_extend:DF (match_operand:SF 2 "register_operand" "f"))))]
+-  "(TARGET_V8 || TARGET_V9) && TARGET_FPU"
++  "(TARGET_V8 || TARGET_V9) && TARGET_FPU && (!TARGET_NO_FSMULD)"
+   "fsmuld\t%1, %2, %0"
+   [(set_attr "type" "fpmul")
+    (set_attr "fptype" "double")])
+@@ -5950,22 +6020,43 @@
+   "fdivq\t%1, %2, %0"
+   [(set_attr "type" "fpdivd")])
+ 
++;;;;;;;;;;;;;;;;;; handle divdf3 ;;;;;;;;;;;;;;;; 
++
+ (define_insn "divdf3"
+   [(set (match_operand:DF 0 "register_operand" "=e")
+ 	(div:DF (match_operand:DF 1 "register_operand" "e")
+ 		(match_operand:DF 2 "register_operand" "e")))]
+   "TARGET_FPU"
+-  "fdivd\t%1, %2, %0"
++  {
++    return (TARGET_STORE_AFTER_DIVSQRT)
++         ? "nop; fdivd\t%1, %2, %0; st %0, [%%sp-8]; nop; nop"
++         : "fdivd\t%1, %2, %0";
++  }
+   [(set_attr "type" "fpdivd")
+-   (set_attr "fptype" "double")])
++   (set_attr "fptype" "double")
++   (set (attr "length")
++	(if_then_else (eq (symbol_ref "TARGET_STORE_AFTER_DIVSQRT") (const_int 0))
++		      (const_int 1) (const_int 5)))])
++
++
++;;;;;;;;;;;;;;;;;; handle divsf3 ;;;;;;;;;;;;;;;;
+ 
+ (define_insn "divsf3"
+   [(set (match_operand:SF 0 "register_operand" "=f")
+ 	(div:SF (match_operand:SF 1 "register_operand" "f")
+ 		(match_operand:SF 2 "register_operand" "f")))]
+-  "TARGET_FPU"
+-  "fdivs\t%1, %2, %0"
+-  [(set_attr "type" "fpdivs")])
++  "TARGET_FPU && (!TARGET_NO_SF_DIVSQRT)"
++  {
++    return (TARGET_STORE_AFTER_DIVSQRT)
++    	   ? "nop; fdivs\t%1, %2, %0; st %0, [%%sp-8]; nop; nop"
++	   : "fdivs\t%1, %2, %0";
++  }
++  [(set_attr "type" "fpdivs")
++   (set (attr "length")	
++	(if_then_else (eq (symbol_ref "TARGET_STORE_AFTER_DIVSQRT") (const_int 0))
++		      (const_int 1) (const_int 5)))])
++  
++;;;;;;;;;;;;;;;;;;
+ 
+ (define_expand "negtf2"
+   [(set (match_operand:TF 0 "register_operand" "=e,e")
+@@ -5973,6 +6064,7 @@
+   "TARGET_FPU"
+   "")
+ 
++
+ (define_insn_and_split "*negtf2_notv9"
+   [(set (match_operand:TF 0 "register_operand" "=e,e")
+ 	(neg:TF (match_operand:TF 1 "register_operand" "0,e")))]
+@@ -6164,21 +6256,41 @@
+   "fsqrtq\t%1, %0"
+   [(set_attr "type" "fpsqrtd")])
+ 
++
++;;;;;;;;;;;;;;;;;; handle sqrtdf2 ;;;;;;;;;;;;;;;; 
++
+ (define_insn "sqrtdf2"
+   [(set (match_operand:DF 0 "register_operand" "=e")
+ 	(sqrt:DF (match_operand:DF 1 "register_operand" "e")))]
+   "TARGET_FPU"
+-  "fsqrtd\t%1, %0"
++  {
++	return TARGET_STORE_AFTER_DIVSQRT
++	       ? "nop; fsqrtd\t%1, %0; st %0, [%%sp-8]; nop; nop"
++	       : "fsqrtd\t%1, %0";
++  }
+   [(set_attr "type" "fpsqrtd")
+-   (set_attr "fptype" "double")])
++   (set_attr "fptype" "double")
++   (set (attr "length")	
++	(if_then_else (eq (symbol_ref "TARGET_STORE_AFTER_DIVSQRT") (const_int 0))
++		      (const_int 1) (const_int 5)))])
++
++;;;;;;;;;;;;;;;;;; handle sqrtsf2 ;;;;;;;;;;;;;;;;
+ 
+ (define_insn "sqrtsf2"
+   [(set (match_operand:SF 0 "register_operand" "=f")
+ 	(sqrt:SF (match_operand:SF 1 "register_operand" "f")))]
+-  "TARGET_FPU"
+-  "fsqrts\t%1, %0"
+-  [(set_attr "type" "fpsqrts")])
++  "TARGET_FPU  && (!TARGET_NO_SF_DIVSQRT)"
++  {
++	return TARGET_STORE_AFTER_DIVSQRT
++	       ? "nop; fsqrts\t%1, %0; st %0, [%%sp-8]; nop; nop"
++	       : "fsqrts\t%1, %0";
++  }
++  [(set_attr "type" "fpsqrts")
++   (set (attr "length")	
++	(if_then_else (eq (symbol_ref "TARGET_STORE_AFTER_DIVSQRT") (const_int 0))
++		      (const_int 1) (const_int 5)))])
+ 
++;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ 
+ ;; Arithmetic shift instructions.
+ 

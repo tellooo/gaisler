@@ -1,0 +1,13 @@
+# to make t-elf not compile leon crti/n
+with_cpu=leon
+
+EXTRA_MULTILIB_PARTS = crtbegin.o crtend.o crti.o crtn.o crtbeginS.o crtendS.o
+
+# Assemble startup files.
+$(T)crti.o: $(srcdir)/config/sparc/sparcleon-ci.S $(GCC_PASSES)
+	$(GCC_FOR_TARGET) $(GCC_CFLAGS) $(MULTILIB_CFLAGS) $(INCLUDES) \
+	-c -o $(T)crti.o -x assembler-with-cpp $(srcdir)/config/sparc/sparcleon-ci.S
+
+$(T)crtn.o: $(srcdir)/config/sparc/sparcleon-cn.S $(GCC_PASSES)
+	$(GCC_FOR_TARGET) $(GCC_CFLAGS) $(MULTILIB_CFLAGS) $(INCLUDES) \
+	-c -o $(T)crtn.o -x assembler-with-cpp $(srcdir)/config/sparc/sparcleon-cn.S

@@ -1,0 +1,62 @@
+--- gcc-3.4.4.old/./gcc/c-opts.c	2020-02-28 17:30:18.896565603 +0100
++++ gcc-3.4.4.new/./gcc/c-opts.c	2017-11-16 16:05:34.088973000 +0100
+@@ -849,6 +849,59 @@
+       flag_no_nonansi_builtin = !value;
+       break;
+ 
++      /* sparc specific extension */
++    case OPT_fsqrdiv_debug:
++      debug_patch_divsqrt = value;
++      break;
++      
++    case OPT_ffsmuld_cancel:
++      flag_fno_fsmuld = value;
++      break;
++      
++    case OPT_fsf_divsqrt_cancel:
++      flag_fno_sf_divsqrt = value;
++      break;
++      
++    case OPT_fstore_after_divsqrt:
++      flag_fstore_after_divsqrt = value;
++      break;
++      
++    case OPT_fnullify_allnop:
++      flag_fnullify_allnop = value;
++      break;
++
++    case OPT_mfpstore_errata:
++      fpstore_errata = value;
++      break;
++
++    case OPT_mfix_b2bst:
++      sparc_fix_b2bst = value;
++      break;
++
++    case OPT_mfix_gr712rc:
++      sparc_fix_gr712rc = value;
++      break;
++
++    case OPT_mfix_ut700:
++      sparc_fix_ut700 = value;
++      break;
++
++    case OPT_mfix_tn0013:
++      sparc_fix_tn0013 = value;
++      break;
++
++    case OPT_mfpstore_branch_slots:
++      fpstore_branch_slots = value;
++      break;
++
++    case OPT_mfpstore_deep_scan:
++      fpstore_deep_scan = value;
++      break;
++
++    case OPT_mfpstore_errata_debug:
++      fpstore_errata_debug = value;
++      break;
++
+     case OPT_fobjc_exceptions:
+       flag_objc_exceptions = value;
+       break;

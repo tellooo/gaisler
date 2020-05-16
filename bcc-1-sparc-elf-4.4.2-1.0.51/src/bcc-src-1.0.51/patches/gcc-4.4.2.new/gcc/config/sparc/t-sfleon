@@ -1,0 +1,7 @@
+with_leon_cpu=sfleon
+
+#TPBIT = tp-bit.c
+#
+#tp-bit.c: $(srcdir)/config/fp-bit.c
+#	echo '# define TFLOAT' > tp-bit.c
+#	cat $(srcdir)/config/fp-bit.c >> tp-bit.c

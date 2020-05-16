@@ -1,0 +1,87 @@
+--- gcc-4.4.2.old/./gcc/config.gcc	2020-02-28 17:30:30.859424914 +0100
++++ gcc-4.4.2.new/./gcc/config.gcc	2010-08-24 10:47:51.387476000 +0200
+@@ -2185,6 +2185,16 @@
+ 	gas=yes gnu_ld=yes
+ 	with_cpu=ultrasparc
+ 	;;
++sparc-*-uclinux*)		# sparc running uClinux with uClibc
++	tm_file="${tm_file} dbxelf.h elfos.h svr4.h sparc/sysv4.h sparc/sp-elf.h sparc/uclinux.h linux.h "
++	tm_defines="${tm_defines} UCLIBC_DEFAULT=1"	
++	#tm_file="${tm_file} dbxelf.h elfos.h svr4.h sparc/sysv4.h sol2.h sparc/sol2.h sparc/sol2-gld.h sparc/elf.h"
++	tmake_file="sparc/t-elf sparc/t-crtfm "
++	extra_parts=" crtbegin.o crtend.o"
++	extra_options="${extra_options} linux.opt"
++	use_fixproto=yes
++	#use_fixproto=no
++	;;
+ sparc-*-elf*)
+ 	tm_file="${tm_file} dbxelf.h elfos.h svr4.h sparc/sysv4.h sparc/sp-elf.h"
+ 	tmake_file="sparc/t-elf sparc/t-crtfm"
+@@ -2978,6 +2988,27 @@
+ 			| v9 | ultrasparc | ultrasparc3 | niagara | niagara2)
+ 				# OK
+ 				;;
++                       leon*|sfleon*|fhleon*)
++				echo "Using leon cpu for ${target}" 1>&2
++				tmake_file="sparc/t-leon ${tmake_file} " # build lib for softfloat with option -msoft-float
++				case "${target}" in
++					sparc*-elf*)
++						echo "Using leon spec file" 1>&2
++						tm_file="${tm_file} sparc/leon.h"
++						;;
++					sparc*-linux-*)
++						tmake_file="sparc/t-leon-linux sparc/t-${val} ${tmake_file} sparc/t-sparcbare" # build lib for softfloat with option -msoft-float
++						echo "Adding multilib sparc/t-leon-linux,sparc/t-sparcbare to leon-sparc-linux: ${tmake_file} " 1>&2
++						;;
++					sparc*-uclinux*)
++						tmake_file="sparc/t-leon-uclinux ${tmake_file} " # build lib for softfloat with option -msoft-float
++						echo "Adding multilib sparc/t-leon-uclinux to leon-sparc-linux: ${tmake_file} " 1>&2
++						;;
++					*)
++						;;
++				esac
++				target_cpu_default2=TARGET_CPU_"`echo $machine | sed 's/-.*$//'`"
++				;;
+ 			*)
+ 				echo "Unknown cpu used in --with-$which=$val" 1>&2
+ 				exit 1
+@@ -3114,6 +3145,7 @@
+ 		;;
+ 
+ 	sparc*-*-*)
++
+ 		# Some standard aliases.
+ 		case x$with_cpu in
+ 		xsparc)
+@@ -3140,6 +3172,7 @@
+ 		;;
+ esac
+ 
++
+ t=
+ all_defaults="abi cpu cpu_32 cpu_64 arch arch_32 arch_64 tune tune_32 tune_64 schedule float mode fpu divide llsc mips-plt"
+ for option in $all_defaults
+@@ -3156,11 +3189,19 @@
+ 			;;
+ 		esac
+ 
+-		if test "x$t" = x
+-		then
+-			t="{ \"$option\", \"$val\" }"
++		if [ "x$option" = xcpu ] && [ "x$val" = xleon -o \
++		     		       	      "x$val" = xfhleon -o \
++					      "x$val" = xfhleonv8 -o \
++					      "x$val" = xsfleon -o \
++					      "x$val" = xsfleonv8 ]; then
++			echo "Getting cpu=$val, not registering it as mcpu option" 2>&1
+ 		else
+-			t="${t}, { \"$option\", \"$val\" }"
++			if test "x$t" = x
++			then
++				t="{ \"$option\", \"$val\" }"
++			else
++				t="${t}, { \"$option\", \"$val\" }"
++			fi
+ 		fi
+ 	fi
+ done

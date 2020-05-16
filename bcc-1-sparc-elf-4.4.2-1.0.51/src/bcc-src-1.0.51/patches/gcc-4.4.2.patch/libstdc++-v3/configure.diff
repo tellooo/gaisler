@@ -1,0 +1,12 @@
+--- gcc-4.4.2.old/./libstdc++-v3/configure	2020-02-28 17:30:30.638427512 +0100
++++ gcc-4.4.2.new/./libstdc++-v3/configure	2009-10-19 13:56:36.786140000 +0200
+@@ -2866,6 +2866,9 @@
+ }
+ _ACEOF
+ # FIXME: Cleanup?
++
++echo "leon: do_link" >&5
++
+ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+   (eval $ac_link) 2>&5
+   ac_status=$?

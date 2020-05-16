@@ -1,0 +1,13 @@
+--- gcc-3.4.4.old/./gcc/fixinc/mkfixinc.sh	2020-02-28 17:30:18.861566017 +0100
++++ gcc-3.4.4.new/./gcc/fixinc/mkfixinc.sh	2007-04-16 15:04:26.400802000 +0200
+@@ -27,6 +27,10 @@
+ 		CFLAGS="${CFLAGS} -Dexit=xexit -Datexit=xatexit"
+ 		MAKE="${MAKE} TARGETS=oneprocess"
+ 		;;
++	*-*-mingw32 )
++	        machine=donothing
++		fixincludes=
++		;;
+ 
+ 	* )
+ 		MAKE="${MAKE} TARGETS=oneprocess"

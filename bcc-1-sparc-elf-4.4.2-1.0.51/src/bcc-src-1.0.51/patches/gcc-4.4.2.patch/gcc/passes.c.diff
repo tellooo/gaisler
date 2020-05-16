@@ -1,0 +1,13 @@
+--- gcc-4.4.2.old/./gcc/passes.c	2020-02-28 17:30:31.491417480 +0100
++++ gcc-4.4.2.new/./gcc/passes.c	2017-08-24 15:54:50.846477000 +0200
+@@ -801,9 +801,9 @@
+ 	  NEXT_PASS (pass_duplicate_computed_gotos);
+ 	  NEXT_PASS (pass_variable_tracking);
+ 	  NEXT_PASS (pass_free_cfg);
+-	  NEXT_PASS (pass_machine_reorg);
+ 	  NEXT_PASS (pass_cleanup_barriers);
+ 	  NEXT_PASS (pass_delay_slots);
++	  NEXT_PASS (pass_machine_reorg);
+ 	  NEXT_PASS (pass_split_for_shorten_branches);
+ 	  NEXT_PASS (pass_convert_to_eh_region_ranges);
+ 	  NEXT_PASS (pass_shorten_branches);

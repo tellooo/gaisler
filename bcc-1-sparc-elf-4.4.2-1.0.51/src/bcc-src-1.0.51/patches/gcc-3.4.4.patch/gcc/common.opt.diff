@@ -1,0 +1,13 @@
+--- gcc-3.4.4.old/./gcc/common.opt	2020-02-28 17:30:18.139574508 +0100
++++ gcc-3.4.4.new/./gcc/common.opt	2010-12-20 10:50:33.941348000 +0100
+@@ -333,6 +333,10 @@
+ Common Joined RejectNegative
+ -ffixed-<register>	Mark <register> as being unavailable to the compiler
+ 
++ffloat-int-mode
++Common
++Do not use floats in int mode
++
+ ffloat-store
+ Common
+ Do not store floats in registers

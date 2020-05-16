@@ -1,0 +1,58 @@
+--- gcc-3.4.4.old/./gcc/c-common.c	2020-02-28 17:30:18.063575402 +0100
++++ gcc-3.4.4.new/./gcc/c-common.c	2017-11-16 16:05:34.088973000 +0100
+@@ -272,6 +272,55 @@
+ 
+ int warn_pointer_arith;
+ 
++/* Nonzero means avoid generation of fsmuld */
++
++int flag_fno_fsmuld = 0;
++
++int debug_patch_divsqrt = 0;
++
++int sparc_fix_ut699 = 0;
++
++int sparc_fix_b2bst = 0;
++
++int sparc_fix_gr712rc = 0;
++
++int sparc_fix_ut700 = 0;
++
++int sparc_fix_tn0013 = 0;
++
++/* Nonzero means emit a store after fdivs/fsqrts/fdivd/fsqrtd */
++
++int flag_fstore_after_divsqrt = 0;
++
++/* Nonzero means emit more nops */
++
++int flag_fnullify_allnop = 0;
++
++/* Nonzero means avoid generation of fdivs/fsqrts, use fdivd/fsqrtd instead  */
++
++int flag_fno_sf_divsqrt = 0;
++
++/* Nonzero means fpstore errata is activated and NOPs are inserted */
++
++int fpstore_errata = 0;
++
++/* Nonzero means fpstore errata is simplified by not allowing certain insn in 
++ * branch delay-slots too. Default to avoid certain insn in call delay-slots */
++
++int fpstore_branch_slots = 0;
++
++/* Nonzero means fpstore errata is simplified by not doing the scan for the
++ * ending single fp-store instruction. This means that if only the first two
++ * instructions in the sequence are detected a NOP is inserted. This means more
++ * NOPs are inserted, the flag is for debug.
++ */
++
++int fpstore_deep_scan = 0;
++
++/* Nonzero means fpstore errata debug information is activated */
++
++int fpstore_errata_debug = 0;
++
+ /* Nonzero means warn for any global function def
+    without separate previous prototype decl.  */
+ 

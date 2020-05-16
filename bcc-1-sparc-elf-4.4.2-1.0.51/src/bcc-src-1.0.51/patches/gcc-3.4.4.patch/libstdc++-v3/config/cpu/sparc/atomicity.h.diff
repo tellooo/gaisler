@@ -1,0 +1,22 @@
+--- gcc-3.4.4.old/./libstdc++-v3/config/cpu/sparc/atomicity.h	2020-02-28 17:30:18.026575835 +0100
++++ gcc-3.4.4.new/./libstdc++-v3/config/cpu/sparc/atomicity.h	2017-12-12 08:58:30.230981000 +0100
+@@ -86,7 +86,8 @@
+   {
+     _Atomic_word __result, __tmp;
+     
+-    __asm__ __volatile__("1:	ldstub	[%1], %0\n\t"
++    __asm__ __volatile__(".align 16\n\t"
++			 "1:	ldstub	[%1], %0\n\t"
+ 			 "	cmp	%0, 0\n\t"
+ 			 "	bne	1b\n\t"
+ 			 "	 nop"
+@@ -108,7 +109,8 @@
+   {
+     _Atomic_word __tmp;
+     
+-    __asm__ __volatile__("1:	ldstub	[%1], %0\n\t"
++    __asm__ __volatile__(".align 16\n\t"
++			 "1:	ldstub	[%1], %0\n\t"
+ 			 "	cmp	%0, 0\n\t"
+ 			 "	bne	1b\n\t"
+ 			 "	 nop"

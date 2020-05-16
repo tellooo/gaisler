@@ -1,0 +1,338 @@
+# This is a Makefile to build a sparc-elf cross compiler for Windows
+# using Mingw32 on linux (Canadian Cross). For this to work you will
+# need booth a sparc-elf compiler and a Mingw32 compiler on your
+# build system. Set HOST to the target used when compiling Mingw32.
+# Set BUILD to the target of your native compiler.
+# 
+# For help with building a Mingw32 cross-compiler look here:
+# http://www.libsdl.org/extras/win32/cross/README.txt
+# Find more information about Canadian Cross here:
+# http://www.airs.com/ian/configure/configure_6.html
+
+include Makefile.release
+
+ISMINGW=y
+TOOLBASE=c:/opt/sparc-elf-4.4.2-mingw
+GCCVERSION=4.4.2
+NO_DO_STRIP=y
+SYMLINKEX=-mingw
+PREFIX = $(CURDIR)/toolchains/sparc-elf-4.4.2-$(RELEASE_VERSION)-mingw
+PREFIX_LINUX = /opt/sparc-elf-$(GCCVERSION)
+BIN    = $(PREFIX)/bin
+CONFIG_PATH = $(PATH)
+EXPORT_PATH = export PATH=$(BIN):$(PREFIX_LINUX)/bin:$(CONFIG_PATH) bash_cv_have_mbstate_t=yes
+#EXTRA_FLAGS = -i
+BINUTIL_EXTRA = --disable-nls
+NEWLIB_EXTRA = --disable-nls
+HOST=i686-mingw32
+TMPDIR_EXTRA = gcc-4.4.2-mingw-$(RELEASE_VERSION)$(TUNE_PREFIX)
+BUILD=i486-slackware-linux-gnu
+TARGET=sparc-elf
+TARGET-GDB=sparc-elf
+GMPDIR=gmp-4.2.4
+MPFRDIR=mpfr-2.4.1
+M_MYSELF=Makefile.gcc-4.4.2-linux-mingw
+BINUTILS_DIR=binutils-2.19.51
+MKPROM_EXTRA=HOSTCC="mingw32-gcc -DLEON" WIN32-LIBS="-lws2_32" POSTFIX=".exe" TOOLBASE="c:/opt/sparc-elf-3.4.4-mingw"
+
+EXTRA_CONFIG = --host=$(HOST) --build=$(BUILD)
+GCC_TARGET_FLAGS=CFLAGS_FOR_TARGET="-g -O2" CXXFLAGS_FOR_TARGET="-g -O2"
+
+build-all: symlink\
+	   newlib-clean \
+	   gcc-clean \
+	   binutils-clean \
+	   mpfr-clean \
+	   gmp-clean \
+	   make-clean \
+           gdb-clean \
+	   gdb-mingw-clean \
+	   binutils-configure \
+	   binutils-compile \
+	   binutils-install \
+	   gmp-configure \
+	   gmp-compile \
+	   gmp-install \
+	   mpfr-configure \
+	   mpfr-compile \
+	   mpfr-install \
+	   gcc-configure \
+	   gcc-compile \
+	   gcc-install \
+	   newlib-configure \
+	   newlib-compile \
+	   newlib-install \
+	   libpthread-compile \
+	   libnet-compile \
+	   freertos-compile \
+	   gdb-mingw-configure \
+	   gdb-mingw-compile \
+	   gdb-mingw-install \
+	   gdb-mingw-6.3-copy \
+	   make-extract \
+	   mkprom-install-linkprom \
+	   gdb-mingw-6.8-build
+	  
+#          mkprom-compile \
+#	   gdb7-all
+	   
+#	   make-configure \
+#	   make-compile \
+#	   make-install
+
+# --------------------------------------
+
+gcc-build: gcc-clean gcc-configure gcc-compile gcc-install
+
+gcc-configure:
+	if [ ! -d $(TMPDIR_EXTRA)gcc-4.4.2-build ] ; then mkdir $(TMPDIR_EXTRA)gcc-4.4.2-build; fi
+	cd $(TMPDIR_EXTRA)gcc-4.4.2-build; $(EXPORT_PATH); \
+	$(GCC_TARGET_FLAGS) \
+	../gcc-4.4.2/configure --target=$(TARGET) $(EXTRA_CONFIG) \
+	 --prefix=$(PREFIX) --with-gmp=$(CURDIR)/$(TMPDIR_EXTRA)$(GMPDIR)-install --with-mpfr=$(CURDIR)/$(TMPDIR_EXTRA)$(MPFRDIR)-install \
+	 --with-gnu-as --with-gnu-ld \
+	 --verbose --enable-languages=c,c++ --disable-shared  --disable-nls \
+	 --with-pkgversion='BCC $(GCCVERSION) release $(RELEASE_VERSION)' \
+	 --with-newlib --with-cpu=leon 2>&1 | tee compile-gcc-configure.out
+
+ gcc-compile:
+	 cd $(TMPDIR_EXTRA)gcc-4.4.2-build; $(EXPORT_PATH);  \
+	 make $(EXTRA_FLAGS) all 2>&1 | tee compile-gcc-make.out
+
+ gcc-compile-gcc:
+	 cd $(TMPDIR_EXTRA)gcc-4.4.2-build; $(EXPORT_PATH);  \
+	 make $(EXTRA_FLAGS) all-gcc 2>&1 | tee compile-gcc-make.out
+
+ gcc-install:
+	 cd $(TMPDIR_EXTRA)gcc-4.4.2-build; $(EXPORT_PATH);  \
+	 make $(EXTRA_FLAGS) install 2>&1 | tee compile-gcc-install.out
+
+ gcc-install-gcc:
+	 cd $(TMPDIR_EXTRA)gcc-4.4.2-build; $(EXPORT_PATH);  \
+	 make $(EXTRA_FLAGS) install-gcc 2>&1 | tee compile-gcc-install-gcc.out
+
+ gcc-clean:
+	 -rm -rf gcc-4.4.2-build
+
+
+
+### Make ###
+#
+# make-clean:
+# 	rm -rf make-3.80-build
+
+# make-configure:
+# 	if [ ! -d make-3.80-build ] ; then mkdir make-3.80-build; fi
+# 	cd make-3.80-build; \
+# 	../make-3.80/configure --prefix=$(PREFIX) --build=$(BUILD) \
+# 		--host=$(HOST) --disable-nls --disable-rpath
+
+# make-compile:
+# 	cd make-3.80-build; \
+# 	make $(EXTRA_FLAGS) all
+
+# make-install:
+# 	cd make-3.80-build; \
+# 	make $(EXTRA_FLAGS) install
+
+# ## Exctract Precompiled mingw32-make
+# make-extract:
+# 	tar -C $(PREFIX) -xzvf tarfiles/mingw32-make-3.80.0-3.tar.gz
+# 	mv $(PREFIX)/bin/mingw32-make.exe $(PREFIX)/bin/make.exe
+
+ # --------------------------------------
+# gdb-mingw-build: gdb-mingw-clean gdb-mingw-configure gdb-mingw-compile gdb-mingw-install
+
+#  gdb-mingw-configure:
+# 	 if [ ! -d $(TMPDIR_EXTRA)gdb-6.3-mingw-build ] ; then mkdir $(TMPDIR_EXTRA)gdb-6.3-mingw-build; fi
+# 	 cd $(TMPDIR_EXTRA)gdb-6.3-mingw-build; $(EXPORT_PATH); \
+# 	 ../gdb-6.3-mingw/configure --target=$(TARGET-GDB) $(EXTRA_CONFIG) \
+# 	 --prefix=$(PREFIX) --disable-nls --disable-libada \
+# 	 --with-cpu=leon 2>&1 | tee compile-gdb-configure.out
+
+#  gdb-mingw-compile:
+# 	 cd $(TMPDIR_EXTRA)gdb-6.3-mingw-build; $(EXPORT_PATH); \
+# 	 make $(EXTRA_FLAGS) 2>&1 | tee compile-gdb-make.out
+
+#  gdb-mingw-install:
+# 	 cd $(TMPDIR_EXTRA)gdb-6.3-mingw-build; $(EXPORT_PATH);  \
+# 	 make $(EXTRA_FLAGS) install 2>&1 | tee compile-gdb-install.out
+
+#  gdb-mingw-clean:
+# 	 rm -rf $(TMPDIR_EXTRA)gdb-6.3-mingw-build
+
+
+
+
+
+#  termcap:
+# 	 termcap/1.3.1/configure --prefix=$MFS --enable-install-termcap --with-termcap=$MFS/etc/termcap && \
+# 	   make && make install && make distclean && 
+
+
+
+
+#### Makefile.common
+#
+
+#----------------------------------------
+# mkprom
+#mkprom-compile:
+#	-cd mkprom; make clean
+#	-cd mkprom; $(EXPORT_PATH); make PREFIX=$(PREFIX) RELEASE_VERSION=$(RELEASE_VERSION) HOSTCC="mingw32-gcc -DLEON" WIN32-LIBS="-lws2_32" POSTFIX=".exe" TOOLBASE="c:/opt/sparc-elf-4.4.2-mingw" multi-do DO="clean multi-all install"
+#	-cd mkprom; $(EXPORT_PATH); make PREFIX=$(PREFIX) RELEASE_VERSION=$(RELEASE_VERSION) HOSTCC="mingw32-gcc -DLEON"  WIN32-LIBS="-lws2_32" POSTFIX=".exe"  TOOLBASE="c:/opt/sparc-elf-4.4.2-mingw" clean multi-all install
+#	-cd mkprom; $(EXPORT_PATH); make PREFIX=$(PREFIX)
+# RELEASE_VERSION=$(RELEASE_VERSION) HOSTCC="mingw32-gcc -DLEON"
+# WIN32-LIBS="-lws2_32" POSTFIX=".exe"
+# TOOLBASE="c:/opt/sparc-elf-4.4.2-mingw" install-mkprom
+
+
+#----------------------------------------
+# libpthread
+# libpthread-compile:
+# 	-cd libs/libpthread; $(EXPORT_PATH); make PREFIX=$(PREFIX) install-headers
+# 	-cd libs/libpthread; $(EXPORT_PATH); make PREFIX=$(PREFIX) multi-do DO="clean multi-all install"
+# 	-cd libs/libpthread; $(EXPORT_PATH); make PREFIX=$(PREFIX) clean multi-all install
+
+# #----------------------------------------
+# # libnet
+# libnet-compile:
+# 	-cd libs/libnet; $(EXPORT_PATH); make PREFIX=$(PREFIX) install-headers
+# 	-cd libs/libnet; $(EXPORT_PATH); make PREFIX=$(PREFIX) multi-do DO="clean multi-all install"
+# 	-cd libs/libnet; $(EXPORT_PATH); make PREFIX=$(PREFIX) clean multi-all install
+
+# --------------------------------------
+# gdb-build: gdb-clean gdb-configure gdb-compile gdb-install
+
+# gdb-dir:
+# 	if [ ! -d $(TMPDIR_EXTRA)gdb-6.3-build ] ; then mkdir $(TMPDIR_EXTRA)gdb-6.3-build; fi
+	
+# gdb-configure: gdb-dir
+# 	cd $(TMPDIR_EXTRA)gdb-6.3-build; $(EXPORT_PATH); \
+# 	../gdb-6.3/configure --target=$(TARGET-GDB) --prefix=$(PREFIX) $(EXTRA_CONFIG) --disable-nls --with-cpu=leon 2>&1 | tee compile-gdb-configure.out
+
+# gdb-compile: gdb-dir
+# 	cd $(TMPDIR_EXTRA)gdb-6.3-build; $(EXPORT_PATH); \
+# 	make $(EXTRA_FLAGS) 2>&1 | tee compile-gdb-make.out
+
+# gdb-install: gdb-dir
+# 	cd $(TMPDIR_EXTRA)gdb-6.3-build; $(EXPORT_PATH);  \
+# 	make $(EXTRA_FLAGS) install 2>&1 | tee compile-gdb-install.out
+
+# gdb-clean:
+# 	rm -rf $(TMPDIR_EXTRA)gdb-6.3-build
+
+# --------------------------------------
+
+# newlib-all: newlib-clean newlib-configure newlib-compile newlib-install
+
+# newlib-dir:
+# 	if [ ! -d $(TMPDIR_EXTRA)newlib-1.13.0-build ] ; then mkdir $(TMPDIR_EXTRA)newlib-1.13.0-build; fi
+
+# newlib-configure: newlib-dir
+# 	cd $(TMPDIR_EXTRA)newlib-1.13.0-build; $(EXPORT_PATH); \
+# 	../newlib-1.13.0/configure --target=$(TARGET)  $(EXTRA_CONFIG) --prefix=$(PREFIX) $(NEWLIB_EXTRA) \
+# 	--enable-newlib-multithread --with-cpu=leon 2>&1 | tee compile-newlib-configure.out
+
+# newlib-compile: newlib-dir
+# 	cd $(TMPDIR_EXTRA)newlib-1.13.0-build; $(EXPORT_PATH); \
+# 	make $(EXTRA_FLAGS) 2>&1 | tee compile-newlib-make.out
+
+# newlib-compile-libgloss: newlib-dir
+# 	cd $(TMPDIR_EXTRA)newlib-1.13.0-build; $(EXPORT_PATH); \
+# 	make $(EXTRA_FLAGS) maybe-all-target-libgloss 2>&1 | tee compile-newlib-make.out
+	
+# newlib-install: newlib-dir
+# 	cd $(TMPDIR_EXTRA)newlib-1.13.0-build; $(EXPORT_PATH); \
+# 	make $(EXTRA_FLAGS) install 2>&1 | tee compile-newlib-install.out
+
+# newlib-install-libgloss: newlib-dir
+# 	cd $(TMPDIR_EXTRA)newlib-1.13.0-build; $(EXPORT_PATH); \
+# 	make $(EXTRA_FLAGS) maybe-install-target-libgloss 2>&1 | tee compile-newlib-install.out
+	
+# newlib-clean: 
+# 	-rm -rf $(TMPDIR_EXTRA)newlib-1.13.0-build
+	
+# --------------------------------------
+
+# binutils-dir:
+# 	if [ ! -d $(TMPDIR_EXTRA)binutils-2.19.51-build ] ; then mkdir $(TMPDIR_EXTRA)binutils-2.19.51-build; fi
+	
+# binutils-configure: binutils-dir
+# 	cd $(TMPDIR_EXTRA)binutils-2.19.51-build; $(EXPORT_PATH); \
+# 	../binutils-2.19.51/configure --target=$(TARGET) $(EXTRA_CONFIG) --prefix=$(PREFIX) $(BINUTIL_EXTRA) \
+#         --verbose --with-cpu=leon  2>&1 | tee compile-binutils-configure.out
+
+# binutils-compile: binutils-dir
+# 	cd $(TMPDIR_EXTRA)binutils-2.19.51-build; $(EXPORT_PATH); \
+# 	 make $(EXTRA_FLAGS) 2>&1 | tee compile-binutils-make.out
+
+# binutils-install: binutils-dir
+# 	cd $(TMPDIR_EXTRA)binutils-2.19.51-build; $(EXPORT_PATH); \
+# 	make $(EXTRA_FLAGS) install 2>&1 | tee compile-binutils-install.out
+
+# binutils-clean:
+# 	rm -rf $(TMPDIR_EXTRA)binutils-2.19.51-build
+
+
+# testexport:
+# 	echo $(EXPORT_PATH)
+
+
+
+
+#---------------------------------------
+
+# gmp-dir:
+# 	if [ ! -d $(TMPDIR_EXTRA)$(GMPDIR)-build ] ; then mkdir $(TMPDIR_EXTRA)$(GMPDIR)-build; fi
+# 	if [ ! -d $(TMPDIR_EXTRA)$(GMPDIR)-install ] ; then mkdir $(TMPDIR_EXTRA)$(GMPDIR)-install; fi
+	
+# gmp-configure: gmp-dir
+# 	cd $(TMPDIR_EXTRA)$(GMPDIR)-build; $(EXPORT_PATH); \
+# 	../$(GMPDIR)/configure  \
+# 	--verbose --prefix=$(CURDIR)/$(TMPDIR_EXTRA)$(GMPDIR)-install \
+# 	--build=$(BUILD) $(EXTRA_CONFIG) \
+# 	--host=$(HOST)  2>&1 | tee compile-gmp-configure.out
+
+# gmp-compile: 
+# 	     cd $(TMPDIR_EXTRA)$(GMPDIR)-build; $(EXPORT_PATH); \
+# 	make 2>&1 | tee compile-gmp-compile.out
+
+# gmp-install: 
+# 	     cd $(TMPDIR_EXTRA)$(GMPDIR)-build; $(EXPORT_PATH); \
+# 	make install 2>&1 | tee compile-gmp-install.out
+
+# gmp-clean: 
+# 	     cd $(TMPDIR_EXTRA)$(GMPDIR)-build; $(EXPORT_PATH); \
+# 	make clean 2>&1 | tee compile-gmp-clean.out
+
+# #---------------------------------------
+	
+# mpfr-dir:
+# 	if [ ! -d $(TMPDIR_EXTRA)$(MPFRDIR)-build ] ; then mkdir $(TMPDIR_EXTRA)$(MPFRDIR)-build; fi
+# 	if [ ! -d $(TMPDIR_EXTRA)$(MPFRDIR)-install ] ; then mkdir $(TMPDIR_EXTRA)$(MPFRDIR)-install; fi
+	
+# mpfr-configure: mpfr-dir
+# 	cd $(TMPDIR_EXTRA)$(MPFRDIR)-build; $(EXPORT_PATH); \
+# 	../$(MPFRDIR)/configure  \
+# 	--verbose --prefix=$(CURDIR)/$(TMPDIR_EXTRA)$(MPFRDIR)-install \
+# 	--build=$(BUILD) $(EXTRA_CONFIG) \
+# 	--host=$(HOST)  2>&1 | tee compile-mpfr-configure.out
+
+# mpfr-compile: 
+# 	     cd $(TMPDIR_EXTRA)$(MPFRDIR)-build; $(EXPORT_PATH); \
+# 	make 2>&1 | tee compile-mpfr-compile.out
+
+# mpfr-install: 
+# 	     cd $(TMPDIR_EXTRA)$(MPFRDIR)-build; $(EXPORT_PATH); \
+# 	make install 2>&1 | tee compile-mpfr-install.out
+
+# mpfr-clean: 
+# 	     cd $(TMPDIR_EXTRA)$(MPFRDIR)-build; $(EXPORT_PATH); \
+# 	make clean 2>&1 | tee compile-mpfr-clean.out
+	
+
+# -------------------------------------
+	
+include Makefile.common		
+include Makefile.common-linux-mingw

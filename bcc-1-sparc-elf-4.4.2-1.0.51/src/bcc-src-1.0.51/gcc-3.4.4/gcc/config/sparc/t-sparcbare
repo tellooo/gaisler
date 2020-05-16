@@ -1,0 +1,34 @@
+# configuration file for a bare sparc cpu
+
+LIB1ASMSRC = sparc/lb1spc.asm
+LIB1ASMFUNCS = _mulsi3 _divsi3 _modsi3
+
+# We want fine grained libraries, so use the new code to build the
+# floating point emulation libraries.
+FPBIT = fp-bit.c
+DPBIT = dp-bit.c
+#TPBIT = tp-bit.c
+#TPBIT_CFLAGS=-mlong-double-128
+
+dp-bit.c: $(srcdir)/config/fp-bit.c
+	cat $(srcdir)/config/fp-bit.c > dp-bit.c
+
+fp-bit.c: $(srcdir)/config/fp-bit.c
+	echo '#define FLOAT' > fp-bit.c
+	cat $(srcdir)/config/fp-bit.c >> fp-bit.c
+
+#tp-bit.c: $(srcdir)/config/fp-bit.c
+#	echo '#if __LDBL_MANT_DIG__ == 113 || __LDBL_MANT_DIG__ == 106' > tp-bit.c
+#	echo '# define TFLOAT' >> tp-bit.c
+#	cat $(srcdir)/config/fp-bit.c >> tp-bit.c
+#	echo '#endif' >> tp-bit.c
+
+# MULTILIB_OPTIONS should have msparclite too, but we'd have to make
+# gas build...
+MULTILIB_OPTIONS = msoft-float mv8 mcpu=ut699
+MULTILIB_DIRNAMES = soft v8 ut699
+MULTILIB_MATCHES = msoft-float=mno-fpu 
+MULTILIB_EXCEPTIONS = 
+
+LIBGCC = stmp-multilib
+INSTALL_LIBGCC = install-multilib

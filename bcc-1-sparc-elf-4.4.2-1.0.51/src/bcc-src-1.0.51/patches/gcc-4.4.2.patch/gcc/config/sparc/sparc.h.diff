@@ -1,0 +1,129 @@
+--- gcc-4.4.2.old/./gcc/config/sparc/sparc.h	2020-02-28 17:30:31.240420432 +0100
++++ gcc-4.4.2.new/./gcc/config/sparc/sparc.h	2016-09-13 08:37:17.814552000 +0200
+@@ -105,6 +105,9 @@
+ 
+ extern const struct processor_costs *sparc_costs;
+ 
++/* diable delay schedule of load instructions */
++extern int sparc_fix_load_in_delay;
++
+ /* Target CPU builtins.  FIXME: Defining sparc is for the benefit of
+    Solaris only; otherwise just define __sparc__.  Sadly the headers
+    are such a mess there is no Solaris-specific header.  */
+@@ -112,6 +115,8 @@
+   do						\
+     {						\
+ 	builtin_define_std ("sparc");		\
++	if (sparc_fix_b2bst)                    \
++	  builtin_define_std("__FIX_B2BST");    \
+ 	if (TARGET_64BIT)			\
+ 	  { 					\
+ 	    builtin_assert ("cpu=sparc64");	\
+@@ -243,6 +248,11 @@
+ #define TARGET_CPU_ultrasparc3	9
+ #define TARGET_CPU_niagara	10
+ #define TARGET_CPU_niagara2	11
++#define TARGET_CPU_leon		12
++#define TARGET_CPU_fhleon       13
++#define TARGET_CPU_fhleonv8	14
++#define TARGET_CPU_sfleon	15
++#define TARGET_CPU_sfleonv8	16
+ 
+ #if TARGET_CPU_DEFAULT == TARGET_CPU_v9 \
+  || TARGET_CPU_DEFAULT == TARGET_CPU_ultrasparc \
+@@ -294,6 +304,31 @@
+ #define ASM_CPU32_DEFAULT_SPEC "-Asparclet"
+ #endif
+ 
++#if TARGET_CPU_DEFAULT == TARGET_CPU_leon 
++#define CPP_CPU32_DEFAULT_SPEC "-D__leonbare__"
++#define ASM_CPU32_DEFAULT_SPEC ""
++#endif
++
++#if TARGET_CPU_DEFAULT == TARGET_CPU_fhleon
++#define CPP_CPU32_DEFAULT_SPEC "-D__leonbare__"
++#define ASM_CPU32_DEFAULT_SPEC ""
++#endif
++
++#if TARGET_CPU_DEFAULT == TARGET_CPU_fhleonv8
++#define CPP_CPU32_DEFAULT_SPEC "-D__leonbare__ -D__sparc_v8__"
++#define ASM_CPU32_DEFAULT_SPEC ""
++#endif
++
++#if TARGET_CPU_DEFAULT == TARGET_CPU_sfleon 
++#define CPP_CPU32_DEFAULT_SPEC "-D__leonbare__ -D_SOFT_FLOAT"
++#define ASM_CPU32_DEFAULT_SPEC ""
++#endif
++
++#if TARGET_CPU_DEFAULT == TARGET_CPU_sfleonv8
++#define CPP_CPU32_DEFAULT_SPEC "-D__leonbare__ -D__sparc_v8__ -D_SOFT_FLOAT"
++#define ASM_CPU32_DEFAULT_SPEC ""
++#endif
++
+ #if TARGET_CPU_DEFAULT == TARGET_CPU_sparclite
+ #define CPP_CPU32_DEFAULT_SPEC "-D__sparclite__"
+ #define ASM_CPU32_DEFAULT_SPEC "-Asparclite"
+@@ -352,6 +387,7 @@
+    for handling -mcpu=xxx switches.  */
+ #define CPP_CPU_SPEC "\
+ %{msoft-float:-D_SOFT_FLOAT} \
++%{mflat: -D_FLAT} \
+ %{mcypress:} \
+ %{msparclite:-D__sparclite__} \
+ %{mf930:-D__sparclite__} %{mf934:-D__sparclite__} \
+@@ -369,6 +405,9 @@
+ %{mcpu=ultrasparc3:-D__sparc_v9__} \
+ %{mcpu=niagara:-D__sparc_v9__} \
+ %{mcpu=niagara2:-D__sparc_v9__} \
++%{mcpu=fhleonv8:-D__sparc_v8__} \
++%{mcpu=sfleonv8:-D__sparc_v8__ -D_SOFT_FLOAT} \
++%{mcpu=sfleon:-D_SOFT_FLOAT} \
+ %{!mcpu*:%{!mcypress:%{!msparclite:%{!mf930:%{!mf934:%{!mv8:%{!msupersparc:%(cpp_cpu_default)}}}}}}} \
+ "
+ #define CPP_ARCH32_SPEC ""
+@@ -403,9 +442,9 @@
+ %{sun4:} %{target:} \
+ %{mcypress:-mcpu=cypress} \
+ %{msparclite:-mcpu=sparclite} %{mf930:-mcpu=f930} %{mf934:-mcpu=f934} \
+-%{mv8:-mcpu=v8} %{msupersparc:-mcpu=supersparc} \
++ %{msupersparc:-mcpu=supersparc} \
+ "
+-
++/*%{mv8:-mcpu=v8}*/
+ /* Override in target specific files.  */
+ #define ASM_CPU_SPEC "\
+ %{mcpu=sparclet:-Asparclet} %{mcpu=tsc701:-Asparclet} \
+@@ -532,6 +571,7 @@
+ enum processor_type {
+   PROCESSOR_V7,
+   PROCESSOR_CYPRESS,
++  PROCESSOR_LEON,
+   PROCESSOR_V8,
+   PROCESSOR_SUPERSPARC,
+   PROCESSOR_SPARCLITE,
+@@ -941,6 +981,16 @@
+ /* The stack bias (amount by which the hardware register is offset by).  */
+ #define SPARC_STACK_BIAS ((TARGET_ARCH64 && TARGET_STACK_BIAS) ? 2047 : 0)
+ 
++extern int debug_patch_divsqrt;
++
++extern int fpstore_errata;
++
++extern int fpstore_branch_slots;
++
++extern int fpstore_deep_scan;
++
++extern int sparc_fpstore_after_final_split (void);
++
+ /* Actual top-of-stack address is 92/176 greater than the contents of the
+    stack pointer register for !v9/v9.  That is:
+    - !v9: 64 bytes for the in and local registers, 4 bytes for structure return
+@@ -2002,7 +2052,7 @@
+ /* If a memory-to-memory move would take MOVE_RATIO or more simple
+    move-instruction pairs, we will do a movmem or libcall instead.  */
+ 
+-#define MOVE_RATIO(speed) ((speed) ? 8 : 3)
++#define MOVE_RATIO(speed) ((speed) ? (TARGET_V8 ? 16 : 8) : 3)
+ 
+ /* Define if operations between registers always perform the operation
+    on the full register even if a narrower mode is specified.  */

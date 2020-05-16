@@ -1,0 +1,134 @@
+include Makefile.release
+
+GCCVERSION=4.4.2
+TOOLBASE=/opt/sparc-elf-4.4.2
+PREFIX = /opt/sparc-elf-$(GCCVERSION)/
+BIN    = $(PREFIX)/bin
+CONFIG_PATH = $(PATH)
+EXPORT_PATH = export PATH=$(BIN):$(CONFIG_PATH)
+TMPDIR_EXTRA = gcc-4.4.2-$(RELEASE_VERSION)$(TUNE_PREFIX)
+BUILD=`uname -m`-linux-gnu
+HOST=`uname -m`-linux-gnu
+TARGET=sparc-elf
+TARGET-GDB=sparc-elf
+BINUTILS_DIR=$(BINUTILS-GIT-PREFIX)binutils-2.19.51
+GMPDIR=gmp-4.2.4
+MPFRDIR=mpfr-2.4.1
+M_MYSELF=Makefile.gcc-4.4.2
+
+GDB_VERSION=7.1
+
+# Select 32-bit ABI when cross compiling on a 64-bit Linux machine
+ifeq ($(ABI), 32)
+GDB_ABI_FLAGS= CXXFLAGS=-m32 LDFLAGS=-m32 CFLAGS=-m32
+BINUTILS_ABI_FLAGS= CXXFLAGS="-m32 -O2" LDFLAGS=-m32 CFLAGS="-m32 -O2"
+GMP_ABI_FLAGS= ABI=32
+MPFR_ABI_FLAGS= ABI=32
+GCC_ABI_FLAGS= CXXFLAGS="-m32 -O2" LDFLAGS=-m32 CFLAGS="-m32 -O2"
+endif
+GCC_TARGET_FLAGS=CFLAGS_FOR_TARGET="-g -O2" CXXFLAGS_FOR_TARGET="-g -O2"
+
+
+build-all: symlink \
+	   newlib-clean \
+	   gcc-clean \
+	   binutils-clean \
+           gdb-clean \
+	   binutils-configure \
+	   binutils-compile \
+	   binutils-install \
+	   gmp-configure \
+	   gmp-compile \
+	   gmp-install \
+	   mpfr-configure \
+	   mpfr-compile \
+	   mpfr-install \
+	   gcc-configure \
+	   gcc-compile-gcc \
+	   gcc-install-gcc \
+	   newlib-configure \
+	   newlib-compile \
+	   newlib-install \
+	   gcc-configure \
+	   gcc-compile \
+	   gcc-install \
+	   gdb-configure \
+	   gdb-compile \
+	   gdb-install \
+	   libpthread-compile \
+	   libnet-compile \
+	   freertos-compile \
+	   mkprom-install-linkprom \
+	   
+#	   mkprom-compile \
+#	   gdb7-all
+
+build-all-gcc-rebuild: gcc-compile \
+	gcc-install \
+	newlib-clean \
+	   newlib-configure \
+	   newlib-compile \
+	   newlib-install
+
+	   
+# --------------------------------------
+
+gcc-build: gcc-clean gcc-configure gcc-compile gcc-install
+
+gcc-configure:
+	if [ ! -d $(TMPDIR_EXTRA)gcc-$(GCCVERSION)-build ] ; then mkdir $(TMPDIR_EXTRA)gcc-$(GCCVERSION)-build; fi
+	cd $(TMPDIR_EXTRA)gcc-$(GCCVERSION)-build; $(EXPORT_PATH); \
+	touch compile-gcc-configure.out; \
+	$(GCC_ABI_FLAGS) \
+	$(GCC_TARGET_FLAGS) \
+	../$(GCC-GIT-PREFIX)gcc-$(GCCVERSION)/configure --target=$(TARGET) --prefix=$(PREFIX) \
+        --with-gnu-as --with-gnu-ld --with-gmp=$(CURDIR)/$(TMPDIR_EXTRA)$(GMPDIR)-install --with-mpfr=$(CURDIR)/$(TMPDIR_EXTRA)$(MPFRDIR)-install \
+        --verbose --enable-languages=c,c++ --disable-shared  --disable-nls \
+	--with-pkgversion='BCC $(GCCVERSION) release $(RELEASE_VERSION)' \
+	--with-newlib --with-headers=$(CURDIR)/$(NEWLIBC-GIT-PREFIX)newlib-1.13.0/newlib/libc/include --with-cpu=leon 2>&1 | tee -a compile-gcc-configure.out
+#--with-newlib 
+
+#        --with-headers=/opt/sparc-elf/sparc-elf/include \
+#        --with-libs=``/opt/sparc-elf/sparc-elf/lib``  \
+
+# todo: add ,c++
+
+gcc-compile:
+	cd $(TMPDIR_EXTRA)gcc-$(GCCVERSION)-build; $(EXPORT_PATH); \
+	make -j8 all 2>&1 | tee compile-gcc-make-all.out
+
+gcc-compile-gcc:
+	cd $(TMPDIR_EXTRA)gcc-$(GCCVERSION)-build; $(EXPORT_PATH); \
+	make -j8 all-gcc 2>&1 | tee compile-gcc-make-all-gcc.out
+
+gcc-clean-gcc:
+	cd $(TMPDIR_EXTRA)gcc-$(GCCVERSION)-build; $(EXPORT_PATH); \
+	make -j8 clean-gcc 2>&1 | tee clean-gcc-make.out
+	
+gcc-install:
+	cd $(TMPDIR_EXTRA)gcc-$(GCCVERSION)-build; $(EXPORT_PATH); \
+	make -j8 install 2>&1 | tee compile-gcc-install.out
+
+gcc-install-gcc:
+	cd $(TMPDIR_EXTRA)gcc-$(GCCVERSION)-build; $(EXPORT_PATH); \
+	make -j8 install-gcc 2>&1 | tee compile-gcc-install-gcc.out
+
+gcc-clean:
+	-rm -rf $(TMPDIR_EXTRA)gcc-$(GCCVERSION)-build
+
+gcc-configure-nonewlib:
+	if [ ! -d $(TMPDIR_EXTRA)gcc-$(GCCVERSION)-build ] ; then mkdir gcc-$(GCCVERSION)-build; fi
+	cd $(TMPDIR_EXTRA)gcc-$(GCCVERSION)-build; $(EXPORT_PATH); \
+	../$(GCC-GIT-PREFIX)gcc-$(GCCVERSION)/configure --target=$(TARGET) --prefix=$(PREFIX) \
+        --with-gnu-as --with-gnu-ld \
+        --verbose --enable-languages=c --disable-shared  --disable-nls \
+        --with-cpu=leon 2>&1 | tee compile-gcc-configure.out
+
+
+
+
+
+
+
+
+include Makefile.common		

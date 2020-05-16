@@ -1,0 +1,58 @@
+--- gcc-3.4.4.old/./gcc/c-common.h	2020-02-28 17:30:18.913565405 +0100
++++ gcc-3.4.4.new/./gcc/c-common.h	2017-11-16 16:05:34.088973000 +0100
+@@ -416,6 +416,55 @@
+ 
+ extern int flag_no_nonansi_builtin;
+ 
++extern int debug_patch_divsqrt;
++
++/* Nonzero means avoid generation of fsmuld */
++
++extern int flag_fno_fsmuld;
++
++/* Nonzero means avoid generation of fdivs/fsqrts, use fdivd/fsqrtd instead  */
++
++extern int flag_fno_sf_divsqrt;
++
++/* Nonzero means emit a store after fdivs/fsqrts/fdivd/fsqrtd */
++
++extern int flag_fstore_after_divsqrt;
++
++/* Nonzero means emit more nops */
++
++extern int flag_fut699_allnop;
++
++/* Nonzero means fpstore errata is activated and NOPs are inserted */
++
++extern int fpstore_errata;
++
++/* Nonzero means fpstore errata is simplified by not allowing certain insn in 
++ * branch delay-slots too. Default to avoid certain insn in call delay-slots */
++
++extern int fpstore_branch_slots;
++
++/* Nonzero means fpstore errata is simplified by not doing the scan for the
++ * ending single fp-store instruction. This means that if only the first two
++ * instructions in the sequence are detected a NOP is inserted. This means more
++ * NOPs are inserted, the flag is for debug.
++ */
++
++extern int fpstore_deep_scan;
++
++/* Nonzero means fpstore errata debug information is activated */
++
++extern int fpstore_errata_debug;
++
++/* Nonzero means B2BST errata work around is activated, its also activated by ut699 */
++
++extern int fix_b2bst;
++
++extern int sparc_fix_gr712rc;
++
++extern int sparc_fix_ut700;
++
++extern int sparc_fix_tn0013;
++
+ /* Nonzero means give `double' the same size as `float'.  */
+ 
+ extern int flag_short_double;

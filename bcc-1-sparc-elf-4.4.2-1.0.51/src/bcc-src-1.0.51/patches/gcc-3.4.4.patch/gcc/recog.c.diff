@@ -1,0 +1,20 @@
+--- gcc-3.4.4.old/./gcc/recog.c	2020-02-28 17:30:18.904565510 +0100
++++ gcc-3.4.4.new/./gcc/recog.c	2014-03-12 17:48:33.941267000 +0100
+@@ -2804,6 +2804,8 @@
+   sbitmap_free (blocks);
+ }
+ 
++extern int sparc_fpstore_after_final_split (void);
++
+ /* Same as split_all_insns, but do not expect CFG to be available.
+    Used by machine dependent reorg passes.  */
+ 
+@@ -2837,6 +2839,8 @@
+ 	    split_insn (insn);
+ 	}
+     }
++
++    sparc_fpstore_after_final_split ();
+ }
+ 
+ #ifdef HAVE_peephole2

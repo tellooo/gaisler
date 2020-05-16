@@ -1,0 +1,19 @@
+--- gcc-3.4.4.old/./gcc/mklibgcc.in	2020-02-28 17:30:18.151574367 +0100
++++ gcc-3.4.4.new/./gcc/mklibgcc.in	2007-02-28 10:38:46.226581000 +0100
+@@ -29,6 +29,7 @@
+ # DPBIT_FUNCS
+ # TPBIT
+ # TPBIT_FUNCS
++# TPBIT_CFLAGS
+ # LIBGCC
+ # MULTILIBS
+ # EXTRA_MULTILIB_PARTS
+@@ -201,7 +202,7 @@
+       out="libgcc/${dir}/${name}${objext}"
+ 
+       echo $out: $TPBIT $fpbit_c_dep
+-      echo "	$gcc_compile" -DFINE_GRAINED_LIBRARIES $flags -DL$name \
++      echo "	$gcc_compile" -DFINE_GRAINED_LIBRARIES $TPBIT_CFLAGS $flags -DL$name \
+ 	-c $TPBIT -o $out
+     done
+     libgcc2_objs="$libgcc2_objs ${name}${objext}"

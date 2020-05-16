@@ -1,0 +1,13 @@
+--- gcc-4.4.2.old/./gcc/c-common.c	2020-02-28 17:30:30.836425184 +0100
++++ gcc-4.4.2.new/./gcc/c-common.c	2013-09-12 09:40:14.323199000 +0200
+@@ -391,6 +391,10 @@
+ 
+ int flag_use_repository;
+ 
++/* Nonzero means generate extra nops.  */
++
++int flag_fnullify_allnop = 0;
++
+ /* Nonzero if we want to issue diagnostics that the standard says are not
+    required.  */
+ 

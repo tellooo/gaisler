@@ -1,0 +1,13 @@
+--- gcc-4.4.2.old/./gcc/c-common.h	2020-02-28 17:30:31.529417033 +0100
++++ gcc-4.4.2.new/./gcc/c-common.h	2013-09-12 09:40:14.323199000 +0200
+@@ -540,6 +540,10 @@
+ 
+ extern int flag_implicit_inline_templates;
+ 
++/* Nonzero means generate extra nops.  */
++
++extern int flag_fnullify_allnop;
++
+ /* Nonzero means generate separate instantiation control files and
+    juggle them at link time.  */
+ 

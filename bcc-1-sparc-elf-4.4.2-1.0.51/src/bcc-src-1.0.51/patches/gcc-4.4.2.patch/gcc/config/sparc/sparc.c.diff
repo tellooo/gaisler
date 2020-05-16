@@ -1,0 +1,996 @@
+--- gcc-4.4.2.old/./gcc/config/sparc/sparc.c	2020-02-28 17:30:30.964423678 +0100
++++ gcc-4.4.2.new/./gcc/config/sparc/sparc.c	2017-11-17 15:20:31.448397000 +0100
+@@ -52,6 +52,7 @@
+ #include "langhooks.h"
+ #include "params.h"
+ #include "df.h"
++#include "c-common.h"
+ 
+ /* Processor costs */
+ static const
+@@ -79,6 +80,30 @@
+ };
+ 
+ static const
++struct processor_costs leon_costs = {
++  COSTS_N_INSNS (1), /* int load */
++  COSTS_N_INSNS (1), /* int signed load */
++  COSTS_N_INSNS (1), /* int zeroed load */
++  COSTS_N_INSNS (1), /* float load */
++  COSTS_N_INSNS (1), /* fmov, fneg, fabs */
++  COSTS_N_INSNS (1), /* fadd, fsub */
++  COSTS_N_INSNS (1), /* fcmp */
++  COSTS_N_INSNS (1), /* fmov, fmovr */
++  COSTS_N_INSNS (1), /* fmul */
++  COSTS_N_INSNS (15), /* fdivs */
++  COSTS_N_INSNS (15), /* fdivd */
++  COSTS_N_INSNS (23), /* fsqrts */
++  COSTS_N_INSNS (23), /* fsqrtd */
++  COSTS_N_INSNS (5), /* imul */
++  COSTS_N_INSNS (5), /* imulX */
++  0, /* imul bit factor */
++  COSTS_N_INSNS (5), /* idiv */
++  COSTS_N_INSNS (5), /* idivX */
++  COSTS_N_INSNS (1), /* movcc/movr */
++  0, /* shift penalty */
++};
++
++static const
+ struct processor_costs supersparc_costs = {
+   COSTS_N_INSNS (1), /* int load */
+   COSTS_N_INSNS (1), /* int signed load */
+@@ -274,6 +299,9 @@
+    saved (as 4-byte quantities).  */
+ static int num_gfregs;
+ 
++/* diable delay schedule of load instructions */
++int sparc_fix_load_in_delay = 0;
++
+ /* The alias set for prologue/epilogue register save/restore.  */
+ static GTY(()) alias_set_type sparc_sr_alias_set;
+ 
+@@ -349,6 +377,14 @@
+ /* 1 if the next opcode is to be specially indented.  */
+ int sparc_indent_opcode = 0;
+ 
++int debug_patch_divsqrt = 0;
++
++int fpstore_branch_slots = 0;
++
++int fpstore_deep_scan = 0;
++
++int fpstore_errata = 0;
++
+ static bool sparc_handle_option (size_t, const char *, int);
+ static void sparc_init_modes (void);
+ static void scan_record_type (tree, int *, int *, int *);
+@@ -398,6 +434,8 @@
+ 				   HOST_WIDE_INT, tree);
+ static bool sparc_can_output_mi_thunk (const_tree, HOST_WIDE_INT,
+ 				       HOST_WIDE_INT, const_tree);
++static int sparc_reorg_nullify (void);
++static void sparc_reorg (void);
+ static struct machine_function * sparc_init_machine_status (void);
+ static bool sparc_cannot_force_const_mem (rtx);
+ static rtx sparc_tls_get_addr (void);
+@@ -447,6 +485,7 @@
+ 
+ /* Whetheran FPU option was specified.  */
+ static bool fpu_option_set = false;
++static bool mv8_option_set = false;
+ 
+ /* Initialize the GCC target structure.  */
+ 
+@@ -510,6 +549,9 @@
+ #undef TARGET_ASM_CAN_OUTPUT_MI_THUNK
+ #define TARGET_ASM_CAN_OUTPUT_MI_THUNK sparc_can_output_mi_thunk
+ 
++#undef TARGET_MACHINE_DEPENDENT_REORG
++#define TARGET_MACHINE_DEPENDENT_REORG sparc_reorg
++
+ #undef TARGET_RTX_COSTS
+ #define TARGET_RTX_COSTS sparc_rtx_costs
+ #undef TARGET_ADDRESS_COST
+@@ -610,6 +652,11 @@
+     case OPT_mtune_:
+       sparc_select[2].string = arg;
+       break;
++
++    case OPT_mv8:
++      mv8_option_set = true;
++      break;
++      
+     }
+ 
+   return true;
+@@ -643,6 +690,11 @@
+     { TARGET_CPU_sparclet, "tsc701" },
+     { TARGET_CPU_sparclite, "f930" },
+     { TARGET_CPU_v8, "v8" },
++    { TARGET_CPU_leon, "leon" },
++    { TARGET_CPU_fhleon, "fhleon" },
++    { TARGET_CPU_fhleonv8, "fhleonv8" },
++    { TARGET_CPU_sfleon, "sfleon" },
++    { TARGET_CPU_sfleonv8, "sfleonv8" },
+     { TARGET_CPU_hypersparc, "hypersparc" },
+     { TARGET_CPU_sparclite86x, "sparclite86x" },
+     { TARGET_CPU_supersparc, "supersparc" },
+@@ -686,6 +738,13 @@
+     /* TI ultrasparc III */
+     /* ??? Check if %y issue still holds true in ultra3.  */
+     { "ultrasparc3", PROCESSOR_ULTRASPARC3, MASK_ISA, MASK_V9|MASK_DEPRECATED_V8_INSNS},
++    /* sparc-leon */
++    { "leon",        PROCESSOR_LEON, MASK_ISA, MASK_FPU },
++    { "fhleon",        PROCESSOR_LEON, MASK_ISA, MASK_FPU },
++    { "fhleonv8",      PROCESSOR_LEON, MASK_ISA & ~(MASK_V8), MASK_V8|MASK_FPU },
++    { "sfleon",      PROCESSOR_LEON,  MASK_ISA | MASK_FPU, 0 },
++    { "sfleonv8",    PROCESSOR_LEON, (MASK_ISA | MASK_FPU) & ~(MASK_V8), MASK_V8 },
++    { "ut699",       PROCESSOR_LEON, (MASK_ISA), MASK_V8|MASK_FPU },
+     /* UltraSPARC T1 */
+     { "niagara", PROCESSOR_NIAGARA, MASK_ISA, MASK_V9|MASK_DEPRECATED_V8_INSNS},
+     { "niagara2", PROCESSOR_NIAGARA, MASK_ISA, MASK_V9},
+@@ -742,6 +801,9 @@
+   gcc_assert (def->name);
+   sparc_select[0].string = def->name;
+ 
++  /* enable always fsmuld suppression */ 
++  target_flags |= MASK_NO_FSMULD ;
++		  
+   for (sel = &sparc_select[0]; sel->name; ++sel)
+     {
+       if (sel->string)
+@@ -749,6 +811,15 @@
+ 	  for (cpu = &cpu_table[0]; cpu->name; ++cpu)
+ 	    if (! strcmp (sel->string, cpu->name))
+ 	      {
++		if (! strcmp (sel->string, "ut699") || sparc_fix_ut699) {
++		  if (debug_patch_divsqrt) {
++		    fprintf(stderr, "ut699: enable -fstore-after-divsqrt -fno-fsmuld -fno-sf-divsqrt\n");
++		  }
++		  target_flags |= MASK_STORE_AFTER_DIVSQRT | MASK_NO_FSMULD | MASK_NO_SF_DIVSQRT;
++		  sparc_fix_ut699 = 1;
++		  sparc_fix_b2bst = 1;
++		  sparc_fix_tn0013 = 1;
++		} else {		      
+ 		if (sel->set_tune_p)
+ 		  sparc_cpu = cpu->processor;
+ 
+@@ -757,6 +828,7 @@
+ 		    target_flags &= ~cpu->disable;
+ 		    target_flags |= cpu->enable;
+ 		  }
++		}
+ 		break;
+ 	      }
+ 
+@@ -765,11 +837,26 @@
+ 	}
+     }
+ 
++  if (sparc_fix_ut699) 
++    {
++    sparc_fix_load_in_delay = 1;
++    fpstore_errata = 1;
++  }
++
++  if (sparc_fix_gr712rc || sparc_fix_ut700)
++    {
++      sparc_fix_b2bst = 1;
++      sparc_fix_tn0013 = 1;
++    }
++
+   /* If -mfpu or -mno-fpu was explicitly used, don't override with
+      the processor default.  */
+   if (fpu_option_set)
+     target_flags = (target_flags & ~MASK_FPU) | fpu;
+ 
++  if (mv8_option_set)
++    target_flags |= MASK_V8;
++  
+   /* Don't allow -mvis if FPU is disabled.  */
+   if (! TARGET_FPU)
+     target_flags &= ~MASK_VIS;
+@@ -823,10 +910,14 @@
+ 
+   switch (sparc_cpu)
+     {
++    case PROCESSOR_LEON:
++      sparc_costs = &leon_costs;
++      break;
+     case PROCESSOR_V7:
+     case PROCESSOR_CYPRESS:
+       sparc_costs = &cypress_costs;
+       break;
++      break;
+     case PROCESSOR_V8:
+     case PROCESSOR_SPARCLITE:
+     case PROCESSOR_SUPERSPARC:
+@@ -7526,6 +7617,7 @@
+     case PROCESSOR_SUPERSPARC:
+       cost = supersparc_adjust_cost (insn, link, dep, cost);
+       break;
++    case PROCESSOR_LEON:
+     case PROCESSOR_HYPERSPARC:
+     case PROCESSOR_SPARCLITE86X:
+       cost = hypersparc_adjust_cost (insn, link, dep, cost);
+@@ -7546,7 +7638,7 @@
+ static int
+ sparc_use_sched_lookahead (void)
+ {
+-  if (sparc_cpu == PROCESSOR_NIAGARA
++  if (sparc_cpu == PROCESSOR_LEON || sparc_cpu == PROCESSOR_NIAGARA
+       || sparc_cpu == PROCESSOR_NIAGARA2)
+     return 0;
+   if (sparc_cpu == PROCESSOR_ULTRASPARC
+@@ -9040,4 +9132,771 @@
+   emit_move_insn (result, gen_lowpart (GET_MODE (result), res));
+ }
+ 
++/**************************** handle fdivd ****************************/
++char *
++output_divdf3 (rtx op0, rtx op1, rtx dest, rtx scratch)
++{
++  static char string[128];
++  if (debug_patch_divsqrt) {
++    fprintf(stderr, "debug_patch_divsqrt:\n");
++    debug_rtx(op0);
++    debug_rtx(op1);
++    debug_rtx(dest);
++    fprintf(stderr, "scratch: 0x%x\n",(int)scratch);
++  }
++  sprintf(string,"fdivd\t%%1, %%2, %%0; st %%0, %%3 !!!");
++  return string;
++}
++
++void
++output_divdf3_emit (rtx dest, rtx op0, rtx op1, rtx scratch)
++{
++  rtx slot0, div, divsave;
++  
++  if (debug_patch_divsqrt) {
++    fprintf(stderr, "output_divdf3_emit:\n");
++    debug_rtx(op0);
++    debug_rtx(op1);
++    debug_rtx(dest);
++    fprintf(stderr, "scratch: 0x%x\n",(int)scratch);
++  }
++	
++  div = gen_rtx_SET (VOIDmode,
++		     dest,
++		     gen_rtx_DIV (DFmode,
++				  op0,
++				  op1));
++  
++  if (TARGET_STORE_AFTER_DIVSQRT) {
++    slot0 = assign_stack_local (DFmode, 8, 8);
++    divsave = gen_rtx_SET (VOIDmode, slot0, dest);
++    emit_insn(divsave);
++    emit_insn (gen_rtx_PARALLEL(VOIDmode,
++				gen_rtvec (2,
++					   div,
++					   gen_rtx_CLOBBER (SImode,
++							    slot0))));
++  } else {
++    emit_insn(div);
++  }
++}
++
++/**************************** handle fdivs ****************************/
++char *
++output_divsf3 (rtx op0, rtx op1, rtx dest, rtx scratch)
++{
++  static char string[128];
++  if (debug_patch_divsqrt) {
++    fprintf(stderr, "debug_patch_divsqrt:\n");
++    debug_rtx(op0);
++    debug_rtx(op1);
++    debug_rtx(dest);
++    fprintf(stderr, "scratch: 0x%x\n",(int)scratch);
++  }
++  sprintf(string,"fdivs\t%%1, %%2, %%0; st %%0, %%3 !!!");
++  return string;
++}
++
++void
++output_divsf3_emit (rtx dest, rtx op0, rtx op1, rtx scratch)
++{
++  rtx slot0, div, divsave;
++  
++  if (debug_patch_divsqrt) {
++    fprintf(stderr, "output_divsf3_emit:\n");
++    debug_rtx(op0);
++    debug_rtx(op1);
++    debug_rtx(dest);
++    fprintf(stderr, "scratch: 0x%x\n",(int)scratch);
++  }
++  
++  div = gen_rtx_SET (VOIDmode,
++		     dest,
++		     gen_rtx_DIV (SFmode,
++				  op0,
++				  op1));
++  
++  if (TARGET_STORE_AFTER_DIVSQRT) {
++    slot0 = assign_stack_local (SFmode, 4, 4);
++    divsave = gen_rtx_SET (VOIDmode, slot0, dest);
++    emit_insn(divsave);
++    emit_insn (gen_rtx_PARALLEL(VOIDmode,
++				gen_rtvec (2,
++					   div,
++					   gen_rtx_CLOBBER (SImode,
++							    slot0))));
++  } else {
++    emit_insn(div);
++  }
++}
++
++/**************************** handle sqrtdf2 ****************************/
++
++char *
++output_sqrtdf2 (rtx dest, rtx op0, rtx scratch)
++{
++  static char string[50];
++  if (debug_patch_divsqrt) {
++    fprintf(stderr, "output_sqrtdf2:\n");
++    debug_rtx(dest);
++    debug_rtx(op0);
++    fprintf(stderr, "scratch: 0x%x\n",(int)scratch);
++  }
++  sprintf(string,"fsqrtd\t%%1, %%0; st %%0, %%2 !!!");
++  return string;
++}
++
++
++void
++output_sqrtdf2_emit (rtx dest, rtx op0, rtx scratch)
++{
++  rtx slot0, sqrt, sqrtsave;
++  if (debug_patch_divsqrt) {
++    fprintf(stderr, "output_sqrtdf2_emit:\n");
++    debug_rtx(dest);
++    debug_rtx(op0);
++    fprintf(stderr, "scratch: 0x%x\n",(int)scratch);
++  }
++  
++  sqrt = gen_rtx_SET (VOIDmode,
++		     dest,
++		     gen_rtx_SQRT (DFmode,
++				  op0));
++  
++  if (TARGET_STORE_AFTER_DIVSQRT) {
++    slot0 = assign_stack_local (DFmode, 8, 8);
++    sqrtsave = gen_rtx_SET (VOIDmode, slot0, dest);
++    emit_insn(sqrtsave);
++    emit_insn (gen_rtx_PARALLEL(VOIDmode,
++				gen_rtvec (2,
++					   sqrt,
++					   gen_rtx_CLOBBER (SImode,
++							    slot0))));
++  } else {
++    emit_insn(sqrt);
++  }
++	
++}
++
++/**************************** handle sqrtsf2 ****************************/
++
++char *
++output_sqrtsf2 (rtx dest, rtx op0, rtx scratch)
++{
++  static char string[50];
++  if (debug_patch_divsqrt) {
++    fprintf(stderr, "output_sqrtsf2:\n");
++    debug_rtx(dest);
++    debug_rtx(op0);
++    fprintf(stderr, "scratch: 0x%x\n",(int)scratch);
++  }
++  sprintf(string,"fsqrts\t%%1, %%0; st %%0, %%2 !!!");
++  return string;
++}
++
++void
++output_sqrtsf2_emit (rtx dest, rtx op0, rtx scratch)
++{
++  rtx slot0, sqrt, sqrtsave;
++  if (debug_patch_divsqrt) {
++    fprintf(stderr, "output_sqrtsf2_emit:\n");
++    debug_rtx(dest);
++    debug_rtx(op0);
++    fprintf(stderr, "scratch: 0x%x\n",(int)scratch);
++  }
++  
++  sqrt = gen_rtx_SET (VOIDmode,
++		     dest,
++		     gen_rtx_SQRT (SFmode,
++				  op0));
++  
++  if (TARGET_STORE_AFTER_DIVSQRT) {
++    slot0 = assign_stack_local (SFmode, 4, 4);
++    sqrtsave = gen_rtx_SET (VOIDmode, slot0, dest);
++    emit_insn(sqrtsave);
++    emit_insn (gen_rtx_PARALLEL(VOIDmode,
++				gen_rtvec (2,
++					   sqrt,
++					   gen_rtx_CLOBBER (SImode,
++							    slot0))));
++  } else {
++    emit_insn(sqrt);
++  }
++
++}
++
++static int sparc_sload_p(rtx insn, int isload)
++{
++  enum attr_type insn_type;
++  rtx set;
++  if ( insn
++       && (GET_CODE (insn) == INSN)
++       && (set = single_set (insn)) != NULL_RTX) 
++    {
++      if (recog_memoized (insn)) 
++	{
++	  insn_type = get_attr_type (insn);
++	  switch(insn_type) {
++	  case TYPE_LOAD:
++	  case TYPE_SLOAD:
++	  case TYPE_FPLOAD:
++	    return isload;
++	  case TYPE_STORE:
++	  case TYPE_FPSTORE:
++	    return !isload;
++	  default:;
++	  }
++	}
++    }
++  return 0;
++}
++
++static int
++fpop_reg_depend_p (rtx insn, unsigned int reg)
++{
++  extract_insn (insn);
++  return (REGNO (recog_data.operand[1]) == reg
++	  || (recog_data.n_operands == 3
++	      && REGNO (recog_data.operand[2]) == reg));
++}
++
++static int
++div_sqrt_insn_p (rtx insn)
++{
++  if ( GET_CODE (PATTERN (insn)) != SET)
++    return false;
++
++  switch (get_attr_type (insn))
++    {
++    case TYPE_FPDIVS:
++    case TYPE_FPSQRTS:
++    case TYPE_FPDIVD:
++    case TYPE_FPSQRTD:
++      return true;
++    default:
++      return false;
++    }
++}
++
++static int
++fpop_insn_p (rtx insn)
++{
++  if ( GET_CODE (PATTERN (insn)) != SET)
++    return false;
++ 
++  switch (get_attr_type (insn))
++    {
++    case TYPE_FPMOVE:
++    case TYPE_FPCMOVE:
++    case TYPE_FP:
++    case TYPE_FPCMP:
++    case TYPE_FPMUL:
++    case TYPE_FPDIVS:
++    case TYPE_FPSQRTS:
++    case TYPE_FPDIVD:
++    case TYPE_FPSQRTD:
++      return true;
++    default:
++      return false;
++    }
++}
++
++/* True if INSN is a md pattern or asm statement.  */
++#define USEFUL_INSN_P(INSN)						\
++   (GET_CODE (PATTERN (INSN)) != USE					\
++   && GET_CODE (PATTERN (INSN)) != CLOBBER)
++
++static void
++sparc_reorg_b2bst(void)
++{
++  rtx insn, next;
++
++  /* Force all instructions to be split into their final form.  */
++  split_all_insns_noflow ();
++
++  /* Now look for specific patterns in the insn stream.  */
++  for (insn = get_insns (); insn; insn = next)
++    {
++      bool insert_nop = false;
++      rtx set;
++      rtx jump = 0;
++
++      /* Look into the instruction in a delay slot.  */
++      if (NONJUMP_INSN_P (insn) && GET_CODE (PATTERN (insn)) == SEQUENCE) {
++        jump = XVECEXP (PATTERN (insn), 0, 0);
++        insn = XVECEXP (PATTERN (insn), 0, 1);
++      }
++
++      if (sparc_fix_gr712rc
++          && (JUMP_P (insn) || jump)
++          && JUMP_LABEL(jump ? jump : insn) != 0
++          && get_attr_branch_type (jump ? jump : insn) == BRANCH_TYPE_ICC)
++        {
++        rtx target;
++ 
++        target = next_active_insn (JUMP_LABEL(jump ? jump : insn));
++        if (target
++            && (fpop_insn_p (target)
++            || ((JUMP_P (target)
++                 && get_attr_branch_type (target) == BRANCH_TYPE_FCC))))
++          emit_insn_before (gen_nop (), target);
++      }
++
++	/* TN-0013 */
++	if (sparc_fix_tn0013
++	  && NONJUMP_INSN_P (insn)
++	  && div_sqrt_insn_p(insn))
++	{
++	  int i;
++	  int fp_found = 0;
++	  unsigned int dest_reg;
++	  rtx after;
++
++	  dest_reg = REGNO (SET_DEST (single_set (insn)));
++
++	  next = next_active_insn (insn);
++	  if (!next)
++	    break;
++
++	  for (after = next, i = 0; i < 4; i++)
++	    {
++	      if (i != 3
++		  && fpop_insn_p (after))
++		{
++		  if (fpop_reg_depend_p (after, dest_reg))
++		    break;
++		  fp_found++;
++		}
++
++	      if (i != 3
++		  && (set = single_set (after)) != NULL_RTX
++		  && REG_P (SET_DEST (set))
++		  && REGNO (SET_DEST (set)) > 31)
++		{
++		  if (REGNO (SET_DEST (set)) == dest_reg)
++		    break;
++		  fp_found++;
++		}
++
++	      if (i > 1
++		  && fp_found >= 2
++		  && div_sqrt_insn_p(after))
++		{
++		  if (i == 2)
++		    emit_insn_before (gen_nop (), next);
++		  insert_nop = true;
++		  break;
++		}
++
++	      if (div_sqrt_insn_p (after))
++		break;
++	      
++	      if (i < 3
++		  && (!NONJUMP_INSN_P (after)
++		      || GET_CODE (PATTERN (after)) == SEQUENCE))
++		{
++		  insert_nop = true;
++		  break;
++		}
++
++	      after = next_active_insn (after);
++	      if (!after)
++		break;
++	    }
++	}
++
++      /* Look for a double-word store */
++      if (sparc_fix_b2bst
++	  && NONJUMP_INSN_P (insn)
++	  && (set = single_set (insn)) != NULL_RTX
++	  && GET_MODE_SIZE (GET_MODE (SET_DEST (set))) == 8
++	  && MEM_P (SET_DEST (set)))
++	{
++	  next = next_active_insn (insn);
++	  if (!next)
++	    break;
++
++	  /* Skip empty assembly statements */
++	  if (USEFUL_INSN_P (next) &&
++	      (asm_noperands (PATTERN (next))>=0) &&
++	      !strcmp(decode_asm_operands (PATTERN (next), NULL,
++					   NULL, NULL, NULL,
++					   NULL), ""))
++	    next = next_active_insn (next);
++	  if (!next)
++	    break;
++
++	  /* If the insn is a branch, then it cannot be problematic.  */
++	  if (!NONJUMP_INSN_P (next) || GET_CODE (PATTERN (next)) == SEQUENCE)
++	    continue;
++
++	  if ((set = single_set (next)) == NULL_RTX)
++	    continue;
++
++	  /* Add NOP if double-word store is followed by any type of store */
++	  if (MEM_P (SET_DEST (set)))
++	    insert_nop = true;
++	}
++      else
++      /* Look for single-word, half-word, or byte store */
++      if (sparc_fix_b2bst
++	  && NONJUMP_INSN_P (insn)
++	  && (set = single_set (insn)) != NULL_RTX
++	  && GET_MODE_SIZE (GET_MODE (SET_DEST (set))) <= 4
++	  && MEM_P (SET_DEST (set)))
++	{
++	  rtx after;
++
++	  next = next_active_insn (insn);
++	  if (!next)
++	    break;
++
++	  /* Skip empty assembly statements */
++	  if (USEFUL_INSN_P (next) &&
++	      (asm_noperands (PATTERN (next))>=0) &&
++	      !strcmp(decode_asm_operands (PATTERN (next), NULL,
++					   NULL, NULL, NULL,
++					   NULL), ""))
++	    next = next_active_insn (next);
++	  if (!next)
++	    break;
++
++	  /* If the insn is a branch, then it cannot be problematic.  */
++	  if (!NONJUMP_INSN_P (next) || GET_CODE (PATTERN (next)) == SEQUENCE)
++	    continue;
++
++	  /* If the insn is a load or store, then it cannot be problematic. */
++	  if ((set = single_set (next)) != NULL_RTX
++	      && (MEM_P (SET_DEST (set)) || MEM_P (SET_SRC (set))))
++	    continue;
++
++	  after = next_active_insn (next);
++	  if (!after)
++	    continue;
++
++	  /* Skip empty assembly statements */
++	  if (USEFUL_INSN_P (after) &&
++	      (asm_noperands (PATTERN (after))>=0) &&
++	      !strcmp(decode_asm_operands (PATTERN (after), NULL,
++					   NULL, NULL, NULL,
++					   NULL), ""))
++	    after = next_active_insn (after);
++	  if (!after)
++	    break;
++
++	  /* If the insn is a branch, then it cannot be problematic.  */
++	  if (!NONJUMP_INSN_P (after) || GET_CODE (PATTERN (after)) == SEQUENCE)
++	    continue;
++
++	  /* Add NOP if third instruction is a store */
++	  if (((set = single_set (after)) != NULL_RTX)
++	      && MEM_P (SET_DEST (set)))
++	    insert_nop = true;
++	}
++      else
++	next = NEXT_INSN (insn);
++
++      if (insert_nop)
++	emit_insn_before (gen_nop (), next);
++    }
++
++  return;
++}
++
++static void
++sparc_reorg (void)
++{
++  rtx insn, next, cstore;
++  if (!sparc_fix_ut699 && !sparc_fix_b2bst && !sparc_fix_gr712rc
++      && !sparc_fix_tn0013 && !sparc_fix_ut700)
++    return;
++
++  if (sparc_fix_b2bst || sparc_fix_gr712rc || sparc_fix_tn0013 || sparc_fix_ut700) {
++    sparc_reorg_b2bst();
++  }
++
++  if (!sparc_fix_ut699)
++    return;
++
++  if (!flag_fnullify_allnop) {
++    sparc_reorg_nullify ();
++    return;
++  } 
++
++  for (insn = get_insns (); insn; insn = next)
++    {
++      next = NEXT_INSN (insn);
++      cstore = next_active_insn (insn);
++      if (sparc_sload_p(insn, 1) && 
++	  (sparc_sload_p(cstore, 0) ||
++	   (/*sparc_fix_socc3 &&*/ sparc_sload_p(cstore, 1))))
++	{
++	  emit_insn_after (gen_nop (), insn);
++	}
++    }
++
++}
++
++static rtx
++mem_ref (rtx x)
++{
++  if (GET_CODE (x) == SIGN_EXTEND || GET_CODE (x) == ZERO_EXTEND)
++    x = XEXP (x, 0);
++
++  if (MEM_P (x))
++    return x;
++
++  return NULL_RTX;
++}
++
++static int sparc_reorg_nullify (void)
++{
++  rtx insn, next;
++
++  /* Now look for specific patterns in the insn stream.  */
++  for (insn = get_insns (); insn; insn = next)
++    {
++      bool insert_nop = false;
++      rtx set;
++
++      /* Look into the instruction in a delay slot.  */
++      if (NONJUMP_INSN_P (insn) && GET_CODE (PATTERN (insn)) == SEQUENCE)
++	insn = XVECEXP (PATTERN (insn), 0, 1);
++
++      if (NONJUMP_INSN_P (insn)
++	  && (set = single_set (insn)) != NULL_RTX
++	  && GET_MODE_SIZE (GET_MODE (SET_SRC (set))) <= 4
++	  && mem_ref (SET_SRC (set)) != NULL_RTX
++	  && REG_P (SET_DEST (set))
++	  && REGNO (SET_DEST (set)) < 32)
++	{
++	  /* There is no problem if the second memory access has a data
++	     dependency on the first single-cycle load.  */
++	  rtx x = SET_DEST (set);
++
++	  /* If the insn has a delay slot, then it cannot be problematic.  */
++	  next = next_active_insn (insn);
++	  if (!next)
++	    break;
++	  if (NONJUMP_INSN_P (next) && GET_CODE (PATTERN (next)) == SEQUENCE)
++	    continue;
++
++	  /* Look for a second memory access to/from an integer register.  */
++	  if ((set = single_set (next)) != NULL_RTX)
++	    {
++	      rtx src = SET_SRC (set);
++	      rtx dest = SET_DEST (set);
++	      rtx mem;
++
++	      /* LDD is affected.  */
++	      if ((mem = mem_ref (src)) != NULL_RTX
++		  && REG_P (dest)
++		  && REGNO (dest) < 32
++		  && !reg_mentioned_p (x, XEXP (mem, 0)))
++		insert_nop = true;
++
++	      /* STD is *not* affected.  */
++	      else if ((mem = mem_ref (dest)) != NULL_RTX
++		       && GET_MODE_SIZE (GET_MODE (mem)) <= 4
++                       && (src == CONST0_RTX (GET_MODE (dest))
++			   || (REG_P (src)
++			       && REGNO (src) < 32
++			       && REGNO (src) != REGNO (x)))
++		       && !reg_mentioned_p (x, XEXP (mem, 0)))
++		insert_nop = true;
++	    }
++	}
++
++      else
++	next = NEXT_INSN (insn);
++
++      if (insert_nop)
++	emit_insn_before (gen_nop (), next);
++    }
++
++  return 0;
++}
++
++/* Check criterias, if it doesn't match return false. save desitination
++ * register nunmber in *rd_fno
++ */
++static bool fpstore_errata_check_insn1(rtx insn, unsigned int *rd_fno)
++{
++  enum attr_type insn_type;
++  rtx set;
++  unsigned int regno;
++
++  /* Must set an FP register */
++  if (GET_CODE (insn) != INSN
++      || GET_CODE (PATTERN (insn)) == SEQUENCE
++      || (set = single_set (insn)) == NULL_RTX
++      || GET_CODE(SET_DEST (set)) != REG
++      || (regno = REGNO(SET_DEST (set))) < SPARC_FIRST_FP_REG)
++    return false;
++
++  insn_type = get_attr_type (insn);
++
++  switch (insn_type) {
++    default:
++      return false;
++    case TYPE_FPLOAD:
++    case TYPE_FPMUL: /* determine if single */
++      if (GET_MODE_SIZE(GET_MODE(SET_DEST(set))) != GET_MODE_SIZE (SImode))
++        return false;
++    case TYPE_FPDIVS:
++    case TYPE_FPSQRTS: /* always single */
++      break;
++    case TYPE_FP: /* can not trust SINGLE/DOUBLE for fitos and fstoi */
++    case TYPE_FPMOVE: /* fneg and fabs double precision is single precision */
++      break;
++  }
++
++  *rd_fno = regno;
++
++  return true;
++}
++
++/* insn is the first instruction in the possible sequence, next is the next
++ * insn object (of unknown type) to be executed.
++ */
++static void fpstore_errata_check_sequence(rtx insn, rtx next)
++{
++  unsigned int ins1_rd, ins2_rd;
++
++  if (fpstore_errata_check_insn1(insn, &ins1_rd) == false)
++    return;
++
++  /* If not the next instruction is not real find next real insn */
++  if (!next)
++      return;
++  if (!INSN_P(next)) {
++    next = next_active_insn (next);
++    if (!next)
++      return;
++  }
++
++  if (fpstore_errata_check_insn1(next, &ins2_rd) == false)
++    return;
++
++  /* Allowed register numbers for second instruction must be within same
++   * double precision pair but not the same register.
++   */
++  if ((ins1_rd == ins2_rd) || ((ins1_rd & ~1) != (ins2_rd & ~1)))
++    return;
++
++  /* Search for a single-precision store of same FP register as desitination of first
++   * register within the next 4 instructions
++   */
++  if (fpstore_deep_scan == 0) {
++    int i;
++    rtx curr, set;
++
++    for (i = 0, curr = next; i < 4 && curr; i ++) {
++      /* Find next real instruction */
++      curr = next_active_insn (curr);
++      if (!curr)
++        break; /* close to return, we insert nop */
++
++      /* skip handling of jumps. then we insert nop */
++      if (JUMP_P(curr) || CALL_P(curr) ||
++          ((GET_CODE (curr) == INSN) && GET_CODE(PATTERN (curr)) == SEQUENCE)) {
++        if (i == 3) {
++          /* delay-slot is not part of sequence ang jump instr. is harmless */
++          return;
++        }
++        break;
++      }
++
++      /* Find FP single-store */
++      if (NONJUMP_INSN_P(curr)
++          && get_attr_type (curr) == TYPE_FPSTORE
++          && (set = single_set (curr)) != NULL_RTX
++          && GET_CODE(SET_SRC (set)) == REG
++          && REGNO (SET_SRC (set)) == ins1_rd
++          && GET_MODE_SIZE(GET_MODE(SET_SRC(set))) == GET_MODE_SIZE (SImode))
++        break;
++    }
++    if (i == 4)
++      return;
++  }
++
++  /* Insert NOP between the first two instructions in the sequence */
++  emit_insn_before (gen_nop (), next);
++}
++
++/* The fpstore errata work around is run after the final split pass, this
++ * is due to movdf_insn_sp32 declaration will result in a RTL which as two
++ * fmovs, after the split pass they will appear as two fmovs and can be fixed
++ * using the below function.
++ */
++int sparc_fpstore_after_final_split (void)
++{
++  rtx insn, next, dslot;
++
++  if (fpstore_errata == 0) /* errata not enabled */
++    return 0;
++
++  /* From changes to sparc.md we know:
++   * It is avoided that LDF/FPOP is in delay slot of a call, return (jump)
++   * or sibling_call that is not relative (which we can follow and analyse
++   * easily). It is configurable (for debug) to avoid the affected from
++   * branch delay-slots, if not we must follow both taken/not-taken branch
++   * execution paths.
++   *
++   * Now look for specific patterns in the instruction stream:
++   *  1. LDF/FPOP %fX
++   *  2. LDF/FPOP %fY
++   * where X and Y is within the same double precision pair.
++   * The fix is to put a NOP instruction bettween 1. and 2.
++   */
++  for (insn = get_insns (); insn; insn = next)
++    {
++      /* Check only instructions */
++      if (NONJUMP_INSN_P (insn)) {
++
++        /* Look into the instruction in a delay slot.
++         * We cover both cases: 1. branch to label, 2. branch not taken
++         */
++        if (GET_CODE (PATTERN (insn)) == SEQUENCE) {
++
++          dslot = XVECEXP (PATTERN (insn), 0, 1);
++
++          if (fpstore_branch_slots == 0) {
++            rtx code_label, jump_insn;
++
++            /* Get Jump insn and delay-slot insn */
++            jump_insn = XVECEXP (PATTERN (insn), 0, 0);
++
++            if (JUMP_P (jump_insn)) {
++              enum attr_type jump_insn_type = get_attr_type (jump_insn);
++
++              /* Machine description makes sure there is nothing that could
++               * trigger errata in a non-branch delay-slot.. but in a branch
++               * delay-slot we must take care of what is jumped to.
++               */
++              if ((jump_insn_type == TYPE_UNCOND_BRANCH) ||
++                  (jump_insn_type == TYPE_BRANCH)) {
++                /* in branch delay-slot. Get branch destination instruction
++                 * after code label and delay-slot instruction.
++                 */
++                code_label = JUMP_LABEL(jump_insn);
++
++                fpstore_errata_check_sequence(dslot, code_label);
++              }
++            }
++          }
++
++          /* now handle branch not taken execution path */
++          insn = dslot;
++        }
++
++        next = NEXT_INSN (insn);
++        fpstore_errata_check_sequence(insn, next);
++      } else
++        next = NEXT_INSN (insn);
++    }
++
++  return 0;
++}
++
+ #include "gt-sparc.h"

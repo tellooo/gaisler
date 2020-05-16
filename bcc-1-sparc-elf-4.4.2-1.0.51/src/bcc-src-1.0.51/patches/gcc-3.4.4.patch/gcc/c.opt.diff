@@ -1,0 +1,69 @@
+--- gcc-3.4.4.old/./gcc/c.opt	2020-02-28 17:30:18.926565252 +0100
++++ gcc-3.4.4.new/./gcc/c.opt	2017-11-16 16:05:34.088973000 +0100
+@@ -559,6 +559,18 @@
+ ObjC ObjC++
+ Assume that receivers of Objective-C messages may be nil
+ 
++ffsmuld-cancel
++C ObjC C++ ObjC++
++Avoid generation of fsmuld
++
++fsf-divsqrt-cancel
++C ObjC C++ ObjC++
++Avoid generation of fdivs/fsqrts, use fdivd/fsqrtd instead 
++
++fsqrdiv-debug
++C ObjC C++ ObjC++
++Show output of div/srqt
++
+ fnonansi-builtins
+ C++ ObjC++
+ 
+@@ -630,6 +642,47 @@
+ C++ ObjC++
+ Display statistics accumulated during compilation
+ 
++fstore-after-divsqrt
++C ObjC C++ ObjC++
++Emit a store after fdivs/fsqrts/fdivd/fsqrtd
++
++fnullify-allnop
++C ObjC C++ ObjC++
++Emit a nop after all loads followed by load/store
++
++mfpstore-errata
++C ObjC C++ ObjC++
++Avoid generation of fdivs/fsqrts, use fdivd/fsqrtd instead  */
++Enable fpstore errata workaround. Affects delay-slots and inserts NOPs.
++
++mfpstore-branch-slots
++C ObjC C++ ObjC++
++Disable certain FP instructions in branch delay-slots too (for debug).
++
++mfpstore-deep-scan
++C ObjC C++ ObjC++
++Disable scan for ending single FP store instruction (for debug).
++
++mfpstore-errata-debug
++C ObjC C++ ObjC++
++Enable fpstore debugging printouts
++
++mfix-b2bst
++C ObjC C++ ObjC++
++Enable workarounds for LEON3FT store-store errata
++
++mfix-gr712rc
++C ObjC C++ ObjC++
++Enable workarounds for GR712RC errata
++
++mfix-ut700
++C ObjC C++ ObjC++
++Enable workarounds for UT700 errata
++
++mfix-tn0013
++C ObjC C++ ObjC++
++Enable workarounds for TN0013 errata
++
+ fstrict-prototype
+ C++ ObjC++
+ 

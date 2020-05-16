@@ -1,0 +1,206 @@
+; Options for the SPARC port of the compiler
+;
+; Copyright (C) 2005, 2007 Free Software Foundation, Inc.
+;
+; This file is part of GCC.
+;
+; GCC is free software; you can redistribute it and/or modify it under
+; the terms of the GNU General Public License as published by the Free
+; Software Foundation; either version 3, or (at your option) any later
+; version.
+;
+; GCC is distributed in the hope that it will be useful, but WITHOUT
+; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+; License for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with GCC; see the file COPYING3.  If not see
+; <http://www.gnu.org/licenses/>.
+
+mfpu
+Target Report Mask(FPU)
+Use hardware FP
+
+mv8
+Target Report Mask(V8)
+Use hardware smul/sdiv
+
+mhard-float
+Target RejectNegative Mask(FPU) MaskExists
+Use hardware FP
+
+msoft-float
+Target RejectNegative InverseMask(FPU)
+Do not use hardware FP
+
+munaligned-doubles
+Target Report Mask(UNALIGNED_DOUBLES)
+Assume possible double misalignment
+
+mimpure-text
+Target Report
+Pass -assert pure-text to linker
+
+mapp-regs
+Target Report Mask(APP_REGS)
+Use ABI reserved registers
+
+mhard-quad-float
+Target Report RejectNegative Mask(HARD_QUAD)
+Use hardware quad FP instructions
+
+msoft-quad-float
+Target Report RejectNegative InverseMask(HARD_QUAD)
+Do not use hardware quad fp instructions
+
+mv8plus
+Target Report Mask(V8PLUS)
+Compile for V8+ ABI
+
+mvis
+Target Report Mask(VIS)
+Use UltraSPARC Visual Instruction Set extensions
+
+mptr64
+Target Report RejectNegative Mask(PTR64)
+Pointers are 64-bit
+
+mptr32
+Target Report RejectNegative InverseMask(PTR64)
+Pointers are 32-bit
+
+m64
+Target Report RejectNegative Mask(64BIT)
+Use 64-bit ABI
+
+m32
+Target Report RejectNegative InverseMask(64BIT)
+Use 32-bit ABI
+
+mstack-bias
+Target Report Mask(STACK_BIAS)
+Use stack bias
+
+mfaster-structs
+Target Report Mask(FASTER_STRUCTS)
+Use structs on stronger alignment for double-word copies
+
+mrelax
+Target
+Optimize tail call instructions in assembler and linker
+
+mcpu=
+Target RejectNegative Joined
+Use features of and schedule code for given CPU
+
+mtune=
+Target RejectNegative Joined
+Schedule code for given CPU
+
+mcmodel=
+Target RejectNegative Joined Var(sparc_cmodel_string)
+Use given SPARC-V9 code model
+
+mstd-struct-return
+Target Report RejectNegative Var(sparc_std_struct_return)
+Enable strict 32-bit psABI struct return checking.
+
+mfix-ut699
+Target Report RejectNegative Var(sparc_fix_ut699)
+Enable workaround for single erratum of UT699 processor
+
+Mask(LITTLE_ENDIAN)
+;; Generate code for little-endian
+
+Mask(LONG_DOUBLE_128)
+;; Use 128-bit long double
+
+Mask(SPARCLITE)
+;; Generate code for SPARClite
+
+Mask(SPARCLET)
+;; Generate code for SPARClet
+
+;;Mask(V8) 
+;; Generate code for SPARC-V8
+
+Mask(V9)
+;; Generate code for SPARC-V9
+
+Mask(DEPRECATED_V8_INSNS)
+;; Generate code that uses the V8 instructions deprecated
+;; in the V9 architecture.
+
+mfix-b2bst
+Target Report RejectNegative Var(sparc_fix_b2bst)
+Enable workarounds for LEON3FT store-store errata
+
+mfix-gr712rc
+Target Report RejectNegative Var(sparc_fix_gr712rc)
+Enable workarounds for GR712RC errata
+
+mfix-ut700
+Target Report RejectNegative Var(sparc_fix_ut700)
+Enable workarounds for UT700 errata
+
+mfix-tn0013
+Target Report RejectNegative Var(sparc_fix_tn0013)
+Enable workarounds for TN-0013 errata
+
+mstore-after-divsqrt
+Target Report RejectNegative Mask(STORE_AFTER_DIVSQRT)
+Emit a store after fdivs/fsqrts/fdivd/fsqrtd
+
+mno-fsmuld
+Target Report RejectNegative Mask(NO_FSMULD)
+Avoid generation of fsmuld
+
+mno-sf-divsqrt
+Target Report RejectNegative Mask(NO_SF_DIVSQRT)
+Avoid generation of fdivs/fsqrts, use fdivd/fsqrtd instead
+
+mdebug-patch-divsqrt
+Target Report RejectNegative Var(debug_patch_divsqrt)
+Print debug output for fpu fixes
+
+mfpstore-errata
+Target Report RejectNegative Var(fpstore_errata)
+Enable workaround for FP-store errata for example present
+in SCOC and UT699. The machine description is modified in
+such a way that first/last single FP instruction
+(identified by the errata) can never happen in call, ret,
+jmp and call_sibling delay slots. Branch delay-slots are
+however allowed, but can be disabled to help with
+diagnostics using the -mfpstore-branch-slots switch.
+In the late split5 pass a NOP instruction is inserted
+between the first two first instructions of the errata
+sequence if such a potential bad sequence is found.
+The NOP insertion can be avoided if a matching FP store
+is not found within the following four instructions. In
+order to simplify the fpstore search alogorithm when a
+instruction with a delay-slot is encountered within the
+following three first instructions the FP store search is
+aborted and NOP is inserted. The FP store search can be
+disabled by the mfpstore-deep-scan flag for debugging
+purposes.
+This switch is default on -mtune=ut699.
+
+mfpstore-branch-slots
+Target Report RejectNegative Var(fpstore_branch_slots)
+Disable Single FPOPs and Single STF/LDF (first and last
+instruction matching errata sequence) in branch dela
+slots. Affects both conditional and unconditional branches
+but other delay slots such as calls/rets or jumps. This is
+switch is for debugging the fpstore errata. It reduces
+the number of cases in the machine description late
+processing stage.
+
+mfpstore-deep-scan
+Target Report RejectNegative Var(fpstore_deep_scan)
+After the first two instructions match the FP store errata
+pattern, the fpstore work around searches for an ending
+matching FP single store. This flag disables the search
+for the ending FP store, disabling this part of the errata
+workaround is only for debugging the -mfpstore-errata
+switch.

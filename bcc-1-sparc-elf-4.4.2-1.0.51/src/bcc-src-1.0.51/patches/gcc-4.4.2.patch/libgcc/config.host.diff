@@ -1,0 +1,16 @@
+--- gcc-4.4.2.old/./libgcc/config.host	2020-02-28 17:30:31.554416739 +0100
++++ gcc-4.4.2.new/./libgcc/config.host	2009-10-19 13:56:36.786140000 +0200
+@@ -527,8 +527,12 @@
+ 	;;
+ sparc-*-elf*)
+ 	;;
++sparc-*-uclinux*)
++	extra_parts=" crtbegin.o crtend.o crtfastmath.o"
++	tmake_file="${tmake_file} sparc/t-crtfm sparc/t-crtfm-uclibc"
++	;;
+ sparc-*-linux*)		# SPARC's running GNU/Linux, libc6
+-	extra_parts="$extra_parts crtfastmath.o"
++	extra_parts="$extra_parts crtfastmath.o "
+ 	tmake_file="${tmake_file} sparc/t-crtfm"
+ 	;;
+ sparc-*-rtems*)

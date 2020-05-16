@@ -1,0 +1,127 @@
+TARGET-GCC?=$(TARGET)
+
+gcc-createtars-mingw: gcc-strip-mingw
+	-mkdir -p $(CURDIR)/toolchains/$(RELEASE_VERSION)
+	make -f $(M_MYSELF) DESTDIR=$(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX) GCCVERSION=$(GCCVERSION) RELEASE_VERSION=$(RELEASE_VERSION) gcc-addsrc-mingw
+	-find $(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX) -name libthreadx.a | xargs rm $$1;
+	-rm -rf $(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX)/$(TARGET)/include/threadx;
+	files=`find $(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX)/ -name .svn -type d`; if [ -n "$$files" ]; then rm -rf $$files; fi
+	$(if $(NO_DO_STRIP),,find  $(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX)/$(TARGET-GCC)/lib|\
+	grep \\.a\$$ | xargs $(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)/bin/$(TARGET)-strip --strip-debug $$1)
+	cd toolchains; rm -rf $(TARGET)-$(GCCVERSION)-mingw; cp -r $(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX) $(TARGET)-$(GCCVERSION)-mingw;zip $(if $(filter y,$(DOPASS)),-P $(PASSWORD) -e ,) -r $(RELEASE_VERSION)/$(EXTRA_RELVERSION_PRE)$(TARGET)$(EXTRA_RELVERSION)-$(GCCVERSION)-$(RELEASE_VERSION)-mingw.zip $(TARGET)-$(GCCVERSION)-mingw
+	cd toolchains/$(RELEASE_VERSION); md5sum $(EXTRA_RELVERSION_PRE)$(TARGET)$(EXTRA_RELVERSION)-$(GCCVERSION)-$(RELEASE_VERSION)-mingw.zip>$(EXTRA_RELVERSION_PRE)$(TARGET)$(EXTRA_RELVERSION)-$(GCCVERSION)-$(RELEASE_VERSION)-mingw.zip.md5
+
+gcc-strip-mingw: 
+	-rm -rf $(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX)/src/freertos/FreeRTOS/TraceCon/*
+	find $(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX) -name "*.exe" | xargs -L1 i686-mingw32-strip
+
+gcc-addsrc-mingw:
+	-rm -rf $(DESTDIR)/doc
+	-rm -rf $(DESTDIR)/src
+	mkdir -p $(DESTDIR)/src/libgloss
+	mkdir -p $(DESTDIR)/doc
+	cp doc/bcc-$(RELEASE_VERSION).pdf $(DESTDIR)/doc/bcc.pdf
+	cp Changelog.txt $(DESTDIR)/doc
+	$(if $(filter sparc-threadx,$(TARGET)),,svn export freertos $(DESTDIR)/src/freertos)
+	-rm -rf $(DESTDIR)/src/freertos/FreeRTOS/Demo/*
+	-rm -rf $(DESTDIR)/src/freertos/FreeRTOS/TraceCon/*
+	$(if $(filter sparc-threadx,$(TARGET)),,svn export freertos/FreeRTOS/Demo/Common $(DESTDIR)/src/freertos/FreeRTOS/Demo/Common)
+	$(if $(filter sparc-threadx,$(TARGET)),,sed -i -e 's/@PREFIX@/$(subst /,\/,$(PREFIX))/g' $(DESTDIR)/src/freertos/Makefile)
+	svn export examples $(DESTDIR)/src/examples
+	$(if $(filter sparc-threadx,$(TARGET)),,cp $(DESTDIR)/src/freertos/ex1.c $(DESTDIR)/src/examples/freertos1.c)
+	$(if $(filter sparc-threadx,$(TARGET)),,cp $(DESTDIR)/src/freertos/ex2.c $(DESTDIR)/src/examples/freertos2.c)
+	$(if $(filter sparc-threadx,$(TARGET)),,svn export libs/libnet $(DESTDIR)/src/libnet)
+	$(if $(filter sparc-threadx,$(TARGET)),,svn export libs/libpthread $(DESTDIR)/src/libpthread)
+	svn export newlib-1.13.0/libgloss/sparc_leon $(DESTDIR)/src/libgloss/sparc_leon
+	cp -r newlib-1.13.0/libgloss/*.c $(DESTDIR)/src/libgloss/
+	cp -r newlib-1.13.0/libgloss/*.h $(DESTDIR)/src/libgloss/
+	cp -r newlib-1.13.0/libgloss/configure $(DESTDIR)/src/libgloss/
+	cp -r newlib-1.13.0/libgloss/Makefile.in $(DESTDIR)/src/libgloss/
+
+gcc-copy:
+	mkdir -p $(PREFIX)/$(TARGET-GCC)/include
+	mkdir -p $(PREFIX)/$(TARGET-GCC)/lib
+	mkdir -p $(PREFIX)/lib/gcc/$(TARGET-GCC)/$(GCCVERSION_EXV)
+	cp -r $(PREFIX_LINUX)/$(TARGET-GCC)/include/* $(PREFIX)/$(TARGET-GCC)/include/
+	cp -r $(PREFIX_LINUX)/$(TARGET-GCC)/lib/* $(PREFIX)/$(TARGET-GCC)/lib/
+	cp -r $(PREFIX_LINUX)/lib/gcc/$(TARGET-GCC)/$(GCCVERSION_EXV)/* $(PREFIX)/lib/gcc/$(TARGET-GCC)/$(GCCVERSION_EXV)/
+	
+ # --------------------------------------
+gdb-mingw-build: gdb-mingw-clean gdb-mingw-configure gdb-mingw-compile gdb-mingw-install
+
+ gdb-mingw-configure:
+	 if [ ! -d $(TMPDIR_EXTRA)gdb-6.3-mingw-build ] ; then mkdir $(TMPDIR_EXTRA)gdb-6.3-mingw-build; fi
+	 cd $(TMPDIR_EXTRA)gdb-6.3-mingw-build; $(EXPORT_PATH); \
+	 ../gdb-6.3-mingw/configure --target=$(TARGET-GDB) $(EXTRA_CONFIG) \
+	 --prefix=$(PREFIX) --disable-nls --disable-libada \
+	 --with-cpu=leon 2>&1 | tee compile-gdb-configure.out
+
+ gdb-mingw-compile:
+	 cd $(TMPDIR_EXTRA)gdb-6.3-mingw-build; $(EXPORT_PATH); \
+	 make $(EXTRA_FLAGS) 2>&1 | tee compile-gdb-make.out
+
+ gdb-mingw-install:
+	 cd $(TMPDIR_EXTRA)gdb-6.3-mingw-build; $(EXPORT_PATH);  \
+	 make $(EXTRA_FLAGS) install 2>&1 | tee compile-gdb-install.out
+
+ gdb-mingw-clean:
+	 rm -rf $(TMPDIR_EXTRA)gdb-6.3-mingw-build
+
+
+
+gdb-mingw-6.3-copy:
+	-cp $(PREFIX)/bin/sparc-elf-gdb.exe $(PREFIX)/bin/sparc-elf-gdb-6.3.exe 
+
+gdb-mingw-6.8-build: gdb-mingw-6.8-clean gdb-mingw-6.8-configure gdb-mingw-6.8-compile gdb-mingw-6.8-install
+
+
+gdb-mingw-6.8-configure:
+	 if [ ! -d $(TMPDIR_EXTRA)git-gdb-6.8-mingw-build ] ; then mkdir $(TMPDIR_EXTRA)git-gdb-6.8-mingw-build; fi
+	 cd $(TMPDIR_EXTRA)git-gdb-6.8-mingw-build; $(EXPORT_PATH); \
+	 ../git-gdb-6.8-mingw/configure --target=$(TARGET-GDB) $(EXTRA_CONFIG) \
+	 --prefix=$(PREFIX) --disable-nls --disable-libada --disable-sim --disable-nls \
+	 --with-cpu=leon 2>&1 | tee compile-gdb-configure.out
+
+ gdb-mingw-6.8-compile:
+	 cd $(TMPDIR_EXTRA)git-gdb-6.8-mingw-build; $(EXPORT_PATH); \
+	 make $(EXTRA_FLAGS) 2>&1 | tee compile-gdb-make.out
+
+ gdb-mingw-6.8-install:
+	 cd $(TMPDIR_EXTRA)git-gdb-6.8-mingw-build; $(EXPORT_PATH);  \
+	 make $(EXTRA_FLAGS) install 2>&1 | tee compile-gdb-install.out
+
+ gdb-mingw-6.8-clean:
+	 rm -rf $(TMPDIR_EXTRA)git-gdb-6.8-mingw-build
+
+
+
+	 
+
+ termcap:
+	 termcap/1.3.1/configure --prefix=$MFS --enable-install-termcap --with-termcap=$MFS/etc/termcap && \
+	   make && make install && make distclean && 
+
+
+
+make-clean:
+	rm -rf make-3.80-build
+
+make-configure:
+	if [ ! -d make-3.80-build ] ; then mkdir make-3.80-build; fi
+	cd make-3.80-build; \
+	../make-3.80/configure --prefix=$(PREFIX) --build=$(BUILD) \
+		--host=$(HOST) --disable-nls --disable-rpath
+
+make-compile:
+	cd make-3.80-build; \
+	make $(EXTRA_FLAGS) all
+
+make-install:
+	cd make-3.80-build; \
+	make $(EXTRA_FLAGS) install
+
+## Exctract Precompiled mingw32-make
+make-extract:
+	tar -C $(PREFIX) -xzvf tarfiles/mingw32-make-3.80.0-3.tar.gz
+	mv $(PREFIX)/bin/mingw32-make.exe $(PREFIX)/bin/make.exe
+	   

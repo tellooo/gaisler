@@ -1,0 +1,14 @@
+VPATH = uip-httpd
+
+CC=sparc-elf-gcc
+CFLAGS=-g
+COPT=-g
+
+httpd: fs.o cgi.o httpd.o httpd_main.o
+	$(CC) -g $^ -o $@ -luip
+
+
+
+
+
+

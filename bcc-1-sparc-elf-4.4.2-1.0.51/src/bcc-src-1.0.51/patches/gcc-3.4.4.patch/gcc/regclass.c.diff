@@ -1,0 +1,23 @@
+--- gcc-3.4.4.old/./gcc/regclass.c	2020-02-28 17:30:18.120574730 +0100
++++ gcc-3.4.4.new/./gcc/regclass.c	2010-12-20 10:50:33.941348000 +0100
+@@ -110,6 +110,7 @@
+ #define CALL_REALLY_USED_REGNO_P(X)  call_used_regs[X]
+ #endif
+ 
++extern int flag_ffloat_int_mode;
+ 
+ /* Indexed by hard register number, contains 1 for registers that are
+    fixed use or call used registers that cannot hold quantities across
+@@ -1323,6 +1324,12 @@
+ 	  if (alt == best)
+ 	    alt = NO_REGS;
+ 
++	  if (flag_ffloat_int_mode &&
++	      GET_MODE_CLASS(PSEUDO_REGNO_MODE (i)) == MODE_INT) {
++		  best = GENERAL_REGS;
++		  alt = NO_REGS;
++	  }
++	  
+ 	  if (dump
+ 	      && (reg_pref[i].prefclass != (int) best
+ 		  || reg_pref[i].altclass != (int) alt))

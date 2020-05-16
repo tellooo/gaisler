@@ -1,0 +1,89 @@
+
+COMPILER=sparc-elf-gcc
+ARCHIVER=sparc-elf-ar
+ARFLAGS=rs
+COMPILERFLAGS=-Wall -gdwarf $(XFLAGS)
+EXTRA_COMPILER_FLAGS = -DIPv4 
+LWIPDIR=lwip-1.1.0/src
+LIB=liblwip4.a
+LEVEL=0
+
+INCLUDES= \
+ -I$(LWIPDIR)/include \
+ -I$(LWIPDIR)/include/ipv4 \
+ -I./include \
+ -I.
+
+INCLUDEFILES=../../../lwip/src/include/ipv4/lwip \
+             ../../../lwip/src/include/lwip \
+             ../../../lwip/src/include/netif \
+             ./include/netif \
+             ./include/arch \
+             ./lwipopts.h
+
+# COREFILES, CORE4FILES: The minimum set of files needed for lwIP.
+COREFILES=$(LWIPDIR)/core/mem.c \
+          $(LWIPDIR)/core/memp.c \
+          $(LWIPDIR)/core/netif.c \
+          $(LWIPDIR)/core/pbuf.c \
+          $(LWIPDIR)/core/stats.c \
+          $(LWIPDIR)/core/sys.c \
+          $(LWIPDIR)/core/tcp.c \
+          $(LWIPDIR)/core/tcp_in.c \
+          $(LWIPDIR)/core/tcp_out.c \
+          $(LWIPDIR)/core/udp.c \
+
+CORE4FILES=$(LWIPDIR)/core/ipv4/icmp.c \
+           $(LWIPDIR)/core/ipv4/ip.c \
+	        $(LWIPDIR)/core/inet.c \
+           $(LWIPDIR)/core/ipv4/ip_addr.c \
+           $(LWIPDIR)/core/ipv4/ip_frag.c
+
+# NETIFFILES: Files implementing various generic network interface functions.
+NETIFFILES=$(LWIPDIR)/netif/etharp.c
+
+# ARCHFILES: Archiecture specific files.
+ARCHFILES=$(wildcard $(LWIPDIR)/arch/*.c \
+                     $(LWIPDIR)/netif/*.c)
+
+# LWIPFILES: All the above.
+LWIPFILES=$(COREFILES) $(CORE4FILES) $(NETIFFILES) $(ARCHFILES)
+LWIPFILESW=$(wildcard $(LWIPFILES))
+LWIPOBJS=$(notdir $(LWIPFILESW:.c=.o))
+
+%.o:
+	$(COMPILER) $(COMPILERFLAGS) $(EXTRA_COMPILER_FLAGS) $(INCLUDES) -c $(<:.o=.c) 
+
+all ipv4 libs: include $(LIB)
+.PHONY: all ipv4 libs include help
+
+include:
+
+clean:
+	@rm -f *.o .depend* 
+
+depend dep: .depend
+	@exit
+
+$(LIB): $(LWIPOBJS)
+	@echo ""
+	@echo "Building lwIP Library, $@"
+	$(ARCHIVER) $(ARFLAGS) $@ $?
+
+.depend: $(LWIPFILES) $(APPFILES)
+	@echo ""
+	@echo "Building dependancies..."
+	$(COMPILER) $(COMPILERFLAGS) $(EXTRA_COMPILER_FLAGS) $(INCLUDES) \
+               -MM $^ > .depend || rm -f .depend
+
+ifneq ($(MAKECMDGOALS), clean)
+ifneq ($(MAKECMDGOALS), depend)
+ifneq ($(MAKECMDGOALS), dep)
+ifneq ($(MAKECMDGOALS), )
+ifneq ($(MAKECMDGOALS), help)
+-include .depend
+endif
+endif
+endif
+endif
+endif

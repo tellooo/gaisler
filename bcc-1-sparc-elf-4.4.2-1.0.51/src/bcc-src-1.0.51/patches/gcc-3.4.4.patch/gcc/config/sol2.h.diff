@@ -1,0 +1,22 @@
+--- gcc-3.4.4.old/./gcc/config/sol2.h	2020-02-28 17:30:18.166574190 +0100
++++ gcc-3.4.4.new/./gcc/config/sol2.h	2007-04-23 12:30:33.129710000 +0200
+@@ -56,13 +56,13 @@
+ #define TARGET_SUB_OS_CPP_BUILTINS()
+ #define TARGET_OS_CPP_BUILTINS()			\
+     do {						\
+-	builtin_define_std ("unix");			\
+-	builtin_define_std ("sun");			\
+-	builtin_define ("__svr4__");			\
+-	builtin_define ("__SVR4");			\
++	/*builtin_define_std ("unix");*/		\
++	/*builtin_define_std ("sun");*/			\
++	/*builtin_define ("__svr4__");*/		\
++	/*builtin_define ("__SVR4");*/			\
+ 	builtin_define ("__PRAGMA_REDEFINE_EXTNAME");	\
+-	builtin_assert ("system=unix");			\
+-	builtin_assert ("system=svr4");			\
++	/*builtin_assert ("system=unix");*/		\
++	/*builtin_assert ("system=svr4");*/		\
+ 	/* For C++ we need to add some additional macro	\
+ 	   definitions required by the C++ standard	\
+ 	   library.  */					\

@@ -1,0 +1,22 @@
+--- gcc-3.4.4.old/./gcc/opts.c	2020-02-28 17:30:18.099574977 +0100
++++ gcc-3.4.4.new/./gcc/opts.c	2010-12-20 10:50:33.941348000 +0100
+@@ -42,6 +42,8 @@
+ unsigned HOST_WIDE_INT g_switch_value;
+ bool g_switch_set;
+ 
++int flag_ffloat_int_mode = 0;
++
+ /* True if we should exit after parsing options.  */
+ bool exit_after_options;
+ 
+@@ -1000,6 +1002,10 @@
+       fix_register (arg, 1, 1);
+       break;
+ 
++    case OPT_ffloat_int_mode:
++      flag_ffloat_int_mode = 1;
++      break;
++      
+     case OPT_ffunction_cse:
+       flag_no_function_cse = !value;
+       break;

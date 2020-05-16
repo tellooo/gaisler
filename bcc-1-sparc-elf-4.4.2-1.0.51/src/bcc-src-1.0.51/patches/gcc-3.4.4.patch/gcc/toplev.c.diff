@@ -1,0 +1,27 @@
+--- gcc-3.4.4.old/./gcc/toplev.c	2020-02-28 17:30:18.088575108 +0100
++++ gcc-3.4.4.new/./gcc/toplev.c	2013-06-01 17:05:11.535576000 +0200
+@@ -2101,6 +2101,7 @@
+ 
+ #ifdef DELAY_SLOTS
+ /* Run delay slot optimization.  */
++void sparc_reorg (void);
+ static void
+ rest_of_handle_delay_slots (tree decl, rtx insns)
+ {
+@@ -2109,6 +2110,8 @@
+ 
+   dbr_schedule (insns, rtl_dump_file);
+ 
++  /*sparc_reorg ();*/
++  
+   close_dump_file (DFI_dbr, print_rtl, insns);
+   timevar_pop (TV_DBR_SCHED);
+ 
+@@ -3587,6 +3590,7 @@
+ #ifdef DELAY_SLOTS
+   if (optimize > 0 && flag_delayed_branch)
+     rest_of_handle_delay_slots (decl, insns);
++  
+ #endif
+ 
+ #if defined (HAVE_ATTR_length) && !defined (STACK_REGS)

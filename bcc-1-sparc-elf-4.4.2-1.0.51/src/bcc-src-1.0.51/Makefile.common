@@ -1,0 +1,514 @@
+
+
+unify_cmds:
+	cd $(PREFIX)/bin; for f in ar as c++ c++filt cpp g++ gcc gccbug gconv ld nm objcopy objdump addr2line ranlib readelf size strings strip; do \
+	   if [ -L sparc-leon-elf-$$f$(EXEPOSTFIX)  -o ! -f  sparc-leon-elf-$$f$(EXEPOSTFIX) ]; then \
+	      ln -sf sparc-elf-$$f$(EXEPOSTFIX) sparc-leon-elf-$$f$(EXEPOSTFIX); \
+	   fi;\
+	   if [ -L sparc-leon-none-$$f$(EXEPOSTFIX)  -o ! -f  sparc-leon-none-$$f$(EXEPOSTFIX) ]; then \
+	      ln -sf sparc-elf-$$f$(EXEPOSTFIX) sparc-leon-none-$$f$(EXEPOSTFIX); \
+	   fi;\
+	done; \
+	ln -sf sparc-elf-gcc-$(GCCVERSION)$(EXEPOSTFIX) sparc-leon-elf-gcc-$(GCCVERSION)$(EXEPOSTFIX); \
+	ln -sf sparc-elf-gcc-$(GCCVERSION)$(EXEPOSTFIX) sparc-leon-none-gcc-$(GCCVERSION)$(EXEPOSTFIX); 
+	cd $(PREFIX)/ ; \
+	ln -sf sparc-elf sparc-leon-elf; \
+	ln -sf sparc-elf sparc-leon-none;
+
+	
+unify_cmds_up:
+	mkdir -p $(PREFIX)/bin
+	mkdir -p $(PREFIX)/sparc-leon3-none
+	cd $(PREFIX)/bin; for f in ar as c++ c++filt cpp g++ gcc gccbug gconv ld nm objcopy objdump addr2line ranlib readelf size strings strip; do \
+	   if [ -L sparc-leon3-elf-$$f$(EXEPOSTFIX)  -o ! -f  sparc-leon3-elf-$$f$(EXEPOSTFIX) ]; then \
+	      ln -sf sparc-leon3-none-$$f$(EXEPOSTFIX) sparc-elf-$$f$(EXEPOSTFIX); \
+	   fi;\
+	done; \
+	ln -sf sparc-leon3-none-gcc-$(GCCVERSION)$(EXEPOSTFIX) sparc-elf-gcc-$(GCCVERSION)$(EXEPOSTFIX); \
+
+
+unify_cmds_up_linux:
+	cd $(PREFIX)/ ; \
+	if [ ! -e sparc-elf ]; then ln -sf sparc-leon3-none sparc-elf; fi; 
+	
+
+#----------------------------------------
+# mkprom
+mkprom-compile:
+	-cd mkprom; $(EXPORT_PATH); make PREFIX=$(PREFIX) RELEASE_VERSION=$(RELEASE_VERSION) $(MKPROM_EXTRA) multi-do DO="clean multi-all install"
+	-cd mkprom; $(EXPORT_PATH); make PREFIX=$(PREFIX) RELEASE_VERSION=$(RELEASE_VERSION) $(MKPROM_EXTRA) clean multi-all install
+	-cd mkprom; $(EXPORT_PATH); make PREFIX=$(PREFIX) RELEASE_VERSION=$(RELEASE_VERSION) $(MKPROM_EXTRA) install-mkprom
+
+mkprom-install-linkprom:
+	cd mkprom; $(EXPORT_PATH); make PREFIX=$(PREFIX) RELEASE_VERSION=$(RELEASE_VERSION) $(MKPROM_EXTRA) install-mkprom-linkprom
+
+
+MKPROM2-DIR=/opt/mkprom2-src
+mkprom2-compile:
+	if [ -f $(MKPROM2-DIR)/mkprom.c ]; then \
+		cd $(MKPROM2-DIR); make TOOLBASE=$(TOOLBASE)/mkprom2 PREFIX=$(PREFIX)/mkprom2 $(if $(ISMINGW),cross-only,all); \
+		cd $(PREFIX)/bin; ln -sf ../mkprom2/mkprom2 mkprom2; \
+		cd $(PREFIX)/bin; ln -sf ../mkprom2/mkprom2 sparc-elf-mkprom2; \
+	fi
+	
+#----------------------------------------
+# libpthread
+libpthread-compile:
+	-cd libs/libpthread; $(EXPORT_PATH); make PREFIX=$(PREFIX) install-headers
+	-cd libs/libpthread; $(EXPORT_PATH); make PREFIX=$(PREFIX) multi-do DO="clean multi-all install"
+	-cd libs/libpthread; $(EXPORT_PATH); make PREFIX=$(PREFIX) clean multi-all install
+
+#----------------------------------------
+# libnet
+libnet-compile:
+	-cd libs/libnet; $(EXPORT_PATH); make PREFIX=$(PREFIX) install-headers
+	-cd libs/libnet; $(EXPORT_PATH); make PREFIX=$(PREFIX) multi-do DO="clean multi-all install"
+	-cd libs/libnet; $(EXPORT_PATH); make PREFIX=$(PREFIX) clean multi-all install
+
+#----------------------------------------
+# libnet
+freertos-compile:
+	-cd freertos; $(EXPORT_PATH); make PREFIX=$(PREFIX) install-headers
+	-cd freertos; $(EXPORT_PATH); make PREFIX=$(PREFIX) multido-compile
+
+# --------------------------------------
+
+gdb-all:  gdb-clean gdb-configure gdb-compile gdb-install
+
+gdb-dir:
+	if [ ! -d $(TMPDIR_EXTRA)insight-6.4-build ] ; then mkdir $(TMPDIR_EXTRA)insight-6.4-build; fi
+	
+gdb-configure: gdb-dir
+	cd $(TMPDIR_EXTRA)insight-6.4-build; $(EXPORT_PATH); \
+	$(GDB_ABI_FLAGS) \
+	../insight-6.4/configure --target=$(TARGET-GDB) --prefix=$(PREFIX) --program-prefix=sparc-elf- \
+	 $(EXTRA_CONFIG) --disable-werror --disable-nls --with-cpu=leon 2>&1 | tee compile-gdb-configure.out
+
+gdb-compile: gdb-dir
+	cd $(TMPDIR_EXTRA)insight-6.4-build; $(EXPORT_PATH); \
+	make $(GDB_ABI_FLAGS) $(EXTRA_FLAGS) 2>&1 | tee compile-gdb-make.out
+
+gdb-install: gdb-dir
+	cd $(TMPDIR_EXTRA)insight-6.4-build; $(EXPORT_PATH);  \
+	make $(EXTRA_FLAGS) install 2>&1 | tee compile-gdb-install.out
+
+gdb-clean:
+	rm -rf $(TMPDIR_EXTRA)insight-6.4-build
+
+
+
+# --------------------------------------
+gdb7-all:  gdb7-clean gdb7-configure gdb7-compile gdb7-install
+
+gdb7-dir:
+	if [ ! -d $(TMPDIR_EXTRA)gdb-$(GDB_VERSION)-build ] ; then mkdir $(TMPDIR_EXTRA)gdb-$(GDB_VERSION)-build; fi
+	
+gdb7-configure: gdb7-dir
+	cd $(TMPDIR_EXTRA)gdb-$(GDB_VERSION)-build; $(EXPORT_PATH); \
+	$(GDB_ABI_FLAGS) \
+	../gdb-$(GDB_VERSION)/configure --target=$(TARGET-GDB) --prefix=$(PREFIX) --program-prefix=sparc-elf- \
+	--program-transform-name='s&gdb&gdb7&' \
+	$(EXTRA_CONFIG) --disable-werror --disable-nls  2>&1 | tee compile-gdb-configure.out
+
+#--with-cpu=leon
+	 
+gdb7-compile: gdb-dir
+	cd $(TMPDIR_EXTRA)gdb-$(GDB_VERSION)-build; $(EXPORT_PATH); \
+	make $(EXTRA_FLAGS) 2>&1 | tee compile-gdb-make.out
+
+gdb7-install: gdb-dir
+	cd $(TMPDIR_EXTRA)gdb-$(GDB_VERSION)-build; $(EXPORT_PATH);  \
+	make $(EXTRA_FLAGS) install 2>&1 | tee compile-gdb-install.out
+
+gdb7-clean:
+	rm -rf $(TMPDIR_EXTRA)gdb-$(GDB_VERSION)-build
+
+
+# --------------------------------------
+gdbold-all:  gdbold-clean gdbold-configure gdbold-compile gdbold-install
+
+gdbold-dir:
+	if [ ! -d $(TMPDIR_EXTRA)gdb-$(GDBOLD_VERSION)-build ] ; then mkdir $(TMPDIR_EXTRA)gdb-$(GDBOLD_VERSION)-build; fi
+	
+gdbold-configure: gdbold-dir
+	cd $(TMPDIR_EXTRA)gdb-$(GDBOLD_VERSION)-build; $(EXPORT_PATH); \
+	../gdb-$(GDBOLD_VERSION)/configure --target=$(TARGET-GDB) --prefix=$(PREFIX) --program-prefix=sparc-elf- \
+	--program-transform-name='s,gdb,gdbold,' \
+	$(EXTRA_CONFIG) --disable-werror --disable-nls  2>&1 | tee compile-gdb-configure.out
+
+#--with-cpu=leon
+	 
+gdbold-compile: gdb-dir
+	cd $(TMPDIR_EXTRA)gdb-$(GDBOLD_VERSION)-build; $(EXPORT_PATH); \
+	make $(EXTRA_FLAGS) 2>&1 | tee compile-gdb-make.out
+
+gdbold-install: gdb-dir
+	cd $(TMPDIR_EXTRA)gdb-$(GDBOLD_VERSION)-build; $(EXPORT_PATH);  \
+	make $(EXTRA_FLAGS) install 2>&1 | tee compile-gdb-install.out
+
+gdbold-clean:
+	rm -rf $(TMPDIR_EXTRA)gdb-$(GDBOLD_VERSION)-build
+	
+
+# --------------------------------------
+
+TARGET-NEWLIB?=$(TARGET)
+NEWLIBC-VERSION?=1.13.0
+
+
+newlib-all: newlib-clean newlib-configure newlib-compile newlib-install
+
+newlib-dir:
+	if [ ! -d $(TMPDIR_EXTRA)newlib-$(NEWLIBC-VERSION)-build ] ; then mkdir $(TMPDIR_EXTRA)newlib-$(NEWLIBC-VERSION)-build; fi
+
+newlib-configure: newlib-dir
+	cd $(TMPDIR_EXTRA)newlib-$(NEWLIBC-VERSION)-build; $(EXPORT_PATH); \
+	../$(NEWLIBC-GIT-PREFIX)newlib-$(NEWLIBC-VERSION)/configure --target=$(TARGET-NEWLIB)  $(EXTRA_CONFIG) --prefix=$(PREFIX) $(NEWLIB_EXTRA) \
+	$(if $(NO_NEWLIBC_MULTITHREAD),,--enable-newlib-multithread) $(if $(NO_LEON_CPU),,--with-cpu=leon)  2>&1 | tee compile-newlib-configure.out
+#--enable-maintainer-mode
+
+newlib-compile: newlib-dir
+	-rm n 
+	-rm b 
+	-rm g
+	ln -s $(PREFIX)/$(if $(TARGET-GCC),$(TARGET-GCC),$(TARGET)) g
+	ln -s $(TMPDIR_EXTRA)newlib-$(NEWLIBC-VERSION)-build b
+	ln -s $(NEWLIBC-GIT-PREFIX)newlib-$(NEWLIBC-VERSION) n
+	cd $(TMPDIR_EXTRA)newlib-$(NEWLIBC-VERSION)-build; $(EXPORT_PATH); \
+	make $(EXTRA_FLAGS) 2>&1 | tee compile-newlib-make.out
+
+newlib-compile-libgloss: newlib-dir
+	cd $(TMPDIR_EXTRA)newlib-$(NEWLIBC-VERSION)-build; $(EXPORT_PATH); \
+	make $(EXTRA_FLAGS) maybe-all-target-libgloss 2>&1 | tee compile-newlib-make.out
+	
+newlib-install: newlib-dir
+	cd $(TMPDIR_EXTRA)newlib-$(NEWLIBC-VERSION)-build; $(EXPORT_PATH); \
+	make  $(EXTRA_FLAGS) install 2>&1 | tee compile-newlib-install.out
+
+newlib-install-libgloss: newlib-dir
+	cd $(TMPDIR_EXTRA)newlib-$(NEWLIBC-VERSION)-build; $(EXPORT_PATH); \
+	make  $(EXTRA_FLAGS) maybe-install-target-libgloss 2>&1 | tee compile-newlib-install.out
+	
+newlib-clean: 
+	-rm -rf $(TMPDIR_EXTRA)newlib-$(NEWLIBC-VERSION)-build
+	
+# --------------------------------------
+binutils-all: binutils-clean binutils-configure binutils-compile binutils-install
+
+TARGET-BINUTILS?=$(TARGET)
+
+binutils-dir:
+	if [ ! -d $(TMPDIR_EXTRA)$(BINUTILS_DIR)-build ] ; then mkdir $(TMPDIR_EXTRA)$(BINUTILS_DIR)-build; fi
+	
+binutils-configure: binutils-dir
+	cd $(TMPDIR_EXTRA)$(BINUTILS_DIR)-build; $(EXPORT_PATH); \
+	$(BINUTILS_ABI_FLAGS) \
+	../$(BINUTILS-GIT-PREFIX)$(BINUTILS_DIR)/configure --target=$(TARGET-BINUTILS) $(EXTRA_CONFIG) --prefix=$(PREFIX) $(BINUTIL_EXTRA) \
+	$(if $(DOSYSROOT),--with-sysroot=$(PREFIX)/sparc-linux ,) \
+        --verbose $(if $(NO_LEON_CPU),,--with-cpu=leon) $(PAGE_SIZE_EXTRA_FLAG)  2>&1 | tee compile-binutils-configure.out
+
+binutils-compile: binutils-dir
+	cd $(TMPDIR_EXTRA)$(BINUTILS_DIR)-build; $(EXPORT_PATH); \
+	 make -j8 $(EXTRA_FLAGS) 2>&1 | tee compile-binutils-make.out
+
+binutils-install: binutils-dir
+	cd $(TMPDIR_EXTRA)$(BINUTILS_DIR)-build; $(EXPORT_PATH); \
+	make  -j8 $(EXTRA_FLAGS) install 2>&1 | tee compile-binutils-install.out
+
+binutils-clean:
+	rm -rf $(TMPDIR_EXTRA)$(BINUTILS_DIR)-build
+
+
+testexport:
+	echo $(EXPORT_PATH)
+
+
+#---------------------------------------
+gmp-all:  gmp-configure gmp-compile gmp-install
+
+gmp-dir:
+	if [ ! -d $(TMPDIR_EXTRA)$(GMPDIR)-build$(GMPTARGET) ] ; then mkdir $(TMPDIR_EXTRA)$(GMPDIR)-build$(GMPTARGET); fi
+	if [ ! -d $(TMPDIR_EXTRA)$(GMPDIR)-install$(GMPTARGET) ] ; then mkdir $(TMPDIR_EXTRA)$(GMPDIR)-install$(GMPTARGET); fi
+	
+gmp-configure: gmp-dir
+	cd $(TMPDIR_EXTRA)$(GMPDIR)-build$(GMPTARGET); $(EXPORT_PATH); \
+	$(GMP_ABI_FLAGS) \
+	../$(GMPDIR)/configure  \
+	--verbose --prefix=$(CURDIR)/$(TMPDIR_EXTRA)$(GMPDIR)-install$(GMPTARGET) \
+	--build=$(BUILD) $(EXTRA_CONFIG) --disable-shared \
+	$(if $(GMPTARGETOPT),$(GMPTARGETOPT),--host=$(HOST))  2>&1 | tee compile-gmp-configure.out
+
+gmp-compile: 
+	     cd $(TMPDIR_EXTRA)$(GMPDIR)-build$(GMPTARGET); $(EXPORT_PATH); \
+	make 2>&1 | tee compile-gmp-compile.out
+
+gmp-install: 
+	     cd $(TMPDIR_EXTRA)$(GMPDIR)-build$(GMPTARGET); $(EXPORT_PATH); \
+	make install 2>&1 | tee compile-gmp-install.out
+
+gmp-clean: 
+	     cd $(TMPDIR_EXTRA)$(GMPDIR)-build$(GMPTARGET); $(EXPORT_PATH); \
+	make clean 2>&1 | tee compile-gmp-clean.out
+
+gmp-configure-target:
+	make -f $(M_MYSELF) gmp-configure GMPTARGET=-target GMPTARGETOPT="--host=sparc-linux CC=sparc-linux-gcc "
+	
+#---------------------------------------
+mpfr-all: mpfr-configure mpfr-compile mpfr-install
+	
+mpfr-dir:
+	if [ ! -d $(TMPDIR_EXTRA)$(MPFRDIR)-build$(MPFRTARGET) ] ; then mkdir $(TMPDIR_EXTRA)$(MPFRDIR)-build$(MPFRTARGET); fi
+	if [ ! -d $(TMPDIR_EXTRA)$(MPFRDIR)-install$(MPFRTARGET) ] ; then mkdir $(TMPDIR_EXTRA)$(MPFRDIR)-install$(MPFRTARGET); fi
+	
+mpfr-configure: mpfr-dir
+	cd $(TMPDIR_EXTRA)$(MPFRDIR)-build$(MPFRTARGET); $(EXPORT_PATH); \
+	$(MPFR_ABI_FLAGS) \
+	../$(MPFRDIR)/configure  \
+	--verbose --prefix=$(CURDIR)/$(TMPDIR_EXTRA)$(MPFRDIR)-install \
+	--build=$(BUILD) $(EXTRA_CONFIG) --disable-shared \
+	 --with-gmp=$(CURDIR)/$(TMPDIR_EXTRA)$(GMPDIR)-install \
+	$(if $(MPFRTARGETOPT),$(MPFRTARGETOPT),--host=$(HOST))  2>&1 | tee compile-mpfr-configure.out
+
+mpfr-compile: 
+	     cd $(TMPDIR_EXTRA)$(MPFRDIR)-build$(MPFRTARGET); $(EXPORT_PATH); \
+	make 2>&1 | tee compile-mpfr-compile.out
+
+mpfr-install: 
+	     cd $(TMPDIR_EXTRA)$(MPFRDIR)-build$(MPFRTARGET); $(EXPORT_PATH); \
+	make install 2>&1 | tee compile-mpfr-install.out
+
+mpfr-clean: 
+	     cd $(TMPDIR_EXTRA)$(MPFRDIR)-build$(MPFRTARGET); $(EXPORT_PATH); \
+	make clean 2>&1 | tee compile-mpfr-clean.out
+
+mpfr-configure-target:
+	make -f $(M_MYSELF) mpfr-configure MPFRTARGET=-target MPFRTARGETOPT="--host=sparc-linux CC=sparc-linux-gcc "
+	
+#---------------------------------------
+mpc-all: mpc-configure mpc-compile mpc-install
+
+MPCDIR?=mpc-0.8.2
+
+mpc-dir:
+	if [ ! -d $(TMPDIR_EXTRA)$(MPCDIR)-build ] ; then mkdir $(TMPDIR_EXTRA)$(MPCDIR)-build; fi
+	if [ ! -d $(TMPDIR_EXTRA)$(MPCDIR)-install ] ; then mkdir $(TMPDIR_EXTRA)$(MPCDIR)-install; fi
+	
+mpc-configure: mpc-dir
+	cd $(TMPDIR_EXTRA)$(MPCDIR)-build; $(EXPORT_PATH); \
+	../$(MPCDIR)/configure  \
+	--verbose --prefix=$(CURDIR)/$(TMPDIR_EXTRA)$(MPCDIR)-install \
+	--build=$(BUILD) $(EXTRA_CONFIG) --disable-shared \
+	--with-gmp=$(CURDIR)/$(TMPDIR_EXTRA)$(GMPDIR)-install --with-mpfr=$(CURDIR)/$(TMPDIR_EXTRA)$(MPFRDIR)-install \
+	--host=$(HOST)  2>&1 | tee compile-mpc-configure.out
+
+mpc-compile: 
+	     cd $(TMPDIR_EXTRA)$(MPCDIR)-build; $(EXPORT_PATH); \
+	make 2>&1 | tee compile-mpc-compile.out
+
+mpc-install: 
+	     cd $(TMPDIR_EXTRA)$(MPCDIR)-build; $(EXPORT_PATH); \
+	make install 2>&1 | tee compile-mpc-install.out
+
+mpc-clean: 
+	     cd $(TMPDIR_EXTRA)$(MPCDIR)-build; $(EXPORT_PATH); \
+	make clean 2>&1 | tee compile-mpc-clean.out
+
+# -------------------------------------
+#	cp ddd/sparc-elf-ddd.3.4.4 toolchains/sparc-elf-$(GCCVERSION)/bin/ddd;\
+#	cp ddd/sparc-elf-ddd.3.4.4 toolchains/sparc-elf-$(GCCVERSION)/bin/sparc-elf-ddd;,)
+
+gcc-createtars: gcc-strip
+	if [ ! -d $(CURDIR)/toolchains/$(RELEASE_VERSION) ] ; then mkdir $(CURDIR)/toolchains/$(RELEASE_VERSION); fi
+	make -f $(M_MYSELF) DESTDIR=$(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX) GCCVERSION=$(GCCVERSION) RELEASE_VERSION=$(RELEASE_VERSION) gcc-addsrc
+	-make -f $(M_MYSELF) bcc-source
+	-cp -r bcc-src-$(RELEASE_VERSION) $(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX)/src/
+	-rm -rf $(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX)/src/bcc-src-$(RELEASE_VERSION)/freertos
+	$(if $(filter sparc-elf,$(TARGET)),,)
+	-find $(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX) -name libthreadx.a | xargs rm $$1;
+	-rm -rf $(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX)/$(TARGET)/include/threadx;
+	files=`find $(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX)/ -name .svn -type d`; if [ -n "$$files" ]; then rm -rf $$files; fi	
+	$(if $(NO_DO_STRIP),,find  $(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX)/$(TARGET)/lib|\
+	grep \\.a\$$ | xargs $(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX)/bin/$(TARGET)-strip --strip-debug $$1)
+	cd $(CURDIR)/toolchains; rm -rf $(TARGET)-$(GCCVERSION); \
+	ln -s $(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX) $(TARGET)-$(GCCVERSION);\
+	tar -hcf - $(TARGET)-$(GCCVERSION) | bzip2 -9 > $(RELEASE_VERSION)/$(EXTRA_RELVERSION_PRE)$(TARGET)$(EXTRA_RELVERSION)-$(GCCVERSION)-$(RELEASE_VERSION).tar.bz2; 
+	cd $(CURDIR)/toolchains/$(RELEASE_VERSION); \
+	md5sum $(EXTRA_RELVERSION_PRE)$(TARGET)$(EXTRA_RELVERSION)-$(GCCVERSION)-$(RELEASE_VERSION).tar.bz2 > $(EXTRA_RELVERSION_PRE)$(TARGET)$(EXTRA_RELVERSION)-$(GCCVERSION)-$(RELEASE_VERSION).tar.bz2.md5;
+	-rm $(CURDIR)/toolchains/$(RELEASE_VERSION)/$(EXTRA_RELVERSION_PRE)$(TARGET)$(EXTRA_RELVERSION)-$(GCCVERSION)-$(RELEASE_VERSION).zip;
+	$(if $(filter y,$(DOPASS)),cd $(CURDIR)/toolchains/$(RELEASE_VERSION);\
+	zip -P $(PASSWORD) -e \
+	$(EXTRA_RELVERSION_PRE)$(TARGET)$(EXTRA_RELVERSION)-$(GCCVERSION)-$(RELEASE_VERSION).zip\
+	$(EXTRA_RELVERSION_PRE)$(TARGET)$(EXTRA_RELVERSION)-$(GCCVERSION)-$(RELEASE_VERSION).tar.bz2,)
+
+
+
+# --------------------------------
+GDBDIR=gdb-6.8
+
+gdb-server-configure:
+	-mkdir -p $(TMPDIR_EXTRA)$(GDBDIR)-build$(GMPTARGET)
+	cd $(TMPDIR_EXTRA)$(GDBDIR)-build$(GMPTARGET);  \
+                gdb_cv_func_sigsetjmp=yes \
+                bash_cv_have_mbstate_t=yes \
+	../$(GDBDIR)/gdb/gdbserver/configure \
+	--build=i686-pc-linux-gnu \
+        --host=sparc-linux \
+        --target=sparc-unknown-linux \
+
+
+#	--disable-nls \
+#                --without-uiout  \
+#                --disable-tui --disable-gdbtk --without-x \
+#                --without-included-gettext 
+
+gdb-server-compile:
+	cd $(TMPDIR_EXTRA)$(GDBDIR)-build$(GMPTARGET);  \
+	   make | tee _compile.txt
+
+$(GDBDIR)-all:  $(GDBDIR)-clean $(GDBDIR)-configure $(GDBDIR)-compile $(GDBDIR)-install
+
+$(GDBDIR)-dir:
+	if [ ! -d $(TMPDIR_EXTRA)$(GDBDIR)-build ] ; then mkdir $(TMPDIR_EXTRA)$(GDBDIR)-build; fi
+	
+$(GDBDIR)-configure: $(GDBDIR)-dir
+	cd $(TMPDIR_EXTRA)$(GDBDIR)-build; $(EXPORT_PATH); \
+	../$(GDBDIR)/configure --target=$(TARGET) --prefix=$(PREFIX) --program-prefix=sparc-elf- \
+	 $(EXTRA_CONFIG) --disable-werror --disable-nls --with-cpu=leon 2>&1 | tee compile-gdb-configure.out
+
+$(GDBDIR)-compile: $(GDBDIR)-dir
+	cd $(TMPDIR_EXTRA)$(GDBDIR)-build; $(EXPORT_PATH); \
+	make $(EXTRA_FLAGS) 2>&1 | tee compile-gdb-make.out
+
+$(GDBDIR)-install: $(GDBDIR)-dir
+	cd $(TMPDIR_EXTRA)$(GDBDIR)-build; $(EXPORT_PATH);  \
+	make $(EXTRA_FLAGS) install 2>&1 | tee compile-gdb-install.out
+
+$(GDBDIR)-clean:
+	rm -rf $(TMPDIR_EXTRA)$(GDBDIR)-build
+	   
+	   
+# --------------------------------
+
+
+gcc-strip:
+	echo not stripped
+
+gcc-strip-not:
+	for file in `find $(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX)/bin/* -maxdepth 1 -type f`; \
+		do echo strip $$file; strip $$file; done
+	for file in `find $(CURDIR)/toolchains/$(TARGET)-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX)/libexec/gcc/$(TARGET)/$(GCCVERSION) -maxdepth 1 -type f`; \
+		do echo strip $$file; strip $$file; done
+
+
+upload:
+	python upload.py $(RELEASE_VERSION)
+
+download:
+	python download.py $(RELEASE_VERSION)
+
+gcc-addsrc:
+	-rm -rf $(DESTDIR)/doc
+	-rm -rf $(DESTDIR)/src
+	mkdir -p $(DESTDIR)/src/libgloss
+	mkdir -p $(DESTDIR)/doc
+	cp Changelog.txt $(DESTDIR)/doc
+	cp doc/bcc-$(RELEASE_VERSION).pdf $(DESTDIR)/doc/bcc.pdf
+	$(if $(filter sparc-threadx,$(TARGET)),,svn export freertos $(DESTDIR)/src/freertos)
+	-rm -rf $(DESTDIR)/src/freertos/FreeRTOS/Demo/*
+	-rm -rf $(DESTDIR)/src/freertos/FreeRTOS/TraceCon/*
+	$(if $(filter sparc-threadx,$(TARGET)),,svn export freertos/FreeRTOS/Demo/Common $(DESTDIR)/src/freertos/FreeRTOS/Demo/Common)
+	$(if $(filter sparc-threadx,$(TARGET)),,sed -i -e 's/@PREFIX@/$(subst /,\/,$(PREFIX))/g' $(DESTDIR)/src/freertos/Makefile)
+	svn export examples $(DESTDIR)/src/examples
+	$(if $(filter sparc-threadx,$(TARGET)),,cp $(DESTDIR)/src/freertos/ex1.c $(DESTDIR)/src/examples/freertos1.c)
+	$(if $(filter sparc-threadx,$(TARGET)),,cp $(DESTDIR)/src/freertos/ex2.c $(DESTDIR)/src/examples/freertos2.c)
+	svn export libs/libnet $(DESTDIR)/src/libnet
+	svn export libs/libpthread $(DESTDIR)/src/libpthread
+	-svn export $(GCC-GIT-PREFIX)gcc-$(GCCVERSION).patch $(DESTDIR)/src/gcc-patch 
+	-svn export $(NEWLIBC-GIT-PREFIX)newlib-$(NEWLIBC-VERSION).patch $(DESTDIR)/src/newlib-patch
+	-svn export $(BINUTILS-GIT-PREFIX)$(BINUTILS_DIR).patch $(DESTDIR)/src/binutils-patch
+	-svn export newlib-1.13.0/libgloss/sparc_leon $(DESTDIR)/src/libgloss/sparc_leon
+	cp -r newlib-1.13.0/libgloss/*.c $(DESTDIR)/src/libgloss/
+	cp -r newlib-1.13.0/libgloss/*.h $(DESTDIR)/src/libgloss/
+	cp -r newlib-1.13.0/libgloss/configure $(DESTDIR)/src/libgloss/
+	cp -r newlib-1.13.0/libgloss/Makefile.in $(DESTDIR)/src/libgloss/
+	-cp changeset_r690.diff $(DESTDIR)/src/leon2-removal.diff
+
+SOURCE_DIST=bcc-src-$(RELEASE_VERSION)
+bcc-source:
+	rm -rf $(SOURCE_DIST)
+	mkdir $(SOURCE_DIST)
+	mkdir -p $(SOURCE_DIST)/tarfiles
+	svn export gcc-4.4.2 $(SOURCE_DIST)/gcc-4.4.2
+	svn export gcc-3.4.4 $(SOURCE_DIST)/gcc-3.4.4
+	svn export binutils-2.16.1 $(SOURCE_DIST)/binutils-2.16.1
+	svn export binutils-2.19.51 $(SOURCE_DIST)/binutils-2.19.51
+	svn export newlib-1.13.0 $(SOURCE_DIST)/newlib-1.13.0
+	svn export libs $(SOURCE_DIST)/libs
+	svn export insight-6.4 $(SOURCE_DIST)/insight-6.4
+	svn export gdb-6.3-mingw $(SOURCE_DIST)/gdb-6.3-mingw
+	svn export mkprom $(SOURCE_DIST)/mkprom
+	svn export freertos $(SOURCE_DIST)/freertos
+	svn export tarfiles/mingw32-make-3.80.0-3.tar.gz $(SOURCE_DIST)/tarfiles/mingw32-make-3.80.0-3.tar.gz
+	-mv $(SOURCE_DIST)/freertos/FreeRTOS/Demo/Common $(SOURCE_DIST)/freertos/FreeRTOS/Common
+	-rm -rf $(SOURCE_DIST)/freertos/FreeRTOS/Demo/*
+	-mv $(SOURCE_DIST)/freertos/FreeRTOS/Common $(SOURCE_DIST)/freertos/FreeRTOS/Demo/Common
+	svn export Makefile $(SOURCE_DIST)/Makefile
+	mv $(SOURCE_DIST)/Makefile $(SOURCE_DIST)/Makefile.bck
+	cat $(SOURCE_DIST)/Makefile.bck | awk -f dist-cleanup.awk > $(SOURCE_DIST)/Makefile
+	rm $(SOURCE_DIST)/Makefile.bck
+	svn export Makefile.gcc-3.4.4 $(SOURCE_DIST)/Makefile.gcc-3.4.4
+	svn export Makefile.gcc-3.4.4-linux-mingw $(SOURCE_DIST)/Makefile.gcc-3.4.4-linux-mingw
+	svn export Makefile.gcc-4.4.2-linux-mingw $(SOURCE_DIST)/Makefile.gcc-4.4.2-linux-mingw
+	svn export Makefile.gcc-4.4.2 $(SOURCE_DIST)/Makefile.gcc-4.4.2
+	svn export Makefile.common $(SOURCE_DIST)/Makefile.common
+	svn export Makefile.common-linux-mingw $(SOURCE_DIST)/Makefile.common-linux-mingw
+	svn export Makefile.release $(SOURCE_DIST)/Makefile.release
+	svn export Changelog.txt $(SOURCE_DIST)/Changelog.txt
+	mkdir -p $(SOURCE_DIST)/patches
+	-cd gcc-3.4.4.diff; sh dodiff.sh
+	-cd gcc-4.4.2.diff; sh dodiff.sh
+	cp -r gcc-3.4.4.diff/gcc-3.4.4.patch $(SOURCE_DIST)/patches/gcc-3.4.4.patch
+	cp -r gcc-4.4.2.diff/gcc-4.4.2.patch $(SOURCE_DIST)/patches/gcc-4.4.2.patch
+	cp -r gcc-3.4.4.diff/gcc-3.4.4.new $(SOURCE_DIST)/patches/gcc-3.4.4.new
+	cp -r gcc-4.4.2.diff/gcc-4.4.2.new $(SOURCE_DIST)/patches/gcc-4.4.2.new
+	-rm releases/$(SOURCE_DIST).tar.bz2
+	tar cvf releases/$(SOURCE_DIST).tar $(SOURCE_DIST) 
+	bzip2 releases/$(SOURCE_DIST).tar
+
+
+	
+symlink:
+	-rm -rf /opt/sparc-elf-$(GCCVERSION)$(SYMLINKEX)
+	-mkdir -p $(CURDIR)/toolchains/sparc-elf-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX)
+	cd /opt;ln -s $(CURDIR)/toolchains/sparc-elf-$(GCCVERSION)-$(RELEASE_VERSION)$(SYMLINKEX) sparc-elf-$(GCCVERSION)$(SYMLINKEX)
+
+
+gcc-ori-diff:
+	-rm -rf gcc-$(GCCVERSION).new
+	for f in `cd gcc-$(GCCVERSION).ori; find . -type f`; do \
+	   d=`dirname $$f`; \
+	   fn=`basename $$f`; \
+	   if [ ! -d gcc-$(GCCVERSION).new/$$d ]; then mkdir -p gcc-$(GCCVERSION).new/$$d; fi;\
+	   echo copy $$f;\
+	   cp gcc-$(GCCVERSION)/$$f gcc-$(GCCVERSION).new/$$f; \
+	done
+	diff -Naurb gcc-$(GCCVERSION).ori gcc-$(GCCVERSION).new >gcc-$(GCCVERSION).diff
+
+as-standalone:
+	mkdir -p gcc-$(GCCVERSION)-standalone/patches gcc-$(GCCVERSION)-standalone/tarfiles
+	cp Makefile.common gcc-$(GCCVERSION)-standalone/
+	cp Makefile.release gcc-$(GCCVERSION)-standalone/
+	cp Makefile.sparc-linux.release gcc-$(GCCVERSION)-standalone/
+	cp Makefile.gcc-sparc-linux gcc-$(GCCVERSION)-standalone/
+	cp Makefile.glibc gcc-$(GCCVERSION)-standalone/
+	cp Makefile.glibc-2.11.2-$(GCCVERSION)-2.6.31 gcc-$(GCCVERSION)-standalone/
+	cp $(M_MYSELF) gcc-$(GCCVERSION)-standalone/
+	echo ""                                  > gcc-$(GCCVERSION)-standalone/Makefile
+	echo "TARGET_CPU?=leon"                 >> gcc-$(GCCVERSION)-standalone/Makefile
+	echo "include $(M_MYSELF)"              >> gcc-$(GCCVERSION)-standalone/Makefile
+	-cd $(BINUTILS_DIR).diff; sh dodiff.sh
+	-cp $(BINUTILS_DIR).diff/$(BINUTILS_DIR).diff gcc-$(GCCVERSION)-standalone/patches/
+	-cd gcc-$(GCCVERSION).diff; sh dodiff.sh
+	-cp gcc-$(GCCVERSION).diff/gcc-$(GCCVERSION).diff gcc-$(GCCVERSION)-standalone/patches/
+	-cd glibc-2.11.2.diff; sh dodiff.sh
+	-cp glibc-2.11.2.diff/glibc-2.11.2.diff gcc-$(GCCVERSION)-standalone/patches/

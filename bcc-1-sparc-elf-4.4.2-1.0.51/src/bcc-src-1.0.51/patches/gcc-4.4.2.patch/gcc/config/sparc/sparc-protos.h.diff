@@ -1,0 +1,17 @@
+--- gcc-4.4.2.old/./gcc/config/sparc/sparc-protos.h	2020-02-28 17:30:31.218420690 +0100
++++ gcc-4.4.2.new/./gcc/config/sparc/sparc-protos.h	2010-06-09 15:30:07.685541000 +0200
+@@ -81,6 +81,14 @@
+ extern void sparc_emit_set_symbolic_const64 (rtx, rtx, rtx);
+ extern int sparc_splitdi_legitimate (rtx, rtx);
+ extern int sparc_absnegfloat_split_legitimate (rtx, rtx);
++extern char *output_divdf3 (rtx , rtx , rtx , rtx );
++extern void output_divdf3_emit (rtx , rtx , rtx , rtx );
++extern char *output_divsf3 (rtx , rtx , rtx , rtx );
++extern void output_divsf3_emit (rtx , rtx , rtx , rtx );
++extern char *output_sqrtdf2 (rtx , rtx , rtx );
++extern char *output_sqrtsf2 (rtx , rtx , rtx );
++extern void output_sqrtdf2_emit (rtx , rtx , rtx );
++extern void output_sqrtsf2_emit (rtx , rtx , rtx );
+ extern const char *output_ubranch (rtx, int, rtx);
+ extern const char *output_cbranch (rtx, rtx, int, int, int, rtx);
+ extern const char *output_return (rtx);

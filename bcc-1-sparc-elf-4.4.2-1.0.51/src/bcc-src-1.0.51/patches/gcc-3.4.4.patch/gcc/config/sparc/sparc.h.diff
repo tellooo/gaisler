@@ -1,0 +1,139 @@
+--- gcc-3.4.4.old/./gcc/config/sparc/sparc.h	2020-02-28 17:30:18.634568686 +0100
++++ gcc-3.4.4.new/./gcc/config/sparc/sparc.h	2017-11-16 16:05:34.088973000 +0100
+@@ -32,6 +32,8 @@
+   do						\
+     {						\
+ 	builtin_define_std ("sparc");		\
++	if (sparc_fix_b2bst)                    \
++	  builtin_define_std("__FIX_B2BST");    \
+ 	if (TARGET_64BIT)			\
+ 	  { 					\
+ 	    builtin_assert ("cpu=sparc64");	\
+@@ -117,6 +119,8 @@
+ extern const char *sparc_cmodel_string;
+ /* One of CM_FOO.  */
+ extern enum cmodel sparc_cmodel;
++/* load in delay disable */
++extern int sparc_fix_load_in_delay;
+ 
+ /* V9 code model selection.  */
+ #define TARGET_CM_MEDLOW    (sparc_cmodel == CM_MEDLOW)
+@@ -149,6 +153,7 @@
+ #define TARGET_CPU_sparc64	7	/* alias */
+ #define TARGET_CPU_ultrasparc	8
+ #define TARGET_CPU_ultrasparc3	9
++#define TARGET_CPU_leon		10
+ 
+ #if TARGET_CPU_DEFAULT == TARGET_CPU_v9 \
+  || TARGET_CPU_DEFAULT == TARGET_CPU_ultrasparc \
+@@ -210,6 +215,11 @@
+ #define ASM_CPU32_DEFAULT_SPEC "-Asparclite"
+ #endif
+ 
++#if TARGET_CPU_DEFAULT == TARGET_CPU_leon
++#define CPP_CPU32_DEFAULT_SPEC "-D__leonbare__"
++#define ASM_CPU32_DEFAULT_SPEC ""
++#endif
++
+ #endif
+ 
+ #if !defined(CPP_CPU32_DEFAULT_SPEC) || !defined(CPP_CPU64_DEFAULT_SPEC)
+@@ -244,10 +254,15 @@
+ 
+ /* Define macros to distinguish architectures.  */
+ 
++#ifndef CPP_CPU_SPEC_PRE
++#define CPP_CPU_SPEC_PRE
++#endif
++
+ /* Common CPP definitions used by CPP_SPEC amongst the various targets
+    for handling -mcpu=xxx switches.  */
+-#define CPP_CPU_SPEC "\
++#define CPP_CPU_SPEC CPP_CPU_SPEC_PRE "\
+ %{msoft-float:-D_SOFT_FLOAT} \
++%{mflat: -D_FLAT} \
+ %{mcypress:} \
+ %{msparclite:-D__sparclite__} \
+ %{mf930:-D__sparclite__} %{mf934:-D__sparclite__} \
+@@ -263,7 +278,7 @@
+ %{mcpu=v9:-D__sparc_v9__} \
+ %{mcpu=ultrasparc:-D__sparc_v9__} \
+ %{mcpu=ultrasparc3:-D__sparc_v9__} \
+-%{!mcpu*:%{!mcypress:%{!msparclite:%{!mf930:%{!mf934:%{!mv8:%{!msupersparc:%(cpp_cpu_default)}}}}}}} \
++%{!mcpu*:%{!mcypress:%{!msparclite:%{!mf930:%{!mf934:%{!msupersparc:%(cpp_cpu_default)}}}}}} \
+ "
+ #define CPP_ARCH32_SPEC ""
+ #define CPP_ARCH64_SPEC "-D__arch64__"
+@@ -297,8 +312,9 @@
+ %{sun4:} %{target:} \
+ %{mcypress:-mcpu=cypress} \
+ %{msparclite:-mcpu=sparclite} %{mf930:-mcpu=f930} %{mf934:-mcpu=f934} \
+-%{mv8:-mcpu=v8} %{msupersparc:-mcpu=supersparc} \
++ %{msupersparc:-mcpu=supersparc} \
+ "
++/* %{mv8:-mcpu=v8} */
+ 
+ /* Override in target specific files.  */
+ #define ASM_CPU_SPEC "\
+@@ -312,7 +328,7 @@
+ %{mcpu=v9:-Av9} \
+ %{mcpu=ultrasparc:%{!mv8plus:-Av9a}} \
+ %{mcpu=ultrasparc3:%{!mv8plus:-Av9b}} \
+-%{!mcpu*:%{!mcypress:%{!msparclite:%{!mf930:%{!mf934:%{!mv8:%{!msupersparc:%(asm_cpu_default)}}}}}}} \
++%{!mcpu*:%{!mcypress:%{!msparclite:%{!mf930:%{!mf934:%{!msupersparc:%(asm_cpu_default)}}}}}} \
+ "
+ 
+ /* Word size selection, among other things.
+@@ -495,6 +511,35 @@
+ 
+ /* 0x100000,0x200000 unused */
+ 
++/* Nonzero means avoid generation of fsmuld */
++extern int flag_fno_fsmuld;
++#define TARGET_NO_FSMULD (flag_fno_fsmuld)
++/* Nonzero means emit a store after fdivs/fsqrts/fdivd/fsqrtd */
++extern int flag_fstore_after_divsqrt;
++#define TARGET_STORE_AFTER_DIVSQRT (flag_fstore_after_divsqrt)
++/* datacache nullify bug, generate more nops*/
++extern int flag_fnullify_allnop;
++/* Nonzero means avoid generation of fdivs/fsqrts, use fdivd/fsqrtd instead  */
++extern int flag_fno_sf_divsqrt;
++#define TARGET_NO_SF_DIVSQRT (flag_fno_sf_divsqrt)
++extern int debug_patch_divsqrt;
++
++extern int sparc_fix_ut699;
++extern int sparc_fix_b2bst;
++extern int sparc_fix_gr712rc;
++extern int sparc_fix_tn0013;
++extern int sparc_fix_ut700;
++
++extern int fpstore_errata;
++
++extern int fpstore_branch_slots;
++
++extern int fpstore_deep_scan;
++
++extern int fpstore_errata_debug;
++
++extern int sparc_fpstore_after_final_split (void);
++
+ /* Nonzero means -m{,no-}fpu was passed on the command line.  */
+ #define MASK_FPU_SET 0x400000
+ #define TARGET_FPU_SET (target_flags & MASK_FPU_SET)
+@@ -577,6 +622,8 @@
+      N_("Utilize Visual Instruction Set") }, 				\
+     {"no-vis", -MASK_VIS,						\
+      N_("Do not utilize Visual Instruction Set") }, 			\
++    {"v8", MASK_V8,							\
++     N_("Add v8 mul/div instructions") }, 				\
+     /* ??? These are deprecated, coerced to -mcpu=.  Delete in 2.9.  */ \
+     {"cypress", 0,							\
+      N_("Optimize for Cypress processors") }, 				\
+@@ -627,6 +674,7 @@
+ enum processor_type {
+   PROCESSOR_V7,
+   PROCESSOR_CYPRESS,
++  PROCESSOR_LEON,
+   PROCESSOR_V8,
+   PROCESSOR_SUPERSPARC,
+   PROCESSOR_SPARCLITE,

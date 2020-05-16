@@ -1,0 +1,23 @@
+--- gcc-3.4.4.old/./gcc/config/sparc/elf.h	2020-02-28 17:30:18.602569062 +0100
++++ gcc-3.4.4.new/./gcc/config/sparc/elf.h	2005-11-14 14:00:55.968763000 +0100
+@@ -25,7 +25,7 @@
+ #undef  ENDFILE_SPEC
+ #define ENDFILE_SPEC \
+   "%{ffast-math|funsafe-math-optimizations:crtfastmath.o%s} \
+-   crtend.o%s crtn.o%s"
++   %{!qnocrtbegin: crtend.o%s }  %{!qnocrtn: crtn.o%s } "
+ 
+ /* Use the default.  */
+ #undef LINK_SPEC
+@@ -48,3 +48,11 @@
+ 
+ #undef SUN_INTEGER_MULTIPLY_64
+ #define SUN_INTEGER_MULTIPLY_64 0
++
++/* Undefine this so that attribute((init_priority)) works.  */
++#undef CTORS_SECTION_ASM_OP
++#undef DTORS_SECTION_ASM_OP
++
++#define SUPPORTS_INIT_PRIORITY 1
++
++

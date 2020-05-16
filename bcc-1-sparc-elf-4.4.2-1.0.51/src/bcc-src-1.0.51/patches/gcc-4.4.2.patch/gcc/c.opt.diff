@@ -1,0 +1,13 @@
+--- gcc-4.4.2.old/./gcc/c.opt	2020-02-28 17:30:31.542416880 +0100
++++ gcc-4.4.2.new/./gcc/c.opt	2013-09-12 09:40:14.323199000 +0200
+@@ -759,6 +759,10 @@
+ C++ ObjC++
+ Display statistics accumulated during compilation
+ 
++fnullify-allnop
++C ObjC C++ ObjC++
++Emit a nop after all loads followed by load/store
++
+ fstrict-prototype
+ C++ ObjC++
+ 

@@ -1,0 +1,41 @@
+LIB1ASMSRC = sparc/lb1spc.asm
+LIB1ASMFUNCS = _mulsi3 _divsi3 _modsi3
+
+# We want fine grained libraries, so use the new code to build the
+# floating point emulation libraries.
+FPBIT = fp-bit.c
+DPBIT = dp-bit.c
+
+dp-bit.c: $(srcdir)/config/fp-bit.c
+	cat $(srcdir)/config/fp-bit.c > dp-bit.c
+
+fp-bit.c: $(srcdir)/config/fp-bit.c
+	echo '#define FLOAT' > fp-bit.c
+	cat $(srcdir)/config/fp-bit.c >> fp-bit.c
+
+# MULTILIB_OPTIONS should have msparclite too, but we'd have to make
+# gas build...
+
+MULTILIB_OPTIONS  = msoft-float mv8 mflat mtune=ut699/mfix-gr712rc/mfix-ut700 mfix-b2bst mfix-tn0013
+MULTILIB_DIRNAMES = soft        v8  flat  ut699       mfix-gr712rc mfix-ut700 mfix-b2bst mfix-tn0013
+MULTILIB_MATCHES = msoft-float=mno-fpu mv8=mcpu?v8 
+MULTILIB_EXCEPTIONS += msoft-float/mtune=ut699 mflat/mtune=ut699 mtune=ut699/mfix-b2bst
+#*flat*/*ut699* *soft*/*ut699*
+MULTILIB_EXCLUSIONS += msoft-float/mtune=ut699 mflat/mtune=ut699 mtune=ut699/mfix-b2bst
+
+MULTILIB_EXCEPTIONS += *mtune=ut699/*mfix-*
+MULTILIB_EXCEPTIONS += *mfix-gr712rc/*mfix-*
+MULTILIB_EXCEPTIONS += *mfix-ut700/*mfix-*
+MULTILIB_EXCEPTIONS += *msoft-float/*mfix-tn0013
+
+LIBGCC = stmp-multilib
+INSTALL_LIBGCC = install-multilib
+
+# Assemble startup files.
+ 
+ifneq ($(with_cpu),leon)
+crti.o: $(srcdir)/config/sparc/sol2-ci.asm $(GCC_PASSES)
+	$(GCC_FOR_TARGET) -c -o crti.o -x assembler-with-cpp $(srcdir)/config/sparc/sol2-ci.asm
+crtn.o: $(srcdir)/config/sparc/sol2-cn.asm $(GCC_PASSES)
+	$(GCC_FOR_TARGET) -c -o crtn.o -x assembler-with-cpp $(srcdir)/config/sparc/sol2-cn.asm
+endif

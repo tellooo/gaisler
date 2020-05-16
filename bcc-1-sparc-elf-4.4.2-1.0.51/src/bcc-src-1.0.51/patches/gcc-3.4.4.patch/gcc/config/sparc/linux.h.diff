@@ -1,0 +1,26 @@
+--- gcc-3.4.4.old/./gcc/config/sparc/linux.h	2020-02-28 17:30:18.720567675 +0100
++++ gcc-3.4.4.new/./gcc/config/sparc/linux.h	2009-03-02 15:36:16.099374000 +0100
+@@ -152,9 +152,13 @@
+ 
+ /* If ELF is the default format, we should not use /lib/elf.  */
+ 
++#ifndef LEON_PAGE_SIZE_DEFINED
++#define LEON_PAGE_SIZE_DEFINED ""
++#endif
++
+ #undef  LINK_SPEC
+ #ifdef USE_GNULIBC_1
+-#define LINK_SPEC "-m elf32_sparc -Y P,/usr/lib %{shared:-shared} \
++#define LINK_SPEC "-m elf32_sparc" LEON_PAGE_SIZE_DEFINED " -Y P,/usr/lib %{shared:-shared} \
+   %{!shared: \
+     %{!ibcs: \
+       %{!static: \
+@@ -162,7 +166,7 @@
+         %{!dynamic-linker:-dynamic-linker /lib/ld-linux.so.1}} \
+         %{static:-static}}}"
+ #else
+-#define LINK_SPEC "-m elf32_sparc -Y P,/usr/lib %{shared:-shared} \
++#define LINK_SPEC "-m elf32_sparc" LEON_PAGE_SIZE_DEFINED " -Y P,/usr/lib %{shared:-shared} \
+   %{!mno-relax:%{!r:-relax}} \
+   %{!shared: \
+     %{!ibcs: \

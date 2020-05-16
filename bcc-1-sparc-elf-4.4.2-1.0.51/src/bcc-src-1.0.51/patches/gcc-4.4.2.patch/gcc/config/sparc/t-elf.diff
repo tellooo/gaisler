@@ -1,0 +1,38 @@
+--- gcc-4.4.2.old/./gcc/config/sparc/t-elf	2020-02-28 17:30:31.343419220 +0100
++++ gcc-4.4.2.new/./gcc/config/sparc/t-elf	2017-11-17 17:39:59.213343000 +0100
+@@ -15,15 +15,32 @@
+ 
+ # MULTILIB_OPTIONS should have msparclite too, but we'd have to make
+ # gas build...
+-MULTILIB_OPTIONS = msoft-float mcpu=v8
+-MULTILIB_DIRNAMES = soft v8
+-MULTILIB_MATCHES = msoft-float=mno-fpu mcpu?v8=mv8
++ifeq ($(with_leon_cpu),)
++MULTILIB_OPTIONS  = msoft-float mv8 mtune=ut699/mfix-gr712rc/mfix-ut700 mfix-b2bst mfix-tn0013
++MULTILIB_DIRNAMES = soft        v8  ut699       mfix-gr712rc mfix-ut700 mfix-b2bst mfix-tn0013
++MULTILIB_MATCHES = msoft-float=mno-fpu mv8=mcpu?v8
++MULTILIB_EXCEPTIONS += msoft-float/mtune=ut699 mtune=ut699/mfix-b2bst
++MULTILIB_EXCLUSIONS += msoft-float/mtune=ut699 mtune=ut699/mfix-b2bst
++
++MULTILIB_EXCEPTIONS += *mtune=ut699/*mfix-*
++MULTILIB_EXCEPTIONS += *mfix-gr712rc/*mfix-*
++MULTILIB_EXCEPTIONS += *mfix-ut700/*mfix-*
++MULTILIB_EXCEPTIONS += *msoft-float/*mfix-tn0013
++else
++MULTILIB_OPTIONS = 
++MULTILIB_DIRNAMES = 
++MULTILIB_MATCHES = 
++MULTILIB_EXCEPTIONS += 
++MULTILIB_EXCLUSIONS += 
++endif
+ 
+ LIBGCC = stmp-multilib
+ INSTALL_LIBGCC = install-multilib
+ 
++ifneq ($(with_cpu),leon)
+ # Assemble startup files.
+ $(T)crti.o: $(srcdir)/config/sparc/sol2-ci.asm $(GCC_PASSES)
+ 	$(GCC_FOR_TARGET) -c -o $(T)crti.o -x assembler-with-cpp $(srcdir)/config/sparc/sol2-ci.asm
+ $(T)crtn.o: $(srcdir)/config/sparc/sol2-cn.asm $(GCC_PASSES)
+ 	$(GCC_FOR_TARGET) -c -o $(T)crtn.o -x assembler-with-cpp $(srcdir)/config/sparc/sol2-cn.asm
++endif

@@ -1,0 +1,30 @@
+--- gcc-3.4.4.old/./gcc/Makefile.in	2020-02-28 17:30:18.872565887 +0100
++++ gcc-3.4.4.new/./gcc/Makefile.in	2008-06-13 10:53:39.043473000 +0200
+@@ -543,7 +543,10 @@
+ 
+ # It is convenient for configure to add the assignment at the beginning,
+ # so don't override it here.
++ifneq (y,$(if $(filter MINGW32%,$(shell uname)),y,$(if $(filter %mingw32-gcc,$(CC)),y,)))
++#ifneq (y,$(if $(filter MINGW32%,$(shell uname)),y,))
+ USE_COLLECT2 = collect2$(exeext)
++endif
+ 
+ # List of extra C and assembler files to add to static and shared libgcc2.
+ # Assembler files should have names ending in `.asm'.
+@@ -754,7 +757,7 @@
+ # -I$(@D) and -I$(srcdir)/$(@D) cause the subdirectory of the file
+ # currently being compiled, in both source trees, to be examined as well.
+ # libintl.h will be found in ../intl if we are using the included libintl.
+-INCLUDES = -I. -I$(@D) -I$(srcdir) -I$(srcdir)/$(@D) \
++INCLUDES = -I. $(if $(@D),-I$(@D),) -I$(srcdir) $(patsub %/,%,-I$(srcdir)/$(@D)) \
+ 	   -I$(srcdir)/../include @INCINTL@
+ 
+ .c.o:
+@@ -1174,6 +1177,7 @@
+ 	DPBIT_FUNCS='$(DPBIT_FUNCS)' \
+ 	TPBIT='$(TPBIT)' \
+ 	TPBIT_FUNCS='$(TPBIT_FUNCS)' \
++	TPBIT_CFLAGS='$(TPBIT_CFLAGS)' \
+ 	MULTILIBS=`$(GCC_FOR_TARGET) --print-multi-lib` \
+ 	EXTRA_MULTILIB_PARTS='$(EXTRA_MULTILIB_PARTS)' \
+ 	SHLIB_LINK='$(SHLIB_LINK)' \
