@@ -1,0 +1,590 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Objective-C Literals &mdash; Clang 8 documentation</title>
+    
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/theme_extras.js"></script>
+    <link rel="top" title="Clang 8 documentation" href="index.html" />
+    <link rel="up" title="Clang Language Extensions" href="LanguageExtensions.html" />
+    <link rel="next" title="Language Specification for Blocks" href="BlockLanguageSpec.html" />
+    <link rel="prev" title="Clang Language Extensions" href="LanguageExtensions.html" /> 
+  </head>
+  <body>
+      <div class="header"><h1 class="heading"><a href="index.html">
+          <span>Clang 8 documentation</span></a></h1>
+        <h2 class="heading"><span>Objective-C Literals</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        «&#160;&#160;<a href="LanguageExtensions.html">Clang Language Extensions</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="BlockLanguageSpec.html">Language Specification for Blocks</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="objective-c-literals">
+<h1>Objective-C Literals<a class="headerlink" href="#objective-c-literals" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Three new features were introduced into clang at the same time:
+<em>NSNumber Literals</em> provide a syntax for creating <tt class="docutils literal"><span class="pre">NSNumber</span></tt> from
+scalar literal expressions; <em>Collection Literals</em> provide a short-hand
+for creating arrays and dictionaries; <em>Object Subscripting</em> provides a
+way to use subscripting with Objective-C objects. Users of Apple
+compiler releases can use these features starting with the Apple LLVM
+Compiler 4.0. Users of open-source LLVM.org compiler releases can use
+these features starting with clang v3.1.</p>
+<p>These language additions simplify common Objective-C programming
+patterns, make programs more concise, and improve the safety of
+container creation.</p>
+<p>This document describes how the features are implemented in clang, and
+how to use them in your own programs.</p>
+</div>
+<div class="section" id="nsnumber-literals">
+<h2>NSNumber Literals<a class="headerlink" href="#nsnumber-literals" title="Permalink to this headline">¶</a></h2>
+<p>The framework class <tt class="docutils literal"><span class="pre">NSNumber</span></tt> is used to wrap scalar values inside
+objects: signed and unsigned integers (<tt class="docutils literal"><span class="pre">char</span></tt>, <tt class="docutils literal"><span class="pre">short</span></tt>, <tt class="docutils literal"><span class="pre">int</span></tt>,
+<tt class="docutils literal"><span class="pre">long</span></tt>, <tt class="docutils literal"><span class="pre">long</span> <span class="pre">long</span></tt>), floating point numbers (<tt class="docutils literal"><span class="pre">float</span></tt>,
+<tt class="docutils literal"><span class="pre">double</span></tt>), and boolean values (<tt class="docutils literal"><span class="pre">BOOL</span></tt>, C++ <tt class="docutils literal"><span class="pre">bool</span></tt>). Scalar values
+wrapped in objects are also known as <em>boxed</em> values.</p>
+<p>In Objective-C, any character, numeric or boolean literal prefixed with
+the <tt class="docutils literal"><span class="pre">'&#64;'</span></tt> character will evaluate to a pointer to an <tt class="docutils literal"><span class="pre">NSNumber</span></tt>
+object initialized with that value. C&#8217;s type suffixes may be used to
+control the size of numeric literals.</p>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<p>The following program illustrates the rules for <tt class="docutils literal"><span class="pre">NSNumber</span></tt> literals:</p>
+<div class="highlight-objc"><pre>void main(int argc, const char *argv[]) {
+  // character literals.
+  NSNumber *theLetterZ = @'Z';          // equivalent to [NSNumber numberWithChar:'Z']
+
+  // integral literals.
+  NSNumber *fortyTwo = @42;             // equivalent to [NSNumber numberWithInt:42]
+  NSNumber *fortyTwoUnsigned = @42U;    // equivalent to [NSNumber numberWithUnsignedInt:42U]
+  NSNumber *fortyTwoLong = @42L;        // equivalent to [NSNumber numberWithLong:42L]
+  NSNumber *fortyTwoLongLong = @42LL;   // equivalent to [NSNumber numberWithLongLong:42LL]
+
+  // floating point literals.
+  NSNumber *piFloat = @3.141592654F;    // equivalent to [NSNumber numberWithFloat:3.141592654F]
+  NSNumber *piDouble = @3.1415926535;   // equivalent to [NSNumber numberWithDouble:3.1415926535]
+
+  // BOOL literals.
+  NSNumber *yesNumber = @YES;           // equivalent to [NSNumber numberWithBool:YES]
+  NSNumber *noNumber = @NO;             // equivalent to [NSNumber numberWithBool:NO]
+
+#ifdef __cplusplus
+  NSNumber *trueNumber = @true;         // equivalent to [NSNumber numberWithBool:(BOOL)true]
+  NSNumber *falseNumber = @false;       // equivalent to [NSNumber numberWithBool:(BOOL)false]
+#endif
+}</pre>
+</div>
+</div>
+<div class="section" id="discussion">
+<h3>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">¶</a></h3>
+<p>NSNumber literals only support literal scalar values after the <tt class="docutils literal"><span class="pre">'&#64;'</span></tt>.
+Consequently, <tt class="docutils literal"><span class="pre">&#64;INT_MAX</span></tt> works, but <tt class="docutils literal"><span class="pre">&#64;INT_MIN</span></tt> does not, because
+they are defined like this:</p>
+<div class="highlight-objc"><div class="highlight"><pre><span class="cp">#define INT_MAX   2147483647  </span><span class="cm">/* max value for an int */</span><span class="cp"></span>
+<span class="cp">#define INT_MIN   (-2147483647-1) </span><span class="cm">/* min value for an int */</span><span class="cp"></span>
+</pre></div>
+</div>
+<p>The definition of <tt class="docutils literal"><span class="pre">INT_MIN</span></tt> is not a simple literal, but a
+parenthesized expression. Parenthesized expressions are supported using
+the <a class="reference external" href="#objc_boxed_expressions">boxed expression</a> syntax, which is
+described in the next section.</p>
+<p>Because <tt class="docutils literal"><span class="pre">NSNumber</span></tt> does not currently support wrapping <tt class="docutils literal"><span class="pre">long</span> <span class="pre">double</span></tt>
+values, the use of a <tt class="docutils literal"><span class="pre">long</span> <span class="pre">double</span> <span class="pre">NSNumber</span></tt> literal (e.g.
+<tt class="docutils literal"><span class="pre">&#64;123.23L</span></tt>) will be rejected by the compiler.</p>
+<p>Previously, the <tt class="docutils literal"><span class="pre">BOOL</span></tt> type was simply a typedef for <tt class="docutils literal"><span class="pre">signed</span> <span class="pre">char</span></tt>,
+and <tt class="docutils literal"><span class="pre">YES</span></tt> and <tt class="docutils literal"><span class="pre">NO</span></tt> were macros that expand to <tt class="docutils literal"><span class="pre">(BOOL)1</span></tt> and
+<tt class="docutils literal"><span class="pre">(BOOL)0</span></tt> respectively. To support <tt class="docutils literal"><span class="pre">&#64;YES</span></tt> and <tt class="docutils literal"><span class="pre">&#64;NO</span></tt> expressions,
+these macros are now defined using new language keywords in
+<tt class="docutils literal"><span class="pre">&lt;objc/objc.h&gt;</span></tt>:</p>
+<div class="highlight-objc"><div class="highlight"><pre><span class="cp">#if __has_feature(objc_bool)</span>
+<span class="cp">#define YES             __objc_yes</span>
+<span class="cp">#define NO              __objc_no</span>
+<span class="cp">#else</span>
+<span class="cp">#define YES             ((BOOL)1)</span>
+<span class="cp">#define NO              ((BOOL)0)</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+<p>The compiler implicitly converts <tt class="docutils literal"><span class="pre">__objc_yes</span></tt> and <tt class="docutils literal"><span class="pre">__objc_no</span></tt> to
+<tt class="docutils literal"><span class="pre">(BOOL)1</span></tt> and <tt class="docutils literal"><span class="pre">(BOOL)0</span></tt>. The keywords are used to disambiguate
+<tt class="docutils literal"><span class="pre">BOOL</span></tt> and integer literals.</p>
+<p>Objective-C++ also supports <tt class="docutils literal"><span class="pre">&#64;true</span></tt> and <tt class="docutils literal"><span class="pre">&#64;false</span></tt> expressions, which
+are equivalent to <tt class="docutils literal"><span class="pre">&#64;YES</span></tt> and <tt class="docutils literal"><span class="pre">&#64;NO</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="boxed-expressions">
+<h2>Boxed Expressions<a class="headerlink" href="#boxed-expressions" title="Permalink to this headline">¶</a></h2>
+<p>Objective-C provides a new syntax for boxing C expressions:</p>
+<div class="highlight-objc"><pre>@( &lt;expression&gt; )</pre>
+</div>
+<p>Expressions of scalar (numeric, enumerated, BOOL), C string pointer
+and some C structures (via NSValue) are supported:</p>
+<div class="highlight-objc"><pre>// numbers.
+NSNumber *smallestInt = @(-INT_MAX - 1);  // [NSNumber numberWithInt:(-INT_MAX - 1)]
+NSNumber *piOverTwo = @(M_PI / 2);        // [NSNumber numberWithDouble:(M_PI / 2)]
+
+// enumerated types.
+typedef enum { Red, Green, Blue } Color;
+NSNumber *favoriteColor = @(Green);       // [NSNumber numberWithInt:((int)Green)]
+
+// strings.
+NSString *path = @(getenv("PATH"));       // [NSString stringWithUTF8String:(getenv("PATH"))]
+NSArray *pathComponents = [path componentsSeparatedByString:@":"];
+
+// structs.
+NSValue *center = @(view.center);         // Point p = view.center;
+                                          // [NSValue valueWithBytes:&amp;p objCType:@encode(Point)];
+NSValue *frame = @(view.frame);           // Rect r = view.frame;
+                                          // [NSValue valueWithBytes:&amp;r objCType:@encode(Rect)];</pre>
+</div>
+<div class="section" id="boxed-enums">
+<h3>Boxed Enums<a class="headerlink" href="#boxed-enums" title="Permalink to this headline">¶</a></h3>
+<p>Cocoa frameworks frequently define constant values using <em>enums.</em>
+Although enum values are integral, they may not be used directly as
+boxed literals (this avoids conflicts with future <tt class="docutils literal"><span class="pre">'&#64;'</span></tt>-prefixed
+Objective-C keywords). Instead, an enum value must be placed inside a
+boxed expression. The following example demonstrates configuring an
+<tt class="docutils literal"><span class="pre">AVAudioRecorder</span></tt> using a dictionary that contains a boxed enumeration
+value:</p>
+<div class="highlight-objc"><pre>enum {
+  AVAudioQualityMin = 0,
+  AVAudioQualityLow = 0x20,
+  AVAudioQualityMedium = 0x40,
+  AVAudioQualityHigh = 0x60,
+  AVAudioQualityMax = 0x7F
+};
+
+- (AVAudioRecorder *)recordToFile:(NSURL *)fileURL {
+  NSDictionary *settings = @{ AVEncoderAudioQualityKey : @(AVAudioQualityMax) };
+  return [[AVAudioRecorder alloc] initWithURL:fileURL settings:settings error:NULL];
+}</pre>
+</div>
+<p>The expression <tt class="docutils literal"><span class="pre">&#64;(AVAudioQualityMax)</span></tt> converts <tt class="docutils literal"><span class="pre">AVAudioQualityMax</span></tt>
+to an integer type, and boxes the value accordingly. If the enum has a
+<a class="reference internal" href="LanguageExtensions.html#objc-fixed-enum"><em>fixed underlying type</em></a> as in:</p>
+<div class="highlight-objc"><pre>typedef enum : unsigned char { Red, Green, Blue } Color;
+NSNumber *red = @(Red), *green = @(Green), *blue = @(Blue); // =&gt; [NSNumber numberWithUnsignedChar:]</pre>
+</div>
+<p>then the fixed underlying type will be used to select the correct
+<tt class="docutils literal"><span class="pre">NSNumber</span></tt> creation method.</p>
+<p>Boxing a value of enum type will result in a <tt class="docutils literal"><span class="pre">NSNumber</span></tt> pointer with a
+creation method according to the underlying type of the enum, which can
+be a <a class="reference internal" href="LanguageExtensions.html#objc-fixed-enum"><em>fixed underlying type</em></a>
+or a compiler-defined integer type capable of representing the values of
+all the members of the enumeration:</p>
+<div class="highlight-objc"><pre>typedef enum : unsigned char { Red, Green, Blue } Color;
+Color col = Red;
+NSNumber *nsCol = @(col); // =&gt; [NSNumber numberWithUnsignedChar:]</pre>
+</div>
+</div>
+<div class="section" id="boxed-c-strings">
+<h3>Boxed C Strings<a class="headerlink" href="#boxed-c-strings" title="Permalink to this headline">¶</a></h3>
+<p>A C string literal prefixed by the <tt class="docutils literal"><span class="pre">'&#64;'</span></tt> token denotes an <tt class="docutils literal"><span class="pre">NSString</span></tt>
+literal in the same way a numeric literal prefixed by the <tt class="docutils literal"><span class="pre">'&#64;'</span></tt> token
+denotes an <tt class="docutils literal"><span class="pre">NSNumber</span></tt> literal. When the type of the parenthesized
+expression is <tt class="docutils literal"><span class="pre">(char</span> <span class="pre">*)</span></tt> or <tt class="docutils literal"><span class="pre">(const</span> <span class="pre">char</span> <span class="pre">*)</span></tt>, the result of the
+boxed expression is a pointer to an <tt class="docutils literal"><span class="pre">NSString</span></tt> object containing
+equivalent character data, which is assumed to be &#8216;\0&#8217;-terminated and
+UTF-8 encoded. The following example converts C-style command line
+arguments into <tt class="docutils literal"><span class="pre">NSString</span></tt> objects.</p>
+<div class="highlight-objc"><pre>// Partition command line arguments into positional and option arguments.
+NSMutableArray *args = [NSMutableArray new];
+NSMutableDictionary *options = [NSMutableDictionary new];
+while (--argc) {
+    const char *arg = *++argv;
+    if (strncmp(arg, "--", 2) == 0) {
+        options[@(arg + 2)] = @(*++argv);   // --key value
+    } else {
+        [args addObject:@(arg)];            // positional argument
+    }
+}</pre>
+</div>
+<p>As with all C pointers, character pointer expressions can involve
+arbitrary pointer arithmetic, therefore programmers must ensure that the
+character data is valid. Passing <tt class="docutils literal"><span class="pre">NULL</span></tt> as the character pointer will
+raise an exception at runtime. When possible, the compiler will reject
+<tt class="docutils literal"><span class="pre">NULL</span></tt> character pointers used in boxed expressions.</p>
+</div>
+<div class="section" id="boxed-c-structures">
+<h3>Boxed C Structures<a class="headerlink" href="#boxed-c-structures" title="Permalink to this headline">¶</a></h3>
+<p>Boxed expressions support construction of NSValue objects.
+It said that C structures can be used, the only requirement is:
+structure should be marked with <tt class="docutils literal"><span class="pre">objc_boxable</span></tt> attribute.
+To support older version of frameworks and/or third-party libraries
+you may need to add the attribute via <tt class="docutils literal"><span class="pre">typedef</span></tt>.</p>
+<div class="highlight-objc"><pre>struct __attribute__((objc_boxable)) Point {
+    // ...
+};
+
+typedef struct __attribute__((objc_boxable)) _Size {
+    // ...
+} Size;
+
+typedef struct _Rect {
+    // ...
+} Rect;
+
+struct Point p;
+NSValue *point = @(p);          // ok
+Size s;
+NSValue *size = @(s);           // ok
+
+Rect r;
+NSValue *bad_rect = @(r);       // error
+
+typedef struct __attribute__((objc_boxable)) _Rect Rect;
+
+NSValue *good_rect = @(r);      // ok</pre>
+</div>
+</div>
+</div>
+<div class="section" id="container-literals">
+<h2>Container Literals<a class="headerlink" href="#container-literals" title="Permalink to this headline">¶</a></h2>
+<p>Objective-C now supports a new expression syntax for creating immutable
+array and dictionary container objects.</p>
+<div class="section" id="id1">
+<h3>Examples<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Immutable array expression:</p>
+<div class="highlight-objc"><pre>NSArray *array = @[ @"Hello", NSApp, [NSNumber numberWithInt:42] ];</pre>
+</div>
+<p>This creates an <tt class="docutils literal"><span class="pre">NSArray</span></tt> with 3 elements. The comma-separated
+sub-expressions of an array literal can be any Objective-C object
+pointer typed expression.</p>
+<p>Immutable dictionary expression:</p>
+<div class="highlight-objc"><pre>NSDictionary *dictionary = @{
+    @"name" : NSUserName(),
+    @"date" : [NSDate date],
+    @"processInfo" : [NSProcessInfo processInfo]
+};</pre>
+</div>
+<p>This creates an <tt class="docutils literal"><span class="pre">NSDictionary</span></tt> with 3 key/value pairs. Value
+sub-expressions of a dictionary literal must be Objective-C object
+pointer typed, as in array literals. Key sub-expressions must be of an
+Objective-C object pointer type that implements the
+<tt class="docutils literal"><span class="pre">&lt;NSCopying&gt;</span></tt> protocol.</p>
+</div>
+<div class="section" id="id2">
+<h3>Discussion<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Neither keys nor values can have the value <tt class="docutils literal"><span class="pre">nil</span></tt> in containers. If the
+compiler can prove that a key or value is <tt class="docutils literal"><span class="pre">nil</span></tt> at compile time, then
+a warning will be emitted. Otherwise, a runtime error will occur.</p>
+<p>Using array and dictionary literals is safer than the variadic creation
+forms commonly in use today. Array literal expressions expand to calls
+to <tt class="docutils literal"><span class="pre">+[NSArray</span> <span class="pre">arrayWithObjects:count:]</span></tt>, which validates that all
+objects are non-<tt class="docutils literal"><span class="pre">nil</span></tt>. The variadic form,
+<tt class="docutils literal"><span class="pre">+[NSArray</span> <span class="pre">arrayWithObjects:]</span></tt> uses <tt class="docutils literal"><span class="pre">nil</span></tt> as an argument list
+terminator, which can lead to malformed array objects. Dictionary
+literals are similarly created with
+<tt class="docutils literal"><span class="pre">+[NSDictionary</span> <span class="pre">dictionaryWithObjects:forKeys:count:]</span></tt> which validates
+all objects and keys, unlike
+<tt class="docutils literal"><span class="pre">+[NSDictionary</span> <span class="pre">dictionaryWithObjectsAndKeys:]</span></tt> which also uses a
+<tt class="docutils literal"><span class="pre">nil</span></tt> parameter as an argument list terminator.</p>
+</div>
+</div>
+<div class="section" id="object-subscripting">
+<h2>Object Subscripting<a class="headerlink" href="#object-subscripting" title="Permalink to this headline">¶</a></h2>
+<p>Objective-C object pointer values can now be used with C&#8217;s subscripting
+operator.</p>
+<div class="section" id="id3">
+<h3>Examples<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>The following code demonstrates the use of object subscripting syntax
+with <tt class="docutils literal"><span class="pre">NSMutableArray</span></tt> and <tt class="docutils literal"><span class="pre">NSMutableDictionary</span></tt> objects:</p>
+<div class="highlight-objc"><div class="highlight"><pre><span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">array</span> <span class="o">=</span> <span class="p">...;</span>
+<span class="n">NSUInteger</span> <span class="n">idx</span> <span class="o">=</span> <span class="p">...;</span>
+<span class="kt">id</span> <span class="n">newObject</span> <span class="o">=</span> <span class="p">...;</span>
+<span class="kt">id</span> <span class="n">oldObject</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+<span class="n">array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">newObject</span><span class="p">;</span>         <span class="c1">// replace oldObject with newObject</span>
+
+<span class="n">NSMutableDictionary</span> <span class="o">*</span><span class="n">dictionary</span> <span class="o">=</span> <span class="p">...;</span>
+<span class="n">NSString</span> <span class="o">*</span><span class="n">key</span> <span class="o">=</span> <span class="p">...;</span>
+<span class="n">oldObject</span> <span class="o">=</span> <span class="n">dictionary</span><span class="p">[</span><span class="n">key</span><span class="p">];</span>
+<span class="n">dictionary</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">newObject</span><span class="p">;</span>    <span class="c1">// replace oldObject with newObject</span>
+</pre></div>
+</div>
+<p>The next section explains how subscripting expressions map to accessor
+methods.</p>
+</div>
+<div class="section" id="subscripting-methods">
+<h3>Subscripting Methods<a class="headerlink" href="#subscripting-methods" title="Permalink to this headline">¶</a></h3>
+<p>Objective-C supports two kinds of subscript expressions: <em>array-style</em>
+subscript expressions use integer typed subscripts; <em>dictionary-style</em>
+subscript expressions use Objective-C object pointer typed subscripts.
+Each type of subscript expression is mapped to a message send using a
+predefined selector. The advantage of this design is flexibility: class
+designers are free to introduce subscripting by declaring methods or by
+adopting protocols. Moreover, because the method names are selected by
+the type of the subscript, an object can be subscripted using both array
+and dictionary styles.</p>
+<div class="section" id="array-style-subscripting">
+<h4>Array-Style Subscripting<a class="headerlink" href="#array-style-subscripting" title="Permalink to this headline">¶</a></h4>
+<p>When the subscript operand has an integral type, the expression is
+rewritten to use one of two different selectors, depending on whether
+the element is being read or written. When an expression reads an
+element using an integral index, as in the following example:</p>
+<div class="highlight-objc"><div class="highlight"><pre><span class="n">NSUInteger</span> <span class="n">idx</span> <span class="o">=</span> <span class="p">...;</span>
+<span class="kt">id</span> <span class="n">value</span> <span class="o">=</span> <span class="n">object</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+</pre></div>
+</div>
+<p>it is translated into a call to <tt class="docutils literal"><span class="pre">objectAtIndexedSubscript:</span></tt></p>
+<div class="highlight-objc"><div class="highlight"><pre><span class="kt">id</span> <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">object</span> <span class="nl">objectAtIndexedSubscript:</span><span class="n">idx</span><span class="p">];</span>
+</pre></div>
+</div>
+<p>When an expression writes an element using an integral index:</p>
+<div class="highlight-objc"><div class="highlight"><pre><span class="n">object</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">newValue</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>it is translated to a call to <tt class="docutils literal"><span class="pre">setObject:atIndexedSubscript:</span></tt></p>
+<div class="highlight-objc"><div class="highlight"><pre><span class="p">[</span><span class="n">object</span> <span class="nl">setObject:</span><span class="n">newValue</span> <span class="nl">atIndexedSubscript:</span><span class="n">idx</span><span class="p">];</span>
+</pre></div>
+</div>
+<p>These message sends are then type-checked and performed just like
+explicit message sends. The method used for objectAtIndexedSubscript:
+must be declared with an argument of integral type and a return value of
+some Objective-C object pointer type. The method used for
+setObject:atIndexedSubscript: must be declared with its first argument
+having some Objective-C pointer type and its second argument having
+integral type.</p>
+<p>The meaning of indexes is left up to the declaring class. The compiler
+will coerce the index to the appropriate argument type of the method it
+uses for type-checking. For an instance of <tt class="docutils literal"><span class="pre">NSArray</span></tt>, reading an
+element using an index outside the range <tt class="docutils literal"><span class="pre">[0,</span> <span class="pre">array.count)</span></tt> will raise
+an exception. For an instance of <tt class="docutils literal"><span class="pre">NSMutableArray</span></tt>, assigning to an
+element using an index within this range will replace that element, but
+assigning to an element using an index outside this range will raise an
+exception; no syntax is provided for inserting, appending, or removing
+elements for mutable arrays.</p>
+<p>A class need not declare both methods in order to take advantage of this
+language feature. For example, the class <tt class="docutils literal"><span class="pre">NSArray</span></tt> declares only
+<tt class="docutils literal"><span class="pre">objectAtIndexedSubscript:</span></tt>, so that assignments to elements will fail
+to type-check; moreover, its subclass <tt class="docutils literal"><span class="pre">NSMutableArray</span></tt> declares
+<tt class="docutils literal"><span class="pre">setObject:atIndexedSubscript:</span></tt>.</p>
+</div>
+<div class="section" id="dictionary-style-subscripting">
+<h4>Dictionary-Style Subscripting<a class="headerlink" href="#dictionary-style-subscripting" title="Permalink to this headline">¶</a></h4>
+<p>When the subscript operand has an Objective-C object pointer type, the
+expression is rewritten to use one of two different selectors, depending
+on whether the element is being read from or written to. When an
+expression reads an element using an Objective-C object pointer
+subscript operand, as in the following example:</p>
+<div class="highlight-objc"><div class="highlight"><pre><span class="kt">id</span> <span class="n">key</span> <span class="o">=</span> <span class="p">...;</span>
+<span class="kt">id</span> <span class="n">value</span> <span class="o">=</span> <span class="n">object</span><span class="p">[</span><span class="n">key</span><span class="p">];</span>
+</pre></div>
+</div>
+<p>it is translated into a call to the <tt class="docutils literal"><span class="pre">objectForKeyedSubscript:</span></tt> method:</p>
+<div class="highlight-objc"><div class="highlight"><pre><span class="kt">id</span> <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">object</span> <span class="nl">objectForKeyedSubscript:</span><span class="n">key</span><span class="p">];</span>
+</pre></div>
+</div>
+<p>When an expression writes an element using an Objective-C object pointer
+subscript:</p>
+<div class="highlight-objc"><div class="highlight"><pre><span class="n">object</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">newValue</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>it is translated to a call to <tt class="docutils literal"><span class="pre">setObject:forKeyedSubscript:</span></tt></p>
+<div class="highlight-objc"><div class="highlight"><pre><span class="p">[</span><span class="n">object</span> <span class="nl">setObject:</span><span class="n">newValue</span> <span class="nl">forKeyedSubscript:</span><span class="n">key</span><span class="p">];</span>
+</pre></div>
+</div>
+<p>The behavior of <tt class="docutils literal"><span class="pre">setObject:forKeyedSubscript:</span></tt> is class-specific; but
+in general it should replace an existing value if one is already
+associated with a key, otherwise it should add a new value for the key.
+No syntax is provided for removing elements from mutable dictionaries.</p>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>Discussion<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>An Objective-C subscript expression occurs when the base operand of the
+C subscript operator has an Objective-C object pointer type. Since this
+potentially collides with pointer arithmetic on the value, these
+expressions are only supported under the modern Objective-C runtime,
+which categorically forbids such arithmetic.</p>
+<p>Currently, only subscripts of integral or Objective-C object pointer
+type are supported. In C++, a class type can be used if it has a single
+conversion function to an integral or Objective-C pointer type, in which
+case that conversion is applied and analysis continues as appropriate.
+Otherwise, the expression is ill-formed.</p>
+<p>An Objective-C object subscript expression is always an l-value. If the
+expression appears on the left-hand side of a simple assignment operator
+(=), the element is written as described below. If the expression
+appears on the left-hand side of a compound assignment operator (e.g.
++=), the program is ill-formed, because the result of reading an element
+is always an Objective-C object pointer and no binary operators are
+legal on such pointers. If the expression appears in any other position,
+the element is read as described below. It is an error to take the
+address of a subscript expression, or (in C++) to bind a reference to
+it.</p>
+<p>Programs can use object subscripting with Objective-C object pointers of
+type <tt class="docutils literal"><span class="pre">id</span></tt>. Normal dynamic message send rules apply; the compiler must
+see <em>some</em> declaration of the subscripting methods, and will pick the
+declaration seen first.</p>
+</div>
+</div>
+<div class="section" id="caveats">
+<h2>Caveats<a class="headerlink" href="#caveats" title="Permalink to this headline">¶</a></h2>
+<p>Objects created using the literal or boxed expression syntax are not
+guaranteed to be uniqued by the runtime, but nor are they guaranteed to
+be newly-allocated. As such, the result of performing direct comparisons
+against the location of an object literal (using <tt class="docutils literal"><span class="pre">==</span></tt>, <tt class="docutils literal"><span class="pre">!=</span></tt>, <tt class="docutils literal"><span class="pre">&lt;</span></tt>,
+<tt class="docutils literal"><span class="pre">&lt;=</span></tt>, <tt class="docutils literal"><span class="pre">&gt;</span></tt>, or <tt class="docutils literal"><span class="pre">&gt;=</span></tt>) is not well-defined. This is usually a simple
+mistake in code that intended to call the <tt class="docutils literal"><span class="pre">isEqual:</span></tt> method (or the
+<tt class="docutils literal"><span class="pre">compare:</span></tt> method).</p>
+<p>This caveat applies to compile-time string literals as well.
+Historically, string literals (using the <tt class="docutils literal"><span class="pre">&#64;&quot;...&quot;</span></tt> syntax) have been
+uniqued across translation units during linking. This is an
+implementation detail of the compiler and should not be relied upon. If
+you are using such code, please use global string constants instead
+(<tt class="docutils literal"><span class="pre">NSString</span> <span class="pre">*</span> <span class="pre">const</span> <span class="pre">MyConst</span> <span class="pre">=</span> <span class="pre">&#64;&quot;...&quot;</span></tt>) or use <tt class="docutils literal"><span class="pre">isEqual:</span></tt>.</p>
+</div>
+<div class="section" id="grammar-additions">
+<h2>Grammar Additions<a class="headerlink" href="#grammar-additions" title="Permalink to this headline">¶</a></h2>
+<p>To support the new syntax described above, the Objective-C
+<tt class="docutils literal"><span class="pre">&#64;</span></tt>-expression grammar has the following new productions:</p>
+<div class="highlight-python"><pre>objc-at-expression : '@' (string-literal | encode-literal | selector-literal | protocol-literal | object-literal)
+                   ;
+
+object-literal : ('+' | '-')? numeric-constant
+               | character-constant
+               | boolean-constant
+               | array-literal
+               | dictionary-literal
+               ;
+
+boolean-constant : '__objc_yes' | '__objc_no' | 'true' | 'false'  /* boolean keywords. */
+                 ;
+
+array-literal : '[' assignment-expression-list ']'
+              ;
+
+assignment-expression-list : assignment-expression (',' assignment-expression-list)?
+                           | /* empty */
+                           ;
+
+dictionary-literal : '{' key-value-list '}'
+                   ;
+
+key-value-list : key-value-pair (',' key-value-list)?
+               | /* empty */
+               ;
+
+key-value-pair : assignment-expression ':' assignment-expression
+               ;</pre>
+</div>
+<p>Note: <tt class="docutils literal"><span class="pre">&#64;true</span></tt> and <tt class="docutils literal"><span class="pre">&#64;false</span></tt> are only supported in Objective-C++.</p>
+</div>
+<div class="section" id="availability-checks">
+<h2>Availability Checks<a class="headerlink" href="#availability-checks" title="Permalink to this headline">¶</a></h2>
+<p>Programs test for the new features by using clang&#8217;s __has_feature
+checks. Here are examples of their use:</p>
+<div class="highlight-objc"><pre>#if __has_feature(objc_array_literals)
+    // new way.
+    NSArray *elements = @[ @"H", @"He", @"O", @"C" ];
+#else
+    // old way (equivalent).
+    id objects[] = { @"H", @"He", @"O", @"C" };
+    NSArray *elements = [NSArray arrayWithObjects:objects count:4];
+#endif
+
+#if __has_feature(objc_dictionary_literals)
+    // new way.
+    NSDictionary *masses = @{ @"H" : @1.0078,  @"He" : @4.0026, @"O" : @15.9990, @"C" : @12.0096 };
+#else
+    // old way (equivalent).
+    id keys[] = { @"H", @"He", @"O", @"C" };
+    id values[] = { [NSNumber numberWithDouble:1.0078], [NSNumber numberWithDouble:4.0026],
+                    [NSNumber numberWithDouble:15.9990], [NSNumber numberWithDouble:12.0096] };
+    NSDictionary *masses = [NSDictionary dictionaryWithObjects:objects forKeys:keys count:4];
+#endif
+
+#if __has_feature(objc_subscripting)
+    NSUInteger i, count = elements.count;
+    for (i = 0; i &lt; count; ++i) {
+        NSString *element = elements[i];
+        NSNumber *mass = masses[element];
+        NSLog(@"the mass of %@ is %@", element, mass);
+    }
+#else
+    NSUInteger i, count = [elements count];
+    for (i = 0; i &lt; count; ++i) {
+        NSString *element = [elements objectAtIndex:i];
+        NSNumber *mass = [masses objectForKey:element];
+        NSLog(@"the mass of %@ is %@", element, mass);
+    }
+#endif
+
+#if __has_attribute(objc_boxable)
+    typedef struct __attribute__((objc_boxable)) _Rect Rect;
+#endif
+
+#if __has_feature(objc_boxed_nsvalue_expressions)
+    CABasicAnimation animation = [CABasicAnimation animationWithKeyPath:@"position"];
+    animation.fromValue = @(layer.position);
+    animation.toValue = @(newPosition);
+    [layer addAnimation:animation forKey:@"move"];
+#else
+    CABasicAnimation animation = [CABasicAnimation animationWithKeyPath:@"position"];
+    animation.fromValue = [NSValue valueWithCGPoint:layer.position];
+    animation.toValue = [NSValue valueWithCGPoint:newPosition];
+    [layer addAnimation:animation forKey:@"move"];
+#endif</pre>
+</div>
+<p>Code can use also <tt class="docutils literal"><span class="pre">__has_feature(objc_bool)</span></tt> to check for the
+availability of numeric literals support. This checks for the new
+<tt class="docutils literal"><span class="pre">__objc_yes</span> <span class="pre">/</span> <span class="pre">__objc_no</span></tt> keywords, which enable the use of
+<tt class="docutils literal"><span class="pre">&#64;YES</span> <span class="pre">/</span> <span class="pre">&#64;NO</span></tt> literals.</p>
+<p>To check whether boxed expressions are supported, use
+<tt class="docutils literal"><span class="pre">__has_feature(objc_boxed_expressions)</span></tt> feature macro.</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        «&#160;&#160;<a href="LanguageExtensions.html">Clang Language Extensions</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="BlockLanguageSpec.html">Language Specification for Blocks</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2007-2019, The Clang Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

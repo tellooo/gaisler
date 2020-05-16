@@ -1,0 +1,19 @@
+This directory contains a SpaceWire RTEMS test/example application used
+together with the GRSPW Router.
+
+The Makefile is used to build the example "make all".
+
+REQUIREMENTS
+============
+ RCC-1.2.4 or later.
+
+FILES
+=====
+
+ spwlib.*               - SpaceWire packet buffer management library
+ grspw_pkt_lib.*        - GRSPW packet driver helper functions
+ mmu_setup.*            - MMU, IOMMU, L2-CACHE setup. NGMP test routines.
+ config*.c              - Driver parameter configurations
+ spwrouter_*            - GRSPW SpaceWire router configuration
+ test.c                 - RTEMS test/example main application
+ gr_cpci_gr740.*        - GR-CPCI-GR740 PCI peripheral driver

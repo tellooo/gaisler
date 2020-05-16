@@ -1,0 +1,3 @@
+stack 0x402ffff0
+load rtems-mmu
+run

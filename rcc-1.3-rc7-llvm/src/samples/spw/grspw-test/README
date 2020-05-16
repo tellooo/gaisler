@@ -1,0 +1,415 @@
+This directory contains an interactive SpaceWire RTEMS test/example application.
+The example can be used together with the GRSPW Router, however the SpaceWire
+addressing must be taken into consideration.
+
+The Makefile is used to build the example "make all".
+
+When building the examples it is possible to control the behaviour by setting the following variables.
+
+CPU         - By setting the CPU variable to one of the cpu-targets, then the hardware specific flags for that cpu-target will be added when compiling.
+CFLAGS      - Override common compilation flags
+CPUFLAGS    - Override the hardware specific compilation flags
+MKPROMFLAGS - Override mkprom2 flags
+
+REQUIREMENTS
+============
+ - RCC-1.2.4 or later.
+ - At least one SpaceWire AMBA port (GRSPW1, GRSPW2 or Router DMA)
+ - Up to 32 AMBA ports are supported.
+
+NOTE that if a router is present it is not an requirement to connect
+SpaceWire connectors with each other in order to use the application, since
+packets can be sent from one AMBA port to another AMBA Port on the same
+system.
+
+
+FILES
+=====
+
+ ../grspw_pkt_lib.*     - GRSPW packet driver helper functions
+ spwrouter_*            - GRSPW SpaceWire router configuration
+ test.c                 - RTEMS test/example main application
+
+
+ROUTER TABLE SETUP
+==================
+ The first router (AHB interface) detected will be set up as follows:
+
+  * no packet distribution
+  * header deletion on addresses: 1-31, 0x90-0xff
+  * addresses ranges 0x20-0x8f routing table is replicated to 0x90-0xff, thus
+    addressing 0x94 will be the same as 0x24 but with header deletion.
+  * addresses 0x20, 0x5c-0x5f, 0x75-0x77 and 0x86-0x8f are disabled
+  * 0x21-0x3f is routed to one port as follows:
+    0x21 -> port1
+    0x22 -> port2
+    ..
+    0x3f -> port31
+  * 0x40-0x5c is routed to two ports as follows (group adaptive):
+    0x40 -> port1 and port2
+    0x41 -> port1 and port3
+    0x42 -> port1 and port4
+    0x43 -> port1 and port5
+    0x44 -> port1 and port6
+    0x45 -> port1 and port7
+    0x46 -> port1 and port8
+    0x47 -> port2 and port3
+    0x48 -> port2 and port4
+    0x49 -> port2 and port5
+    0x4a -> port2 and port6
+    0x4b -> port2 and port7
+    0x4c -> port2 and port8
+    0x4d -> port3 and port4
+    0x4e -> port3 and port5
+    0x4f -> port3 and port6
+    0x50 -> port3 and port7
+    0x51 -> port3 and port8
+    0x52 -> port4 and port5
+    0x53 -> port4 and port6
+    0x54 -> port4 and port7
+    0x55 -> port4 and port8
+    0x56 -> port5 and port6
+    0x57 -> port5 and port7
+    0x58 -> port5 and port8
+    0x59 -> port6 and port7
+    0x5a -> port6 and port8
+    0x5b -> port7 and port8
+  * 0x60-0x74 are routed to three ports as follows (group adaptive)
+    0x60 -> port1, port2 and port3
+    0x61 -> port1, port2 and port4
+    0x62 -> port1, port2 and port5
+    0x63 -> port1, port2 and port6
+    0x64 -> port1, port2 and port7
+    0x65 -> port1, port2 and port8
+    0x66 -> port2, port3 and port4
+    0x67 -> port2, port3 and port5
+    0x68 -> port2, port3 and port6
+    0x69 -> port2, port3 and port7
+    0x6a -> port2, port3 and port8
+    0x6b -> port3, port4 and port5
+    0x6c -> port3, port4 and port6
+    0x6d -> port3, port4 and port7
+    0x6e -> port3, port4 and port8
+    0x6f -> port4, port5 and port6
+    0x70 -> port4, port5 and port7
+    0x71 -> port4, port5 and port8
+    0x72 -> port5, port6 and port7
+    0x73 -> port5, port6 and port8
+    0x74 -> port6, port7 and port8
+  * 0x78-0x85 are routed to four ports as follows (group adaptive)
+    0x78 -> port1, port2, port3 and port4
+    0x79 -> port1, port2, port3 and port5
+    0x7a -> port1, port2, port3 and port6
+    0x7b -> port1, port2, port3 and port7
+    0x7c -> port1, port2, port3 and port8
+    0x7d -> port2, port3, port4 and port5
+    0x7e -> port2, port3, port4 and port6
+    0x7f -> port2, port3, port4 and port7
+    0x80 -> port2, port3, port4 and port8
+    0x81 -> port3, port4, port5 and port6
+    0x82 -> port3, port4, port5 and port7
+    0x83 -> port3, port4, port5 and port8
+    0x84 -> port4, port5, port6 and port7
+    0x85 -> port4, port5, port6 and port8
+    0x86 -> port5, port6, port7 and port8
+
+
+TYPICAL CONSOLE OUTPUT
+======================
+ This section lists a typical run with the application using a LEON3-FT AX
+ system with two GRSPW1 connected to each other using one SpaceWire cable.
+
+GRMON:
+
+grmon2> lo test
+  40000000 .text                    199.3kB / 199.3kB   [===============>] 100%
+  40031D20 .data                      6.8kB /   6.8kB   [===============>] 100%
+  40033820 .jcr                         4B              [===============>] 100%
+  Total size: 206.04kB (92.04kbit/s)
+  Entry point 0x40000000
+  Image /home/daniel/git/rtems/build/src/samples/spw/grspw-test/test loaded
+
+grmon2> run
+
+
+TERMINAL EMULATOR:
+
+Setting up SpaceWire router
+Configuring Router
+ROUTER_LIB: Failed to open device: No such file or directory (2)
+Failed to open SpW Router
+Router_configure: Error -1
+Failed router initialization, assuming that it does not exists
+ Initializing SpaceWire device 0
+ After Link Start: 5                                                            
+ Initializing SpaceWire device 1                                                
+ After Link Start: 5                                                            
+                                                                                
+                                                                                
+Starting SpW DMA channels                                                       
+Starting GRSPW0: DMA Started Successfully                                       
+Starting GRSPW1: DMA Started Successfully                                       
+Started link control task                                                       
+GRSPW0: link state entering run-state                                           
+GRSPW1: link state entering run-state                                           
+Started DMA control task                                                        
+Starting Packet processing loop. Enter Command:                                 
+                                                                                
+h                                                                               
+ c   - Set SpaceWire clock divisor                                              
+ h   - HELP                                                                     
+ l   - Link and port setup & state                                              
+ q   - Quit example                                                             
+ s   - Print driver stats                                                       
+ t   - time-code, generate tick-in                                              
+ x   - Transmit one packet                                                      
+                                                                                
+SYNTAX:                                                                         
+ cDEVNO run_clkdiv [startup_clkdiv]                                             
+ lDEVNO                                                                         
+ q                                                                              
+ sDEVNO                                                                         
+ tDEVNO [TIME-CODE]                                                             
+ xDEVNO [PATH_0 .. PATH_N] NODE_ID                                              
+i0                                                                              
+HARDWARE SUPPORT:                                                               
+ RMAP:                    NO                                                    
+ RMAP CRC:                NO                                                    
+ UNALIGNED RX ADR:        NO                                                    
+ NUMBER OF PORTS:         1                                                     
+ DMA CHANNEL COUNT:       1                                                     
+ HARDWARE VERSION:        0x001f0000 GRSPW1                                     
+i1                                                                              
+HARDWARE SUPPORT:                                                               
+ RMAP:                    NO                                                    
+ RMAP CRC:                NO                                                    
+ UNALIGNED RX ADR:        NO                                                    
+ NUMBER OF PORTS:         1                                                     
+ DMA CHANNEL COUNT:       1                                                     
+ HARDWARE VERSION:        0x001f0000 GRSPW1                                     
+l                                                                               
+ GRSPW0 link/port setup:                                                        
+ link_ctrl:      0x06                                                           
+ clkdiv_start:   0x05                                                           
+ clkdiv_run:     0x00                                                           
+ link_state:     5                                                              
+ port_cfg:       0                                                              
+ port_active:    Port0                                                          
+                                                                                
+ GRSPW1 link/port setup:                                                        
+ link_ctrl:      0x06                                                           
+ clkdiv_start:   0x05                                                           
+ clkdiv_run:     0x00                                                           
+ link_state:     5                                                              
+ port_cfg:       0                                                              
+ port_active:    Port0                                                          
+                                                                                
+s0                                                                              
+                                                                                
+                                                                                
+--- GRSPW0 Driver Stats ---                                                     
+ DRVQ RX_READY: 0                                                               
+ DRVQ RX_SCHED: 8                                                               
+ DRVQ RX_RECV: 0                                                                
+ DRVQ TX_SEND: 0                                                                
+ DRVQ TX_SCHED: 0                                                               
+ DRVQ TX_SENT: 0                                                                
+SpW0 STATISTICS:                                                                
+ irq_cnt:                  0                                                    
+ err_credit:               0                                                    
+ err_eeop:                 0                                                    
+ err_addr:                 0                                                    
+ err_parity:               0                                                    
+ err_escape:               0                                                    
+ err_wsync:                0                                                    
+ DMA[0] irq_cnt:           0                                                    
+ DMA[0] tx_pkts:           0                                                    
+ DMA[0] tx_err_link:       0                                                    
+ DMA[0] rx_pkts:           0                                                    
+ DMA[0] rx_err_trunk:      0                                                    
+ DMA[0] rx_err_endpkt:     0                                                    
+ DMA[0] send_cnt_min:      1073741823                                           
+ DMA[0] send_cnt_max:      0                                                    
+ DMA[0] tx_sched_cnt_min:  1073741823                                           
+ DMA[0] tx_sched_cnt_max:  0                                                    
+ DMA[0] sent_cnt_max:      0                                                    
+ DMA[0] ready_cnt_min:     0                                                    
+ DMA[0] ready_cnt_max:     8                                                    
+ DMA[0] rx_sched_cnt_min:  1073741823                                           
+ DMA[0] rx_sched_cnt_max:  8                                                    
+ DMA[0] recv_cnt_max:      0                                                    
+ DMA[0] tx_work_cnt:       0                                                    
+ DMA[0] rx_work_cnt:       0                                                    
+ DMA[0] tx_work_enabled:   0                                                    
+ DMA[0] rx_work_enabled:   0                                                    
+s1                                                                              
+                                                                                
+                                                                                
+--- GRSPW1 Driver Stats ---                                                     
+ DRVQ RX_READY: 0                                                               
+ DRVQ RX_SCHED: 8                                                               
+ DRVQ RX_RECV: 0                                                                
+ DRVQ TX_SEND: 0                                                                
+ DRVQ TX_SCHED: 0                                                               
+ DRVQ TX_SENT: 0                                                                
+SpW1 STATISTICS:                                                                
+ irq_cnt:                  0                                                    
+ err_credit:               0                                                    
+ err_eeop:                 0                                                    
+ err_addr:                 0                                                    
+ err_parity:               0                                                    
+ err_escape:               0                                                    
+ err_wsync:                0                                                    
+ DMA[0] irq_cnt:           0                                                    
+ DMA[0] tx_pkts:           0                                                    
+ DMA[0] tx_err_link:       0                                                    
+ DMA[0] rx_pkts:           0                                                    
+ DMA[0] rx_err_trunk:      0                                                    
+ DMA[0] rx_err_endpkt:     0                                                    
+ DMA[0] send_cnt_min:      1073741823                                           
+ DMA[0] send_cnt_max:      0                                                    
+ DMA[0] tx_sched_cnt_min:  1073741823                                           
+ DMA[0] tx_sched_cnt_max:  0                                                    
+ DMA[0] sent_cnt_max:      0                                                    
+ DMA[0] ready_cnt_min:     0                                                    
+ DMA[0] ready_cnt_max:     8                                                    
+ DMA[0] rx_sched_cnt_min:  1073741823                                           
+ DMA[0] rx_sched_cnt_max:  8                                                    
+ DMA[0] recv_cnt_max:      0                                                    
+ DMA[0] tx_work_cnt:       0                                                    
+ DMA[0] rx_work_cnt:       0                                                    
+ DMA[0] tx_work_enabled:   0                                                    
+ DMA[0] rx_work_enabled:   0                                                    
+x1 33                                                                           
+ X1: scheduling packet on GRSPW1                                                
+GRSPW1: Sending 1 packets                                                       
+ PKT of length 32 bytes, 0x21 0x9b 0x01 0x00 0x01 0x01 0x01 0x01                
+GRSPW0: Recevied 1 packets                                                      
+ PKT of length 32 bytes, 0x21 0x9b 0x01 0x00 0x01 0x01 0x01 0x01...             
+s0                                                                              
+                                                                                
+                                                                                
+--- GRSPW0 Driver Stats ---                                                     
+ DRVQ RX_READY: 0                                                               
+ DRVQ RX_SCHED: 8                                                               
+ DRVQ RX_RECV: 0                                                                
+ DRVQ TX_SEND: 0                                                                
+ DRVQ TX_SCHED: 0                                                               
+ DRVQ TX_SENT: 0                                                                
+SpW0 STATISTICS:                                                                
+ irq_cnt:                  0                                                    
+ err_credit:               0                                                    
+ err_eeop:                 0                                                    
+ err_addr:                 0                                                    
+ err_parity:               0                                                    
+ err_escape:               0                                                    
+ err_wsync:                0                                                    
+ DMA[0] irq_cnt:           0                                                    
+ DMA[0] tx_pkts:           0                                                    
+ DMA[0] tx_err_link:       0                                                    
+ DMA[0] rx_pkts:           1                                                    
+ DMA[0] rx_err_trunk:      0                                                    
+ DMA[0] rx_err_endpkt:     0                                                    
+ DMA[0] send_cnt_min:      1073741823                                           
+ DMA[0] send_cnt_max:      0                                                    
+ DMA[0] tx_sched_cnt_min:  1073741823                                           
+ DMA[0] tx_sched_cnt_max:  0                                                    
+ DMA[0] sent_cnt_max:      0                                                    
+ DMA[0] ready_cnt_min:     0                                                    
+ DMA[0] ready_cnt_max:     8                                                    
+ DMA[0] rx_sched_cnt_min:  7                                                    
+ DMA[0] rx_sched_cnt_max:  8                                                    
+ DMA[0] recv_cnt_max:      1                                                    
+ DMA[0] tx_work_cnt:       0                                                    
+ DMA[0] rx_work_cnt:       0                                                    
+ DMA[0] tx_work_enabled:   0                                                    
+ DMA[0] rx_work_enabled:   0                                                    
+s1                                                                              
+                                                                                
+                                                                                
+--- GRSPW1 Driver Stats ---                                                     
+ DRVQ RX_READY: 0                                                               
+ DRVQ RX_SCHED: 8                                                               
+ DRVQ RX_RECV: 0                                                                
+ DRVQ TX_SEND: 0                                                                
+ DRVQ TX_SCHED: 0                                                               
+ DRVQ TX_SENT: 0                                                                
+SpW1 STATISTICS:                                                                
+ irq_cnt:                  0                                                    
+ err_credit:               0                                                    
+ err_eeop:                 0                                                    
+ err_addr:                 0                                                    
+ err_parity:               0                                                    
+ err_escape:               0                                                    
+ err_wsync:                0                                                    
+ DMA[0] irq_cnt:           0                                                    
+ DMA[0] tx_pkts:           1                                                    
+ DMA[0] tx_err_link:       0                                                    
+ DMA[0] rx_pkts:           0                                                    
+ DMA[0] rx_err_trunk:      0                                                    
+ DMA[0] rx_err_endpkt:     0                                                    
+ DMA[0] send_cnt_min:      0                                                    
+ DMA[0] send_cnt_max:      1                                                    
+ DMA[0] tx_sched_cnt_min:  0                                                    
+ DMA[0] tx_sched_cnt_max:  1                                                    
+ DMA[0] sent_cnt_max:      1                                                    
+ DMA[0] ready_cnt_min:     0                                                    
+ DMA[0] ready_cnt_max:     8                                                    
+ DMA[0] rx_sched_cnt_min:  1073741823                                           
+ DMA[0] rx_sched_cnt_max:  8                                                    
+ DMA[0] recv_cnt_max:      0                                                    
+ DMA[0] tx_work_cnt:       0                                                    
+ DMA[0] rx_work_cnt:       0                                                    
+ DMA[0] tx_work_enabled:   0                                                    
+ DMA[0] rx_work_enabled:   0                                                    
+x1 33 34                                                                        
+ X1: scheduling packet on GRSPW1                                                
+GRSPW1: Sending 1 packets                                                       
+ PKT of length 33 bytes, 0x21 0x22 0x9b 0x01 0x00 0x01 0x01 0x01                
+GRSPW0: Recevied 1 packets                                                      
+ PKT of length 33 bytes, 0x21 0x22 0x9b 0x01 0x00 0x01 0x01 0x01...             
+x0 33                                                                           
+ X0: scheduling packet on GRSPW0                                                
+GRSPW0: Sending 1 packets                                                       
+ PKT of length 32 bytes, 0x21 0x9b 0x00 0x00 0x00 0x00 0x00 0x00                
+GRSPW1: Recevied 1 packets                                                      
+ PKT of length 32 bytes, 0x21 0x9b 0x00 0x00 0x00 0x00 0x00 0x00...             
+
+### USER DISCONNECT SPACEWIRE CABLE BETWEEN GRSPW0 AND GRSPW1
+
+GRSPW0: link state leaving run-state 
+GRSPW1: link state leaving run-state                                            
+x0 33                                                                           
+ X0: scheduling packet on GRSPW0                                                
+GRSPW0: Sending 1 packets                                                       
+ PKT of length 32 bytes, 0x21 0x9b 0x00 0x00 0x00 0x00 0x00 0x00                
+
+### PACKET NOT RECEIVED. ONE PACKET SCHEDULED FOR TRANSMISSION.
+### USER CONNECT SPACEWIRE CABLE BETWEEN GRSPW0 AND GRSPW1 AGAIN
+
+GRSPW0: link state entering run-state                                           
+GRSPW1: link state entering run-state                                           
+GRSPW1: Recevied 1 packets                                                      
+ PKT of length 32 bytes, 0x21 0x9b 0x00 0x00 0x00 0x00 0x00 0x00...
+t0                                                                              
+GRSPW1: TC-ISR received 0x01                                                    
+ T0: generated tick-in on GRSPW0                                                
+t0                                                                              
+GRSPW1: TC-ISR received 0x02                                                    
+ T0: generated tick-in on GRSPW0                                                
+t0                                                                              
+GRSPW1: TC-ISR received 0x03                                                    
+ T0: generated tick-in on GRSPW0                                                
+t1                                                                              
+GRSPW0: TC-ISR received 0x04                                                    
+ T1: generated tick-in on GRSPW1                                                
+t1 55                                                                           
+ T1: time-code value now 0x37                                                   
+ T1: generated tick-in on GRSPW1                                                
+t1                                                                              
+GRSPW0: TC-ISR received 0x39                                                    
+ T1: generated tick-in on GRSPW1                                                
+t0                                                                              
+GRSPW1: TC-ISR received 0x3A                                                    
+ T0: generated tick-in on GRSPW0                                                
+

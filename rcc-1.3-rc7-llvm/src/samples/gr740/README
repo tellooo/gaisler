@@ -1,0 +1,8 @@
+GR740 SAMPLES
+-------------
+
+The sample RTEMS application found in this directory are specific for the GR740
+quad-core processor.
+
+ampdemo            - Asymmetric multiprocessing (AMP) demonstration for RTEMS SMP
+

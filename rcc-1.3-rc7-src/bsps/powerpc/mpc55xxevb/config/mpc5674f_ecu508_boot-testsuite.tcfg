@@ -1,0 +1,5 @@
+#
+# mpc5674f_ecu508_boot RTEMS Test Database.
+#
+
+include: testdata/small-memory-testsuite.tcfg

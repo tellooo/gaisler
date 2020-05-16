@@ -1,0 +1,473 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Clang 8.0.0 Release Notes &mdash; Clang 8 documentation</title>
+    
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/theme_extras.js"></script>
+    <link rel="top" title="Clang 8 documentation" href="index.html" />
+    <link rel="next" title="Clang Compiler User’s Manual" href="UsersManual.html" />
+    <link rel="prev" title="Using Clang as a Compiler" href="index.html" /> 
+  </head>
+  <body>
+      <div class="header"><h1 class="heading"><a href="index.html">
+          <span>Clang 8 documentation</span></a></h1>
+        <h2 class="heading"><span>Clang 8.0.0 Release Notes</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        «&#160;&#160;<a href="index.html">Using Clang as a Compiler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="UsersManual.html">Clang Compiler User&#8217;s Manual</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="clang-8-0-0-release-notes">
+<h1>Clang 8.0.0 Release Notes<a class="headerlink" href="#clang-8-0-0-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#what-s-new-in-clang-8-0-0" id="id2">What&#8217;s New in Clang 8.0.0?</a><ul>
+<li><a class="reference internal" href="#major-new-features" id="id3">Major New Features</a></li>
+<li><a class="reference internal" href="#non-comprehensive-list-of-changes-in-this-release" id="id4">Non-comprehensive list of changes in this release</a></li>
+<li><a class="reference internal" href="#new-compiler-flags" id="id5">New Compiler Flags</a></li>
+<li><a class="reference internal" href="#modified-compiler-flags" id="id6">Modified Compiler Flags</a></li>
+<li><a class="reference internal" href="#new-pragmas-in-clang" id="id7">New Pragmas in Clang</a></li>
+<li><a class="reference internal" href="#attribute-changes-in-clang" id="id8">Attribute Changes in Clang</a></li>
+<li><a class="reference internal" href="#windows-support" id="id9">Windows Support</a></li>
+<li><a class="reference internal" href="#opencl-kernel-language-changes-in-clang" id="id10">OpenCL Kernel Language Changes in Clang</a></li>
+<li><a class="reference internal" href="#abi-changes-in-clang" id="id11">ABI Changes in Clang</a></li>
+<li><a class="reference internal" href="#openmp-support-in-clang" id="id12">OpenMP Support in Clang</a></li>
+<li><a class="reference internal" href="#undefined-behavior-sanitizer-ubsan" id="id13">Undefined Behavior Sanitizer (UBSan)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#additional-information" id="id14">Additional Information</a></li>
+</ul>
+</div>
+<p>Written by the <a class="reference external" href="https://llvm.org/">LLVM Team</a></p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This document contains the release notes for the Clang C/C++/Objective-C/OpenCL
+frontend, part of the LLVM Compiler Infrastructure, release 8.0.0. Here we
+describe the status of Clang in some detail, including major
+improvements from the previous release and new feature work. For the
+general LLVM release notes, see <a class="reference external" href="https://llvm.org/docs/ReleaseNotes.html">the LLVM
+documentation</a>. All LLVM
+releases may be downloaded
+from the <a class="reference external" href="https://releases.llvm.org/">LLVM releases web site</a>.</p>
+<p>For more information about Clang or LLVM, including information about the
+latest release, please see the <a class="reference external" href="https://clang.llvm.org">Clang Web Site</a> or the
+<a class="reference external" href="https://llvm.org">LLVM Web Site</a>.</p>
+</div>
+<div class="section" id="what-s-new-in-clang-8-0-0">
+<h2><a class="toc-backref" href="#id2">What&#8217;s New in Clang 8.0.0?</a><a class="headerlink" href="#what-s-new-in-clang-8-0-0" title="Permalink to this headline">¶</a></h2>
+<p>Some of the major new features and improvements to Clang are listed
+here. Generic improvements to Clang as a whole or to its underlying
+infrastructure are described first, followed by language-specific
+sections with improvements to Clang&#8217;s support for those languages.</p>
+<div class="section" id="major-new-features">
+<h3><a class="toc-backref" href="#id3">Major New Features</a><a class="headerlink" href="#major-new-features" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">Clang supports use of a profile remapping file, which permits
+profile data captured for one version of a program to be applied
+when building another version where symbols have changed (for
+example, due to renaming a class or namespace).
+See the <a class="reference internal" href="UsersManual.html#profile-remapping"><em>UsersManual</em></a> for details.</p>
+</li>
+<li><p class="first">Clang has new options to initialize automatic variables with a pattern. The default is still that automatic variables are uninitialized. This isn&#8217;t meant to change the semantics of C and C++. Rather, it&#8217;s meant to be a last resort when programmers inadvertently have some undefined behavior in their code. These options aim to make undefined behavior hurt less, which security-minded people will be very happy about. Notably, this means that there&#8217;s no inadvertent information leak when:</p>
+<blockquote>
+<div><ul class="simple">
+<li>The compiler re-uses stack slots, and a value is used uninitialized.</li>
+<li>The compiler re-uses a register, and a value is used uninitialized.</li>
+<li>Stack structs / arrays / unions with padding are copied.</li>
+</ul>
+</div></blockquote>
+<p>These options only address stack and register information leaks.</p>
+<p>Caveats:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Variables declared in unreachable code and used later aren&#8217;t initialized. This affects goto statements, Duff&#8217;s device, and other objectionable uses of switch statements. This should instead be a hard-error in any serious codebase.</li>
+<li>These options don&#8217;t affect volatile stack variables.</li>
+<li>Padding isn&#8217;t fully handled yet.</li>
+</ul>
+</div></blockquote>
+<p>How to use it on the command line:</p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">-ftrivial-auto-var-init=uninitialized</span></tt> (the default)</li>
+<li><tt class="docutils literal"><span class="pre">-ftrivial-auto-var-init=pattern</span></tt></li>
+</ul>
+</div></blockquote>
+<p>There is also a new attribute to request a variable to not be initialized, mainly to disable initialization of large stack arrays when deemed too expensive:</p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">int</span> <span class="pre">dont_initialize_me</span> <span class="pre">__attribute((uninitialized));</span></tt></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="section" id="improvements-to-clang-s-diagnostics">
+<h4>Improvements to Clang&#8217;s diagnostics<a class="headerlink" href="#improvements-to-clang-s-diagnostics" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">-Wextra-semi-stmt</span></tt> is a new diagnostic that diagnoses extra semicolons,
+much like <tt class="docutils literal"><span class="pre">-Wextra-semi</span></tt>. This new diagnostic diagnoses all <em>unnecessary</em>
+null statements (expression statements without an expression), unless: the
+semicolon directly follows a macro that was expanded to nothing or if the
+semicolon is within the macro itself. This applies to macros defined in system
+headers as well as user-defined macros.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="cp">#define MACRO(x) int x;</span>
+<span class="cp">#define NULLMACRO(varname)</span>
+
+<span class="kt">void</span> <span class="n">test</span><span class="p">()</span> <span class="p">{</span>
+  <span class="p">;</span> <span class="c1">// &lt;- warning: &#39;;&#39; with no preceding expression is a null statement</span>
+
+  <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+    <span class="p">;</span> <span class="c1">// OK, it is needed.</span>
+
+  <span class="k">switch</span> <span class="p">(</span><span class="n">my_enum</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">case</span> <span class="nl">E1:</span>
+    <span class="c1">// stuff</span>
+    <span class="k">break</span><span class="p">;</span>
+  <span class="k">case</span> <span class="nl">E2:</span>
+    <span class="p">;</span> <span class="c1">// OK, it is needed.</span>
+  <span class="p">}</span>
+
+  <span class="n">MACRO</span><span class="p">(</span><span class="n">v0</span><span class="p">;)</span> <span class="c1">// Extra semicolon, but within macro, so ignored.</span>
+
+  <span class="n">MACRO</span><span class="p">(</span><span class="n">v1</span><span class="p">);</span> <span class="c1">// &lt;- warning: &#39;;&#39; with no preceding expression is a null statement</span>
+
+  <span class="n">NULLMACRO</span><span class="p">(</span><span class="n">v2</span><span class="p">);</span> <span class="c1">// ignored, NULLMACRO expanded to nothing.</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">-Wempty-init-stmt</span></tt> is a new diagnostic that diagnoses empty init-statements
+of <tt class="docutils literal"><span class="pre">if</span></tt>, <tt class="docutils literal"><span class="pre">switch</span></tt>, <tt class="docutils literal"><span class="pre">range-based</span> <span class="pre">for</span></tt>, unless: the semicolon directly
+follows a macro that was expanded to nothing or if the semicolon is within the
+macro itself (both macros from system headers, and normal macros). This
+diagnostic is in the <tt class="docutils literal"><span class="pre">-Wextra-semi-stmt</span></tt> group and is enabled in
+<tt class="docutils literal"><span class="pre">-Wextra</span></tt>.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="kt">void</span> <span class="n">test</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(;</span> <span class="c1">// &lt;- warning: init-statement of &#39;if&#39; is a null statement</span>
+     <span class="kc">true</span><span class="p">)</span>
+    <span class="p">;</span>
+
+  <span class="k">switch</span> <span class="p">(;</span> <span class="c1">// &lt;- warning: init-statement of &#39;switch&#39; is a null statement</span>
+          <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">...</span>
+  <span class="p">}</span>
+
+  <span class="k">for</span> <span class="p">(;</span> <span class="c1">// &lt;- warning: init-statement of &#39;range-based for&#39; is a null statement</span>
+       <span class="kt">int</span> <span class="n">y</span> <span class="o">:</span> <span class="n">S</span><span class="p">())</span>
+    <span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="non-comprehensive-list-of-changes-in-this-release">
+<h3><a class="toc-backref" href="#id4">Non-comprehensive list of changes in this release</a><a class="headerlink" href="#non-comprehensive-list-of-changes-in-this-release" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>The experimental feature Pretokenized Headers (PTH) was removed in its
+entirely from Clang. The feature did not properly work with about 1/3 of the
+possible tokens available and was unmaintained.</li>
+<li>The internals of libc++ include directory detection on MacOS have changed.
+Instead of running a search based on the <tt class="docutils literal"><span class="pre">-resource-dir</span></tt> flag, the search
+is now based on the path of the compiler in the filesystem. The default
+behaviour should not change. However, if you override <tt class="docutils literal"><span class="pre">-resource-dir</span></tt>
+manually and rely on the old behaviour you will need to add appropriate
+compiler flags for finding the corresponding libc++ include directory.</li>
+<li>The integrated assembler is used now by default for all MIPS targets.</li>
+<li>Improved support for MIPS N32 ABI and MIPS R6 target triples.</li>
+<li>Clang now includes builtin functions for bitwise rotation of common value
+sizes, such as: <a class="reference external" href="LanguageExtensions.html#builtin-rotateleft">__builtin_rotateleft32</a></li>
+<li>Improved optimization for the corresponding MSVC compatibility builtins such
+as <tt class="docutils literal"><span class="pre">_rotl()</span></tt>.</li>
+</ul>
+</div>
+<div class="section" id="new-compiler-flags">
+<h3><a class="toc-backref" href="#id5">New Compiler Flags</a><a class="headerlink" href="#new-compiler-flags" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">-mspeculative-load-hardening</span></tt> Clang now has an option to enable
+Speculative Load Hardening.</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">-fprofile-filter-files=[regexes]</span></tt> and <tt class="docutils literal"><span class="pre">-fprofile-exclude-files=[regexes]</span></tt>.</p>
+<p>Clang has now options to filter or exclude some files when
+instrumenting for gcov-based profiling.
+See the <a class="reference external" href="UsersManual.html#cmdoption-fprofile-filter-files">UsersManual</a> for details.</p>
+</li>
+<li><p class="first">When using a custom stack alignment, the <tt class="docutils literal"><span class="pre">stackrealign</span></tt> attribute is now
+implicitly set on the main function.</p>
+</li>
+<li><p class="first">Emission of <tt class="docutils literal"><span class="pre">R_MIPS_JALR</span></tt> and <tt class="docutils literal"><span class="pre">R_MICROMIPS_JALR</span></tt> relocations can now
+be controlled by the <tt class="docutils literal"><span class="pre">-mrelax-pic-calls</span></tt> and <tt class="docutils literal"><span class="pre">-mno-relax-pic-calls</span></tt>
+options.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="modified-compiler-flags">
+<h3><a class="toc-backref" href="#id6">Modified Compiler Flags</a><a class="headerlink" href="#modified-compiler-flags" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>As of clang 8, <tt class="docutils literal"><span class="pre">alignof</span></tt> and <tt class="docutils literal"><span class="pre">_Alignof</span></tt> return the ABI alignment of a type,
+as opposed to the preferred alignment. <tt class="docutils literal"><span class="pre">__alignof</span></tt> still returns the
+preferred alignment. <tt class="docutils literal"><span class="pre">-fclang-abi-compat=7</span></tt> (and previous) will make
+<tt class="docutils literal"><span class="pre">alignof</span></tt> and <tt class="docutils literal"><span class="pre">_Alignof</span></tt> return preferred alignment again.</li>
+</ul>
+</div>
+<div class="section" id="new-pragmas-in-clang">
+<h3><a class="toc-backref" href="#id7">New Pragmas in Clang</a><a class="headerlink" href="#new-pragmas-in-clang" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Clang now supports adding multiple <cite>#pragma clang attribute</cite> attributes into
+a scope of pushed attributes.</li>
+</ul>
+</div>
+<div class="section" id="attribute-changes-in-clang">
+<h3><a class="toc-backref" href="#id8">Attribute Changes in Clang</a><a class="headerlink" href="#attribute-changes-in-clang" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Clang now supports enabling/disabling speculative load hardening on a
+per-function basis using the function attribute
+<tt class="docutils literal"><span class="pre">speculative_load_hardening</span></tt>/<tt class="docutils literal"><span class="pre">no_speculative_load_hardening</span></tt>.</li>
+</ul>
+</div>
+<div class="section" id="windows-support">
+<h3><a class="toc-backref" href="#id9">Windows Support</a><a class="headerlink" href="#windows-support" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>clang-cl now supports the use of the precompiled header options <tt class="docutils literal"><span class="pre">/Yc</span></tt> and <tt class="docutils literal"><span class="pre">/Yu</span></tt>
+without the filename argument. When these options are used without the
+filename, a <cite>#pragma hdrstop</cite> inside the source marks the end of the
+precompiled code.</li>
+<li>clang-cl has a new command-line option, <tt class="docutils literal"><span class="pre">/Zc:dllexportInlines-</span></tt>, similar to
+<tt class="docutils literal"><span class="pre">-fvisibility-inlines-hidden</span></tt> on non-Windows, that makes class-level
+<cite>dllexport</cite> and <cite>dllimport</cite> attributes not apply to inline member functions.
+This can significantly reduce compile and link times. See the <a class="reference external" href="UsersManual.html#the-zc-dllexportinlines-option">User&#8217;s Manual</a> for more info.</li>
+<li>For MinGW, <tt class="docutils literal"><span class="pre">-municode</span></tt> now correctly defines <tt class="docutils literal"><span class="pre">UNICODE</span></tt> during
+preprocessing.</li>
+<li>For MinGW, clang now produces vtables and RTTI for dllexported classes
+without key functions. This fixes building Qt in debug mode.</li>
+<li>Allow using Address Sanitizer and Undefined Behaviour Sanitizer on MinGW.</li>
+<li>Structured Exception Handling support for ARM64 Windows. The ARM64 Windows
+target is in pretty good shape now.</li>
+</ul>
+</div>
+<div class="section" id="opencl-kernel-language-changes-in-clang">
+<h3><a class="toc-backref" href="#id10">OpenCL Kernel Language Changes in Clang</a><a class="headerlink" href="#opencl-kernel-language-changes-in-clang" title="Permalink to this headline">¶</a></h3>
+<p>Misc:</p>
+<ul class="simple">
+<li>Improved address space support with Clang builtins.</li>
+<li>Improved various diagnostics for vectors with element types from extensions;
+values used in attributes; duplicate address spaces.</li>
+<li>Allow blocks to capture arrays.</li>
+<li>Allow zero assignment and comparisons between variables of <tt class="docutils literal"><span class="pre">queue_t</span></tt> type.</li>
+<li>Improved diagnostics of formatting specifiers and argument promotions for
+vector types in <tt class="docutils literal"><span class="pre">printf</span></tt>.</li>
+<li>Fixed return type of enqueued kernel and pipe builtins.</li>
+<li>Fixed address space of <tt class="docutils literal"><span class="pre">clk_event_t</span></tt> generated in the IR.</li>
+<li>Fixed address space when passing/returning structs.</li>
+</ul>
+<p>Header file fixes:</p>
+<ul class="simple">
+<li>Added missing extension guards around several builtin function overloads.</li>
+<li>Fixed serialization support when registering vendor extensions using pragmas.</li>
+<li>Fixed OpenCL version in declarations of builtin functions with sampler-less
+image accesses.</li>
+</ul>
+<p>New vendor extensions added:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">cl_intel_planar_yuv</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">cl_intel_device_side_avc_motion_estimation</span></tt></li>
+</ul>
+<p>C++ for OpenCL:</p>
+<ul class="simple">
+<li>Added support of address space conversions in C style casts.</li>
+<li>Enabled address spaces for references.</li>
+<li>Fixed use of address spaces in templates: address space deduction and diagnostics.</li>
+<li>Changed default address space to work with C++ specific concepts: class members,
+template parameters, etc.</li>
+<li>Added generic address space by default to the generated hidden &#8216;this&#8217; parameter.</li>
+<li>Extend overload ranking rules for address spaces.</li>
+</ul>
+</div>
+<div class="section" id="abi-changes-in-clang">
+<h3><a class="toc-backref" href="#id11">ABI Changes in Clang</a><a class="headerlink" href="#abi-changes-in-clang" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">_Alignof</span></tt> and <tt class="docutils literal"><span class="pre">alignof</span></tt> now return the ABI alignment of a type, as opposed
+to the preferred alignment.<ul>
+<li>This is more in keeping with the language of the standards, as well as
+being compatible with gcc</li>
+<li><tt class="docutils literal"><span class="pre">__alignof</span></tt> and <tt class="docutils literal"><span class="pre">__alignof__</span></tt> still return the preferred alignment of
+a type</li>
+<li>This shouldn&#8217;t break any ABI except for things that explicitly ask for
+<tt class="docutils literal"><span class="pre">alignas(alignof(T))</span></tt>.</li>
+<li>If you have interfaces that break with this change, you may wish to switch
+to <tt class="docutils literal"><span class="pre">alignas(__alignof(T))</span></tt>, instead of using the <tt class="docutils literal"><span class="pre">-fclang-abi-compat</span></tt>
+switch.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="openmp-support-in-clang">
+<h3><a class="toc-backref" href="#id12">OpenMP Support in Clang</a><a class="headerlink" href="#openmp-support-in-clang" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>OpenMP 5.0 features<ul>
+<li>Support relational-op != (not-equal) as one of the canonical forms of random
+access iterator.</li>
+<li>Added support for mapping of the lambdas in target regions.</li>
+<li>Added parsing/sema analysis for the requires directive.</li>
+<li>Support nested declare target directives.</li>
+<li>Make the <cite>this</cite> pointer implicitly mapped as <cite>map(this[:1])</cite>.</li>
+<li>Added the <cite>close</cite> <em>map-type-modifier</em>.</li>
+</ul>
+</li>
+<li>Various bugfixes and improvements.</li>
+</ul>
+<p>New features supported for Cuda devices:</p>
+<ul class="simple">
+<li>Added support for the reductions across the teams.</li>
+<li>Extended number of constructs that can be executed in SPMD mode.</li>
+<li>Fixed support for lastprivate/reduction variables in SPMD constructs.</li>
+<li>New collapse clause scheme to avoid expensive remainder operations.</li>
+<li>New default schedule for distribute and parallel constructs.</li>
+<li>Simplified code generation for distribute and parallel in SPMD mode.</li>
+<li>Flag (<tt class="docutils literal"><span class="pre">-fopenmp_optimistic_collapse</span></tt>) for user to limit collapsed
+loop counter width when safe to do so.</li>
+<li>General performance improvement.</li>
+</ul>
+</div>
+<div class="section" id="undefined-behavior-sanitizer-ubsan">
+<span id="release-notes-ubsan"></span><h3><a class="toc-backref" href="#id13">Undefined Behavior Sanitizer (UBSan)</a><a class="headerlink" href="#undefined-behavior-sanitizer-ubsan" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">The Implicit Conversion Sanitizer (<tt class="docutils literal"><span class="pre">-fsanitize=implicit-conversion</span></tt>) group
+was extended. One more type of issues is caught - implicit integer sign change.
+(<tt class="docutils literal"><span class="pre">-fsanitize=implicit-integer-sign-change</span></tt>).
+This makes the Implicit Conversion Sanitizer feature-complete,
+with only missing piece being bitfield handling.
+While there is a <tt class="docutils literal"><span class="pre">-Wsign-conversion</span></tt> diagnostic group that catches this kind
+of issues, it is both noisy, and does not catch <strong>all</strong> the cases.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="kt">bool</span> <span class="n">consume</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">val</span><span class="p">);</span>
+
+<span class="kt">void</span> <span class="n">test</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">consume</span><span class="p">(</span><span class="n">val</span><span class="p">);</span> <span class="c1">// If the value was negative, it is now large positive.</span>
+  <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">consume</span><span class="p">((</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="n">val</span><span class="p">);</span> <span class="c1">// OK, the conversion is explicit.</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Like some other <tt class="docutils literal"><span class="pre">-fsanitize=integer</span></tt> checks, these issues are <strong>not</strong>
+undefined behaviour. But they are not <em>always</em> intentional, and are somewhat
+hard to track down. This group is <strong>not</strong> enabled by <tt class="docutils literal"><span class="pre">-fsanitize=undefined</span></tt>,
+but the <tt class="docutils literal"><span class="pre">-fsanitize=implicit-integer-sign-change</span></tt> check
+is enabled by <tt class="docutils literal"><span class="pre">-fsanitize=integer</span></tt>.
+(as is <tt class="docutils literal"><span class="pre">-fsanitize=implicit-integer-truncation</span></tt> check)</p>
+</li>
+<li><p class="first">The Implicit Conversion Sanitizer (<tt class="docutils literal"><span class="pre">-fsanitize=implicit-conversion</span></tt>) has
+learned to sanitize compound assignment operators.</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">alignment</span></tt> check has learned to sanitize the assume_aligned-like attributes:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="k">typedef</span> <span class="kt">char</span> <span class="o">**</span><span class="n">__attribute__</span><span class="p">((</span><span class="n">align_value</span><span class="p">(</span><span class="mi">1024</span><span class="p">)))</span> <span class="n">aligned_char</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">ac_struct</span> <span class="p">{</span>
+  <span class="n">aligned_char</span> <span class="n">a</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="kt">char</span> <span class="o">**</span><span class="n">load_from_ac_struct</span><span class="p">(</span><span class="k">struct</span> <span class="n">ac_struct</span> <span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">x</span><span class="o">-&gt;</span><span class="n">a</span><span class="p">;</span> <span class="c1">// &lt;- check that loaded &#39;a&#39; is aligned</span>
+<span class="p">}</span>
+
+<span class="kt">char</span> <span class="o">**</span><span class="n">passthrough</span><span class="p">(</span><span class="n">__attribute__</span><span class="p">((</span><span class="n">align_value</span><span class="p">(</span><span class="mi">1024</span><span class="p">)))</span> <span class="kt">char</span> <span class="o">**</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">x</span><span class="p">;</span> <span class="c1">// &lt;- check the pointer passed as function argument</span>
+<span class="p">}</span>
+
+<span class="kt">char</span> <span class="o">**</span><span class="n">__attribute__</span><span class="p">((</span><span class="n">alloc_align</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span>
+<span class="n">alloc_align</span><span class="p">(</span><span class="kt">int</span> <span class="n">size</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">alignment</span><span class="p">);</span>
+
+<span class="kt">char</span> <span class="o">**</span><span class="n">caller</span><span class="p">(</span><span class="kt">int</span> <span class="n">size</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">alloc_align</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="mi">1024</span><span class="p">);</span> <span class="c1">// &lt;- check returned pointer</span>
+<span class="p">}</span>
+
+<span class="kt">char</span> <span class="o">**</span><span class="n">__attribute__</span><span class="p">((</span><span class="n">assume_aligned</span><span class="p">(</span><span class="mi">1024</span><span class="p">)))</span> <span class="n">get_ptr</span><span class="p">();</span>
+
+<span class="kt">char</span> <span class="o">**</span><span class="n">caller2</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">get_ptr</span><span class="p">();</span> <span class="c1">// &lt;- check returned pointer</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="o">*</span><span class="n">caller3</span><span class="p">(</span><span class="kt">char</span> <span class="o">**</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">__builtin_assume_aligned</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1024</span><span class="p">);</span>  <span class="c1">// &lt;- check returned pointer</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="o">*</span><span class="n">caller4</span><span class="p">(</span><span class="kt">char</span> <span class="o">**</span><span class="n">x</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">offset</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">__builtin_assume_aligned</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1024</span><span class="p">,</span> <span class="n">offset</span><span class="p">);</span>  <span class="c1">// &lt;- check returned pointer accounting for the offest</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">process</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">int</span> <span class="n">width</span><span class="p">)</span> <span class="p">{</span>
+    <span class="cp">#pragma omp for simd aligned(data : 1024) </span><span class="c1">// &lt;- aligned clause will be checked.</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">*=</span> <span class="n">data</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="additional-information">
+<h2><a class="toc-backref" href="#id14">Additional Information</a><a class="headerlink" href="#additional-information" title="Permalink to this headline">¶</a></h2>
+<p>A wide variety of additional information is available on the <a class="reference external" href="https://clang.llvm.org/">Clang web
+page</a>. The web page contains versions of the
+API documentation which are up-to-date with the Subversion version of
+the source code. You can access versions of these documents specific to
+this release by going into the &#8220;<tt class="docutils literal"><span class="pre">clang/docs/</span></tt>&#8221; directory in the Clang
+tree.</p>
+<p>If you have any questions or comments about Clang, please feel free to
+contact us via the <a class="reference external" href="https://lists.llvm.org/mailman/listinfo/cfe-dev">mailing
+list</a>.</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        «&#160;&#160;<a href="index.html">Using Clang as a Compiler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="UsersManual.html">Clang Compiler User&#8217;s Manual</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2007-2019, The Clang Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,175 @@
+# ABOUT
+This is an AMP example for RTEMS SMP targeting GR740. It consists of two
+applications:
+
+## APPLICATIONS
+### sp-tick
+Single processor (SP) application which prints the date once a second. It is
+created using RTEMS non-SMP but could also be created with some other
+OS/toolchain.
+
+The following GR740 peripherals are used by the sp-tick application:
+- APBUART0
+- GPTIMER0
+
+### smp-tick
+Symmetric Multiprocessing (SMP) application hich prints the date one or more
+time each second. This is a proper RTEMS SMP application
+
+The following GR740 peripherals are used by the smp-tick application:
+- APBUART1
+- GPTIMER1 (only subtimer index 1 on a zero-based index)
+
+
+## CONFIGURATIONS
+The sp-tick and smp-tick applications are available in two configurations to
+create the following demonstrations.
+
+### smp0
+- CPU[0,1,2]: smp-tick
+- CPU[0,1,2] uses interrupt controller 0
+- CPU[3]: sp-tick
+- CPU[3] uses interrupt controller 3
+sp-tick is started from inside smp-tick before the date printouts. 
+
+This example is prepared with the GRMON script ampdemo-smp0.tcl
+grmon2> batch ampdemo-smp0.tcl
+grmon2> run
+
+### sp0
+- CPU[0]: sp-tick
+- CPU[0] uses interrupt controller 0
+- CPU[1,2,3]: smp-tick
+- CPU[1,2,3] uses interrupt controller 1
+smp-tick is started from inside sp-tick before any date printouts. 
+
+This example is prepared with the GRMON script ampdemo-smp0.tcl
+grmon2> batch ampdemo-sp0.tcl
+grmon2> run
+
+# SCRIPTS
+The preparation scripts ampdemo-smp0.tcl and ampdemo-sp0.tcl will setup the
+system for configuration smp0 and sp0 respectively. This includes the following:
+- Load images
+- Set entry points
+- Set stack pointers
+- Assign interrupt controllers to CPU:s. This is done in an "exechook",
+  executed at 'run' after the GRMON drivers have been reset.
+- Insert breakpoints on individual CPU:s as a sanity check that the AMP
+  applications do not touch each others resources.
+
+# COMPILE
+To build all binaries required by the demonstration, issue in the ampdemo/
+directory:
+$ make
+
+# EXAMPLE
+grmon2> puts $::grmon_version
+  2.0.84
+
+grmon2> batch ampdemo-sp0.tcl
+  00000000 .text                    197.7kB / 197.7kB   [===============>] 100%
+  000316C0 .rtemsroset                 96B              [===============>] 100%
+  00031720 .data                      5.6kB /   5.6kB   [===============>] 100%
+  Total size: 203.41kB (75.74Mbit/s)
+  Entry point 0x0
+  Image /home/maberg/repos/rcc/src/samples/ampdemo/smp-tick-cpu1 loaded
+  01000000 .text                    175.4kB / 175.4kB   [===============>] 100%
+  0102BDC0 .rtemsroset                 96B              [===============>] 100%
+  0102BE20 .data                      4.7kB /   4.7kB   [===============>] 100%
+  Total size: 180.23kB (67.11Mbit/s)
+  Entry point 0x1000000
+  Image /home/maberg/repos/rcc/src/samples/ampdemo/sp-tick-cpu0 loaded
+
+  DEVICE   CHANNEL          NOTE
+  uart0    Default          FIFO debug mode
+  uart1    Default          FIFO debug mode
+  Cpu 0 entry point: 0x01000000
+  Cpu 1 entry point: 0x00000000
+  Cpu 2 entry point: 0x00000000
+  Cpu 3 entry point: 0x00000000
+   CPU 0 stack pointer: 0x01fffff0
+   CPU 1 stack pointer: 0x00fffff0
+   CPU 2 stack pointer: 0x00fffff0
+   CPU 3 stack pointer: 0x00fffff0
+  use 'run' to start example
+  
+grmon2> run
+  Configuring interrupt controller
+  ASMP control register:  0x30000001
+  IRQCSEL 0-7 register:   0x01110000
+  IRQCSEL 8-15 register:  0x00000000
+
+  Decode of ASMP control register:
+        Number of internal controllers (NCTRL+1): 4
+        Inter-controller Force: Disabled
+        Routing locked: YesSP:    I am the master
+SP:   - Waking up CPU[1]...
+SMP: *** CLOCK TICK TEST ***
+SMP:   I am the slave
+TA1  - rtems_clock_get - 09:00:00   12/31/1988
+TA2  - rtems_clock_get - 09:00:00   12/31/1988
+TA3  - rtems_clock_get - 09:00:00   12/31/1988
+TA1  - rtems_clock_get - 09:00:01   12/31/1988
+SP   - time - Fri Jan  1 00:00:02 1988
+TA1  - rtems_clock_get - 09:00:02   12/31/1988
+TA2  - rtems_clock_get - 09:00:02   12/31/1988
+SP   - time - Fri Jan  1 00:00:03 1988
+TA3  - rtems_clock_get - 09:00:03   12/31/1988
+TA1  - rtems_clock_get - 09:00:03   12/31/1988
+SP   - time - Fri Jan  1 00:00:04 1988
+TA1  - rtems_clock_get - 09:00:04   12/31/1988
+TA2  - rtems_clock_get - 09:00:04   12/31/1988
+SP   - time - Fri Jan  1 00:00:05 1988
+TA1  - rtems_clock_get - 09:00:05   12/31/1988
+SP   - time - Fri Jan  1 00:00:06 1988
+TA3  - rtems_clock_get - 09:00:06   12/31/1988
+TA1  - rtems_clock_get - 09:00:06   12/31/1988
+TA2  - rtems_clock_get - 09:00:06   12/31/1988
+SP   - time - Fri Jan  1 00:00:07 1988
+TA1  - rtems_clock_get - 09:00:07   12/31/1988
+SP   - time - Fri Jan  1 00:00:08 1988
+TA1  - rtems_clock_get - 09:00:08   12/31/1988
+TA2  - rtems_clock_get - 09:00:08   12/31/1988
+SP   - time - Fri Jan  1 00:00:09 1988
+TA3  - rtems_clock_get - 09:00:09   12/31/1988
+TA1  - rtems_clock_get - 09:00:09   12/31/1988
+SP   - time - Fri Jan  1 00:00:10 1988
+TA1  - rtems_clock_get - 09:00:10   12/31/1988
+TA2  - rtems_clock_get - 09:00:10   12/31/1988
+
+  
+  CPU 0:  Interrupted!
+          0x01003af0: e83ba010  std  %l4, [%sp + 0x10]
+  CPU 1:  Interrupted!
+          0x00002778: a7800000  mov  0, %asr19  <pwdloop+0>
+  CPU 2:  Interrupted!
+          0x00002778: a7800000  mov  0, %asr19  <pwdloop+0>
+  CPU 3:  Interrupted!
+          0x00002778: a7800000  mov  0, %asr19  <pwdloop+0>
+  
+grmon2> bt cpu0
+  Inside trap/irq
+  
+       %pc          %sp 
+  #0   0x01003af0   0x01033ce0
+  #1   0x010012dc   0x01033d48   <Init+0x18>
+  #2   0x010120d8   0x01033da8   <_Thread_Entry_adaptor_numeric+0x8>
+  #3   0x010166c8   0x01033e08   <_Thread_Handler+0x84>
+  #4   0x01016644   0x01033e68   <_Thread_Handler+0>
+  
+grmon2> bt cpu1
+  
+       %pc          %sp 
+  #0   0x00002778   0x0003fc90   <pwdloop+0>
+  #1   0x0001f30c   0x0003fcf0   <_Thread_Handler+0x48>
+  #2   0x0001f2c4   0x0003fd50   <_Thread_Handler+0>
+  
+grmon2> 
+
+grmon2> batch ampdemo-smp0.tcl
+[...]
+
+grmon2> run
+[...]
+

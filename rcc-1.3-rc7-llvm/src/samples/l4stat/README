@@ -1,0 +1,56 @@
+L4STAT RTEMS demo application
+-----------------------------------------------------------------
+
+1. Overview
+
+  This test sets up the L4stat device to count instructions by the
+  init CPU. 
+  The application periodically polls and prints the counter value. 
+
+
+2. Hardware Requirements
+
+  The hardware to run on must be a GRLIB system with a L4STAT core. 
+
+3. Source code structure
+
+  The code is made up of one module:
+   - test.c - The demo program
+
+  See the header file comments for further details.
+
+4. Running
+
+  First, build the binary by running "make" 
+
+  Second, make sure the L4STAT core is not clock-gated off.
+
+  Third, load and run the "test" binary.
+
+  From grmon:
+    load test
+    run
+
+5. Sample output
+
+grmon2> load test
+  00000000 .text                    180.2kB / 180.2kB   [===============>] 100%
+  0002D0E0 .rtemsroset                 96B              [===============>] 100%
+  0002D140 .data                      6.2kB /   6.2kB   [===============>] 100%
+  Total size: 186.48kB (17.56Mbit/s)
+  Entry point 0x0
+  Image /home/javier/Personal/rtems/rtems-build/src/samples/l4stat/test loaded
+  
+grmon2> run
+-- L4stat RTEMS test application --
+Config: Event: 17
+Polltime: 1 s
+[C] Counter value: 285632
+[C] Counter value: 1422533
+[C] Counter value: 2590911
+[C] Counter value: 3369505
+[C] Counter value: 4533745
+[C] Counter value: 5695693
+[C] Counter value: 6870097
+[C] Counter value: 8018953
+

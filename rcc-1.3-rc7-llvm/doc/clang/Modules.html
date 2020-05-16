@@ -1,0 +1,964 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Modules &mdash; Clang 8 documentation</title>
+    
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/theme_extras.js"></script>
+    <link rel="top" title="Clang 8 documentation" href="index.html" />
+    <link rel="next" title="MSVC compatibility" href="MSVCCompatibility.html" />
+    <link rel="prev" title="Source-based Code Coverage" href="SourceBasedCodeCoverage.html" /> 
+  </head>
+  <body>
+      <div class="header"><h1 class="heading"><a href="index.html">
+          <span>Clang 8 documentation</span></a></h1>
+        <h2 class="heading"><span>Modules</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        «&#160;&#160;<a href="SourceBasedCodeCoverage.html">Source-based Code Coverage</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="MSVCCompatibility.html">MSVC compatibility</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="modules">
+<h1>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id9">Introduction</a><ul>
+<li><a class="reference internal" href="#problems-with-the-current-model" id="id10">Problems with the current model</a></li>
+<li><a class="reference internal" href="#semantic-import" id="id11">Semantic import</a></li>
+<li><a class="reference internal" href="#problems-modules-do-not-solve" id="id12">Problems modules do not solve</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-modules" id="id13">Using Modules</a><ul>
+<li><a class="reference internal" href="#objective-c-import-declaration" id="id14">Objective-C Import declaration</a></li>
+<li><a class="reference internal" href="#includes-as-imports" id="id15">Includes as imports</a></li>
+<li><a class="reference internal" href="#module-maps" id="id16">Module maps</a></li>
+<li><a class="reference internal" href="#compilation-model" id="id17">Compilation model</a></li>
+<li><a class="reference internal" href="#command-line-parameters" id="id18">Command-line parameters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-semantics" id="id19">Module Semantics</a><ul>
+<li><a class="reference internal" href="#macros" id="id20">Macros</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-map-language" id="id21">Module Map Language</a><ul>
+<li><a class="reference internal" href="#lexical-structure" id="id22">Lexical structure</a></li>
+<li><a class="reference internal" href="#module-map-file" id="id23">Module map file</a></li>
+<li><a class="reference internal" href="#module-declaration" id="id24">Module declaration</a><ul>
+<li><a class="reference internal" href="#requires-declaration" id="id25">Requires declaration</a></li>
+<li><a class="reference internal" href="#header-declaration" id="id26">Header declaration</a></li>
+<li><a class="reference internal" href="#umbrella-directory-declaration" id="id27">Umbrella directory declaration</a></li>
+<li><a class="reference internal" href="#submodule-declaration" id="id28">Submodule declaration</a></li>
+<li><a class="reference internal" href="#export-declaration" id="id29">Export declaration</a></li>
+<li><a class="reference internal" href="#re-export-declaration" id="id30">Re-export Declaration</a></li>
+<li><a class="reference internal" href="#use-declaration" id="id31">Use declaration</a></li>
+<li><a class="reference internal" href="#link-declaration" id="id32">Link declaration</a></li>
+<li><a class="reference internal" href="#configuration-macros-declaration" id="id33">Configuration macros declaration</a></li>
+<li><a class="reference internal" href="#conflict-declarations" id="id34">Conflict declarations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#attributes" id="id35">Attributes</a></li>
+<li><a class="reference internal" href="#private-module-map-files" id="id36">Private Module Map Files</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#modularizing-a-platform" id="id37">Modularizing a Platform</a></li>
+<li><a class="reference internal" href="#future-directions" id="id38">Future Directions</a></li>
+<li><a class="reference internal" href="#where-to-learn-more-about-modules" id="id39">Where To Learn More About Modules</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id9">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Most software is built using a number of software libraries, including libraries supplied by the platform, internal libraries built as part of the software itself to provide structure, and third-party libraries. For each library, one needs to access both its interface (API) and its implementation. In the C family of languages, the interface to a library is accessed by including the appropriate header files(s):</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="cp">#include &lt;SomeLib.h&gt;</span>
+</pre></div>
+</div>
+<p>The implementation is handled separately by linking against the appropriate library. For example, by passing <tt class="docutils literal"><span class="pre">-lSomeLib</span></tt> to the linker.</p>
+<p>Modules provide an alternative, simpler way to use software libraries that provides better compile-time scalability and eliminates many of the problems inherent to using the C preprocessor to access the API of a library.</p>
+<div class="section" id="problems-with-the-current-model">
+<h3><a class="toc-backref" href="#id10">Problems with the current model</a><a class="headerlink" href="#problems-with-the-current-model" title="Permalink to this headline">¶</a></h3>
+<p>The <tt class="docutils literal"><span class="pre">#include</span></tt> mechanism provided by the C preprocessor is a very poor way to access the API of a library, for a number of reasons:</p>
+<ul class="simple">
+<li><strong>Compile-time scalability</strong>: Each time a header is included, the
+compiler must preprocess and parse the text in that header and every
+header it includes, transitively. This process must be repeated for
+every translation unit in the application, which involves a huge
+amount of redundant work. In a project with <em>N</em> translation units
+and <em>M</em> headers included in each translation unit, the compiler is
+performing <em>M x N</em> work even though most of the <em>M</em> headers are
+shared among multiple translation units. C++ is particularly bad,
+because the compilation model for templates forces a huge amount of
+code into headers.</li>
+<li><strong>Fragility</strong>: <tt class="docutils literal"><span class="pre">#include</span></tt> directives are treated as textual
+inclusion by the preprocessor, and are therefore subject to any
+active macro definitions at the time of inclusion. If any of the
+active macro definitions happens to collide with a name in the
+library, it can break the library API or cause compilation failures
+in the library header itself. For an extreme example,
+<tt class="docutils literal"><span class="pre">#define</span> <span class="pre">std</span> <span class="pre">&quot;The</span> <span class="pre">C++</span> <span class="pre">Standard&quot;</span></tt> and then include a standard
+library header: the result is a horrific cascade of failures in the
+C++ Standard Library&#8217;s implementation. More subtle real-world
+problems occur when the headers for two different libraries interact
+due to macro collisions, and users are forced to reorder
+<tt class="docutils literal"><span class="pre">#include</span></tt> directives or introduce <tt class="docutils literal"><span class="pre">#undef</span></tt> directives to break
+the (unintended) dependency.</li>
+<li><strong>Conventional workarounds</strong>: C programmers have
+adopted a number of conventions to work around the fragility of the
+C preprocessor model. Include guards, for example, are required for
+the vast majority of headers to ensure that multiple inclusion
+doesn&#8217;t break the compile. Macro names are written with
+<tt class="docutils literal"><span class="pre">LONG_PREFIXED_UPPERCASE_IDENTIFIERS</span></tt> to avoid collisions, and some
+library/framework developers even use <tt class="docutils literal"><span class="pre">__underscored</span></tt> names
+in headers to avoid collisions with &#8220;normal&#8221; names that (by
+convention) shouldn&#8217;t even be macros. These conventions are a
+barrier to entry for developers coming from non-C languages, are
+boilerplate for more experienced developers, and make our headers
+far uglier than they should be.</li>
+<li><strong>Tool confusion</strong>: In a C-based language, it is hard to build tools
+that work well with software libraries, because the boundaries of
+the libraries are not clear. Which headers belong to a particular
+library, and in what order should those headers be included to
+guarantee that they compile correctly? Are the headers C, C++,
+Objective-C++, or one of the variants of these languages? What
+declarations in those headers are actually meant to be part of the
+API, and what declarations are present only because they had to be
+written as part of the header file?</li>
+</ul>
+</div>
+<div class="section" id="semantic-import">
+<h3><a class="toc-backref" href="#id11">Semantic import</a><a class="headerlink" href="#semantic-import" title="Permalink to this headline">¶</a></h3>
+<p>Modules improve access to the API of software libraries by replacing the textual preprocessor inclusion model with a more robust, more efficient semantic model. From the user&#8217;s perspective, the code looks only slightly different, because one uses an <tt class="docutils literal"><span class="pre">import</span></tt> declaration rather than a <tt class="docutils literal"><span class="pre">#include</span></tt> preprocessor directive:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">import</span> <span class="n">std</span><span class="p">.</span><span class="n">io</span><span class="p">;</span> <span class="c1">// pseudo-code; see below for syntax discussion</span>
+</pre></div>
+</div>
+<p>However, this module import behaves quite differently from the corresponding <tt class="docutils literal"><span class="pre">#include</span> <span class="pre">&lt;stdio.h&gt;</span></tt>: when the compiler sees the module import above, it loads a binary representation of the <tt class="docutils literal"><span class="pre">std.io</span></tt> module and makes its API available to the application directly. Preprocessor definitions that precede the import declaration have no impact on the API provided by <tt class="docutils literal"><span class="pre">std.io</span></tt>, because the module itself was compiled as a separate, standalone module. Additionally, any linker flags required to use the <tt class="docutils literal"><span class="pre">std.io</span></tt> module will automatically be provided when the module is imported <a class="footnote-reference" href="#id5" id="id1">[1]</a>
+This semantic import model addresses many of the problems of the preprocessor inclusion model:</p>
+<ul class="simple">
+<li><strong>Compile-time scalability</strong>: The <tt class="docutils literal"><span class="pre">std.io</span></tt> module is only compiled once, and importing the module into a translation unit is a constant-time operation (independent of module system). Thus, the API of each software library is only parsed once, reducing the <em>M x N</em> compilation problem to an <em>M + N</em> problem.</li>
+<li><strong>Fragility</strong>: Each module is parsed as a standalone entity, so it has a consistent preprocessor environment. This completely eliminates the need for <tt class="docutils literal"><span class="pre">__underscored</span></tt> names and similarly defensive tricks. Moreover, the current preprocessor definitions when an import declaration is encountered are ignored, so one software library can not affect how another software library is compiled, eliminating include-order dependencies.</li>
+<li><strong>Tool confusion</strong>: Modules describe the API of software libraries, and tools can reason about and present a module as a representation of that API. Because modules can only be built standalone, tools can rely on the module definition to ensure that they get the complete API for the library. Moreover, modules can specify which languages they work with, so, e.g., one can not accidentally attempt to load a C++ module into a C program.</li>
+</ul>
+</div>
+<div class="section" id="problems-modules-do-not-solve">
+<h3><a class="toc-backref" href="#id12">Problems modules do not solve</a><a class="headerlink" href="#problems-modules-do-not-solve" title="Permalink to this headline">¶</a></h3>
+<p>Many programming languages have a module or package system, and because of the variety of features provided by these languages it is important to define what modules do <em>not</em> do. In particular, all of the following are considered out-of-scope for modules:</p>
+<ul class="simple">
+<li><strong>Rewrite the world&#8217;s code</strong>: It is not realistic to require applications or software libraries to make drastic or non-backward-compatible changes, nor is it feasible to completely eliminate headers. Modules must interoperate with existing software libraries and allow a gradual transition.</li>
+<li><strong>Versioning</strong>: Modules have no notion of version information. Programmers must still rely on the existing versioning mechanisms of the underlying language (if any exist) to version software libraries.</li>
+<li><strong>Namespaces</strong>: Unlike in some languages, modules do not imply any notion of namespaces. Thus, a struct declared in one module will still conflict with a struct of the same name declared in a different module, just as they would if declared in two different headers. This aspect is important for backward compatibility, because (for example) the mangled names of entities in software libraries must not change when introducing modules.</li>
+<li><strong>Binary distribution of modules</strong>: Headers (particularly C++ headers) expose the full complexity of the language. Maintaining a stable binary module format across architectures, compiler versions, and compiler vendors is technically infeasible.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="using-modules">
+<h2><a class="toc-backref" href="#id13">Using Modules</a><a class="headerlink" href="#using-modules" title="Permalink to this headline">¶</a></h2>
+<p>To enable modules, pass the command-line flag <tt class="docutils literal"><span class="pre">-fmodules</span></tt>. This will make any modules-enabled software libraries available as modules as well as introducing any modules-specific syntax. Additional <a class="reference internal" href="#command-line-parameters">command-line parameters</a> are described in a separate section later.</p>
+<div class="section" id="objective-c-import-declaration">
+<h3><a class="toc-backref" href="#id14">Objective-C Import declaration</a><a class="headerlink" href="#objective-c-import-declaration" title="Permalink to this headline">¶</a></h3>
+<p>Objective-C provides syntax for importing a module via an <em>&#64;import declaration</em>, which imports the named module:</p>
+<div class="highlight-python"><pre>@import std;</pre>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">&#64;import</span></tt> declaration above imports the entire contents of the <tt class="docutils literal"><span class="pre">std</span></tt> module (which would contain, e.g., the entire C or C++ standard library) and make its API available within the current translation unit. To import only part of a module, one may use dot syntax to specific a particular submodule, e.g.,</p>
+<div class="highlight-python"><pre>@import std.io;</pre>
+</div>
+<p>Redundant import declarations are ignored, and one is free to import modules at any point within the translation unit, so long as the import declaration is at global scope.</p>
+<p>At present, there is no C or C++ syntax for import declarations. Clang
+will track the modules proposal in the C++ committee. See the section
+<a class="reference internal" href="#includes-as-imports">Includes as imports</a> to see how modules get imported today.</p>
+</div>
+<div class="section" id="includes-as-imports">
+<h3><a class="toc-backref" href="#id15">Includes as imports</a><a class="headerlink" href="#includes-as-imports" title="Permalink to this headline">¶</a></h3>
+<p>The primary user-level feature of modules is the import operation, which provides access to the API of software libraries. However, today&#8217;s programs make extensive use of <tt class="docutils literal"><span class="pre">#include</span></tt>, and it is unrealistic to assume that all of this code will change overnight. Instead, modules automatically translate <tt class="docutils literal"><span class="pre">#include</span></tt> directives into the corresponding module import. For example, the include directive</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+</pre></div>
+</div>
+<p>will be automatically mapped to an import of the module <tt class="docutils literal"><span class="pre">std.io</span></tt>. Even with specific <tt class="docutils literal"><span class="pre">import</span></tt> syntax in the language, this particular feature is important for both adoption and backward compatibility: automatic translation of <tt class="docutils literal"><span class="pre">#include</span></tt> to <tt class="docutils literal"><span class="pre">import</span></tt> allows an application to get the benefits of modules (for all modules-enabled libraries) without any changes to the application itself. Thus, users can easily use modules with one compiler while falling back to the preprocessor-inclusion mechanism with other compilers.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The automatic mapping of <tt class="docutils literal"><span class="pre">#include</span></tt> to <tt class="docutils literal"><span class="pre">import</span></tt> also solves an implementation problem: importing a module with a definition of some entity (say, a <tt class="docutils literal"><span class="pre">struct</span> <span class="pre">Point</span></tt>) and then parsing a header containing another definition of <tt class="docutils literal"><span class="pre">struct</span> <span class="pre">Point</span></tt> would cause a redefinition error, even if it is the same <tt class="docutils literal"><span class="pre">struct</span> <span class="pre">Point</span></tt>. By mapping <tt class="docutils literal"><span class="pre">#include</span></tt> to <tt class="docutils literal"><span class="pre">import</span></tt>, the compiler can guarantee that it always sees just the already-parsed definition from the module.</p>
+</div>
+<p>While building a module, <tt class="docutils literal"><span class="pre">#include_next</span></tt> is also supported, with one caveat.
+The usual behavior of <tt class="docutils literal"><span class="pre">#include_next</span></tt> is to search for the specified filename
+in the list of include paths, starting from the path <em>after</em> the one
+in which the current file was found.
+Because files listed in module maps are not found through include paths, a
+different strategy is used for <tt class="docutils literal"><span class="pre">#include_next</span></tt> directives in such files: the
+list of include paths is searched for the specified header name, to find the
+first include path that would refer to the current file. <tt class="docutils literal"><span class="pre">#include_next</span></tt> is
+interpreted as if the current file had been found in that path.
+If this search finds a file named by a module map, the <tt class="docutils literal"><span class="pre">#include_next</span></tt>
+directive is translated into an import, just like for a <tt class="docutils literal"><span class="pre">#include</span></tt>
+directive.``</p>
+</div>
+<div class="section" id="module-maps">
+<h3><a class="toc-backref" href="#id16">Module maps</a><a class="headerlink" href="#module-maps" title="Permalink to this headline">¶</a></h3>
+<p>The crucial link between modules and headers is described by a <em>module map</em>, which describes how a collection of existing headers maps on to the (logical) structure of a module. For example, one could imagine a module <tt class="docutils literal"><span class="pre">std</span></tt> covering the C standard library. Each of the C standard library headers (<tt class="docutils literal"><span class="pre">&lt;stdio.h&gt;</span></tt>, <tt class="docutils literal"><span class="pre">&lt;stdlib.h&gt;</span></tt>, <tt class="docutils literal"><span class="pre">&lt;math.h&gt;</span></tt>, etc.) would contribute to the <tt class="docutils literal"><span class="pre">std</span></tt> module, by placing their respective APIs into the corresponding submodule (<tt class="docutils literal"><span class="pre">std.io</span></tt>, <tt class="docutils literal"><span class="pre">std.lib</span></tt>, <tt class="docutils literal"><span class="pre">std.math</span></tt>, etc.). Having a list of the headers that are part of the <tt class="docutils literal"><span class="pre">std</span></tt> module allows the compiler to build the <tt class="docutils literal"><span class="pre">std</span></tt> module as a standalone entity, and having the mapping from header names to (sub)modules allows the automatic translation of <tt class="docutils literal"><span class="pre">#include</span></tt> directives to module imports.</p>
+<p>Module maps are specified as separate files (each named <tt class="docutils literal"><span class="pre">module.modulemap</span></tt>) alongside the headers they describe, which allows them to be added to existing software libraries without having to change the library headers themselves (in most cases <a class="footnote-reference" href="#id6" id="id2">[2]</a>). The actual <a class="reference internal" href="#module-map-language">Module map language</a> is described in a later section.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To actually see any benefits from modules, one first has to introduce module maps for the underlying C standard library and the libraries and headers on which it depends. The section <a class="reference internal" href="#modularizing-a-platform">Modularizing a Platform</a> describes the steps one must take to write these module maps.</p>
+</div>
+<p>One can use module maps without modules to check the integrity of the use of header files. To do this, use the <tt class="docutils literal"><span class="pre">-fimplicit-module-maps</span></tt> option instead of the <tt class="docutils literal"><span class="pre">-fmodules</span></tt> option, or use <tt class="docutils literal"><span class="pre">-fmodule-map-file=</span></tt> option to explicitly specify the module map files to load.</p>
+</div>
+<div class="section" id="compilation-model">
+<h3><a class="toc-backref" href="#id17">Compilation model</a><a class="headerlink" href="#compilation-model" title="Permalink to this headline">¶</a></h3>
+<p>The binary representation of modules is automatically generated by the compiler on an as-needed basis. When a module is imported (e.g., by an <tt class="docutils literal"><span class="pre">#include</span></tt> of one of the module&#8217;s headers), the compiler will spawn a second instance of itself <a class="footnote-reference" href="#id7" id="id3">[3]</a>, with a fresh preprocessing context <a class="footnote-reference" href="#id8" id="id4">[4]</a>, to parse just the headers in that module. The resulting Abstract Syntax Tree (AST) is then persisted into the binary representation of the module that is then loaded into translation unit where the module import was encountered.</p>
+<p>The binary representation of modules is persisted in the <em>module cache</em>. Imports of a module will first query the module cache and, if a binary representation of the required module is already available, will load that representation directly. Thus, a module&#8217;s headers will only be parsed once per language configuration, rather than once per translation unit that uses the module.</p>
+<p>Modules maintain references to each of the headers that were part of the module build. If any of those headers changes, or if any of the modules on which a module depends change, then the module will be (automatically) recompiled. The process should never require any user intervention.</p>
+</div>
+<div class="section" id="command-line-parameters">
+<h3><a class="toc-backref" href="#id18">Command-line parameters</a><a class="headerlink" href="#command-line-parameters" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">-fmodules</span></tt></dt>
+<dd>Enable the modules feature.</dd>
+<dt><tt class="docutils literal"><span class="pre">-fbuiltin-module-map</span></tt></dt>
+<dd>Load the Clang builtins module map file. (Equivalent to <tt class="docutils literal"><span class="pre">-fmodule-map-file=&lt;resource</span> <span class="pre">dir&gt;/include/module.modulemap</span></tt>)</dd>
+<dt><tt class="docutils literal"><span class="pre">-fimplicit-module-maps</span></tt></dt>
+<dd>Enable implicit search for module map files named <tt class="docutils literal"><span class="pre">module.modulemap</span></tt> and similar. This option is implied by <tt class="docutils literal"><span class="pre">-fmodules</span></tt>. If this is disabled with <tt class="docutils literal"><span class="pre">-fno-implicit-module-maps</span></tt>, module map files will only be loaded if they are explicitly specified via <tt class="docutils literal"><span class="pre">-fmodule-map-file</span></tt> or transitively used by another module map file.</dd>
+<dt><tt class="docutils literal"><span class="pre">-fmodules-cache-path=&lt;directory&gt;</span></tt></dt>
+<dd>Specify the path to the modules cache. If not provided, Clang will select a system-appropriate default.</dd>
+<dt><tt class="docutils literal"><span class="pre">-fno-autolink</span></tt></dt>
+<dd>Disable automatic linking against the libraries associated with imported modules.</dd>
+<dt><tt class="docutils literal"><span class="pre">-fmodules-ignore-macro=macroname</span></tt></dt>
+<dd>Instruct modules to ignore the named macro when selecting an appropriate module variant. Use this for macros defined on the command line that don&#8217;t affect how modules are built, to improve sharing of compiled module files.</dd>
+<dt><tt class="docutils literal"><span class="pre">-fmodules-prune-interval=seconds</span></tt></dt>
+<dd>Specify the minimum delay (in seconds) between attempts to prune the module cache. Module cache pruning attempts to clear out old, unused module files so that the module cache itself does not grow without bound. The default delay is large (604,800 seconds, or 7 days) because this is an expensive operation. Set this value to 0 to turn off pruning.</dd>
+<dt><tt class="docutils literal"><span class="pre">-fmodules-prune-after=seconds</span></tt></dt>
+<dd>Specify the minimum time (in seconds) for which a file in the module cache must be unused (according to access time) before module pruning will remove it. The default delay is large (2,678,400 seconds, or 31 days) to avoid excessive module rebuilding.</dd>
+<dt><tt class="docutils literal"><span class="pre">-module-file-info</span> <span class="pre">&lt;module</span> <span class="pre">file</span> <span class="pre">name&gt;</span></tt></dt>
+<dd>Debugging aid that prints information about a given module file (with a <tt class="docutils literal"><span class="pre">.pcm</span></tt> extension), including the language and preprocessor options that particular module variant was built with.</dd>
+<dt><tt class="docutils literal"><span class="pre">-fmodules-decluse</span></tt></dt>
+<dd>Enable checking of module <tt class="docutils literal"><span class="pre">use</span></tt> declarations.</dd>
+<dt><tt class="docutils literal"><span class="pre">-fmodule-name=module-id</span></tt></dt>
+<dd>Consider a source file as a part of the given module.</dd>
+<dt><tt class="docutils literal"><span class="pre">-fmodule-map-file=&lt;file&gt;</span></tt></dt>
+<dd>Load the given module map file if a header from its directory or one of its subdirectories is loaded.</dd>
+<dt><tt class="docutils literal"><span class="pre">-fmodules-search-all</span></tt></dt>
+<dd>If a symbol is not found, search modules referenced in the current module maps but not imported for symbols, so the error message can reference the module by name.  Note that if the global module index has not been built before, this might take some time as it needs to build all the modules.  Note that this option doesn&#8217;t apply in module builds, to avoid the recursion.</dd>
+<dt><tt class="docutils literal"><span class="pre">-fno-implicit-modules</span></tt></dt>
+<dd>All modules used by the build must be specified with <tt class="docutils literal"><span class="pre">-fmodule-file</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">-fmodule-file=[&lt;name&gt;=]&lt;file&gt;</span></tt></dt>
+<dd>Specify the mapping of module names to precompiled module files. If the
+name is omitted, then the module file is loaded whether actually required
+or not. If the name is specified, then the mapping is treated as another
+prebuilt module search mechanism (in addition to <tt class="docutils literal"><span class="pre">-fprebuilt-module-path</span></tt>)
+and the module is only loaded if required. Note that in this case the
+specified file also overrides this module&#8217;s paths that might be embedded
+in other precompiled module files.</dd>
+<dt><tt class="docutils literal"><span class="pre">-fprebuilt-module-path=&lt;directory&gt;</span></tt></dt>
+<dd>Specify the path to the prebuilt modules. If specified, we will look for modules in this directory for a given top-level module name. We don&#8217;t need a module map for loading prebuilt modules in this directory and the compiler will not try to rebuild these modules. This can be specified multiple times.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="module-semantics">
+<h2><a class="toc-backref" href="#id19">Module Semantics</a><a class="headerlink" href="#module-semantics" title="Permalink to this headline">¶</a></h2>
+<p>Modules are modeled as if each submodule were a separate translation unit, and a module import makes names from the other translation unit visible. Each submodule starts with a new preprocessor state and an empty translation unit.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This behavior is currently only approximated when building a module with submodules. Entities within a submodule that has already been built are visible when building later submodules in that module. This can lead to fragile modules that depend on the build order used for the submodules of the module, and should not be relied upon. This behavior is subject to change.</p>
+</div>
+<p>As an example, in C, this implies that if two structs are defined in different submodules with the same name, those two types are distinct types (but may be <em>compatible</em> types if their definitions match). In C++, two structs defined with the same name in different submodules are the <em>same</em> type, and must be equivalent under C++&#8217;s One Definition Rule.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Clang currently only performs minimal checking for violations of the One Definition Rule.</p>
+</div>
+<p>If any submodule of a module is imported into any part of a program, the entire top-level module is considered to be part of the program. As a consequence of this, Clang may diagnose conflicts between an entity declared in an unimported submodule and an entity declared in the current translation unit, and Clang may inline or devirtualize based on knowledge from unimported submodules.</p>
+<div class="section" id="macros">
+<h3><a class="toc-backref" href="#id20">Macros</a><a class="headerlink" href="#macros" title="Permalink to this headline">¶</a></h3>
+<p>The C and C++ preprocessor assumes that the input text is a single linear buffer, but with modules this is not the case. It is possible to import two modules that have conflicting definitions for a macro (or where one <tt class="docutils literal"><span class="pre">#define</span></tt>s a macro and the other <tt class="docutils literal"><span class="pre">#undef</span></tt>ines it). The rules for handling macro definitions in the presence of modules are as follows:</p>
+<ul class="simple">
+<li>Each definition and undefinition of a macro is considered to be a distinct entity.</li>
+<li>Such entities are <em>visible</em> if they are from the current submodule or translation unit, or if they were exported from a submodule that has been imported.</li>
+<li>A <tt class="docutils literal"><span class="pre">#define</span> <span class="pre">X</span></tt> or <tt class="docutils literal"><span class="pre">#undef</span> <span class="pre">X</span></tt> directive <em>overrides</em> all definitions of <tt class="docutils literal"><span class="pre">X</span></tt> that are visible at the point of the directive.</li>
+<li>A <tt class="docutils literal"><span class="pre">#define</span></tt> or <tt class="docutils literal"><span class="pre">#undef</span></tt> directive is <em>active</em> if it is visible and no visible directive overrides it.</li>
+<li>A set of macro directives is <em>consistent</em> if it consists of only <tt class="docutils literal"><span class="pre">#undef</span></tt> directives, or if all <tt class="docutils literal"><span class="pre">#define</span></tt> directives in the set define the macro name to the same sequence of tokens (following the usual rules for macro redefinitions).</li>
+<li>If a macro name is used and the set of active directives is not consistent, the program is ill-formed. Otherwise, the (unique) meaning of the macro name is used.</li>
+</ul>
+<p>For example, suppose:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">&lt;stdio.h&gt;</span></tt> defines a macro <tt class="docutils literal"><span class="pre">getc</span></tt> (and exports its <tt class="docutils literal"><span class="pre">#define</span></tt>)</li>
+<li><tt class="docutils literal"><span class="pre">&lt;cstdio&gt;</span></tt> imports the <tt class="docutils literal"><span class="pre">&lt;stdio.h&gt;</span></tt> module and undefines the macro (and exports its <tt class="docutils literal"><span class="pre">#undef</span></tt>)</li>
+</ul>
+<p>The <tt class="docutils literal"><span class="pre">#undef</span></tt> overrides the <tt class="docutils literal"><span class="pre">#define</span></tt>, and a source file that imports both modules <em>in any order</em> will not see <tt class="docutils literal"><span class="pre">getc</span></tt> defined as a macro.</p>
+</div>
+</div>
+<div class="section" id="module-map-language">
+<h2><a class="toc-backref" href="#id21">Module Map Language</a><a class="headerlink" href="#module-map-language" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The module map language is not currently guaranteed to be stable between major revisions of Clang.</p>
+</div>
+<p>The module map language describes the mapping from header files to the
+logical structure of modules. To enable support for using a library as
+a module, one must write a <tt class="docutils literal"><span class="pre">module.modulemap</span></tt> file for that library. The
+<tt class="docutils literal"><span class="pre">module.modulemap</span></tt> file is placed alongside the header files themselves,
+and is written in the module map language described below.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For compatibility with previous releases, if a module map file named
+<tt class="docutils literal"><span class="pre">module.modulemap</span></tt> is not found, Clang will also search for a file named
+<tt class="docutils literal"><span class="pre">module.map</span></tt>. This behavior is deprecated and we plan to eventually
+remove it.</p>
+</div>
+<p>As an example, the module map file for the C standard library might look a bit like this:</p>
+<div class="highlight-python"><pre>module std [system] [extern_c] {
+  module assert {
+    textual header "assert.h"
+    header "bits/assert-decls.h"
+    export *
+  }
+
+  module complex {
+    header "complex.h"
+    export *
+  }
+
+  module ctype {
+    header "ctype.h"
+    export *
+  }
+
+  module errno {
+    header "errno.h"
+    header "sys/errno.h"
+    export *
+  }
+
+  module fenv {
+    header "fenv.h"
+    export *
+  }
+
+  // ...more headers follow...
+}</pre>
+</div>
+<p>Here, the top-level module <tt class="docutils literal"><span class="pre">std</span></tt> encompasses the whole C standard library. It has a number of submodules containing different parts of the standard library: <tt class="docutils literal"><span class="pre">complex</span></tt> for complex numbers, <tt class="docutils literal"><span class="pre">ctype</span></tt> for character types, etc. Each submodule lists one of more headers that provide the contents for that submodule. Finally, the <tt class="docutils literal"><span class="pre">export</span> <span class="pre">*</span></tt> command specifies that anything included by that submodule will be automatically re-exported.</p>
+<div class="section" id="lexical-structure">
+<h3><a class="toc-backref" href="#id22">Lexical structure</a><a class="headerlink" href="#lexical-structure" title="Permalink to this headline">¶</a></h3>
+<p>Module map files use a simplified form of the C99 lexer, with the same rules for identifiers, tokens, string literals, <tt class="docutils literal"><span class="pre">/*</span> <span class="pre">*/</span></tt> and <tt class="docutils literal"><span class="pre">//</span></tt> comments. The module map language has the following reserved words; all other C identifiers are valid identifiers.</p>
+<pre class="literal-block">
+<tt class="docutils literal"><span class="pre">config_macros</span></tt> <tt class="docutils literal"><span class="pre">export_as</span></tt>  <tt class="docutils literal"><span class="pre">private</span></tt>
+<tt class="docutils literal"><span class="pre">conflict</span></tt>      <tt class="docutils literal"><span class="pre">framework</span></tt>  <tt class="docutils literal"><span class="pre">requires</span></tt>
+<tt class="docutils literal"><span class="pre">exclude</span></tt>       <tt class="docutils literal"><span class="pre">header</span></tt>     <tt class="docutils literal"><span class="pre">textual</span></tt>
+<tt class="docutils literal"><span class="pre">explicit</span></tt>      <tt class="docutils literal"><span class="pre">link</span></tt>       <tt class="docutils literal"><span class="pre">umbrella</span></tt>
+<tt class="docutils literal"><span class="pre">extern</span></tt>        <tt class="docutils literal"><span class="pre">module</span></tt>     <tt class="docutils literal"><span class="pre">use</span></tt>
+<tt class="docutils literal"><span class="pre">export</span></tt>
+</pre>
+</div>
+<div class="section" id="module-map-file">
+<h3><a class="toc-backref" href="#id23">Module map file</a><a class="headerlink" href="#module-map-file" title="Permalink to this headline">¶</a></h3>
+<p>A module map file consists of a series of module declarations:</p>
+<pre class="literal-block">
+<em>module-map-file</em>:
+  <em>module-declaration*</em>
+</pre>
+<p>Within a module map file, modules are referred to by a <em>module-id</em>, which uses periods to separate each part of a module&#8217;s name:</p>
+<pre class="literal-block">
+<em>module-id</em>:
+  <em>identifier</em> ('.' <em>identifier</em>)*
+</pre>
+</div>
+<div class="section" id="module-declaration">
+<h3><a class="toc-backref" href="#id24">Module declaration</a><a class="headerlink" href="#module-declaration" title="Permalink to this headline">¶</a></h3>
+<p>A module declaration describes a module, including the headers that contribute to that module, its submodules, and other aspects of the module.</p>
+<pre class="literal-block">
+<em>module-declaration</em>:
+  <tt class="docutils literal"><span class="pre">explicit</span></tt><sub>opt</sub> <tt class="docutils literal"><span class="pre">framework</span></tt><sub>opt</sub> <tt class="docutils literal"><span class="pre">module</span></tt> <em>module-id</em> <em>attributes</em><sub>opt</sub> '{' <em>module-member*</em> '}'
+  <tt class="docutils literal"><span class="pre">extern</span></tt> <tt class="docutils literal"><span class="pre">module</span></tt> <em>module-id</em> <em>string-literal</em>
+</pre>
+<p>The <em>module-id</em> should consist of only a single <em>identifier</em>, which provides the name of the module being defined. Each module shall have a single definition.</p>
+<p>The <tt class="docutils literal"><span class="pre">explicit</span></tt> qualifier can only be applied to a submodule, i.e., a module that is nested within another module. The contents of explicit submodules are only made available when the submodule itself was explicitly named in an import declaration or was re-exported from an imported module.</p>
+<p>The <tt class="docutils literal"><span class="pre">framework</span></tt> qualifier specifies that this module corresponds to a Darwin-style framework. A Darwin-style framework (used primarily on Mac OS X and iOS) is contained entirely in directory <tt class="docutils literal"><span class="pre">Name.framework</span></tt>, where <tt class="docutils literal"><span class="pre">Name</span></tt> is the name of the framework (and, therefore, the name of the module). That directory has the following layout:</p>
+<div class="highlight-python"><pre>Name.framework/
+  Modules/module.modulemap  Module map for the framework
+  Headers/                  Subdirectory containing framework headers
+  PrivateHeaders/           Subdirectory containing framework private headers
+  Frameworks/               Subdirectory containing embedded frameworks
+  Resources/                Subdirectory containing additional resources
+  Name                      Symbolic link to the shared library for the framework</pre>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">system</span></tt> attribute specifies that the module is a system module. When a system module is rebuilt, all of the module&#8217;s headers will be considered system headers, which suppresses warnings. This is equivalent to placing <tt class="docutils literal"><span class="pre">#pragma</span> <span class="pre">GCC</span> <span class="pre">system_header</span></tt> in each of the module&#8217;s headers. The form of attributes is described in the section <a class="reference internal" href="#attributes">Attributes</a>, below.</p>
+<p>The <tt class="docutils literal"><span class="pre">extern_c</span></tt> attribute specifies that the module contains C code that can be used from within C++. When such a module is built for use in C++ code, all of the module&#8217;s headers will be treated as if they were contained within an implicit <tt class="docutils literal"><span class="pre">extern</span> <span class="pre">&quot;C&quot;</span></tt> block. An import for a module with this attribute can appear within an <tt class="docutils literal"><span class="pre">extern</span> <span class="pre">&quot;C&quot;</span></tt> block. No other restrictions are lifted, however: the module currently cannot be imported within an <tt class="docutils literal"><span class="pre">extern</span> <span class="pre">&quot;C&quot;</span></tt> block in a namespace.</p>
+<p>The <tt class="docutils literal"><span class="pre">no_undeclared_includes</span></tt> attribute specifies that the module can only reach non-modular headers and headers from used modules. Since some headers could be present in more than one search path and map to different modules in each path, this mechanism helps clang to find the right header, i.e., prefer the one for the current module or in a submodule instead of the first usual match in the search paths.</p>
+<p>Modules can have a number of different kinds of members, each of which is described below:</p>
+<pre class="literal-block">
+<em>module-member</em>:
+  <em>requires-declaration</em>
+  <em>header-declaration</em>
+  <em>umbrella-dir-declaration</em>
+  <em>submodule-declaration</em>
+  <em>export-declaration</em>
+  <em>export-as-declaration</em>
+  <em>use-declaration</em>
+  <em>link-declaration</em>
+  <em>config-macros-declaration</em>
+  <em>conflict-declaration</em>
+</pre>
+<p>An extern module references a module defined by the <em>module-id</em> in a file given by the <em>string-literal</em>. The file can be referenced either by an absolute path or by a path relative to the current map file.</p>
+<div class="section" id="requires-declaration">
+<h4><a class="toc-backref" href="#id25">Requires declaration</a><a class="headerlink" href="#requires-declaration" title="Permalink to this headline">¶</a></h4>
+<p>A <em>requires-declaration</em> specifies the requirements that an importing translation unit must satisfy to use the module.</p>
+<pre class="literal-block">
+<em>requires-declaration</em>:
+  <tt class="docutils literal"><span class="pre">requires</span></tt> <em>feature-list</em>
+
+<em>feature-list</em>:
+  <em>feature</em> (',' <em>feature</em>)*
+
+<em>feature</em>:
+  <tt class="docutils literal"><span class="pre">!</span></tt><sub>opt</sub> <em>identifier</em>
+</pre>
+<p>The requirements clause allows specific modules or submodules to specify that they are only accessible with certain language dialects, platforms, environments and target specific features. The feature list is a set of identifiers, defined below. If any of the features is not available in a given translation unit, that translation unit shall not import the module. When building a module for use by a compilation, submodules requiring unavailable features are ignored. The optional <tt class="docutils literal"><span class="pre">!</span></tt> indicates that a feature is incompatible with the module.</p>
+<p>The following features are defined:</p>
+<dl class="docutils">
+<dt>altivec</dt>
+<dd>The target supports AltiVec.</dd>
+<dt>blocks</dt>
+<dd>The &#8220;blocks&#8221; language feature is available.</dd>
+<dt>coroutines</dt>
+<dd>Support for the coroutines TS is available.</dd>
+<dt>cplusplus</dt>
+<dd>C++ support is available.</dd>
+<dt>cplusplus11</dt>
+<dd>C++11 support is available.</dd>
+<dt>cplusplus14</dt>
+<dd>C++14 support is available.</dd>
+<dt>cplusplus17</dt>
+<dd>C++17 support is available.</dd>
+<dt>c99</dt>
+<dd>C99 support is available.</dd>
+<dt>c11</dt>
+<dd>C11 support is available.</dd>
+<dt>c17</dt>
+<dd>C17 support is available.</dd>
+<dt>freestanding</dt>
+<dd>A freestanding environment is available.</dd>
+<dt>gnuinlineasm</dt>
+<dd>GNU inline ASM is available.</dd>
+<dt>objc</dt>
+<dd>Objective-C support is available.</dd>
+<dt>objc_arc</dt>
+<dd>Objective-C Automatic Reference Counting (ARC) is available</dd>
+<dt>opencl</dt>
+<dd>OpenCL is available</dd>
+<dt>tls</dt>
+<dd>Thread local storage is available.</dd>
+<dt><em>target feature</em></dt>
+<dd>A specific target feature (e.g., <tt class="docutils literal"><span class="pre">sse4</span></tt>, <tt class="docutils literal"><span class="pre">avx</span></tt>, <tt class="docutils literal"><span class="pre">neon</span></tt>) is available.</dd>
+<dt><em>platform/os</em></dt>
+<dd>A os/platform variant (e.g. <tt class="docutils literal"><span class="pre">freebsd</span></tt>, <tt class="docutils literal"><span class="pre">win32</span></tt>, <tt class="docutils literal"><span class="pre">windows</span></tt>, <tt class="docutils literal"><span class="pre">linux</span></tt>, <tt class="docutils literal"><span class="pre">ios</span></tt>, <tt class="docutils literal"><span class="pre">macos</span></tt>, <tt class="docutils literal"><span class="pre">iossimulator</span></tt>) is available.</dd>
+<dt><em>environment</em></dt>
+<dd>A environment variant (e.g. <tt class="docutils literal"><span class="pre">gnu</span></tt>, <tt class="docutils literal"><span class="pre">gnueabi</span></tt>, <tt class="docutils literal"><span class="pre">android</span></tt>, <tt class="docutils literal"><span class="pre">msvc</span></tt>) is available.</dd>
+</dl>
+<p><strong>Example:</strong> The <tt class="docutils literal"><span class="pre">std</span></tt> module can be extended to also include C++ and C++11 headers using a <em>requires-declaration</em>:</p>
+<div class="highlight-python"><pre>module std {
+   // C standard library...
+
+   module vector {
+     requires cplusplus
+     header "vector"
+   }
+
+   module type_traits {
+     requires cplusplus11
+     header "type_traits"
+   }
+ }</pre>
+</div>
+</div>
+<div class="section" id="header-declaration">
+<h4><a class="toc-backref" href="#id26">Header declaration</a><a class="headerlink" href="#header-declaration" title="Permalink to this headline">¶</a></h4>
+<p>A header declaration specifies that a particular header is associated with the enclosing module.</p>
+<pre class="literal-block">
+<em>header-declaration</em>:
+  <tt class="docutils literal"><span class="pre">private</span></tt><sub>opt</sub> <tt class="docutils literal"><span class="pre">textual</span></tt><sub>opt</sub> <tt class="docutils literal"><span class="pre">header</span></tt> <em>string-literal</em> <em>header-attrs</em><sub>opt</sub>
+  <tt class="docutils literal"><span class="pre">umbrella</span></tt> <tt class="docutils literal"><span class="pre">header</span></tt> <em>string-literal</em> <em>header-attrs</em><sub>opt</sub>
+  <tt class="docutils literal"><span class="pre">exclude</span></tt> <tt class="docutils literal"><span class="pre">header</span></tt> <em>string-literal</em> <em>header-attrs</em><sub>opt</sub>
+
+<em>header-attrs</em>:
+  '{' <em>header-attr*</em> '}'
+
+<em>header-attr</em>:
+  <tt class="docutils literal"><span class="pre">size</span></tt> <em>integer-literal</em>
+  <tt class="docutils literal"><span class="pre">mtime</span></tt> <em>integer-literal</em>
+</pre>
+<p>A header declaration that does not contain <tt class="docutils literal"><span class="pre">exclude</span></tt> nor <tt class="docutils literal"><span class="pre">textual</span></tt> specifies a header that contributes to the enclosing module. Specifically, when the module is built, the named header will be parsed and its declarations will be (logically) placed into the enclosing submodule.</p>
+<p>A header with the <tt class="docutils literal"><span class="pre">umbrella</span></tt> specifier is called an umbrella header. An umbrella header includes all of the headers within its directory (and any subdirectories), and is typically used (in the <tt class="docutils literal"><span class="pre">#include</span></tt> world) to easily access the full API provided by a particular library. With modules, an umbrella header is a convenient shortcut that eliminates the need to write out <tt class="docutils literal"><span class="pre">header</span></tt> declarations for every library header. A given directory can only contain a single umbrella header.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Any headers not included by the umbrella header should have
+explicit <tt class="docutils literal"><span class="pre">header</span></tt> declarations. Use the
+<tt class="docutils literal"><span class="pre">-Wincomplete-umbrella</span></tt> warning option to ask Clang to complain
+about headers not covered by the umbrella header or the module map.</p>
+</div>
+<p>A header with the <tt class="docutils literal"><span class="pre">private</span></tt> specifier may not be included from outside the module itself.</p>
+<p>A header with the <tt class="docutils literal"><span class="pre">textual</span></tt> specifier will not be compiled when the module is
+built, and will be textually included if it is named by a <tt class="docutils literal"><span class="pre">#include</span></tt>
+directive. However, it is considered to be part of the module for the purpose
+of checking <em>use-declaration</em>s, and must still be a lexically-valid header
+file. In the future, we intend to pre-tokenize such headers and include the
+token sequence within the prebuilt module representation.</p>
+<p>A header with the <tt class="docutils literal"><span class="pre">exclude</span></tt> specifier is excluded from the module. It will not be included when the module is built, nor will it be considered to be part of the module, even if an <tt class="docutils literal"><span class="pre">umbrella</span></tt> header or directory would otherwise make it part of the module.</p>
+<p><strong>Example:</strong> The C header <tt class="docutils literal"><span class="pre">assert.h</span></tt> is an excellent candidate for a textual header, because it is meant to be included multiple times (possibly with different <tt class="docutils literal"><span class="pre">NDEBUG</span></tt> settings). However, declarations within it should typically be split into a separate modular header.</p>
+<div class="highlight-python"><pre>module std [system] {
+  textual header "assert.h"
+}</pre>
+</div>
+<p>A given header shall not be referenced by more than one <em>header-declaration</em>.</p>
+<p>Two <em>header-declaration</em>s, or a <em>header-declaration</em> and a <tt class="docutils literal"><span class="pre">#include</span></tt>, are
+considered to refer to the same file if the paths resolve to the same file
+and the specified <em>header-attr</em>s (if any) match the attributes of that file,
+even if the file is named differently (for instance, by a relative path or
+via symlinks).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The use of <em>header-attr</em>s avoids the need for Clang to speculatively
+<tt class="docutils literal"><span class="pre">stat</span></tt> every header referenced by a module map. It is recommended that
+<em>header-attr</em>s only be used in machine-generated module maps, to avoid
+mismatches between attribute values and the corresponding files.</p>
+</div>
+</div>
+<div class="section" id="umbrella-directory-declaration">
+<h4><a class="toc-backref" href="#id27">Umbrella directory declaration</a><a class="headerlink" href="#umbrella-directory-declaration" title="Permalink to this headline">¶</a></h4>
+<p>An umbrella directory declaration specifies that all of the headers in the specified directory should be included within the module.</p>
+<pre class="literal-block">
+<em>umbrella-dir-declaration</em>:
+  <tt class="docutils literal"><span class="pre">umbrella</span></tt> <em>string-literal</em>
+</pre>
+<p>The <em>string-literal</em> refers to a directory. When the module is built, all of the header files in that directory (and its subdirectories) are included in the module.</p>
+<p>An <em>umbrella-dir-declaration</em> shall not refer to the same directory as the location of an umbrella <em>header-declaration</em>. In other words, only a single kind of umbrella can be specified for a given directory.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Umbrella directories are useful for libraries that have a large number of headers but do not have an umbrella header.</p>
+</div>
+</div>
+<div class="section" id="submodule-declaration">
+<h4><a class="toc-backref" href="#id28">Submodule declaration</a><a class="headerlink" href="#submodule-declaration" title="Permalink to this headline">¶</a></h4>
+<p>Submodule declarations describe modules that are nested within their enclosing module.</p>
+<pre class="literal-block">
+<em>submodule-declaration</em>:
+  <em>module-declaration</em>
+  <em>inferred-submodule-declaration</em>
+</pre>
+<p>A <em>submodule-declaration</em> that is a <em>module-declaration</em> is a nested module. If the <em>module-declaration</em> has a <tt class="docutils literal"><span class="pre">framework</span></tt> specifier, the enclosing module shall have a <tt class="docutils literal"><span class="pre">framework</span></tt> specifier; the submodule&#8217;s contents shall be contained within the subdirectory <tt class="docutils literal"><span class="pre">Frameworks/SubName.framework</span></tt>, where <tt class="docutils literal"><span class="pre">SubName</span></tt> is the name of the submodule.</p>
+<p>A <em>submodule-declaration</em> that is an <em>inferred-submodule-declaration</em> describes a set of submodules that correspond to any headers that are part of the module but are not explicitly described by a <em>header-declaration</em>.</p>
+<pre class="literal-block">
+<em>inferred-submodule-declaration</em>:
+  <tt class="docutils literal"><span class="pre">explicit</span></tt><sub>opt</sub> <tt class="docutils literal"><span class="pre">framework</span></tt><sub>opt</sub> <tt class="docutils literal"><span class="pre">module</span></tt> '*' <em>attributes</em><sub>opt</sub> '{' <em>inferred-submodule-member*</em> '}'
+
+<em>inferred-submodule-member</em>:
+  <tt class="docutils literal"><span class="pre">export</span></tt> '*'
+</pre>
+<p>A module containing an <em>inferred-submodule-declaration</em> shall have either an umbrella header or an umbrella directory. The headers to which the <em>inferred-submodule-declaration</em> applies are exactly those headers included by the umbrella header (transitively) or included in the module because they reside within the umbrella directory (or its subdirectories).</p>
+<p>For each header included by the umbrella header or in the umbrella directory that is not named by a <em>header-declaration</em>, a module declaration is implicitly generated from the <em>inferred-submodule-declaration</em>. The module will:</p>
+<ul class="simple">
+<li>Have the same name as the header (without the file extension)</li>
+<li>Have the <tt class="docutils literal"><span class="pre">explicit</span></tt> specifier, if the <em>inferred-submodule-declaration</em> has the <tt class="docutils literal"><span class="pre">explicit</span></tt> specifier</li>
+<li>Have the <tt class="docutils literal"><span class="pre">framework</span></tt> specifier, if the
+<em>inferred-submodule-declaration</em> has the <tt class="docutils literal"><span class="pre">framework</span></tt> specifier</li>
+<li>Have the attributes specified by the <em>inferred-submodule-declaration</em></li>
+<li>Contain a single <em>header-declaration</em> naming that header</li>
+<li>Contain a single <em>export-declaration</em> <tt class="docutils literal"><span class="pre">export</span> <span class="pre">*</span></tt>, if the <em>inferred-submodule-declaration</em> contains the <em>inferred-submodule-member</em> <tt class="docutils literal"><span class="pre">export</span> <span class="pre">*</span></tt></li>
+</ul>
+<p><strong>Example:</strong> If the subdirectory &#8220;MyLib&#8221; contains the headers <tt class="docutils literal"><span class="pre">A.h</span></tt> and <tt class="docutils literal"><span class="pre">B.h</span></tt>, then the following module map:</p>
+<div class="highlight-python"><pre>module MyLib {
+  umbrella "MyLib"
+  explicit module * {
+    export *
+  }
+}</pre>
+</div>
+<p>is equivalent to the (more verbose) module map:</p>
+<div class="highlight-python"><pre>module MyLib {
+  explicit module A {
+    header "A.h"
+    export *
+  }
+
+  explicit module B {
+    header "B.h"
+    export *
+  }
+}</pre>
+</div>
+</div>
+<div class="section" id="export-declaration">
+<h4><a class="toc-backref" href="#id29">Export declaration</a><a class="headerlink" href="#export-declaration" title="Permalink to this headline">¶</a></h4>
+<p>An <em>export-declaration</em> specifies which imported modules will automatically be re-exported as part of a given module&#8217;s API.</p>
+<pre class="literal-block">
+<em>export-declaration</em>:
+  <tt class="docutils literal"><span class="pre">export</span></tt> <em>wildcard-module-id</em>
+
+<em>wildcard-module-id</em>:
+  <em>identifier</em>
+  '*'
+  <em>identifier</em> '.' <em>wildcard-module-id</em>
+</pre>
+<p>The <em>export-declaration</em> names a module or a set of modules that will be re-exported to any translation unit that imports the enclosing module. Each imported module that matches the <em>wildcard-module-id</em> up to, but not including, the first <tt class="docutils literal"><span class="pre">*</span></tt> will be re-exported.</p>
+<p><strong>Example:</strong> In the following example, importing <tt class="docutils literal"><span class="pre">MyLib.Derived</span></tt> also provides the API for <tt class="docutils literal"><span class="pre">MyLib.Base</span></tt>:</p>
+<div class="highlight-python"><pre>module MyLib {
+  module Base {
+    header "Base.h"
+  }
+
+  module Derived {
+    header "Derived.h"
+    export Base
+  }
+}</pre>
+</div>
+<p>Note that, if <tt class="docutils literal"><span class="pre">Derived.h</span></tt> includes <tt class="docutils literal"><span class="pre">Base.h</span></tt>, one can simply use a wildcard export to re-export everything <tt class="docutils literal"><span class="pre">Derived.h</span></tt> includes:</p>
+<div class="highlight-python"><pre>module MyLib {
+  module Base {
+    header "Base.h"
+  }
+
+  module Derived {
+    header "Derived.h"
+    export *
+  }
+}</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The wildcard export syntax <tt class="docutils literal"><span class="pre">export</span> <span class="pre">*</span></tt> re-exports all of the
+modules that were imported in the actual header file. Because
+<tt class="docutils literal"><span class="pre">#include</span></tt> directives are automatically mapped to module imports,
+<tt class="docutils literal"><span class="pre">export</span> <span class="pre">*</span></tt> provides the same transitive-inclusion behavior
+provided by the C preprocessor, e.g., importing a given module
+implicitly imports all of the modules on which it depends.
+Therefore, liberal use of <tt class="docutils literal"><span class="pre">export</span> <span class="pre">*</span></tt> provides excellent backward
+compatibility for programs that rely on transitive inclusion (i.e.,
+all of them).</p>
+</div>
+</div>
+<div class="section" id="re-export-declaration">
+<h4><a class="toc-backref" href="#id30">Re-export Declaration</a><a class="headerlink" href="#re-export-declaration" title="Permalink to this headline">¶</a></h4>
+<p>An <em>export-as-declaration</em> specifies that the current module will have
+its interface re-exported by the named module.</p>
+<pre class="literal-block">
+<em>export-as-declaration</em>:
+  <tt class="docutils literal"><span class="pre">export_as</span></tt> <em>identifier</em>
+</pre>
+<p>The <em>export-as-declaration</em> names the module that the current
+module will be re-exported through. Only top-level modules
+can be re-exported, and any given module may only be re-exported
+through a single module.</p>
+<p><strong>Example:</strong> In the following example, the module <tt class="docutils literal"><span class="pre">MyFrameworkCore</span></tt>
+will be re-exported via the module <tt class="docutils literal"><span class="pre">MyFramework</span></tt>:</p>
+<div class="highlight-python"><pre>module MyFrameworkCore {
+  export_as MyFramework
+}</pre>
+</div>
+</div>
+<div class="section" id="use-declaration">
+<h4><a class="toc-backref" href="#id31">Use declaration</a><a class="headerlink" href="#use-declaration" title="Permalink to this headline">¶</a></h4>
+<p>A <em>use-declaration</em> specifies another module that the current top-level module
+intends to use. When the option <em>-fmodules-decluse</em> is specified, a module can
+only use other modules that are explicitly specified in this way.</p>
+<pre class="literal-block">
+<em>use-declaration</em>:
+  <tt class="docutils literal"><span class="pre">use</span></tt> <em>module-id</em>
+</pre>
+<p><strong>Example:</strong> In the following example, use of A from C is not declared, so will trigger a warning.</p>
+<div class="highlight-python"><pre>module A {
+  header "a.h"
+}
+
+module B {
+  header "b.h"
+}
+
+module C {
+  header "c.h"
+  use B
+}</pre>
+</div>
+<p>When compiling a source file that implements a module, use the option
+<tt class="docutils literal"><span class="pre">-fmodule-name=module-id</span></tt> to indicate that the source file is logically part
+of that module.</p>
+<p>The compiler at present only applies restrictions to the module directly being built.</p>
+</div>
+<div class="section" id="link-declaration">
+<h4><a class="toc-backref" href="#id32">Link declaration</a><a class="headerlink" href="#link-declaration" title="Permalink to this headline">¶</a></h4>
+<p>A <em>link-declaration</em> specifies a library or framework against which a program should be linked if the enclosing module is imported in any translation unit in that program.</p>
+<pre class="literal-block">
+<em>link-declaration</em>:
+  <tt class="docutils literal"><span class="pre">link</span></tt> <tt class="docutils literal"><span class="pre">framework</span></tt><sub>opt</sub> <em>string-literal</em>
+</pre>
+<p>The <em>string-literal</em> specifies the name of the library or framework against which the program should be linked. For example, specifying &#8220;clangBasic&#8221; would instruct the linker to link with <tt class="docutils literal"><span class="pre">-lclangBasic</span></tt> for a Unix-style linker.</p>
+<p>A <em>link-declaration</em> with the <tt class="docutils literal"><span class="pre">framework</span></tt> specifies that the linker should link against the named framework, e.g., with <tt class="docutils literal"><span class="pre">-framework</span> <span class="pre">MyFramework</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Automatic linking with the <tt class="docutils literal"><span class="pre">link</span></tt> directive is not yet widely
+implemented, because it requires support from both the object file
+format and the linker. The notion is similar to Microsoft Visual
+Studio&#8217;s <tt class="docutils literal"><span class="pre">#pragma</span> <span class="pre">comment(lib...)</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="configuration-macros-declaration">
+<h4><a class="toc-backref" href="#id33">Configuration macros declaration</a><a class="headerlink" href="#configuration-macros-declaration" title="Permalink to this headline">¶</a></h4>
+<p>The <em>config-macros-declaration</em> specifies the set of configuration macros that have an effect on the API of the enclosing module.</p>
+<pre class="literal-block">
+<em>config-macros-declaration</em>:
+  <tt class="docutils literal"><span class="pre">config_macros</span></tt> <em>attributes</em><sub>opt</sub> <em>config-macro-list</em><sub>opt</sub>
+
+<em>config-macro-list</em>:
+  <em>identifier</em> (',' <em>identifier</em>)*
+</pre>
+<p>Each <em>identifier</em> in the <em>config-macro-list</em> specifies the name of a macro. The compiler is required to maintain different variants of the given module for differing definitions of any of the named macros.</p>
+<p>A <em>config-macros-declaration</em> shall only be present on a top-level module, i.e., a module that is not nested within an enclosing module.</p>
+<p>The <tt class="docutils literal"><span class="pre">exhaustive</span></tt> attribute specifies that the list of macros in the <em>config-macros-declaration</em> is exhaustive, meaning that no other macro definition is intended to have an effect on the API of that module.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <tt class="docutils literal"><span class="pre">exhaustive</span></tt> attribute implies that any macro definitions
+for macros not listed as configuration macros should be ignored
+completely when building the module. As an optimization, the
+compiler could reduce the number of unique module variants by not
+considering these non-configuration macros. This optimization is not
+yet implemented in Clang.</p>
+</div>
+<p>A translation unit shall not import the same module under different definitions of the configuration macros.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Clang implements a weak form of this requirement: the definitions
+used for configuration macros are fixed based on the definitions
+provided by the command line. If an import occurs and the definition
+of any configuration macro has changed, the compiler will produce a
+warning (under the control of <tt class="docutils literal"><span class="pre">-Wconfig-macros</span></tt>).</p>
+</div>
+<p><strong>Example:</strong> A logging library might provide different API (e.g., in the form of different definitions for a logging macro) based on the <tt class="docutils literal"><span class="pre">NDEBUG</span></tt> macro setting:</p>
+<div class="highlight-python"><pre>module MyLogger {
+  umbrella header "MyLogger.h"
+  config_macros [exhaustive] NDEBUG
+}</pre>
+</div>
+</div>
+<div class="section" id="conflict-declarations">
+<h4><a class="toc-backref" href="#id34">Conflict declarations</a><a class="headerlink" href="#conflict-declarations" title="Permalink to this headline">¶</a></h4>
+<p>A <em>conflict-declaration</em> describes a case where the presence of two different modules in the same translation unit is likely to cause a problem. For example, two modules may provide similar-but-incompatible functionality.</p>
+<pre class="literal-block">
+<em>conflict-declaration</em>:
+  <tt class="docutils literal"><span class="pre">conflict</span></tt> <em>module-id</em> ',' <em>string-literal</em>
+</pre>
+<p>The <em>module-id</em> of the <em>conflict-declaration</em> specifies the module with which the enclosing module conflicts. The specified module shall not have been imported in the translation unit when the enclosing module is imported.</p>
+<p>The <em>string-literal</em> provides a message to be provided as part of the compiler diagnostic when two modules conflict.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Clang emits a warning (under the control of <tt class="docutils literal"><span class="pre">-Wmodule-conflict</span></tt>)
+when a module conflict is discovered.</p>
+</div>
+<p><strong>Example:</strong></p>
+<div class="highlight-python"><pre>module Conflicts {
+  explicit module A {
+    header "conflict_a.h"
+    conflict B, "we just don't like B"
+  }
+
+  module B {
+    header "conflict_b.h"
+  }
+}</pre>
+</div>
+</div>
+</div>
+<div class="section" id="attributes">
+<h3><a class="toc-backref" href="#id35">Attributes</a><a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<p>Attributes are used in a number of places in the grammar to describe specific behavior of other declarations. The format of attributes is fairly simple.</p>
+<pre class="literal-block">
+<em>attributes</em>:
+  <em>attribute</em> <em>attributes</em><sub>opt</sub>
+
+<em>attribute</em>:
+  '[' <em>identifier</em> ']'
+</pre>
+<p>Any <em>identifier</em> can be used as an attribute, and each declaration specifies what attributes can be applied to it.</p>
+</div>
+<div class="section" id="private-module-map-files">
+<h3><a class="toc-backref" href="#id36">Private Module Map Files</a><a class="headerlink" href="#private-module-map-files" title="Permalink to this headline">¶</a></h3>
+<p>Module map files are typically named <tt class="docutils literal"><span class="pre">module.modulemap</span></tt> and live
+either alongside the headers they describe or in a parent directory of
+the headers they describe. These module maps typically describe all of
+the API for the library.</p>
+<p>However, in some cases, the presence or absence of particular headers
+is used to distinguish between the &#8220;public&#8221; and &#8220;private&#8221; APIs of a
+particular library. For example, a library may contain the headers
+<tt class="docutils literal"><span class="pre">Foo.h</span></tt> and <tt class="docutils literal"><span class="pre">Foo_Private.h</span></tt>, providing public and private APIs,
+respectively. Additionally, <tt class="docutils literal"><span class="pre">Foo_Private.h</span></tt> may only be available on
+some versions of library, and absent in others. One cannot easily
+express this with a single module map file in the library:</p>
+<div class="highlight-python"><pre>module Foo {
+  header "Foo.h"
+  ...
+}
+
+module Foo_Private {
+  header "Foo_Private.h"
+  ...
+}</pre>
+</div>
+<p>because the header <tt class="docutils literal"><span class="pre">Foo_Private.h</span></tt> won&#8217;t always be available. The
+module map file could be customized based on whether
+<tt class="docutils literal"><span class="pre">Foo_Private.h</span></tt> is available or not, but doing so requires custom
+build machinery.</p>
+<p>Private module map files, which are named <tt class="docutils literal"><span class="pre">module.private.modulemap</span></tt>
+(or, for backward compatibility, <tt class="docutils literal"><span class="pre">module_private.map</span></tt>), allow one to
+augment the primary module map file with an additional modules. For
+example, we would split the module map file above into two module map
+files:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="cm">/* module.modulemap */</span>
+<span class="n">module</span> <span class="n">Foo</span> <span class="p">{</span>
+  <span class="n">header</span> <span class="s">&quot;Foo.h&quot;</span>
+<span class="p">}</span>
+
+<span class="cm">/* module.private.modulemap */</span>
+<span class="n">module</span> <span class="n">Foo_Private</span> <span class="p">{</span>
+  <span class="n">header</span> <span class="s">&quot;Foo_Private.h&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>When a <tt class="docutils literal"><span class="pre">module.private.modulemap</span></tt> file is found alongside a
+<tt class="docutils literal"><span class="pre">module.modulemap</span></tt> file, it is loaded after the <tt class="docutils literal"><span class="pre">module.modulemap</span></tt>
+file. In our example library, the <tt class="docutils literal"><span class="pre">module.private.modulemap</span></tt> file
+would be available when <tt class="docutils literal"><span class="pre">Foo_Private.h</span></tt> is available, making it
+easier to split a library&#8217;s public and private APIs along header
+boundaries.</p>
+<p>When writing a private module as part of a <em>framework</em>, it&#8217;s recommended that:</p>
+<ul class="simple">
+<li>Headers for this module are present in the <tt class="docutils literal"><span class="pre">PrivateHeaders</span></tt> framework
+subdirectory.</li>
+<li>The private module is defined as a <em>top level module</em> with the name of the
+public framework prefixed, like <tt class="docutils literal"><span class="pre">Foo_Private</span></tt> above. Clang has extra logic
+to work with this naming, using <tt class="docutils literal"><span class="pre">FooPrivate</span></tt> or <tt class="docutils literal"><span class="pre">Foo.Private</span></tt> (submodule)
+trigger warnings and might not work as expected.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="modularizing-a-platform">
+<h2><a class="toc-backref" href="#id37">Modularizing a Platform</a><a class="headerlink" href="#modularizing-a-platform" title="Permalink to this headline">¶</a></h2>
+<p>To get any benefit out of modules, one needs to introduce module maps for software libraries starting at the bottom of the stack. This typically means introducing a module map covering the operating system&#8217;s headers and the C standard library headers (in <tt class="docutils literal"><span class="pre">/usr/include</span></tt>, for a Unix system).</p>
+<p>The module maps will be written using the <a class="reference internal" href="#module-map-language">module map language</a>, which provides the tools necessary to describe the mapping between headers and modules. Because the set of headers differs from one system to the next, the module map will likely have to be somewhat customized for, e.g., a particular distribution and version of the operating system. Moreover, the system headers themselves may require some modification, if they exhibit any anti-patterns that break modules. Such common patterns are described below.</p>
+<dl class="docutils">
+<dt><strong>Macro-guarded copy-and-pasted definitions</strong></dt>
+<dd><p class="first">System headers vend core types such as <tt class="docutils literal"><span class="pre">size_t</span></tt> for users. These types are often needed in a number of system headers, and are almost trivial to write. Hence, it is fairly common to see a definition such as the following copy-and-pasted throughout the headers:</p>
+<div class="highlight-python"><pre>#ifndef _SIZE_T
+#define _SIZE_T
+typedef __SIZE_TYPE__ size_t;
+#endif</pre>
+</div>
+<p class="last">Unfortunately, when modules compiles all of the C library headers together into a single module, only the first actual type definition of <tt class="docutils literal"><span class="pre">size_t</span></tt> will be visible, and then only in the submodule corresponding to the lucky first header. Any other headers that have copy-and-pasted versions of this pattern will <em>not</em> have a definition of <tt class="docutils literal"><span class="pre">size_t</span></tt>. Importing the submodule corresponding to one of those headers will therefore not yield <tt class="docutils literal"><span class="pre">size_t</span></tt> as part of the API, because it wasn&#8217;t there when the header was parsed. The fix for this problem is either to pull the copied declarations into a common header that gets included everywhere <tt class="docutils literal"><span class="pre">size_t</span></tt> is part of the API, or to eliminate the <tt class="docutils literal"><span class="pre">#ifndef</span></tt> and redefine the <tt class="docutils literal"><span class="pre">size_t</span></tt> type. The latter works for C++ headers and C11, but will cause an error for non-modules C90/C99, where redefinition of <tt class="docutils literal"><span class="pre">typedefs</span></tt> is not permitted.</p>
+</dd>
+<dt><strong>Conflicting definitions</strong></dt>
+<dd>Different system headers may provide conflicting definitions for various macros, functions, or types. These conflicting definitions don&#8217;t tend to cause problems in a pre-modules world unless someone happens to include both headers in one translation unit. Since the fix is often simply &#8220;don&#8217;t do that&#8221;, such problems persist. Modules requires that the conflicting definitions be eliminated or that they be placed in separate modules (the former is generally the better answer).</dd>
+<dt><strong>Missing includes</strong></dt>
+<dd>Headers are often missing <tt class="docutils literal"><span class="pre">#include</span></tt> directives for headers that they actually depend on. As with the problem of conflicting definitions, this only affects unlucky users who don&#8217;t happen to include headers in the right order. With modules, the headers of a particular module will be parsed in isolation, so the module may fail to build if there are missing includes.</dd>
+<dt><strong>Headers that vend multiple APIs at different times</strong></dt>
+<dd>Some systems have headers that contain a number of different kinds of API definitions, only some of which are made available with a given include. For example, the header may vend <tt class="docutils literal"><span class="pre">size_t</span></tt> only when the macro <tt class="docutils literal"><span class="pre">__need_size_t</span></tt> is defined before that header is included, and also vend <tt class="docutils literal"><span class="pre">wchar_t</span></tt> only when the macro <tt class="docutils literal"><span class="pre">__need_wchar_t</span></tt> is defined. Such headers are often included many times in a single translation unit, and will have no include guards. There is no sane way to map this header to a submodule. One can either eliminate the header (e.g., by splitting it into separate headers, one per actual API) or simply <tt class="docutils literal"><span class="pre">exclude</span></tt> it in the module map.</dd>
+</dl>
+<p>To detect and help address some of these problems, the <tt class="docutils literal"><span class="pre">clang-tools-extra</span></tt> repository contains a <tt class="docutils literal"><span class="pre">modularize</span></tt> tool that parses a set of given headers and attempts to detect these problems and produce a report. See the tool&#8217;s in-source documentation for information on how to check your system or library headers.</p>
+</div>
+<div class="section" id="future-directions">
+<h2><a class="toc-backref" href="#id38">Future Directions</a><a class="headerlink" href="#future-directions" title="Permalink to this headline">¶</a></h2>
+<p>Modules support is under active development, and there are many opportunities remaining to improve it. Here are a few ideas:</p>
+<dl class="docutils">
+<dt><strong>Detect unused module imports</strong></dt>
+<dd>Unlike with <tt class="docutils literal"><span class="pre">#include</span></tt> directives, it should be fairly simple to track whether a directly-imported module has ever been used. By doing so, Clang can emit <tt class="docutils literal"><span class="pre">unused</span> <span class="pre">import</span></tt> or <tt class="docutils literal"><span class="pre">unused</span> <span class="pre">#include</span></tt> diagnostics, including Fix-Its to remove the useless imports/includes.</dd>
+<dt><strong>Fix-Its for missing imports</strong></dt>
+<dd>It&#8217;s fairly common for one to make use of some API while writing code, only to get a compiler error about &#8220;unknown type&#8221; or &#8220;no function named&#8221; because the corresponding header has not been included. Clang can detect such cases and auto-import the required module, but should provide a Fix-It to add the import.</dd>
+<dt><strong>Improve modularize</strong></dt>
+<dd>The modularize tool is both extremely important (for deployment) and extremely crude. It needs better UI, better detection of problems (especially for C++), and perhaps an assistant mode to help write module maps for you.</dd>
+</dl>
+</div>
+<div class="section" id="where-to-learn-more-about-modules">
+<h2><a class="toc-backref" href="#id39">Where To Learn More About Modules</a><a class="headerlink" href="#where-to-learn-more-about-modules" title="Permalink to this headline">¶</a></h2>
+<p>The Clang source code provides additional information about modules:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">clang/lib/Headers/module.modulemap</span></tt></dt>
+<dd>Module map for Clang&#8217;s compiler-specific header files.</dd>
+<dt><tt class="docutils literal"><span class="pre">clang/test/Modules/</span></tt></dt>
+<dd>Tests specifically related to modules functionality.</dd>
+<dt><tt class="docutils literal"><span class="pre">clang/include/clang/Basic/Module.h</span></tt></dt>
+<dd>The <tt class="docutils literal"><span class="pre">Module</span></tt> class in this header describes a module, and is used throughout the compiler to implement modules.</dd>
+<dt><tt class="docutils literal"><span class="pre">clang/include/clang/Lex/ModuleMap.h</span></tt></dt>
+<dd>The <tt class="docutils literal"><span class="pre">ModuleMap</span></tt> class in this header describes the full module map, consisting of all of the module map files that have been parsed, and providing facilities for looking up module maps and mapping between modules and headers (in both directions).</dd>
+<dt><a class="reference external" href="PCHInternals.html">PCHInternals</a></dt>
+<dd>Information about the serialized AST format used for precompiled headers and modules. The actual implementation is in the <tt class="docutils literal"><span class="pre">clangSerialization</span></tt> library.</dd>
+</dl>
+<table class="docutils footnote" frame="void" id="id5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Automatic linking against the libraries of modules requires specific linker support, which is not widely available.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id6" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>There are certain anti-patterns that occur in headers, particularly system headers, that cause problems for modules. The section <a class="reference internal" href="#modularizing-a-platform">Modularizing a Platform</a> describes some of them.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id7" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>The second instance is actually a new thread within the current process, not a separate process. However, the original compiler instance is blocked on the execution of this thread.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id8" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[4]</a></td><td>The preprocessing context in which the modules are parsed is actually dependent on the command-line options provided to the compiler, including the language dialect and any <tt class="docutils literal"><span class="pre">-D</span></tt> options. However, the compiled modules for different command-line options are kept distinct, and any preprocessor directives that occur within the translation unit are ignored. See the section on the <a class="reference internal" href="#configuration-macros-declaration">Configuration macros declaration</a> for more information.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        «&#160;&#160;<a href="SourceBasedCodeCoverage.html">Source-based Code Coverage</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="MSVCCompatibility.html">MSVC compatibility</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2007-2019, The Clang Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

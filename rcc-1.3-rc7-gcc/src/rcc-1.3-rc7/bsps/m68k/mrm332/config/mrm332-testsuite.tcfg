@@ -1,0 +1,16 @@
+#
+# mrm332 RTEMS Test Database.
+#
+# Format is one line per test that is _NOT_ built.
+#
+
+include: testdata/disable-iconv-tests.tcfg
+exclude: cdtest
+exclude: dl05
+exclude: fileio
+exclude: fsdosfsname01
+exclude: iostream
+exclude: linpack
+exclude: sptls01
+exclude: sptls02
+exclude: utf8proc01

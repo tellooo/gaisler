@@ -1,0 +1,104 @@
+daniel@daniel:/opt/rtems-4.10/src/samples/mmu$ grmon -ftdi -nb -stack 0x402ffff0 -u
+  
+  GRMON2 LEON debug monitor v2.0.40 professional version
+  
+  Copyright (C) 2013 Aeroflex Gaisler - All rights reserved.
+  For latest updates, go to http://www.gaisler.com/
+  Comments or bug-reports to support@gaisler.com
+
+Commands missing help:
+ datacache
+
+ JTAG chain (1): GR712RC 
+  Detected system:     GR712RC
+  Detected frequency:  48 MHz
+  
+  Component                            Vendor
+  LEON3-FT SPARC V8 Processor          Aeroflex Gaisler
+  LEON3-FT SPARC V8 Processor          Aeroflex Gaisler
+  JTAG Debug Link                      Aeroflex Gaisler
+  GR Ethernet MAC                      Aeroflex Gaisler
+  SatCAN controller                    Aeroflex Gaisler
+  GRSPW2 SpaceWire Serial Link         Aeroflex Gaisler
+  GRSPW2 SpaceWire Serial Link         Aeroflex Gaisler
+  GRSPW2 SpaceWire Serial Link         Aeroflex Gaisler
+  GRSPW2 SpaceWire Serial Link         Aeroflex Gaisler
+  GRSPW2 SpaceWire Serial Link         Aeroflex Gaisler
+  GRSPW2 SpaceWire Serial Link         Aeroflex Gaisler
+  AMBA Wrapper for Core1553BRM         Aeroflex Gaisler
+  CCSDS Telecommand Decoder            Aeroflex Gaisler
+  CCSDS Telemetry Encoder              Aeroflex Gaisler
+  SLINK Master                         Aeroflex Gaisler
+  Memory controller with EDAC          Aeroflex Gaisler
+  AHB/APB Bridge                       Aeroflex Gaisler
+  LEON3 Debug Support Unit             Aeroflex Gaisler
+  AHB/APB Bridge                       Aeroflex Gaisler
+  OC CAN AHB interface                 Aeroflex Gaisler
+  Generic FT AHB SRAM module           Aeroflex Gaisler
+  Generic UART                         Aeroflex Gaisler
+  Multi-processor Interrupt Ctrl.      Aeroflex Gaisler
+  Modular Timer Unit                   Aeroflex Gaisler
+  SPI Controller                       Aeroflex Gaisler
+  CAN Bus multiplexer                  Aeroflex Gaisler
+  General Purpose Register             Aeroflex Gaisler
+  ASCS Master                          Aeroflex Gaisler
+  General Purpose I/O port             Aeroflex Gaisler
+  General Purpose I/O port             Aeroflex Gaisler
+  AMBA Wrapper for OC I2C-master       Aeroflex Gaisler
+  Clock gating unit                    Aeroflex Gaisler
+  AHB Status Register                  Aeroflex Gaisler
+  Generic UART                         Aeroflex Gaisler
+  Generic UART                         Aeroflex Gaisler
+  Generic UART                         Aeroflex Gaisler
+  Generic UART                         Aeroflex Gaisler
+  Generic UART                         Aeroflex Gaisler
+  Timer Unit with Latches              Aeroflex Gaisler
+  
+  Use command 'info sys' to print a detailed report of attached cores
+
+grmon2> load /opt/rtems-4.10/src/samples/mmu/rtems-mmu
+  40000000 .text                    157.2kB / 157.2kB   [===============>] 100%
+  400274C0 .data                      4.6kB /   4.6kB   [===============>] 100%
+  40028710 .jcr                         4B              [===============>] 100%
+  Total size: 161.77kB (780.46kbit/s)
+  Entry point 0x40000000
+  Image /opt/rtems-4.10/src/samples/mmu/rtems-mmu loaded
+  
+grmon2> run
+******** Running SRMMU test ********
+
+The MMU has been setup and enabled
+
+
+Test[00]: reading 0x40380000 (MMU Tables, should not be allowed)
+!!!BAD TRAP: 0x9
+Read[0x40380000]: 0x40380000
+
+
+Test[01]: write 0x40381000 (MMU Tables, should not be allowed)
+!!!BAD TRAP: 0x9
+
+
+Test[02]: reading 0x00000000 (PROM, should be allowed)
+Read[0x02200000]: 0x10800400
+
+
+Test[03]: write 0x00000000 (PROM, should not be allowed)
+!!!BAD TRAP: 0x9
+
+
+Test[04]: 0x40300000 (call read-only area should not be allowed)
+!!!BAD TRAP: 0x1
+!!!generated from PC 0x80000000, redirecting to content of reg I0
+ CALL test should end up in this function instead
+
+
+
+  CPU MMU TEST DONE
+
+
+
+  CPU 0:  Program exited normally.
+  CPU 1:  Power down mode
+  
+grmon2> 

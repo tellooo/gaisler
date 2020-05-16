@@ -1,0 +1,14 @@
+## -------------------------------------------------------------------------
+
+CC = @CC@
+CXX = @CXX@
+CPP = @CPP@
+CCAS = @CCAS@
+
+##
+AM_CPPFLAGS = @RTEMS_CPPFLAGS@ @RTEMS_BSP_CPPFLAGS@
+AM_CFLAGS =
+AM_CXXFLAGS =
+AM_CCASFLAGS = @RTEMS_CCASFLAGS@
+
+ARFLAGS = crD

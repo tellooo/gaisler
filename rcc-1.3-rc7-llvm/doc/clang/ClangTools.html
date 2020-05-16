@@ -1,0 +1,224 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Overview &mdash; Clang 8 documentation</title>
+    
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/theme_extras.js"></script>
+    <link rel="top" title="Clang 8 documentation" href="index.html" />
+    <link rel="next" title="ClangCheck" href="ClangCheck.html" />
+    <link rel="prev" title="Clang’s refactoring engine" href="RefactoringEngine.html" /> 
+  </head>
+  <body>
+      <div class="header"><h1 class="heading"><a href="index.html">
+          <span>Clang 8 documentation</span></a></h1>
+        <h2 class="heading"><span>Overview</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        «&#160;&#160;<a href="RefactoringEngine.html">Clang&#8217;s refactoring engine</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="ClangCheck.html">ClangCheck</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<p>Clang Tools are standalone command line (and potentially GUI) tools
+designed for use by C++ developers who are already using and enjoying
+Clang as their compiler. These tools provide developer-oriented
+functionality such as fast syntax checking, automatic formatting,
+refactoring, etc.</p>
+<p>Only a couple of the most basic and fundamental tools are kept in the
+primary Clang Subversion project. The rest of the tools are kept in a
+side-project so that developers who don&#8217;t want or need to build them
+don&#8217;t. If you want to get access to the extra Clang Tools repository,
+simply check it out into the tools tree of your Clang checkout and
+follow the usual process for building and working with a combined
+LLVM/Clang checkout:</p>
+<ul class="simple">
+<li>With Subversion:<ul>
+<li><tt class="docutils literal"><span class="pre">cd</span> <span class="pre">llvm/tools/clang/tools</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">svn</span> <span class="pre">co</span> <span class="pre">https://llvm.org/svn/llvm-project/clang-tools-extra/trunk</span> <span class="pre">extra</span></tt></li>
+</ul>
+</li>
+<li>Or with Git:<ul>
+<li><tt class="docutils literal"><span class="pre">cd</span> <span class="pre">llvm/tools/clang/tools</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://llvm.org/git/clang-tools-extra.git</span> <span class="pre">extra</span></tt></li>
+</ul>
+</li>
+</ul>
+<p>This document describes a high-level overview of the organization of
+Clang Tools within the project as well as giving an introduction to some
+of the more important tools. However, it should be noted that this
+document is currently focused on Clang and Clang Tool developers, not on
+end users of these tools.</p>
+<div class="section" id="clang-tools-organization">
+<h2>Clang Tools Organization<a class="headerlink" href="#clang-tools-organization" title="Permalink to this headline">¶</a></h2>
+<p>Clang Tools are CLI or GUI programs that are intended to be directly
+used by C++ developers. That is they are <em>not</em> primarily for use by
+Clang developers, although they are hopefully useful to C++ developers
+who happen to work on Clang, and we try to actively dogfood their
+functionality. They are developed in three components: the underlying
+infrastructure for building a standalone tool based on Clang, core
+shared logic used by many different tools in the form of refactoring and
+rewriting libraries, and the tools themselves.</p>
+<p>The underlying infrastructure for Clang Tools is the
+<a class="reference internal" href="LibTooling.html"><em>LibTooling</em></a> platform. See its documentation for much
+more detailed information about how this infrastructure works. The
+common refactoring and rewriting toolkit-style library is also part of
+LibTooling organizationally.</p>
+<p>A few Clang Tools are developed along side the core Clang libraries as
+examples and test cases of fundamental functionality. However, most of
+the tools are developed in a side repository to provide easy separation
+from the core libraries. We intentionally do not support public
+libraries in the side repository, as we want to carefully review and
+find good APIs for libraries as they are lifted out of a few tools and
+into the core Clang library set.</p>
+<p>Regardless of which repository Clang Tools&#8217; code resides in, the
+development process and practices for all Clang Tools are exactly those
+of Clang itself. They are entirely within the Clang <em>project</em>,
+regardless of the version control scheme.</p>
+</div>
+<div class="section" id="core-clang-tools">
+<h2>Core Clang Tools<a class="headerlink" href="#core-clang-tools" title="Permalink to this headline">¶</a></h2>
+<p>The core set of Clang tools that are within the main repository are
+tools that very specifically complement, and allow use and testing of
+<em>Clang</em> specific functionality.</p>
+<div class="section" id="clang-check">
+<h3><tt class="docutils literal"><span class="pre">clang-check</span></tt><a class="headerlink" href="#clang-check" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="ClangCheck.html"><em>ClangCheck</em></a> combines the LibTooling framework for running a
+Clang tool with the basic Clang diagnostics by syntax checking specific files
+in a fast, command line interface. It can also accept flags to re-display the
+diagnostics in different formats with different flags, suitable for use driving
+an IDE or editor. Furthermore, it can be used in fixit-mode to directly apply
+fixit-hints offered by clang. See <a class="reference internal" href="HowToSetupToolingForLLVM.html"><em>How To Setup Clang Tooling For LLVM</em></a> for
+instructions on how to setup and used <cite>clang-check</cite>.</p>
+</div>
+<div class="section" id="clang-format">
+<h3><tt class="docutils literal"><span class="pre">clang-format</span></tt><a class="headerlink" href="#clang-format" title="Permalink to this headline">¶</a></h3>
+<p>Clang-format is both a <a class="reference internal" href="LibFormat.html"><em>library</em></a> and a <a class="reference internal" href="ClangFormat.html"><em>stand-alone tool</em></a> with the goal of automatically reformatting C++ sources files
+according to configurable style guides.  To do so, clang-format uses Clang&#8217;s
+<tt class="docutils literal"><span class="pre">Lexer</span></tt> to transform an input file into a token stream and then changes all
+the whitespace around those tokens.  The goal is for clang-format to serve both
+as a user tool (ideally with powerful IDE integrations) and as part of other
+refactoring tools, e.g. to do a reformatting of all the lines changed during a
+renaming.</p>
+</div>
+</div>
+<div class="section" id="extra-clang-tools">
+<h2>Extra Clang Tools<a class="headerlink" href="#extra-clang-tools" title="Permalink to this headline">¶</a></h2>
+<p>As various categories of Clang Tools are added to the extra repository,
+they&#8217;ll be tracked here. The focus of this documentation is on the scope
+and features of the tools for other tool developers; each tool should
+provide its own user-focused documentation.</p>
+<div class="section" id="clang-tidy">
+<h3><tt class="docutils literal"><span class="pre">clang-tidy</span></tt><a class="headerlink" href="#clang-tidy" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://clang.llvm.org/extra/clang-tidy/">clang-tidy</a> is a clang-based C++
+linter tool. It provides an extensible framework for building compiler-based
+static analyses detecting and fixing bug-prone patterns, performance,
+portability and maintainability issues.</p>
+</div>
+</div>
+<div class="section" id="ideas-for-new-tools">
+<h2>Ideas for new Tools<a class="headerlink" href="#ideas-for-new-tools" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">C++ cast conversion tool.  Will convert C-style casts (<tt class="docutils literal"><span class="pre">(type)</span> <span class="pre">value</span></tt>) to
+appropriate C++ cast (<tt class="docutils literal"><span class="pre">static_cast</span></tt>, <tt class="docutils literal"><span class="pre">const_cast</span></tt> or
+<tt class="docutils literal"><span class="pre">reinterpret_cast</span></tt>).</p>
+</li>
+<li><p class="first">Non-member <tt class="docutils literal"><span class="pre">begin()</span></tt> and <tt class="docutils literal"><span class="pre">end()</span></tt> conversion tool.  Will convert
+<tt class="docutils literal"><span class="pre">foo.begin()</span></tt> into <tt class="docutils literal"><span class="pre">begin(foo)</span></tt> and similarly for <tt class="docutils literal"><span class="pre">end()</span></tt>, where
+<tt class="docutils literal"><span class="pre">foo</span></tt> is a standard container.  We could also detect similar patterns for
+arrays.</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">tr1</span></tt> removal tool.  Will migrate source code from using TR1 library
+features to C++11 library.  For example:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="cp">#include &lt;tr1/unordered_map&gt;</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">tr1</span><span class="o">::</span><span class="n">unordered_map</span> <span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">ma</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ma</span><span class="p">.</span><span class="n">size</span> <span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>should be rewritten to:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="cp">#include &lt;unordered_map&gt;</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span> <span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">ma</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ma</span><span class="p">.</span><span class="n">size</span> <span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">A tool to remove <tt class="docutils literal"><span class="pre">auto</span></tt>.  Will convert <tt class="docutils literal"><span class="pre">auto</span></tt> to an explicit type or add
+comments with deduced types.  The motivation is that there are developers
+that don&#8217;t want to use <tt class="docutils literal"><span class="pre">auto</span></tt> because they are afraid that they might lose
+control over their code.</p>
+</li>
+<li><p class="first">C++14: less verbose operator function objects (<a class="reference external" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3421.htm">N3421</a>).
+For example:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="n">sort</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">greater</span><span class="o">&lt;</span><span class="n">ValueType</span><span class="o">&gt;</span><span class="p">());</span>
+</pre></div>
+</div>
+<p>should be rewritten to:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="n">sort</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">greater</span><span class="o">&lt;&gt;</span><span class="p">());</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        «&#160;&#160;<a href="RefactoringEngine.html">Clang&#8217;s refactoring engine</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="ClangCheck.html">ClangCheck</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2007-2019, The Clang Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

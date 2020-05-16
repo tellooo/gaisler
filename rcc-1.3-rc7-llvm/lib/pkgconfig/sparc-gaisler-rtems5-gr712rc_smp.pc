@@ -1,0 +1,18 @@
+#
+# pkg-config support file for RTEMS BSP gr712rc_smp
+#
+# Warning: This stuff is experimental and may be changed at any time.
+#
+prefix=/scratch/jenkins/workspace/RCC_master-KM5WEZV2QBPWA3KWTLID2LONMQ6KHXQSKK2LENARD3XKNAOB5V6Q/toolchain/build-llvm-linux64/opt/rcc-1.3-rc7-llvm
+exec_prefix=/scratch/jenkins/workspace/RCC_master-KM5WEZV2QBPWA3KWTLID2LONMQ6KHXQSKK2LENARD3XKNAOB5V6Q/toolchain/build-llvm-linux64/opt/rcc-1.3-rc7-llvm/sparc-gaisler-rtems5
+libdir=${exec_prefix}/gr712rc_smp/lib
+includedir=${exec_prefix}/gr712rc_smp/lib/include
+
+CFLAGS=-mcpu=gr712rc -O2 -g -ffunction-sections -fdata-sections -Wall -Wmissing-prototypes -Wimplicit-function-declaration -Wstrict-prototypes -Wnested-externs
+RTEMS_BSP=gr712rc_smp
+
+Name: sparc-gaisler-rtems5-gr712rc_smp
+Version: 5.0.0
+Description: RTEMS BSP gr712rc_smp
+Libs:
+Cflags: -qrtems -B${exec_prefix}/lib/ -B${libdir}/ --specs bsp_specs ${CFLAGS}

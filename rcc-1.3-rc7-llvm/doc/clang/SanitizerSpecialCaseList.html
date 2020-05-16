@@ -1,0 +1,167 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sanitizer special case list &mdash; Clang 8 documentation</title>
+    
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/theme_extras.js"></script>
+    <link rel="top" title="Clang 8 documentation" href="index.html" />
+    <link rel="next" title="Control Flow Integrity" href="ControlFlowIntegrity.html" />
+    <link rel="prev" title="SanitizerStats" href="SanitizerStats.html" /> 
+  </head>
+  <body>
+      <div class="header"><h1 class="heading"><a href="index.html">
+          <span>Clang 8 documentation</span></a></h1>
+        <h2 class="heading"><span>Sanitizer special case list</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        «&#160;&#160;<a href="SanitizerStats.html">SanitizerStats</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="ControlFlowIntegrity.html">Control Flow Integrity</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="sanitizer-special-case-list">
+<h1>Sanitizer special case list<a class="headerlink" href="#sanitizer-special-case-list" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#goal-and-usage" id="id2">Goal and usage</a></li>
+<li><a class="reference internal" href="#example" id="id3">Example</a></li>
+<li><a class="reference internal" href="#format" id="id4">Format</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This document describes the way to disable or alter the behavior of
+sanitizer tools for certain source-level entities by providing a special
+file at compile-time.</p>
+</div>
+<div class="section" id="goal-and-usage">
+<h2><a class="toc-backref" href="#id2">Goal and usage</a><a class="headerlink" href="#goal-and-usage" title="Permalink to this headline">¶</a></h2>
+<p>User of sanitizer tools, such as <a class="reference internal" href="AddressSanitizer.html"><em>AddressSanitizer</em></a>, <a class="reference internal" href="ThreadSanitizer.html"><em>ThreadSanitizer</em></a>
+or <a class="reference internal" href="MemorySanitizer.html"><em>MemorySanitizer</em></a> may want to disable or alter some checks for
+certain source-level entities to:</p>
+<ul class="simple">
+<li>speedup hot function, which is known to be correct;</li>
+<li>ignore a function that does some low-level magic (e.g. walks through the
+thread stack, bypassing the frame boundaries);</li>
+<li>ignore a known problem.</li>
+</ul>
+<p>To achieve this, user may create a file listing the entities they want to
+ignore, and pass it to clang at compile-time using
+<tt class="docutils literal"><span class="pre">-fsanitize-blacklist</span></tt> flag. See <a class="reference internal" href="UsersManual.html"><em>Clang Compiler User&#8217;s Manual</em></a> for details.</p>
+</div>
+<div class="section" id="example">
+<h2><a class="toc-backref" href="#id3">Example</a><a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>cat foo.c
+<span class="c">#include &lt;stdlib.h&gt;</span>
+void bad_foo<span class="o">()</span> <span class="o">{</span>
+  int *a <span class="o">=</span> <span class="o">(</span>int*<span class="o">)</span>malloc<span class="o">(</span>40<span class="o">)</span>;
+  a<span class="o">[</span>10<span class="o">]</span> <span class="o">=</span> 1;
+<span class="o">}</span>
+int main<span class="o">()</span> <span class="o">{</span> bad_foo<span class="o">()</span>; <span class="o">}</span>
+<span class="nv">$ </span>cat blacklist.txt
+<span class="c"># Ignore reports from bad_foo function.</span>
+fun:bad_foo
+<span class="nv">$ </span>clang -fsanitize<span class="o">=</span>address foo.c ; ./a.out
+<span class="c"># AddressSanitizer prints an error report.</span>
+<span class="nv">$ </span>clang -fsanitize<span class="o">=</span>address -fsanitize-blacklist<span class="o">=</span>blacklist.txt foo.c ; ./a.out
+<span class="c"># No error report here.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="format">
+<h2><a class="toc-backref" href="#id4">Format</a><a class="headerlink" href="#format" title="Permalink to this headline">¶</a></h2>
+<p>Blacklists consist of entries, optionally grouped into sections. Empty lines and
+lines starting with &#8220;#&#8221; are ignored.</p>
+<p>Section names are regular expressions written in square brackets that denote
+which sanitizer the following entries apply to. For example, <tt class="docutils literal"><span class="pre">[address]</span></tt>
+specifies AddressSanitizer while <tt class="docutils literal"><span class="pre">[cfi-vcall|cfi-icall]</span></tt> specifies Control
+Flow Integrity virtual and indirect call checking. Entries without a section
+will be placed under the <tt class="docutils literal"><span class="pre">[*]</span></tt> section applying to all enabled sanitizers.</p>
+<p>Entries contain an entity type, followed by a colon and a regular expression,
+specifying the names of the entities, optionally followed by an equals sign and
+a tool-specific category, e.g. <tt class="docutils literal"><span class="pre">fun:*ExampleFunc=example_category</span></tt>.  The
+meaning of <tt class="docutils literal"><span class="pre">*</span></tt> in regular expression for entity names is different - it is
+treated as in shell wildcarding. Two generic entity types are <tt class="docutils literal"><span class="pre">src</span></tt> and
+<tt class="docutils literal"><span class="pre">fun</span></tt>, which allow users to specify source files and functions, respectively.
+Some sanitizer tools may introduce custom entity types and categories - refer to
+tool-specific docs.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># Lines starting with # are ignored.</span>
+<span class="c"># Turn off checks for the source file (use absolute path or path relative</span>
+<span class="c"># to the current working directory):</span>
+src:/path/to/source/file.c
+<span class="c"># Turn off checks for a particular functions (use mangled names):</span>
+fun:MyFooBar
+fun:_Z8MyFooBarv
+<span class="c"># Extended regular expressions are supported:</span>
+fun:bad_<span class="o">(</span>foo|bar<span class="o">)</span>
+src:bad_source<span class="o">[</span>1-9<span class="o">]</span>.c
+<span class="c"># Shell like usage of * is supported (* is treated as .*):</span>
+src:bad/sources/*
+fun:*BadFunction*
+<span class="c"># Specific sanitizer tools may introduce categories.</span>
+src:/special/path/*<span class="o">=</span>special_sources
+<span class="c"># Sections can be used to limit blacklist entries to specific sanitizers</span>
+<span class="o">[</span>address<span class="o">]</span>
+fun:*BadASanFunc*
+<span class="c"># Section names are regular expressions</span>
+<span class="o">[</span>cfi-vcall|cfi-icall<span class="o">]</span>
+fun:*BadCfiCall
+<span class="c"># Entries without sections are placed into [*] and apply to all sanitizers</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        «&#160;&#160;<a href="SanitizerStats.html">SanitizerStats</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="ControlFlowIntegrity.html">Control Flow Integrity</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2007-2019, The Clang Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

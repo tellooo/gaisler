@@ -1,0 +1,21 @@
+GR712 SAMPLES
+-------------
+
+The sample RTEMS application found in this directory are specific for the
+RCC RTEMS GR712RC release. The standard examples available RCC (../) are
+also working for the GR712RC when compiled for LEON3.
+
+rtems-ascs         - ASCS RTEMS driver demonstration application
+rtems-satcan.c     - SATCAN and CANMUX RTEMS driver demonstration application
+rtems-slink.c      - SLINK RTEMS driver demonstration application
+
+When building the examples it is possible to control the behaviour by setting the following variables.
+
+CPU         - By setting the CPU variable to one of the cpu-targets, then the hardware specific flags for that cpu-target will be added when compiling.
+CFLAGS      - Override common compilation flags
+CPUFLAGS    - Override the hardware specific compilation flags
+MKPROMFLAGS - Override mkprom2 flags
+
+TMTC
+----
+TM and TC examples are available separately in the TMTC stack.

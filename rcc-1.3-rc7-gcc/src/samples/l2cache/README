@@ -1,0 +1,80 @@
+L2cache RTEMS demo application
+-----------------------------------------------------------------
+
+1. Overview
+
+  This test sets up the L2cache device with writethrough and locked
+  ways. The example enables EDAC and scrubbing and whenever an 
+  uncorrectable error is detected, the ways are filled again with
+  the data.
+  The application also sets the L4stat unit with L2 events/stats and
+  periodically polls it and prints the statistics. 
+
+
+2. Hardware Requirements
+
+  The hardware to run on must be a GRLIB system with a L2cache and a L4STAT core. 
+
+3. Source code structure
+
+  The code is made up of one module:
+   - test.c - The demo program
+
+  See the header file comments for further details.
+
+4. Running
+
+  First, build the binary by running "make" 
+
+  Second, make sure the L4STAT core is not clock-gated off.
+
+  Third, load and run the "test" binary.
+
+  From grmon:
+    load test
+    run
+
+5. Sample output
+
+grmon2> load test
+  0002EC10 .rtemsroset                 96B              [===============>] 100%
+  0002EC70 .data                      6.3kB /   6.3kB   [===============>] 100%
+  Total size: 193.38kB (17.03Mbit/s)
+  Entry point 0x0
+  Image /home/javier/Personal/rtems/rtems-build/src/samples/l2cache/test loaded
+  
+grmon2> run
+-- L2cache RTEMS test application --
+-- Running in cpu: 0 --
+-- L4stat core configured --
+ -Counter[0]: Event: 99 [Correctable L2 Tag error]
+ -Counter[1]: Event: 100 [Uncorrectable L2 Tag error]
+ -Counter[2]: Event: 101 [Correctable L2 Data error]
+ -Counter[3]: Event: 102 [Uncorrectable L2 Data error]
+ -Counter[4]: Event: 96 [L2 hits]
+ -Counter[5]: Event: 97 [L2 misses]
+-- L2cache core configured --
+ -L2cache enabled
+ -Writethrough write policy
+ -Locked way[0]: Tag: 0x00000000
+ -Locked way[1]: Tag: 0x00080000
+ -Locked way[2]: Tag: 0x00100000
+ -Locked way[3]: Tag: 0x00180000
+ -EDAC enabled
+ -Scrub enabled, delay: 16
+-- Report task started --
+[HIT] L2cache hits: 15708731
+[MISS] L2cache misses: 5
+[CTE] L2cache Corr. Tag errors: 0
+[UTE] L2cache Uncorr. Tag errors: 0
+[CDE] L2cache Corr. Data errors: 1
+[UDE] L2cache Uncorr. Data errors: 0
+[FILL] Number of times L2 filled: 1
+[HIT] L2cache hits: 30380038
+[MISS] L2cache misses: 5
+[CTE] L2cache Corr. Tag errors: 0
+[UTE] L2cache Uncorr. Tag errors: 0
+[CDE] L2cache Corr. Data errors: 2
+[UDE] L2cache Uncorr. Data errors: 0
+[FILL] Number of times L2 filled: 1
+

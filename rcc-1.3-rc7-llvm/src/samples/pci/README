@@ -1,0 +1,5 @@
+FILES
+-----
+
+  pci_static_config.c     Example PCI configuration used instead of the auto
+                          configuration library

@@ -1,0 +1,13 @@
+#
+# rtl22xx RTEMS Test Database.
+#
+# Format is one line per test that is _NOT_ built.
+#
+
+include: testdata/disable-iconv-tests.tcfg
+exclude: fileio
+exclude: fsdosfsname01
+exclude: linpack
+exclude: iostream
+exclude: rtems++
+exclude: utf8proc01

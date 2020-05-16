@@ -1,0 +1,56 @@
+OVERVIEW
+========
+
+The RTEMS operating system does have MMU support, but it is still possible to
+take advantage of the MMU without RTEMS' knowledge. In multi-core systems one
+could for example have two different MMU configurations guaranteeing that one
+CPU does not overwrite the others DATA. The DMA engines are no possible to
+limit using the MMU so 100% protection is not possible.
+
+One could also set up different contexts for different tasks where all tasks
+have access to instructions and operating system data, but limited access to
+task specific data structures laying outside of RTEMS control, for example DMA
+buffers or customly allocated memory using by the application. One could set
+up the RTEMS Extension manager to call a custom function on every context
+switch where the MMU context could be switched depending on the task ID.
+
+In this example a single context is set up as described below using Level1 and
+Level2 MMU tables. A trap handler is installed to certain trap numbers that
+is called upon invalid accesses. The example makes invalid accesses to some
+different areas demonstrating that the trap handler is called. Note that
+Trap 9 used here is not only called on MMU faults.
+
+
+MMU TABLE CONFIGURATION
+=======================
+
+	/*** Setup Context 0 Access ***/
+
+	/* 0x00000000-0x00ffffff: R/X (PROM access) */
+	/* 0x01000000-0x3fffffff: INVALID */
+	/* 0x40000000-0x40ffffff: see Level2 below */
+		/* 0x40000000-0x402fffff: R/W/X (application area) */
+		/* 0x40300000-0x40340000: R */
+		/* 0x40340000-0x4037ffff: PROM R/W access (MMU address translation) */
+		/* 0x40380000-0x403fffff: INVALID (MMU tables) */
+		/* 0x40400000-0x40ffffff: INVALID */
+	/* 0x41000000-0x7fffffff: INVALID */
+	/* 0x80000000-0xffffffff: R/W (I/O registers, PCI, etc) */
+
+
+EXAMPLE ACCESS PATTERN
+======================
+
+Application access pattern:
+ * Reads&Writes 0x40380000 (should fail),
+ * Read&Writes 0x00000000 (write should fail)
+ * Jump to 0x80000000 (should fail), the trap_returnfunc() is called instead
+
+
+REQUIREMENTS
+============
+
+ * The test has only been tested on the LEON3&4. AT697 does not have an MMU.
+ * start GRMON with -nb
+ * start GRMON with -stack 0x402ffff0 (or use batch script)
+ * minimum 4Mb Memory @ 0x40000000

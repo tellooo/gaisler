@@ -1,0 +1,11 @@
+#
+# mpc5643l_evb RTEMS Test Database.
+#
+# Format is one line per test that is _NOT_ built.
+#
+
+include: testdata/small-memory-testsuite.tcfg
+
+exclude: pppd
+# psxaio02 when debug
+exclude: psxaio02

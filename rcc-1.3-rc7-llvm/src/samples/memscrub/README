@@ -1,0 +1,66 @@
+AHB memory scrubber (memscrub) and FT DDR2 RTEMS demo application
+-----------------------------------------------------------------
+
+1. Overview
+
+  This is an RTEMS demo application written to show how the Memscrub AHB 
+  memory scrubber can be used together with the fault-tolerant version 
+  of the memory controller.
+
+  This demo application starts upp the scrubber over a memory area. The 
+  demo prints status messages from events caused by scrubber interrupts 
+  and also periodically prints the total corrected error count from the 
+  scrubber.
+
+
+2. Hardware Requirements
+
+  The hardware to run on must be a GRLIB system with a FT memory controller 
+  and a memory scrubber on the same bus.
+
+3. Source code structure
+
+  The code is made up of two modules:
+   - msgq.c/h - Message queue
+   - test.c - The demo program
+
+  See the header file comments for further details.
+
+4. Running
+
+  First, build the binary by running "make" 
+
+  Before the program is started, memory edac has to be enabled and 
+  the memory area must have been cleared to initialize the checkbits. 
+  This can be done from grmon using the "scrub clear" command. 
+
+  From grmon:
+    scrub clear 0 0x3ffffff
+    load test
+    run
+
+5. Sample output
+
+grmon2> load test
+  00000000 .text                    186.2kB / 186.2kB   [===============>] 100%
+  0002E8A0 .rtemsroset                 96B              [===============>] 100%
+  0002E900 .data                      6.2kB /   6.2kB   [===============>] 100%
+  Total size: 192.42kB (24.63Mbit/s)
+  Entry point 0x0
+  Image /home/javier/Personal/rtems/rtems-build/src/samples/memscrub/tmp/test loaded
+  
+grmon2> run
+-- Scrubber RTEMS test application --
+Config: Mem range: 00000000-07ffffff
+Opermode:verbose
+[R] Scrubber iteration done, runcount=0, blockcount=0
+[R] CE detected, addr=ffe01000, wr, mst=0, size=4
+[R] Scrubber iteration done, runcount=0, blockcount=0
+[R] Scrubber iteration done, runcount=0, blockcount=0
+
+
+6. Notes
+
+  The demo can be run in a more verbose mode, where each completed scrub 
+  interation and error is logged. See the OPERMODE constant in 
+  test.c 
