@@ -1,0 +1,58 @@
+<HTML>
+<!-- created Dec 13 2011 from miscellaneous.texi line 69 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Miscellaneous Specifying Processor Endianness</TITLE>
+<LINK REL="Precedes" HREF="porting00082.html">
+<LINK REV="Precedes" HREF="porting00080.html">
+<LINK REV="Subdocument" HREF="porting00080.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00080.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00080.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00082.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<H3>10.2.1: Specifying Processor Endianness</H3>
+<P>
+The <CODE>CPU_BIG_ENDIAN</CODE> and <CODE>CPU_LITTLE_ENDIAN</CODE> are
+set to specify the endian
+format used by this microprocessor.  These macros should not be set to the
+same value.  The following example illustrates how these macros should be
+set on a processor family that is big endian.
+</P>
+<DL><DT><DD>
+<PRE>
+#define CPU_BIG_ENDIAN                           TRUE
+#define CPU_LITTLE_ENDIAN                        FALSE
+</PRE>
+</DL>
+<P>
+The <CODE>CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK</CODE> macro is set to the amount of
+stack space above the minimum thread stack space required by the MPCI
+Receive Server Thread.  This macro is needed because in a multiprocessor
+system the MPCI Receive Server Thread must be able to process all
+directives.
+</P>
+<DL><DT><DD>
+<PRE>
+#define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="porting00082.html">
+<LINK REV="Precedes" HREF="porting00080.html">
+<LINK REV="Subdocument" HREF="porting00080.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00080.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00080.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00082.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

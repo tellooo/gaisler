@@ -1,0 +1,60 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/rtmon.texi line 349 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Rate Monotonic Manager Assumptions</TITLE>
+<LINK REL="Precedes" HREF="ada_user00335.html">
+<LINK REV="Precedes" HREF="ada_user00333.html">
+<LINK REV="Subdocument" HREF="ada_user00333.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00333.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00333.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00335.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H4>19.2.5.1: Assumptions</H4>
+<P>
+The schedulability analysis rules for RMS were
+developed based on the following assumptions:
+</P>
+<UL>
+<LI>The requests for all tasks for which hard deadlines
+exist are periodic, with a constant interval between requests.
+
+<LI>Each task must complete before the next request for it
+occurs.
+
+<LI>The tasks are independent in that a task does not depend
+on the initiation or completion of requests for other tasks.
+
+<LI>The execution time for each task without preemption or
+interruption is constant and does not vary.
+
+<LI>Any non-periodic tasks in the system are special.  These
+tasks displace periodic tasks while executing and do not have
+hard, critical deadlines.
+</UL>
+
+<P>
+Once the basic schedulability analysis is understood,
+some of the above assumptions can be relaxed and the
+side-effects accounted for.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00335.html">
+<LINK REV="Precedes" HREF="ada_user00333.html">
+<LINK REV="Subdocument" HREF="ada_user00333.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00333.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00333.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00335.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

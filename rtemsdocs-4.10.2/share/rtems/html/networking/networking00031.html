@@ -1,0 +1,353 @@
+<HTML>
+<!-- created Dec 13 2011 from networkapp.texi line 649 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Adding a Default Route</TITLE>
+<LINK REL="Precedes" HREF="networking00032.html">
+<LINK REV="Precedes" HREF="networking00030.html">
+<LINK REV="Subdocument" HREF="networking00020.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="networking00030.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="networking00020.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="networking00032.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Network Supplement</CITE></P>
+<H3>3.4.5: Adding a Default Route</H3>
+<P>
+The function provided in this section is functionally equivalent to
+the command <CODE>route add default gw yyy.yyy.yyy.yyy</CODE>:
+</P>
+<DL><DT><DD>
+<PRE>
+void mon_ifconfig(int argc, char *argv[],  unsigned32 command_arg,
+                  bool verbose)
+{
+    struct sockaddr_in  ipaddr;
+    struct sockaddr_in  dstaddr;
+    struct sockaddr_in  netmask;
+    struct sockaddr_in  broadcast;
+    char               *iface;
+    int                 f_ip        = 0;
+    int                 f_ptp       = 0;
+    int                 f_netmask   = 0;
+    int                 f_up        = 0;
+    int                 f_down      = 0;
+    int                 f_bcast     = 0;
+    int                 cur_idx;
+    int                 rc;
+    int                 flags;
+
+    bzero((void*) &amp;ipaddr, sizeof(ipaddr));
+    bzero((void*) &amp;dstaddr, sizeof(dstaddr));
+    bzero((void*) &amp;netmask, sizeof(netmask));
+    bzero((void*) &amp;broadcast, sizeof(broadcast));
+
+    ipaddr.sin_len = sizeof(ipaddr);
+    ipaddr.sin_family = AF_INET;
+
+    dstaddr.sin_len = sizeof(dstaddr);
+    dstaddr.sin_family = AF_INET;
+
+    netmask.sin_len = sizeof(netmask);
+    netmask.sin_family = AF_INET;
+
+    broadcast.sin_len = sizeof(broadcast);
+    broadcast.sin_family = AF_INET;
+
+    cur_idx = 0;
+    if (argc &lt;= 1) {
+        /* display all interfaces */
+        iface = NULL;
+        cur_idx += 1;
+    } else {
+        iface = argv[1];
+        if (isdigit(*argv[2])) {
+            if (inet_pton(AF_INET, argv[2], &amp;ipaddr.sin_addr) &lt; 0) {
+                printf(&quot;bad ip address: %s\n&quot;, argv[2]);
+                return;
+            }
+            f_ip = 1;
+            cur_idx += 3;
+        } else {
+            cur_idx += 2;
+        }
+    }
+
+    if ((f_down !=0) &amp;&amp; (f_ip != 0)) {
+        f_up = 1;
+    }
+
+    while(argc &gt; cur_idx) {
+        if (strcmp(argv[cur_idx], &quot;up&quot;) == 0) {
+            f_up = 1;
+            if (f_down != 0) {
+                printf(&quot;Can't make interface up and down\n&quot;);
+            }
+        } else if(strcmp(argv[cur_idx], &quot;down&quot;) == 0) {
+            f_down = 1;
+            if (f_up != 0) {
+                printf(&quot;Can't make interface up and down\n&quot;);
+            }
+        } else if(strcmp(argv[cur_idx], &quot;netmask&quot;) == 0) {
+            if ((cur_idx + 1) &gt;= argc) {
+                printf(&quot;No netmask address\n&quot;);
+                return;
+            }
+            if (inet_pton(AF_INET, argv[cur_idx+1], &amp;netmask.sin_addr) &lt; 0) {
+                printf(&quot;bad netmask: %s\n&quot;, argv[cur_idx]);
+                return;
+            }
+            f_netmask = 1;
+            cur_idx += 1;
+        } else if(strcmp(argv[cur_idx], &quot;broadcast&quot;) == 0) {
+            if ((cur_idx + 1) &gt;= argc) {
+                printf(&quot;No broadcast address\n&quot;);
+                return;
+            }
+            if (inet_pton(AF_INET, argv[cur_idx+1], &amp;broadcast.sin_addr) &lt; 0) {
+                printf(&quot;bad broadcast: %s\n&quot;, argv[cur_idx]);
+                return;
+            }
+            f_bcast = 1;
+            cur_idx += 1;
+        } else if(strcmp(argv[cur_idx], &quot;pointopoint&quot;) == 0) {
+            if ((cur_idx + 1) &gt;= argc) {
+                printf(&quot;No pointopoint address\n&quot;);
+                return;
+            }
+            if (inet_pton(AF_INET, argv[cur_idx+1], &amp;dstaddr.sin_addr) &lt; 0) {
+                printf(&quot;bad pointopoint: %s\n&quot;, argv[cur_idx]);
+                return;
+            }
+
+            f_ptp = 1;
+            cur_idx += 1;
+        } else {
+            printf(&quot;Bad parameter: %s\n&quot;, argv[cur_idx]);
+            return;
+        }
+
+        cur_idx += 1;
+    }
+
+    printf(&quot;ifconfig &quot;);
+    if (iface != NULL) {
+        printf(&quot;%s &quot;, iface);
+        if (f_ip != 0) {
+            char str[256];
+            inet_ntop(AF_INET, &amp;ipaddr.sin_addr, str, 256);
+            printf(&quot;%s &quot;, str);
+        }
+
+        if (f_netmask != 0) {
+            char str[256];
+            inet_ntop(AF_INET, &amp;netmask.sin_addr, str, 256);
+            printf(&quot;netmask %s &quot;, str);
+        }
+
+        if (f_bcast != 0) {
+            char str[256];
+            inet_ntop(AF_INET, &amp;broadcast.sin_addr, str, 256);
+            printf(&quot;broadcast %s &quot;, str);
+        }
+
+        if (f_ptp != 0) {
+            char str[256];
+            inet_ntop(AF_INET, &amp;dstaddr.sin_addr, str, 256);
+            printf(&quot;pointopoint %s &quot;, str);
+        }
+
+        if (f_up != 0) {
+            printf(&quot;up\n&quot;);
+        } else if (f_down != 0) {
+            printf(&quot;down\n&quot;);
+        } else {
+            printf(&quot;\n&quot;);
+        }
+    }
+
+    if ((iface == NULL) || ((f_ip == 0) &amp;&amp; (f_down == 0) &amp;&amp; (f_up == 0))) {
+        rtems_bsdnet_show_if_stats();
+        return;
+    }
+
+    flags = 0;
+    if (f_netmask) {
+        rc = rtems_bsdnet_ifconfig(iface, SIOCSIFNETMASK, &amp;netmask);
+        if (rc &lt; 0) {
+            printf(&quot;Could not set netmask: %s\n&quot;, strerror(errno));
+            return;
+        }
+    }
+
+    if (f_bcast) {
+        rc = rtems_bsdnet_ifconfig(iface, SIOCSIFBRDADDR, &amp;broadcast);
+        if (rc &lt; 0) {
+            printf(&quot;Could not set broadcast: %s\n&quot;, strerror(errno));
+            return;
+        }
+    }
+
+    if (f_ptp) {
+        rc = rtems_bsdnet_ifconfig(iface, SIOCSIFDSTADDR, &amp;dstaddr);
+        if (rc &lt; 0) {
+            printf(&quot;Could not set destination address: %s\n&quot;, strerror(errno));
+            return;
+        }
+        flags |= IFF_POINTOPOINT;
+    }
+
+    /* This must come _after_ setting the netmask, broadcast addresses */
+    if (f_ip) {
+        rc = rtems_bsdnet_ifconfig(iface, SIOCSIFADDR, &amp;ipaddr);
+        if (rc &lt; 0) {
+            printf(&quot;Could not set IP address: %s\n&quot;, strerror(errno));
+            return;
+        }
+    }
+
+    if (f_up != 0) {
+        flags |= IFF_UP;
+    }
+
+    if (f_down != 0) {
+        printf(&quot;Warning: taking interfaces down is not supported\n&quot;);
+    }
+
+    rc = rtems_bsdnet_ifconfig(iface, SIOCSIFFLAGS, &amp;flags);
+    if (rc &lt; 0) {
+        printf(&quot;Could not set interface flags: %s\n&quot;, strerror(errno));
+        return;
+    }
+}
+
+
+
+void mon_route(int argc, char *argv[],  unsigned32 command_arg,
+               bool verbose)
+{
+    int                cmd;
+    struct sockaddr_in dst;
+    struct sockaddr_in gw;
+    struct sockaddr_in netmask;
+    int                f_host;
+    int                f_gw       = 0;
+    int                cur_idx;
+    int                flags;
+    int                rc;
+
+    memset(&amp;dst, 0, sizeof(dst));
+    memset(&amp;gw, 0, sizeof(gw));
+    memset(&amp;netmask, 0, sizeof(netmask));
+
+    dst.sin_len = sizeof(dst);
+    dst.sin_family = AF_INET;
+    dst.sin_addr.s_addr = inet_addr(&quot;0.0.0.0&quot;);
+
+    gw.sin_len = sizeof(gw);
+    gw.sin_family = AF_INET;
+    gw.sin_addr.s_addr = inet_addr(&quot;0.0.0.0&quot;);
+
+    netmask.sin_len = sizeof(netmask);
+    netmask.sin_family = AF_INET;
+    netmask.sin_addr.s_addr = inet_addr(&quot;255.255.255.0&quot;);
+
+    if (argc &lt; 2) {
+        rtems_bsdnet_show_inet_routes();
+        return;
+    }
+
+    if (strcmp(argv[1], &quot;add&quot;) == 0) {
+        cmd = RTM_ADD;
+    } else if (strcmp(argv[1], &quot;del&quot;) == 0) {
+        cmd = RTM_DELETE;
+    } else {
+        printf(&quot;invalid command: %s\n&quot;, argv[1]);
+        printf(&quot;\tit should be 'add' or 'del'\n&quot;);
+        return;
+    }
+
+    if (argc &lt; 3) {
+        printf(&quot;not enough arguments\n&quot;);
+        return;
+    }
+
+    if (strcmp(argv[2], &quot;-host&quot;) == 0) {
+        f_host = 1;
+    } else if (strcmp(argv[2], &quot;-net&quot;) == 0) {
+        f_host = 0;
+    } else {
+        printf(&quot;Invalid type: %s\n&quot;, argv[1]);
+        printf(&quot;\tit should be '-host' or '-net'\n&quot;);
+        return;
+    }
+
+    if (argc &lt; 4) {
+        printf(&quot;not enough arguments\n&quot;);
+        return;
+    }
+
+    inet_pton(AF_INET, argv[3], &amp;dst.sin_addr);
+
+    cur_idx = 4;
+    while(cur_idx &lt; argc) {
+        if (strcmp(argv[cur_idx], &quot;gw&quot;) == 0) {
+            if ((cur_idx +1) &gt;= argc) {
+                printf(&quot;no gateway address\n&quot;);
+                return;
+            }
+            f_gw = 1;
+            inet_pton(AF_INET, argv[cur_idx + 1], &amp;gw.sin_addr);
+            cur_idx += 1;
+        } else if(strcmp(argv[cur_idx], &quot;netmask&quot;) == 0) {
+            if ((cur_idx +1) &gt;= argc) {
+                printf(&quot;no netmask address\n&quot;);
+                return;
+            }
+            f_gw = 1;
+            inet_pton(AF_INET, argv[cur_idx + 1], &amp;netmask.sin_addr);
+            cur_idx += 1;
+        } else {
+            printf(&quot;Unknown argument\n&quot;);
+            return;
+        }
+        cur_idx += 1;
+    }
+
+    flags = RTF_STATIC;
+    if (f_gw != 0) {
+        flags |= RTF_GATEWAY;
+    }
+    if (f_host != 0) {
+        flags |= RTF_HOST;
+    }
+
+    rc = rtems_bsdnet_rtrequest(cmd, &amp;dst, &amp;gw, &amp;netmask, flags, NULL);
+    if (rc &lt; 0) {
+        printf(&quot;Error adding route\n&quot;);
+    }
+}
+</PRE>
+</DL>
+<P>
+Thanks to <A HREF="mailto:jtm@smoothmsmoothie.com">Jay Monkman</A> for this example
+code.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="networking00032.html">
+<LINK REV="Precedes" HREF="networking00030.html">
+<LINK REV="Subdocument" HREF="networking00020.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="networking00030.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="networking00020.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="networking00032.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Network Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

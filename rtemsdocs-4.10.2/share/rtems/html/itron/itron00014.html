@@ -1,0 +1,45 @@
+<HTML>
+<!-- created Dec 13 2011 from task.texi line 174 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Task Manager Task Manager Suspending and Resuming Tasks</TITLE>
+<LINK REL="Precedes" HREF="itron00015.html">
+<LINK REV="Precedes" HREF="itron00013.html">
+<LINK REV="Subdocument" HREF="itron00005.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00013.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00005.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00015.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<H3>1.3.3: Task Manager Suspending and Resuming Tasks</H3>
+<P>
+The sus_tsk directive suspends the execution of the task specified by tskid by putting it into SUSPEND state. SUSPEND state is released by issuing the rsm_tsk or frsm_tsk system call.
+</P>
+<P>
+If the task specified to sus_tsk is already in WAIT state, it will be put in the combined WAIT-SUSPEND state by the execution of sus_tsk.  If wait conditions for the task are later fulfilled, it will enter SUSPEND state. If rsm_tsk is issued on the task, it will return to the WAIT state before the suspension.
+</P>
+<P>
+Both rsm_tsk and fsm_tsk system calls release SUSPEND state of the task specified by tskid.  Specifically, they cause SUSPEND state to be released and the execution of the specified task to resume when the task has been suspended by the prior execution of sus_tsk.
+</P>
+<P>
+If the specified task is in WAIT-SUSPEND state, the execution of rsm_tsk only releases the SUSPEND state, and the task will become WAIT state.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="itron00015.html">
+<LINK REV="Precedes" HREF="itron00013.html">
+<LINK REV="Subdocument" HREF="itron00005.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00013.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00005.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00015.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,66 @@
+<HTML>
+<!-- created Dec 13 2011 from bsp.texi line 203 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Board Support Packages Clock Tick Device Driver</TITLE>
+<LINK REL="Precedes" HREF="c_user00380.html">
+<LINK REV="Precedes" HREF="c_user00379.html">
+<LINK REV="Subdocument" HREF="c_user00379.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00379.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00379.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00380.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H3>21.3.1: Clock Tick Device Driver</H3>
+<P>
+Most RTEMS applications will include a clock tick
+device driver which invokes the <CODE>rtems_clock_tick</CODE>
+directive at regular intervals.  The clock tick is necessary if
+the application is to utilize timeslicing, the clock manager, the
+timer manager, the rate monotonic manager, or the timeout option on blocking
+directives.
+</P>
+<P>
+The clock tick is usually provided as an interrupt from a counter/timer
+or a real-time clock device.  When a counter/timer is used to provide the
+clock tick, the device is typically programmed to operate in continuous
+mode.  This mode selection causes the device to automatically reload the
+initial count and continue the countdown without programmer intervention.
+This reduces the overhead required to manipulate the counter/timer in
+the clock tick ISR and increases the accuracy of tick occurrences.
+The initial count can be based on the microseconds_per_tick field
+in the RTEMS Configuration Table.  An alternate approach is to set
+the initial count for a fixed time period (such as one millisecond)
+and have the ISR invoke <CODE>rtems_clock_tick</CODE> on the
+configured <CODE>microseconds_per_tick</CODE> boundaries.  Obviously, this
+can induce some error if the configured <CODE>microseconds_per_tick</CODE>
+is not evenly divisible by the chosen clock interrupt quantum.
+</P>
+<P>
+It is important to note that the interval between
+clock ticks directly impacts the granularity of RTEMS timing
+operations.  In addition, the frequency of clock ticks is an
+important factor in the overall level of system overhead.  A
+high clock tick frequency results in less processor time being
+available for task execution due to the increased number of
+clock tick ISRs.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00380.html">
+<LINK REV="Precedes" HREF="c_user00379.html">
+<LINK REV="Subdocument" HREF="c_user00379.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00379.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00379.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00380.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

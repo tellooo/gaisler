@@ -1,0 +1,158 @@
+<HTML>
+<!-- created Dec 13 2011 from general.texi line 240 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>General Commands echo - produce message in a shell script</TITLE>
+<LINK REL="Precedes" HREF="shell00018.html">
+<LINK REV="Precedes" HREF="shell00016.html">
+<LINK REV="Subdocument" HREF="shell00014.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="shell00016.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="shell00014.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="shell00018.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Shell User's Guide</CITE></P>
+<H3>2.2.3: echo - produce message in a shell script</H3>
+<H3>SYNOPSYS:</H3>
+<DL><DT><DD>
+<PRE>
+echo [-n | -e] args ...
+</PRE>
+</DL>
+<H3>DESCRIPTION:</H3>
+<P>
+echo prints its arguments on the standard output, separated by spaces.
+Unless the <STRONG>-n</STRONG> option is present, a newline is output following the
+arguments.  The <STRONG>-e</STRONG> option causes echo to treat the escape sequences
+specially, as described in the following paragraph.  The <STRONG>-e</STRONG> option is the
+default, and is provided solely for compatibility with other systems.
+Only one of the options <STRONG>-n</STRONG> and <STRONG>-e</STRONG> may be given.
+</P>
+<P>
+If any of the following sequences of characters is encountered during
+output, the sequence is not output.  Instead, the specified action is
+performed:
+</P>
+<DL>
+<DT><STRONG>\b</STRONG>
+<DD>
+A backspace character is output.
+
+<DT><STRONG>\c</STRONG>
+<DD>
+Subsequent output is suppressed.  This is normally used at the
+end of the last argument to suppress the trailing newline that
+echo would otherwise output.
+
+<DT><STRONG>\f</STRONG>
+<DD>
+Output a form feed.
+
+<DT><STRONG>\n</STRONG>
+<DD>
+Output a newline character.
+
+<DT><STRONG>\r</STRONG>
+<DD>
+Output a carriage return.
+
+<DT><STRONG>\t</STRONG>
+<DD>
+Output a (horizontal) tab character.
+
+<DT><STRONG>\v</STRONG>
+<DD>
+Output a vertical tab.
+
+<DT><STRONG>\0digits</STRONG>
+<DD>
+Output the character whose value is given by zero to three digits.
+If there are zero digits, a nul character is output.
+
+<DT><STRONG>\\</STRONG>
+<DD>
+Output a backslash.
+
+</DL>
+<H3>EXIT STATUS:</H3>
+<P>
+This command returns 0 on success and non-zero if an error is encountered.
+</P>
+<H3>NOTES:</H3>
+<P>
+The octal character escape mechanism (\0digits) differs from the C lan-
+guage mechanism.
+</P>
+<P>
+There is no way to force <CODE>echo</CODE> to treat its arguments literally, rather
+than interpreting them as options and escape sequences.
+</P>
+<H3>EXAMPLES:</H3>
+<P>
+The following is an example of how to use <CODE>echo</CODE>:
+</P>
+<DL><DT><DD>
+<PRE>
+SHLL [/] $ echo a b c
+a b c
+SHLL [/] $ echo
+
+</PRE>
+</DL>
+<H3>CONFIGURATION:</H3>
+<P>
+This command is included in the default shell command set.
+When building a custom command set, define
+<CODE>CONFIGURE_SHELL_COMMAND_ECHO</CODE> to have this
+command included.
+</P>
+<P>
+This command can be excluded from the shell command set by
+defining <CODE>CONFIGURE_SHELL_NO_COMMAND_ECHO</CODE> when all
+shell commands have been configured.
+</P>
+<H3>PROGRAMMING INFORMATION:</H3>
+<P>
+The <CODE>echo</CODE> is implemented by a C language function
+which has the following prototype:
+</P>
+<DL><DT><DD>
+<PRE>
+int rtems_shell_rtems_main_echo(
+  int    argc,
+  char **argv
+);
+</PRE>
+</DL>
+<P>
+The configuration structure for the <CODE>echo</CODE> has the
+following prototype:
+</P>
+<DL><DT><DD>
+<PRE>
+extern rtems_shell_cmd_t rtems_shell_ECHO_Command;
+</PRE>
+</DL>
+<H3>ORIGIN:</H3>
+<P>
+The implementation and portions of the documentation for this
+command are from NetBSD 4.0.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="shell00018.html">
+<LINK REV="Precedes" HREF="shell00016.html">
+<LINK REV="Subdocument" HREF="shell00014.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="shell00016.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="shell00014.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="shell00018.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Shell User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

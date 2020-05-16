@@ -1,0 +1,84 @@
+<HTML>
+<!-- created Dec 13 2011 from general.texi line 46 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Port Specific Information CPU Model Dependent Features</TITLE>
+<LINK REL="Precedes" HREF="cpu_supplement00009.html">
+<LINK REV="Precedes" HREF="cpu_supplement00002.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00002.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00002.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00002.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00009.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<H2>1.1: CPU Model Dependent Features</H2>
+<MENU>
+<LI><A HREF="cpu_supplement00009.html">Port Specific Information CPU Model Name</A>
+<LI><A HREF="cpu_supplement00010.html">Port Specific Information Floating Point Unit</A>
+</MENU>
+<P>
+Microprocessors are generally classified into families with a variety of
+CPU models or implementations within that family.  Within a processor
+family, there is a high level of binary compatibility.  This family
+may be based on either an architectural specification or on maintaining
+compatibility with a popular processor.  Recent microprocessor families
+such as the SPARC or PowerPC are based on an architectural specification
+which is independent or any particular CPU model or implementation.
+Older families such as the Motorola 68000 and the Intel x86 evolved as the
+manufacturer strived to produce higher performance processor models which
+maintained binary compatibility with older models.
+</P>
+<P>
+RTEMS takes advantage of the similarity of the various models within a
+CPU family.  Although the models do vary in significant ways, the high
+level of compatibility makes it possible to share the bulk of the CPU
+dependent executive code across the entire family.  Each processor family
+supported by RTEMS has a list of features which vary between CPU models
+within a family.  For example, the most common model dependent feature
+regardless of CPU family is the presence or absence of a floating point
+unit or coprocessor.  When defining the list of features present on a
+particular CPU model, one simply notes that floating point hardware
+is or is not present and defines a single constant appropriately.
+Conditional compilation is utilized to include the appropriate source
+code for this CPU model's feature set.  It is important to note that
+this means that RTEMS is thus compiled using the appropriate feature set
+and compilation flags optimal for this CPU model used.  The alternative
+would be to generate a binary which would execute on all family members
+using only the features which were always present.
+</P>
+<P>
+The set of CPU model feature macros are defined in the file
+<CODE>cpukit/score/cpu/CPU/rtems/score/cpu.h</CODE> based upon the GNU tools
+multilib variant that is appropriate for the particular CPU model defined
+on the compilation command line.
+</P>
+<P>
+In each of the architecture specific chapters, this section presents
+the set of features which vary across various implementations of the
+architecture that may be of importance to RTEMS application developers.
+</P>
+<P>
+The subsections will vary amongst the target architecture chapters as
+the specific features may vary.  However, each port will include a few
+common features such as the CPU Model Name and presence of a hardware
+Floating Point Unit.  The common features are described here.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="cpu_supplement00009.html">
+<LINK REV="Precedes" HREF="cpu_supplement00002.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00002.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00002.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00002.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00009.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

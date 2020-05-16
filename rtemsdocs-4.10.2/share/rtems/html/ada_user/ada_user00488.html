@@ -1,0 +1,62 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/object.texi line 184 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Object Services Printing an Object Id</TITLE>
+<LINK REL="Precedes" HREF="ada_user00483.html">
+<LINK REV="Precedes" HREF="ada_user00487.html">
+<LINK REV="Subdocument" HREF="ada_user00482.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00487.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00482.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00483.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>27.3.2: Printing an Object Id</H3>
+<P>
+RTEMS also provides services to associate the API and Class
+portions of an Object Id with strings.  This allows the
+application developer to provide more information about
+an object in diagnostic messages.
+</P>
+<P>
+In the following C language example, an Id is decomposed into
+its constituent parts and &quot;pretty-printed.&quot;
+</P>
+<DL><DT><DD>
+<PRE>
+void prettyPrintObjectId(rtems_id id)
+{
+  int tmpAPI, tmpClass;
+
+  tmpAPI   = rtems_object_id_get_api(id),
+  tmpClass = rtems_object_id_get_class(id),
+
+  printf(
+    &quot;API=%s Class=%s Node=%d Index=%d\n&quot;,
+    rtems_object_get_api_name(tmpAPI),
+    rtems_object_get_api_class_name(tmpAPI, tmpClass),
+    rtems_object_id_get_node(id),
+    rtems_object_id_get_index(id)
+  );
+}
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00483.html">
+<LINK REV="Precedes" HREF="ada_user00487.html">
+<LINK REV="Subdocument" HREF="ada_user00482.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00487.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00482.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00483.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

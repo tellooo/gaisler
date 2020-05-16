@@ -1,0 +1,81 @@
+<HTML>
+<!-- created Dec 13 2011 from init.texi line 27 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Initialization Code Introduction</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00037.html">
+<LINK REV="Precedes" HREF="bsp_howto00035.html">
+<LINK REV="Subdocument" HREF="bsp_howto00035.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00035.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00035.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00037.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H2>7.1: Introduction</H2>
+<P>
+The initialization code is the first piece of code executed when there's a
+reset/reboot. Its purpose is to initialize the board for the application.
+This chapter contains a narrative description of the initialization
+process followed by a description of each of the files and routines
+commonly found in the BSP related to initialization.  The remainder of
+this chapter covers special issues which require attention such
+as interrupt vector table and chip select initialization.
+</P>
+<P>
+Most of the examples in this chapter will be based on the SPARC/ERC32 and
+m68k/gen68340 BSP initialization code.  Like most BSPs, the initialization
+for these BSP is divided into two subdirectories under the BSP source
+directory.  The BSP source code for these BSPs is in the following
+directories:
+</P>
+<DL><DT><DD>
+<PRE>
+c/src/lib/libbsp/m68k/gen68340
+c/src/lib/libbsp/sparc/erc32
+</PRE>
+</DL>
+<P>
+Both BSPs contain startup code written in assembly language and C.
+The gen68340 BSP has its early initialization start code in the
+<CODE>start340</CODE> subdirectory and its C startup code in the <CODE>startup</CODE>
+directory.  In the <CODE>start340</CODE> directory are two source files.
+The file <CODE>startfor340only.s</CODE> is the simpler of these files as it only
+has initialization code for a MC68340 board.  The file <CODE>start340.s</CODE>
+contains initialization for a 68349 based board as well.
+</P>
+<P>
+Similarly, the ERC32 BSP has startup code written in assembly language
+and C.  However, this BSP shares this code with other SPARC BSPs.
+Thus the <CODE>Makefile.am</CODE> explicitly references the following files
+for this functionality.
+</P>
+<DL><DT><DD>
+<PRE>
+../../sparc/shared/start.S
+../../sparc/shared/bspclean.c
+</PRE>
+</DL>
+<P>
+<STRONG>NOTE:</STRONG> In most BSPs, the directory named <CODE>start340</CODE> in the
+gen68340 BSP would be simply named <CODE>start</CODE> or start followed by a
+BSP designation.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00037.html">
+<LINK REV="Precedes" HREF="bsp_howto00035.html">
+<LINK REV="Subdocument" HREF="bsp_howto00035.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00035.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00035.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00037.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

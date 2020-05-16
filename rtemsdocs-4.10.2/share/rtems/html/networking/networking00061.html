@@ -1,0 +1,42 @@
+<HTML>
+<!-- created Dec 13 2011 from decdriver.texi line 208 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Receiver Thread</TITLE>
+<LINK REL="Precedes" HREF="networking00062.html">
+<LINK REV="Precedes" HREF="networking00060.html">
+<LINK REV="Subdocument" HREF="networking00054.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="networking00060.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="networking00054.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="networking00062.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Network Supplement</CITE></P>
+<H3>6.4.3: Receiver Thread</H3>
+<P>
+This thread is event driven. Each time a DEC PCI board interrupt occurs, the
+handler checks if this is a receive interrupt and send an event ``reception''
+to the receiver thread which looks into the entire buffer descriptors ring the
+ones that contain a valid incoming frame (bit OWN=0 means descriptor belongs
+to host processor). Each valid incoming ethernet frame is sent to the protocol
+stack and the buffer descriptor is given back to the DEC board (the host processor
+reset bit OWN, which means descriptor belongs to 21140).
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="networking00062.html">
+<LINK REV="Precedes" HREF="networking00060.html">
+<LINK REV="Subdocument" HREF="networking00054.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="networking00060.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="networking00054.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="networking00062.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Network Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

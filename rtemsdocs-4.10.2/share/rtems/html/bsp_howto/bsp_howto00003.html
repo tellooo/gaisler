@@ -1,0 +1,66 @@
+<HTML>
+<!-- created Dec 13 2011 from target.texi line 39 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Target Dependent Files CPU Dependent</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00004.html">
+<LINK REV="Precedes" HREF="bsp_howto00002.html">
+<LINK REV="Subdocument" HREF="bsp_howto00002.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00002.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00002.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00004.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H2>2.1: CPU Dependent</H2>
+<P>
+This class of code includes the foundation
+routines for the executive proper such as the context switch and
+the interrupt subroutine implementations.  Sources for the supported
+processor families can be found in <CODE>cpukit/score/cpu</CODE>.
+A good starting point for a new family of processors is the
+<CODE>no_cpu</CODE> directory, which holds both prototypes and
+descriptions of each needed CPU dependent function.
+</P>
+<P>
+CPU dependent code is further subcategorized if the implementation is
+dependent on a particular CPU model.  For example, the MC68000 and MC68020
+processors are both members of the m68k CPU family but there are significant
+differences between these CPU models which RTEMS must take into account.
+</P>
+<P>
+The source code found in the <CODE>cpukit/score/cpu</CODE> is required to
+only depend upon the CPU model variations that GCC distinguishes
+for the purposes of multilib'ing.  Multilib is the term the GNU
+community uses to refer to building a single library source multiple
+times with different compiler options so the binary code generated
+is compatible.  As an example, from GCC's perspective, many PowerPC
+CPU models are just a PPC603e.  Remember that GCC only cares about
+the CPU code itself and need not be aware of any peripherals.  In
+the embedded community, we are exposed to thousands of CPU models
+which are all based upon only a relative small number of CPU cores.
+</P>
+<P>
+Similarly for the SPARC/ERC32 BSP, the <CODE>RTEMS_CPU</CODE> is specified as
+<CODE>erc32</CODE> which is the name of the CPU model and BSP for this SPARC V7
+system on chip.  But the multilib variant used is actually <CODE>v7</CODE>
+which indicates the ERC32 CPU core is a SPARC V7.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00004.html">
+<LINK REV="Precedes" HREF="bsp_howto00002.html">
+<LINK REV="Subdocument" HREF="bsp_howto00002.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00002.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00002.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00004.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

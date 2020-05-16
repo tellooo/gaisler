@@ -1,0 +1,61 @@
+<HTML>
+<!-- created Dec 13 2011 from barrier.texi line 513 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Barrier Manager BARRIER_RELEASE - Release a barrier</TITLE>
+<LINK REL="Precedes" HREF="c_user00376.html">
+<LINK REV="Precedes" HREF="c_user00374.html">
+<LINK REV="Subdocument" HREF="c_user00363.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00374.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00363.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00376.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H3>20.4.5: BARRIER_RELEASE - Release a barrier</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+rtems_status_code rtems_barrier_release(
+  rtems_id  id,
+  uint32_t *released
+);
+</PRE>
+</DL>
+<H3>DIRECTIVE STATUS CODES:</H3>
+<P>
+<CODE>RTEMS_SUCCESSFUL</CODE> - barrier released successfully<BR>
+
+<CODE>RTEMS_INVALID_ID</CODE> - invalid barrier id<BR>
+
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This directive releases the barrier specified by id.
+All tasks waiting at the barrier will be unblocked.
+If the running task's preemption mode is enabled and one of
+the unblocked tasks has a higher priority than the running task.
+</P>
+<H3>NOTES:</H3>
+<P>
+The calling task may be preempted if it causes a
+higher priority task to be made ready for execution.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00376.html">
+<LINK REV="Precedes" HREF="c_user00374.html">
+<LINK REV="Subdocument" HREF="c_user00363.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00374.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00363.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00376.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

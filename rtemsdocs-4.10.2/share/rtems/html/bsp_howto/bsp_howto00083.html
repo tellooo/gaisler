@@ -1,0 +1,88 @@
+<HTML>
+<!-- created Dec 13 2011 from rtc.texi line 98 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Real-Time Clock Driver Initialization</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00084.html">
+<LINK REV="Precedes" HREF="bsp_howto00082.html">
+<LINK REV="Subdocument" HREF="bsp_howto00081.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00082.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00081.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00084.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H2>11.2: Initialization</H2>
+<P>
+The <CODE>rtc_initialize</CODE> routine is responsible for initializing the
+RTC chip so it can be used.  The shared libchip implementation of this
+driver supports multiple RTCs and bases its initialization order on
+the order the chips are defined in the <CODE>RTC_Table</CODE>.  Each chip
+defined in the table may or may not be present on this particular board.
+It is the responsibility of the <CODE>deviceProbe</CODE> to indicate the
+presence of a particular RTC chip.  The first RTC found to be present
+is considered the preferred RTC.
+</P>
+<P>
+In the shared libchip based implementation
+of the driver, the following actions are performed:
+</P>
+<DL><DT><DD>
+<PRE>
+rtems_device_driver rtc_initialize(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor_arg,
+  void                      *arg
+)
+{
+   for each RTC configured in RTC_Table
+     if the deviceProbe for this RTC indicates it is present
+       set RTC_Minor to this device
+       set RTC_Present to TRUE
+       break out of this loop
+
+   if RTC_Present is not TRUE
+     return RTEMS_INVALID_NUMBER to indicate that no RTC is present
+
+   register this minor number as the &quot;/dev/rtc&quot;
+
+   perform the deviceInitialize routine for the preferred RTC chip
+
+   for RTCs past this one in the RTC_Table
+     if the deviceProbe for this RTC indicates it is present
+       perform the deviceInitialize routine for this RTC chip
+       register the configured name for this RTC
+}
+</PRE>
+</DL>
+<P>
+The <CODE>deviceProbe</CODE> routine returns TRUE if the device
+configured by this entry in the <CODE>RTC_Table</CODE> is present.
+This configuration scheme allows one to support multiple versions
+of the same board with a single BSP.  For example, if the first
+generation of a board had Vendor A's RTC chip and the second
+generation had Vendor B's RTC chip, RTC_Table could contain
+information for both.  The <CODE>deviceProbe</CODE> configured
+for Vendor A's RTC chip would need to return TRUE if the
+board was a first generation one.  The <CODE>deviceProbe</CODE>
+routines are very board dependent and must be provided by
+the BSP.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00084.html">
+<LINK REV="Precedes" HREF="bsp_howto00082.html">
+<LINK REV="Subdocument" HREF="bsp_howto00081.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00082.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00081.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00084.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

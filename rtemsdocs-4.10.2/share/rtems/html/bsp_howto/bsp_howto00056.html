@@ -1,0 +1,62 @@
+<HTML>
+<!-- created Dec 13 2011 from console.texi line 150 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Console Driver Serial Driver Functioning Overview</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00057.html">
+<LINK REV="Precedes" HREF="bsp_howto00055.html">
+<LINK REV="Subdocument" HREF="bsp_howto00052.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00055.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00052.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00057.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H2>8.4: Serial Driver Functioning Overview</H2>
+<MENU>
+<LI><A HREF="bsp_howto00057.html">Console Driver Basics</A>
+<LI><A HREF="bsp_howto00058.html">Console Driver Termios and Polled IO</A>
+<LI><A HREF="bsp_howto00059.html">Console Driver Termios and Interrupt Driven IO</A>
+<LI><A HREF="bsp_howto00060.html">Console Driver Initialization</A>
+<LI><A HREF="bsp_howto00061.html">Console Driver Opening a serial device</A>
+<LI><A HREF="bsp_howto00062.html">Console Driver Closing a Serial Device</A>
+<LI><A HREF="bsp_howto00063.html">Console Driver Reading Characters from a Serial Device</A>
+<LI><A HREF="bsp_howto00064.html">Console Driver Writing Characters to a Serial Device</A>
+<LI><A HREF="bsp_howto00065.html">Console Driver Changing Serial Line Parameters</A>
+</MENU>
+<P>
+The following Figure shows how a Termios driven serial driver works:
+</P>
+<P ALIGN="center"><IMG SRC="TERMIOSFlow.png" ALT="Termios Flow"></P>
+<P>
+The following list describes the basic flow.
+</P>
+<UL>
+<LI>the application programmer uses standard C library call (printf,
+scanf, read, write, etc.),
+
+<LI>C library (e.g. RedHat (formerly Cygnus) Newlib) calls
+the RTEMS system call interface.  This code can be found in the
+<CODE>cpukit/libcsupport/src</CODE> directory.
+
+<LI>Glue code calls the serial driver entry routines.
+
+</UL>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00057.html">
+<LINK REV="Precedes" HREF="bsp_howto00055.html">
+<LINK REV="Subdocument" HREF="bsp_howto00052.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00055.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00052.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00057.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,244 @@
+<HTML>
+<!-- created Dec 13 2011 from networkapp.texi line 109 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Network Configuration</TITLE>
+<LINK REL="Precedes" HREF="networking00025.html">
+<LINK REV="Precedes" HREF="networking00023.html">
+<LINK REV="Subdocument" HREF="networking00019.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="networking00023.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="networking00019.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="networking00025.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Network Supplement</CITE></P>
+<H3>3.3.2: Network Configuration</H3>
+<P>
+The network configuration is specified by declaring
+and initializing the <CODE>rtems_bsdnet_config</CODE>
+structure.
+</P>
+<DL><DT><DD>
+<PRE>
+struct rtems_bsdnet_config {
+  /*
+   * This entry points to the head of the ifconfig chain.
+   */
+  struct rtems_bsdnet_ifconfig *ifconfig;
+
+  /*
+   * This entry should be rtems_bsdnet_do_bootp if BOOTP
+   * is being used to configure the network, and NULL
+   * if BOOTP is not being used.
+   */
+  void                    (*bootp)(void);
+
+  /*
+   * The remaining items can be initialized to 0, in
+   * which case the default value will be used.
+   */
+  rtems_task_priority  network_task_priority;  /* 100        */
+  unsigned long        mbuf_bytecount;         /* 64 kbytes  */
+  unsigned long        mbuf_cluster_bytecount; /* 128 kbytes */
+  char                *hostname;               /* BOOTP      */
+  char                *domainname;             /* BOOTP      */
+  char                *gateway;                /* BOOTP      */
+  char                *log_host;               /* BOOTP      */
+  char                *name_server[3];         /* BOOTP      */
+  char                *ntp_server[3];          /* BOOTP      */
+  unsigned long        sb_efficiency;          /* 2          */
+  /* UDP TX: 9216 bytes */
+  unsigned long        udp_tx_buf_size;
+  /* UDP RX: 40 * (1024 + sizeof(struct sockaddr_in)) */
+  unsigned long        udp_rx_buf_size;
+  /* TCP TX: 16 * 1024 bytes */
+  unsigned long        tcp_tx_buf_size;
+  /* TCP TX: 16 * 1024 bytes */
+  unsigned long        tcp_rx_buf_size;
+};
+</PRE>
+</DL>
+<P>
+The structure entries are described in the following table.
+If your application uses BOOTP/DHCP to obtain network configuration
+information and if you are happy with the default values described
+below, you need to provide only the first two entries in this structure.
+</P>
+<DL>
+<DT><CODE>struct rtems_bsdnet_ifconfig *ifconfig</CODE>
+<DD>
+A pointer to the first configuration structure of the first network
+device.  This structure is described in the following section.
+You must provide a value for this entry since there is no default value for it.
+
+<DT><CODE>void (*bootp)(void)</CODE>
+<DD>
+This entry should be set to <CODE>rtems_bsdnet_do_bootp</CODE> if your
+application by default uses the BOOTP/DHCP client protocol to obtain
+network configuration information.  It should be set to <CODE>NULL</CODE> if
+your application does not use BOOTP/DHCP.
+
+<P>
+You can also use <CODE>rtems_bsdnet_do_bootp_rootfs</CODE> to have a set of
+standard files created with the information return by the BOOTP/DHCP
+protocol. The IP address is added to `<CODE>/etc/hosts</CODE>' with the host
+name and domain returned. If no host name or domain is returned
+<CODE>me.mydomain</CODE> is used. The BOOTP/DHCP server's address is also
+added to `<CODE>/etc/hosts</CODE>'. The domain name server listed in the
+BOOTP/DHCP information are added to `<CODE>/etc/resolv.conf</CODE>'. A
+<CODE>search</CODE> record is also added if a domain is returned. The files
+are created if they do not exist.
+</P>
+<P>
+The default <CODE>rtems_bsdnet_do_bootp</CODE> and
+<CODE>rtems_bsdnet_do_bootp_rootfs</CODE> handlers will loop for-ever
+waiting for a BOOTP/DHCP server to respond. If an error is detected
+such as not valid interface or valid hardware address the target will
+reboot allowing any hardware reset to correct itself.
+</P>
+<P>
+You can provide your own custom handler which allows you to perform
+an initialization that meets your specific system requirements. For
+example you could try BOOTP/DHCP then enter a configuration tool if no
+server is found allowing the user to switch to a static configuration.
+</P>
+<DT><CODE>int network_task_priority</CODE>
+<DD>
+The priority at which the network task and network device
+receive and transmit tasks will run.
+If a value of 0 is specified the tasks will run at priority 100.
+
+<DT><CODE>unsigned long mbuf_bytecount</CODE>
+<DD>
+The number of bytes to allocate from the heap for use as mbufs.
+If a value of 0 is specified, 64 kbytes will be allocated.
+
+<DT><CODE>unsigned long mbuf_cluster_bytecount</CODE>
+<DD>
+The number of bytes to allocate from the heap for use as mbuf clusters.
+If a value of 0 is specified, 128 kbytes will be allocated.
+
+<DT><CODE>char *hostname</CODE>
+<DD>
+The host name of the system.
+If this, or any of the following, entries are <CODE>NULL</CODE> the value
+may be obtained from a BOOTP/DHCP server.
+
+<DT><CODE>char *domainname</CODE>
+<DD>
+The name of the Internet domain to which the system belongs.
+
+<DT><CODE>char *gateway</CODE>
+<DD>
+The Internet host number of the network gateway machine,
+specified in 'dotted decimal' (<CODE>129.128.4.1</CODE>) form.
+
+<DT><CODE>char *log_host</CODE>
+<DD>
+The Internet host number of the machine to which <CODE>syslog</CODE> messages
+will be sent.
+
+<DT><CODE>char *name_server[3]</CODE>
+<DD>
+The Internet host numbers of up to three machines to be used as
+Internet Domain Name Servers.
+
+<DT><CODE>char *ntp_server[3]</CODE>
+<DD>
+The Internet host numbers of up to three machines to be used as
+Network Time Protocol (NTP) Servers.
+
+<DT><CODE>unsigned long sb_efficiency</CODE>
+<DD>
+This is the first of five configuration parameters related to
+the amount of memory each socket may consume for buffers.  The
+TCP/IP stack reserves buffers (e.g. mbufs) for each open socket.  The
+TCP/IP stack has different limits for the transmit and receive
+buffers associated with each TCP and UDP socket.  By tuning these
+parameters, the application developer can make trade-offs between
+memory consumption and performance.  The default parameters favor
+performance over memory consumption.  See
+<A HREF="http://www.rtems.org/ml/rtems-users/2004/february/msg00200.html"></A>
+for more details but note that after the RTEMS 4.8 release series,
+the sb_efficiency default was changed from <CODE>8</CODE> to <CODE>2</CODE>.
+
+<P>
+The user should also be aware of the <CODE>SO_SNDBUF</CODE> and <CODE>SO_RCVBUF</CODE>
+IO control operations.  These can be used to specify the
+send and receive buffer sizes for a specific socket.  There
+is no standard IO control to change the <CODE>sb_efficiency</CODE> factor.
+</P>
+<P>
+The <CODE>sb_efficiency</CODE> parameter is a buffering factor used
+in the implementation of the TCP/IP stack.  The default is <CODE>2</CODE>
+which indicates double buffering.  When allocating memory for each
+socket, this number is multiplied by the buffer sizes for that socket.
+</P>
+<DT><CODE>unsigned long udp_tx_buf_size</CODE>
+<DD>
+This configuration parameter specifies the maximum amount of
+buffer memory which may be used for UDP sockets to transmit
+with.  The default size is 9216 bytes which corresponds to
+the maximum datagram size.
+
+<DT><CODE>unsigned long udp_rx_buf_size</CODE>
+<DD>
+This configuration parameter specifies the maximum amount of
+buffer memory which may be used for UDP sockets to receive
+into.  The default size is the following length in bytes:
+
+<DL><DT><DD>
+<PRE>
+40 * (1024 + sizeof(struct sockaddr_in)
+</PRE>
+</DL>
+<DT><CODE>unsigned long tcp_tx_buf_size</CODE>
+<DD>
+This configuration parameter specifies the maximum amount of
+buffer memory which may be used for TCP sockets to transmit
+with.  The default size is sixteen kilobytes.
+
+<DT><CODE>unsigned long tcp_rx_buf_size</CODE>
+<DD>
+This configuration parameter specifies the maximum amount of
+buffer memory which may be used for TCP sockets to receive
+into.  The default size is sixteen kilobytes.
+
+</DL>
+<P>
+In addition, the following fields in the <CODE>rtems_bsdnet_ifconfig</CODE>
+are of interest.
+</P>
+<DL>
+<DT><STRONG>int port</STRONG>
+<DD>
+The I/O port number (ex: 0x240) on which the external Ethernet
+can be accessed.
+
+<DT><STRONG>int irno</STRONG>
+<DD>
+The interrupt number of the external Ethernet controller.
+
+<DT><STRONG>int bpar</STRONG>
+<DD>
+The address of the shared memory on the external Ethernet controller.
+
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="networking00025.html">
+<LINK REV="Precedes" HREF="networking00023.html">
+<LINK REV="Subdocument" HREF="networking00019.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="networking00023.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="networking00019.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="networking00025.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Network Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

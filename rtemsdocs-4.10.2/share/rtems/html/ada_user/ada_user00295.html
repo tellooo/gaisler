@@ -1,0 +1,61 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/io.texi line 193 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>I/O Manager Device Driver Interface</TITLE>
+<LINK REL="Precedes" HREF="ada_user00296.html">
+<LINK REV="Precedes" HREF="ada_user00294.html">
+<LINK REV="Subdocument" HREF="ada_user00287.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00294.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00287.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00296.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>16.2.6: Device Driver Interface</H3>
+<P>
+When an application invokes an I/O manager directive,
+RTEMS determines which device driver entry point must be
+invoked.  The information passed by the application to RTEMS is
+then passed to the correct device driver entry point.  RTEMS
+will invoke each device driver entry point assuming it is
+compatible with the following prototype:
+</P>
+<DL><DT><DD>
+<PRE>
+function IO_Entry (
+  Major          : in     RTEMS.Device_Major_Number;
+  Minor          : in     RTEMS.Device_Major_Number;
+  Argument_Block : in     RTEMS.Address
+) return RTEMS.Status_Code;
+</PRE>
+</DL>
+<P>
+The format and contents of the parameter block are
+device driver and entry point dependent.
+</P>
+<P>
+It is recommended that a device driver avoid
+generating error codes which conflict with those used by
+application components.  A common technique used to generate
+driver specific error codes is to make the most significant part
+of the status indicate a driver specific code.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00296.html">
+<LINK REV="Precedes" HREF="ada_user00294.html">
+<LINK REV="Subdocument" HREF="ada_user00287.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00294.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00287.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00296.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

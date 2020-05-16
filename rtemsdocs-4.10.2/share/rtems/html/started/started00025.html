@@ -1,0 +1,60 @@
+<HTML>
+<!-- created Dec 13 2011 from binaries.texi line 73 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Installing RPMs</TITLE>
+<LINK REL="Precedes" HREF="started00026.html">
+<LINK REV="Precedes" HREF="started00022.html">
+<LINK REV="Subdocument" HREF="started00022.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started00022.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started00022.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started00026.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with RTEMS</CITE></P>
+<H3>3.1.1: Installing RPMs</H3>
+<P>
+The following is a sample session illustrating the installation
+of a C/C++ toolset targeting the SPARC architecture.
+</P>
+<DL><DT><DD>
+<PRE>
+rpm -U rtems-4.10-binutils-common-2.18.91-1.i386.rpm
+rpm -U rtems-4.10-sparc-rtems4.10-binutils-2.18.91-1.i386.rpm
+rpm -U rtems-4.10-gcc-common-4.3.2-3.i386.rpm
+rpm -U rtems-4.10-sparc-rtems4.10-newlib-1.16.0-3.i386.rpm
+rpm -U rtems-4.10-sparc-rtems4.10-gcc-4.3.2-3.i386.rpm
+rpm -U rtems-4.10-sparc-rtems4.10-gcc-c++-4.3.2-3.i386.rpm
+rpm -U rtems-4.10-gdb-common-6.8-3.i386.rpm
+rpm -U rtems-4.10-sparc-rtems4.10-gdb-6.8-3.i386.rpm
+</PRE>
+</DL>
+<P>
+Upon successful completion of the above command sequence, a
+C/C++ cross development toolset targeting the SPARC is
+installed in <CODE>/opt/rtems-4.10</CODE>.  In order to use this toolset,
+the directory <CODE>/opt/rtems-4.10/bin</CODE> must be included in your
+PATH.
+</P>
+<P>
+Once you have successfully installed the RPMs for BINUTILS, GCC,
+NEWLIB, and GDB, then you may proceed directly to <A HREF="started00024.html">Building RTEMS</A>.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="started00026.html">
+<LINK REV="Precedes" HREF="started00022.html">
+<LINK REV="Subdocument" HREF="started00022.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started00022.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started00022.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started00026.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with RTEMS</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,285 @@
+<HTML>
+<!-- created Dec 13 2011 from conf.texi line 1008 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Configuring a System Configuration Table</TITLE>
+<LINK REL="Precedes" HREF="c_user00416.html">
+<LINK REV="Precedes" HREF="c_user00436.html">
+<LINK REV="Subdocument" HREF="c_user00043.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00436.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00043.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00416.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H2>23.3: Configuration Table</H2>
+<P>
+The RTEMS Configuration Table is used to tailor an
+application for its specific needs.  For example, the user can
+configure the number of device drivers or which APIs may be used.
+THe address of the user-defined Configuration Table is passed as an
+argument to the <CODE>rtems_initialize_executive</CODE>
+directive, which MUST be the first RTEMS directive called.
+The RTEMS Configuration Table is defined in the following C structure:
+</P>
+<DL><DT><DD>
+<PRE>
+typedef struct {
+  void                           *work_space_start;
+  uintptr_t                       work_space_size;
+  uint32_t                        maximum_extensions;
+  uint32_t                        microseconds_per_tick;
+  uint32_t                        ticks_per_timeslice;
+  void                          (*idle_task)( void );
+  uint32_t                        idle_task_stack_size;
+  uint32_t                        interrupt_stack_size;
+  void *                        (*stack_allocate_hook)( size_t );
+  void                          (*stack_free_hook)( void * );
+  bool                            do_zero_of_workspace;
+  uint32_t                        maximum_drivers;
+  uint32_t                        number_of_device_drivers;
+  rtems_driver_address_table     *Device_driver_table;
+  uint32_t                        number_of_initial_extensions;
+  rtems_extensions_table         *User_extension_table;
+#if defined(RTEMS_MULTIPROCESSING)
+  rtems_multiprocessing_table    *User_multiprocessing_table;
+#endif
+  rtems_api_configuration_table  *RTEMS_api_configuration;
+  posix_api_configuration_table  *POSIX_api_configuration;
+  itron_api_configuration        *ITRON_api_configuration;
+} rtems_configuration_table;
+</PRE>
+</DL>
+<DL>
+<DT><STRONG>work_space_start</STRONG>
+<DD>
+is the address of the RTEMS RAM Workspace.
+This area contains items such as the
+various object control blocks (TCBs, QCBs, ...) and task stacks.
+If the address is not aligned on a four-word boundary, then
+RTEMS will invoke the fatal error handler during
+<CODE>rtems_initialize_executive</CODE>.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro <CODE>CONFIGURE_EXECUTIVE_RAM_WORK_AREA</CODE>
+which defaults to <CODE>NULL</CODE>.  Normally, this field should be
+configured as <CODE>NULL</CODE> as BSPs will assign memory for the
+RTEMS RAM Workspace as part of system initialization.
+
+<DT><STRONG>work_space_size</STRONG>
+<DD>
+is the calculated size of the
+RTEMS RAM Workspace.  The section Sizing the RTEMS RAM Workspace
+details how to arrive at this number.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro <CODE>CONFIGURE_EXECUTIVE_RAM_SIZE</CODE>
+and is calculated based on the other system configuration settings.
+
+<DT><STRONG>microseconds_per_tick</STRONG>
+<DD>
+is number of microseconds per clock tick.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro <CODE>CONFIGURE_MICROSECONDS_PER_TICK</CODE>.
+If not defined by the application, then the
+<CODE>CONFIGURE_MICROSECONDS_PER_TICK</CODE> macro defaults to 10000
+(10 milliseconds).
+
+<DT><STRONG>ticks_per_timeslice</STRONG>
+<DD>
+is the number of clock ticks for a timeslice.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro <CODE>CONFIGURE_TICKS_PER_TIMESLICE</CODE>.
+
+<DT><STRONG>idle_task</STRONG>
+<DD>
+is the address of the optional user
+provided routine which is used as the system's IDLE task.  If
+this field is not NULL, then the RTEMS default IDLE task is not
+used.  This field may be NULL to indicate that the default IDLE
+is to be used.  When using the <CODE>rtems/confdefs.h</CODE> mechanism
+for configuring an RTEMS application, the value for this field
+corresponds to the setting of the macro <CODE>CONFIGURE_IDLE_TASK_BODY</CODE>.
+
+<DT><STRONG>idle_task_stack_size</STRONG>
+<DD>
+is the size of the RTEMS idle task stack in bytes.  If this number is less
+than the configured minimum stack size, then the idle task's stack will
+be set to the minimum.  When using the <CODE>rtems/confdefs.h</CODE> mechanism
+for configuring an RTEMS application, the value for this field corresponds
+to the setting of the macro <CODE>CONFIGURE_IDLE_TASK_STACK_SIZE</CODE>.
+
+<DT><STRONG>interrupt_stack_size</STRONG>
+<DD>
+is the size of the RTEMS interrupt stack in bytes.  If this number is less
+than configured minimum stack size, then the interrupt stack will be set
+to the minimum.  When using the <CODE>rtems/confdefs.h</CODE> mechanism for
+configuring an RTEMS application, the value for this field corresponds
+to the setting of the macro <CODE>CONFIGURE_INTERRUPT_STACK_SIZE</CODE>.
+
+<DT><STRONG>stack_allocate_hook</STRONG>
+<DD>
+may point to a user provided routine to allocate task stacks.
+The default is to allocate task stacks from the RTEMS Workspace.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism
+for configuring an RTEMS application, the value for this field
+corresponds to the setting of the macro
+<CODE>CONFIGURE_TASK_STACK_ALLOCATOR</CODE>.
+
+<DT><STRONG>stack_free_hook</STRONG>
+<DD>
+may point to a user provided routine to free task stacks.
+The default is to allocate task stacks from the RTEMS Workspace.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism
+for configuring an RTEMS application, the value for this field
+corresponds to the setting of the macro
+<CODE>CONFIGURE_TASK_STACK_DEALLOCATOR</CODE>.
+
+<DT><STRONG>do_zero_of_workspace</STRONG>
+<DD>
+indicates whether RTEMS should zero the RTEMS Workspace and
+C Program Heap as part of its initialization.  If set to
+TRUE, the Workspace is zeroed.  Otherwise, it is not.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism
+for configuring an RTEMS application, the value for this field
+corresponds to the setting of the macro
+<CODE>CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY</CODE>.
+
+<DT><STRONG>maximum_drivers</STRONG>
+<DD>
+is the maximum number of device drivers that can be registered.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro <CODE>CONFIGURE_MAXIMUM_DRIVERS</CODE>.
+
+<DT><STRONG>number_of_device_drivers</STRONG>
+<DD>
+is the number of device drivers for the system.  There should be
+the same number of entries in the Device Driver Table.  If this field
+is zero, then the <CODE>User_driver_address_table</CODE> entry should be NULL.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the value for this field is calculated
+automatically based on the number of entries in the
+Device Driver Table.  This calculation is based on the assumption
+that the Device Driver Table is named <CODE>Device_drivers</CODE>
+and defined in C.  This table may be generated automatically
+for simple applications using only the device drivers that correspond
+to the following macros:
+
+<UL>
+<LI><CODE>CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER</CODE>
+<LI><CODE>CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER</CODE>
+<LI><CODE>CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER</CODE>
+<LI><CODE>CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER</CODE>
+<LI><CODE>CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER</CODE>
+
+</UL>
+<P>
+Note that network device drivers are not configured in the
+Device Driver Table.
+</P>
+<DT><STRONG>Device_driver_table</STRONG>
+<DD>
+is the address of the Device Driver Table.  This table contains the entry
+points for each device driver.  If the number_of_device_drivers field is zero,
+then this entry should be NULL. The format of this table will be
+discussed below.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the Device Driver Table is assumed to be
+named <CODE>Device_drivers</CODE> and defined in C.  If the application is providing
+its own Device Driver Table, then the macro
+<CODE>CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE</CODE> must be defined to indicate
+this and prevent <CODE>rtems/confdefs.h</CODE> from generating the table.
+
+<DT><STRONG>number_of_initial_extensions</STRONG>
+<DD>
+is the number of initial user extensions.  There should be
+the same number of entries as in the User_extension_table.  If this field
+is zero, then the User_driver_address_table entry should be NULL.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro <CODE>CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS</CODE>
+which is set automatically by <CODE>rtems/confdefs.h</CODE> based on the size
+of the User Extensions Table.
+
+<DT><STRONG>User_extension_table</STRONG>
+<DD>
+is the address of the User
+Extension Table.  This table contains the entry points for the
+static set of optional user extensions.  If no user extensions
+are configured, then this entry should be NULL.  The format of
+this table will be discussed below.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the User Extensions Table is named
+<CODE>Configuration_Initial_Extensions</CODE> and defined in
+confdefs.h.  It is initialized based on the following
+macros:
+
+<UL>
+<LI><CODE>CONFIGURE_INITIAL_EXTENSIONS</CODE>
+<LI><CODE>STACK_CHECKER_EXTENSION</CODE>
+
+</UL>
+<P>
+The application may configure one or more initial user extension
+sets by setting the <CODE>CONFIGURE_INITIAL_EXTENSIONS</CODE> macro.  By
+defining the <CODE>STACK_CHECKER_EXTENSION</CODE> macro, the task stack bounds
+checking user extension set is automatically included in the
+application.
+</P>
+<DT><STRONG>User_multiprocessing_table</STRONG>
+<DD>
+is the address of the Multiprocessor Configuration Table.  This
+table contains information needed by RTEMS only when used in a multiprocessor
+configuration.  This field must be NULL when RTEMS is used in a
+single processor configuration.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the Multiprocessor Configuration Table
+is automatically generated when the <CODE>CONFIGURE_MP_APPLICATION</CODE>
+is defined.  If <CODE>CONFIGURE_MP_APPLICATION</CODE> is not defined, the this
+entry is set to NULL.  The generated table has the name
+<CODE>Multiprocessing_configuration</CODE>.
+
+<DT><STRONG>RTEMS_api_configuration</STRONG>
+<DD>
+is the address of the RTEMS API Configuration Table.  This table
+contains information needed by the RTEMS API.  This field should be
+NULL if the RTEMS API is not used.  [NOTE: Currently the RTEMS API
+is required to support support components such as BSPs and libraries
+which use this API.]  This table is built automatically and this
+entry filled in, if using the <CODE>rtems/confdefs.h</CODE> application
+configuration mechanism.  The generated table has the name
+<CODE>Configuration_RTEMS_API</CODE>.
+
+<DT><STRONG>POSIX_api_configuration</STRONG>
+<DD>
+is the address of the POSIX API Configuration Table.  This table
+contains information needed by the POSIX API.  This field should be
+NULL if the POSIX API is not used.  This table is built automatically
+and this entry filled in, if using the <CODE>rtems/confdefs.h</CODE> application
+configuration mechanism.  The <CODE>rtems/confdefs.h</CODE> application
+mechanism will fill this field in with the address of the
+<CODE>Configuration_POSIX_API</CODE> table of POSIX API is configured
+and NULL if the POSIX API is not configured.
+
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00416.html">
+<LINK REV="Precedes" HREF="c_user00436.html">
+<LINK REV="Subdocument" HREF="c_user00043.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00436.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00043.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00416.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

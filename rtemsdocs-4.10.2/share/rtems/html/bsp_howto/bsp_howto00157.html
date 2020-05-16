@@ -1,0 +1,63 @@
+<HTML>
+<!-- created Dec 13 2011 from discrete.texi line 55 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Discrete Driver Major and Minor Numbers</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00158.html">
+<LINK REV="Precedes" HREF="bsp_howto00156.html">
+<LINK REV="Subdocument" HREF="bsp_howto00156.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00156.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00156.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00158.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H2>19.1: Major and Minor Numbers</H2>
+<P>
+The <STRONG>major</STRONG> number of a device driver is its index in the
+RTEMS Device Address Table.
+</P>
+<P>
+A <STRONG>minor</STRONG> number is associated with each device instance
+managed by a particular device driver.  An RTEMS minor number
+is an <CODE>unsigned32</CODE> entity.  Convention calls for
+dividing the bits in the minor number down into categories
+that specify a particular bitfield.  This results in categories
+like the following:
+</P>
+<UL>
+<LI><STRONG>board</STRONG> - indicates the board a particular bitfield is located on
+<LI><STRONG>word</STRONG> - indicates the particular word of discrete bits the
+bitfield is located within
+<LI><STRONG>start</STRONG> - indicates the starting bit of the bitfield
+<LI><STRONG>width</STRONG> - indicates the width of the bitfield
+
+</UL>
+<P>
+From the above, it should be clear that a single device driver
+can support multiple copies of the same board in a single system.
+The minor number is used to distinguish the devices.
+</P>
+<P>
+By providing a way to easily access a particular bitfield from
+the device driver, the application is insulated with knowing how
+to mask fields in and out of a discrete I/O.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00158.html">
+<LINK REV="Precedes" HREF="bsp_howto00156.html">
+<LINK REV="Subdocument" HREF="bsp_howto00156.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00156.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00156.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00158.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

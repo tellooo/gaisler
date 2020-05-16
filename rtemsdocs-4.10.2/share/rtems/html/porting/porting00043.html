@@ -1,0 +1,57 @@
+<HTML>
+<!-- created Dec 13 2011 from taskcontext.texi line 61 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Task Context Management Minimum Task Stack Size</TITLE>
+<LINK REL="Precedes" HREF="porting00044.html">
+<LINK REV="Precedes" HREF="porting00042.html">
+<LINK REV="Subdocument" HREF="porting00039.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00042.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00039.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00044.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<H3>6.2.2: Minimum Task Stack Size</H3>
+<P>
+The CPU_STACK_MINIMUM_SIZE macro should be set to the minimum size of each
+task stack.  This size is specified as the number of bytes.  This minimum
+stack size should be large enough to run all RTEMS tests.  The minimum
+stack size is chosen such that a &quot;reasonable&quot; small application should not
+have any problems.  Choosing a minimum stack size that is too small will
+result in the RTEMS tests &quot;blowing&quot; their stack and not executing
+properly.
+</P>
+<P>
+There are many reasons a task could require a stack size larger than the
+minimum.  For example, a task could have a very deep call path or declare
+large data structures on the stack.  Tasks which utilize C++ exceptions
+tend to require larger stacks as do Ada tasks.
+</P>
+<P>
+The following illustrates setting the minimum stack size to 4 kilobytes
+per task.
+</P>
+<DL><DT><DD>
+<PRE>
+#define CPU_STACK_MINIMUM_SIZE          (1024*4)
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="porting00044.html">
+<LINK REV="Precedes" HREF="porting00042.html">
+<LINK REV="Subdocument" HREF="porting00039.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00042.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00039.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00044.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

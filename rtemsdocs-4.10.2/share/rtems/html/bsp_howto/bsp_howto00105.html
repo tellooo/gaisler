@@ -1,0 +1,119 @@
+<HTML>
+<!-- created Dec 13 2011 from nvmem.texi line 79 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Non-Volatile Memory Driver Non-Volatile Memory Driver Configuration</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00106.html">
+<LINK REV="Precedes" HREF="bsp_howto00104.html">
+<LINK REV="Subdocument" HREF="bsp_howto00103.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00104.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00103.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00106.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H2>14.2: Non-Volatile Memory Driver Configuration</H2>
+<P>
+There is not a standard non-volatile driver configuration table but some
+fields are common across different drivers.  The non-volatile memory driver
+configuration table is typically an array of structures with each
+structure containing the information for a particular area of
+non-volatile memory.
+The following is a list of the type of information normally required
+to configure each area of non-volatile memory.
+</P>
+<DL>
+<DT><STRONG>memory_type</STRONG>
+<DD>
+is the type of memory device in this area.  Choices are battery backed RAM,
+EEPROM, Flash, or an optional user-supplied type.  If the user-supplied type
+is configured, then the user is responsible for providing a set of
+routines to program the memory.
+
+<DT><STRONG>memory</STRONG>
+<DD>
+is the base address of this memory area.
+
+<DT><STRONG>attributes</STRONG>
+<DD>
+is a pointer to a memory type specific attribute block.  Some of
+the fields commonly contained in this memory type specific attribute
+structure area:
+
+<DL>
+<DT><STRONG>use_protection_algorithm</STRONG>
+<DD>
+is set to TRUE to indicate that the protection (i.e. locking) algorithm
+should be used for this area of non-volatile memory.  A particular
+type of non-volatile memory may not have a protection algorithm.
+
+<DT><STRONG>access</STRONG>
+<DD>
+is an enumerated type to indicate the organization of the memory
+devices in this memory area.  The following is a list of the
+access types supported by the current driver implementation:
+
+<UL>
+<LI>simple unsigned8
+<LI>simple unsigned16
+<LI>simple unsigned32
+<LI>simple unsigned64
+<LI>single unsigned8 at offset 0 in an unsigned16
+<LI>single unsigned8 at offset 1 in an unsigned16
+<LI>single unsigned8 at offset 0 in an unsigned32
+<LI>single unsigned8 at offset 1 in an unsigned32
+<LI>single unsigned8 at offset 2 in an unsigned32
+<LI>single unsigned8 at offset 3 in an unsigned32
+</UL>
+
+<DT><STRONG>depth</STRONG>
+<DD>
+is the depth of the progamming FIFO on this particular chip.  Some
+chips, particularly EEPROMs, have the same programming algorithm but
+vary in the depth of the amount of data that can be programmed in a single
+block.
+
+</DL>
+<DT><STRONG>number_of_partitions</STRONG>
+<DD>
+is the number of logical partitions within this area.
+
+<DT><STRONG>Partitions</STRONG>
+<DD>
+is the address of the table that contains an entry to describe each
+partition in this area.  Fields within each element of this
+table are defined as follows:
+
+<DL>
+<DT><STRONG>offset</STRONG>
+<DD>
+is the offset of this partition from the base address of this area.
+
+<DT><STRONG>length</STRONG>
+<DD>
+is the length of this partition.
+
+</DL>
+</DL>
+<P>
+By dividing an area of memory into multiple partitions, it is possible
+to easily divide the non-volatile memory for different purposes.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00106.html">
+<LINK REV="Precedes" HREF="bsp_howto00104.html">
+<LINK REV="Subdocument" HREF="bsp_howto00103.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00104.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00103.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00106.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

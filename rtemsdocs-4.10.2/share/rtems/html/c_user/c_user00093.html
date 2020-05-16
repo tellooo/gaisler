@@ -1,0 +1,51 @@
+<HTML>
+<!-- created Dec 13 2011 from intr.texi line 23 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Interrupt Manager Introduction</TITLE>
+<LINK REL="Precedes" HREF="c_user00094.html">
+<LINK REV="Precedes" HREF="c_user00092.html">
+<LINK REV="Subdocument" HREF="c_user00092.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00092.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00092.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00094.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H2>6.1: Introduction</H2>
+<P>
+Any real-time executive must provide a mechanism for
+quick response to externally generated interrupts to satisfy the
+critical time constraints of the application.  The interrupt
+manager provides this mechanism for RTEMS.  This manager permits
+quick interrupt response times by providing the critical ability
+to alter task execution which allows a task to be preempted upon
+exit from an ISR.  The interrupt manager includes the following
+directive:
+</P>
+<UL>
+<LI><CODE>rtems_interrupt_catch</CODE> - Establish an ISR
+<LI><CODE>rtems_interrupt_disable</CODE> - Disable Interrupts
+<LI><CODE>rtems_interrupt_enable</CODE> - Enable Interrupts
+<LI><CODE>rtems_interrupt_flash</CODE> - Flash Interrupt
+<LI><CODE>rtems_interrupt_is_in_progress</CODE> - Is an ISR in Progress
+</UL>
+
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00094.html">
+<LINK REV="Precedes" HREF="c_user00092.html">
+<LINK REV="Subdocument" HREF="c_user00092.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00092.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00092.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00094.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

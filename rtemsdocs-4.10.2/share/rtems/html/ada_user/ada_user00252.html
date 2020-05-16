@@ -1,0 +1,61 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/region.texi line 57 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Region Manager Region Manager Definitions</TITLE>
+<LINK REL="Precedes" HREF="ada_user00253.html">
+<LINK REV="Precedes" HREF="ada_user00249.html">
+<LINK REV="Subdocument" HREF="ada_user00249.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00249.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00249.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00253.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>14.2.1: Region Manager Definitions</H3>
+<P>
+A region makes up a physically contiguous memory
+space with user-defined boundaries from which variable-sized
+segments are dynamically allocated and deallocated.  A segment
+is a variable size section of memory which is allocated in
+multiples of a user-defined page size.  This page size is
+required to be a multiple of four greater than or equal to four.
+For example, if a request for a 350-byte segment is made in a
+region with 256-byte pages, then a 512-byte segment is allocated.
+</P>
+<P>
+Regions are organized as doubly linked chains of
+variable sized memory blocks.  Memory requests are allocated
+using a first-fit algorithm.  If available, the requester
+receives the number of bytes requested (rounded up to the next
+page size).  RTEMS requires some overhead from the region's
+memory for each segment that is allocated.  Therefore, an
+application should only modify the memory of a segment that has
+been obtained from the region.  The application should NOT
+modify the memory outside of any obtained segments and within
+the region's boundaries while the region is currently active in
+the system.
+</P>
+<P>
+Upon return to the region, the free block is
+coalesced with its neighbors (if free) on both sides to produce
+the largest possible unused block.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00253.html">
+<LINK REV="Precedes" HREF="ada_user00249.html">
+<LINK REV="Subdocument" HREF="ada_user00249.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00249.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00249.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00253.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

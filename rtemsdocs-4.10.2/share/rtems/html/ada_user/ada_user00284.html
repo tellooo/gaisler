@@ -1,0 +1,66 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/dpmem.texi line 383 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Dual-Ported Memory Manager PORT_INTERNAL_TO_EXTERNAL - Convert internal to external address</TITLE>
+<LINK REL="Precedes" HREF="ada_user00285.html">
+<LINK REV="Precedes" HREF="ada_user00283.html">
+<LINK REV="Subdocument" HREF="ada_user00275.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00283.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00275.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00285.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>15.4.5: PORT_INTERNAL_TO_EXTERNAL - Convert internal to external address</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+procedure Port_Internal_To_External (
+   ID       : in     RTEMS.ID;
+   Internal : in     RTEMS.Address;
+   External :    out RTEMS.Address;
+   Result   :    out RTEMS.Status_Codes
+);
+</PRE>
+</DL>
+<H3>DIRECTIVE STATUS CODES:</H3>
+<P>
+<CODE>RTEMS.INVALID_ADDRESS</CODE> - <CODE>external</CODE> is NULL<BR>
+
+<CODE>RTEMS.SUCCESSFUL</CODE> - successful conversion
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This directive converts a dual-ported memory address
+from internal to external representation so that it can be
+passed to owner of the DPMA represented by the specified port.
+If the given internal address is an invalid dual-ported address,
+then the external address is set to the given internal address.
+</P>
+<H3>NOTES:</H3>
+<P>
+This directive is callable from an ISR.
+</P>
+<P>
+This directive will not cause the calling task to be
+preempted.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00285.html">
+<LINK REV="Precedes" HREF="ada_user00283.html">
+<LINK REV="Subdocument" HREF="ada_user00275.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00283.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00275.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00285.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

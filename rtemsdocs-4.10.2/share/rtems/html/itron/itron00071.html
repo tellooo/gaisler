@@ -1,0 +1,97 @@
+<HTML>
+<!-- created Dec 13 2011 from eventflags.texi line 93 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Eventflags Manager T_CFLG Structure</TITLE>
+<LINK REL="Precedes" HREF="itron00072.html">
+<LINK REV="Precedes" HREF="itron00070.html">
+<LINK REV="Subdocument" HREF="itron00067.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00070.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00067.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00072.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<H3>4.2.2: T_CFLG Structure</H3>
+<P>
+The T_CFLG structire is used to define the characteristics of an eventflag
+and passed as an argument to the <CODE>cre_flg</CODE> service. The structure is
+defined as follows:
+</P>
+<DL><DT><DD>
+<PRE>
+
+/*
+ * Create Eventflags (cre_flg) Structure
+ */
+
+typedef struct t_cflg {
+  VP exinf;     /* extended information */
+  ATR flgatr;   /* eventflag attribute */
+  UINT iflgptn; /* initial eventflag */
+  /* additional implementation dependent information may be included */
+} T_CFLG;
+
+/*
+ *  flgatr - Eventflag Attribute Values
+ */
+
+
+/* multiple tasks are not allowed to wait (Wait Single Task)*/
+
+#define TA_WSGL 0x00
+
+/* multiple tasks are allowed to wait (Wait Multiple Task) */
+
+#define TA_WMUL 0x08
+
+/* wfmode */
+#define TWF_ANDW 0x00 /* AND wait */
+#define TWF_ORW 0x02 /* OR wait */
+#define TWF_CLR 0x01 /* clear specification */
+</PRE>
+</DL>
+<P>
+where the meaning of each field is:
+</P>
+<DL>
+<DT><STRONG>exinf</STRONG>
+<DD>
+may be used freely by the user for including extended information about
+the eventflag to be created. Information set here may be accessed by
+<CODE>ref_flg</CODE>. If a larger region is desired for including user information, or
+if the user wishes to change the contents of this information, the usr
+should allocate memory area and set the address of this memory packet to
+<CODE>exinf</CODE>.  The OS does not take care of the contents of <CODE>exinf</CODE>. This
+implementation does not use this field.
+
+<DT><STRONG>flgatr</STRONG>
+<DD>
+is the attributes for this eventflag. The lower bits of flgatr represent
+system attributes, while the upper bits represent implementation-dependent
+attributes.
+
+<DT><STRONG>iflgptn</STRONG>
+<DD>
+is the initial eventflag pattern.
+(CPU and/or implementation-dependent information may also be included)
+
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="itron00072.html">
+<LINK REV="Precedes" HREF="itron00070.html">
+<LINK REV="Subdocument" HREF="itron00067.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00070.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00067.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00072.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

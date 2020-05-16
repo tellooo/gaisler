@@ -1,0 +1,75 @@
+<HTML>
+<!-- created Dec 13 2011 from concepts.texi line 324 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Key Concepts Communication and Synchronization</TITLE>
+<LINK REL="Precedes" HREF="c_user00020.html">
+<LINK REV="Precedes" HREF="c_user00024.html">
+<LINK REV="Subdocument" HREF="c_user00016.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00024.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00016.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00020.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H2>2.3: Communication and Synchronization</H2>
+<P>
+In real-time multitasking applications, the ability
+for cooperating execution threads to communicate and synchronize
+with each other is imperative.  A real-time executive should
+provide an application with the following capabilities:
+</P>
+<UL>
+<LI>Data transfer between cooperating tasks
+<LI>Data transfer between tasks and ISRs
+<LI>Synchronization of cooperating tasks
+<LI>Synchronization of tasks and ISRs
+</UL>
+
+<P>
+Most RTEMS managers can be used to provide some form
+of communication and/or synchronization.  However, managers
+dedicated specifically to communication and synchronization
+provide well established mechanisms which directly map to the
+application's varying needs.  This level of flexibility allows
+the application designer to match the features of a particular
+manager with the complexity of communication and synchronization
+required.  The following managers were specifically designed for
+communication and synchronization:
+</P>
+<UL>
+<LI>Semaphore
+<LI>Message Queue
+<LI>Event
+<LI>Signal
+</UL>
+
+<P>
+The semaphore manager supports mutual exclusion
+involving the synchronization of access to one or more shared
+user resources.  Binary semaphores may utilize the optional
+priority inheritance algorithm to avoid the problem of priority
+inversion.  The message manager supports both communication and
+synchronization, while the event manager primarily provides a
+high performance synchronization mechanism.  The signal manager
+supports only asynchronous communication and is typically used
+for exception handling.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00020.html">
+<LINK REV="Precedes" HREF="c_user00024.html">
+<LINK REV="Subdocument" HREF="c_user00016.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00024.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00016.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00020.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

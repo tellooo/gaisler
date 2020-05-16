@@ -1,0 +1,89 @@
+<HTML>
+<!-- created Dec 13 2011 from rtmon.texi line 892 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Rate Monotonic Manager Simple Periodic Task</TITLE>
+<LINK REL="Precedes" HREF="c_user00348.html">
+<LINK REV="Precedes" HREF="c_user00346.html">
+<LINK REV="Subdocument" HREF="c_user00327.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00346.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00327.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00348.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H3>19.3.7: Simple Periodic Task</H3>
+<P>
+This example consists of a single periodic task
+which, after initialization, executes every 100 clock ticks.
+</P>
+<DL><DT><DD>
+<PRE>
+rtems_task Periodic_task(rtems_task_argument arg)
+{
+  rtems_name        name;
+  rtems_id          period;
+  rtems_status_code status;
+
+  name = rtems_build_name( 'P', 'E', 'R', 'D' );
+
+  status = rtems_rate_monotonic_create( name, &amp;period );
+  if ( status != RTEMS_STATUS_SUCCESSFUL ) {
+    printf( &quot;rtems_monotonic_create failed with status of %d.\n&quot;, rc );
+    exit( 1 );
+  }
+
+
+  while ( 1 ) {
+    if ( rtems_rate_monotonic_period( period, 100 ) == RTEMS_TIMEOUT )
+      break;
+
+    /* Perform some periodic actions */
+  }
+
+  /* missed period so delete period and SELF */
+
+  status = rtems_rate_monotonic_delete( period );
+  if ( status != RTEMS_STATUS_SUCCESSFUL ) {
+    printf( &quot;rtems_rate_monotonic_delete failed with status of %d.\n&quot;, status );
+    exit( 1 );
+  }
+
+  status = rtems_task_delete( SELF );    /* should not return */
+  printf( &quot;rtems_task_delete returned with status of %d.\n&quot;, status );
+  exit( 1 );
+}
+</PRE>
+</DL>
+<P>
+The above task creates a rate monotonic period as
+part of its initialization.  The first time the loop is
+executed, the <CODE>rtems_rate_monotonic_period</CODE>
+directive will initiate the period for 100 ticks and return
+immediately.  Subsequent invocations of the
+<CODE>rtems_rate_monotonic_period</CODE> directive will result
+in the task blocking for the remainder of the 100 tick period.
+If, for any reason, the body of the loop takes more than 100
+ticks to execute, the <CODE>rtems_rate_monotonic_period</CODE>
+directive will return the <CODE>RTEMS_TIMEOUT</CODE> status.
+If the above task misses its deadline, it will delete the rate
+monotonic period and itself.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00348.html">
+<LINK REV="Precedes" HREF="c_user00346.html">
+<LINK REV="Subdocument" HREF="c_user00327.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00346.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00327.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00348.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

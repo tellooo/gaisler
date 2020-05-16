@@ -1,0 +1,134 @@
+<HTML>
+<!-- created Dec 13 2011 from network.texi line 344 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Network Commands route - show or manipulate the ip routing table</TITLE>
+<LINK REL="Precedes" HREF="shell00091.html">
+<LINK REV="Precedes" HREF="shell00089.html">
+<LINK REV="Subdocument" HREF="shell00087.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="shell00089.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="shell00087.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="shell00091.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Shell User's Guide</CITE></P>
+<H3>6.2.3: route - show or manipulate the ip routing table</H3>
+<H3>SYNOPSYS:</H3>
+<DL><DT><DD>
+<PRE>
+route [subcommand] [args]
+</PRE>
+</DL>
+<H3>DESCRIPTION:</H3>
+<P>
+This command is used to display and manipulate the routing table.
+When invoked with no arguments, the current routing information is
+displayed.  When invoked with the subcommands <CODE>add</CODE> or <CODE>del</CODE>,
+then additional arguments must be provided to describe the route.
+</P>
+<P>
+Command templates include the following:
+</P>
+<DL><DT><DD>
+<PRE>
+route [add|del] -net IP_ADDRESS gw GATEWAY_ADDRESS [netmask MASK]
+route [add|del] -host IP_ADDRESS gw GATEWAY_ADDRES [netmask MASK]
+</PRE>
+</DL>
+<P>
+When not provided the netmask defaults to <CODE>255.255.255.0</CODE>
+</P>
+<H3>EXIT STATUS:</H3>
+<P>
+This command returns 0 on success and non-zero if an error is encountered.
+</P>
+<H3>NOTES:</H3>
+<P>
+Just like its counterpart on GNU/Linux and BSD systems, this command
+is complicated.  More example usages would be a welcome submission.
+</P>
+<H3>EXAMPLES:</H3>
+<P>
+The following is an example of how to use <CODE>route</CODE> to display,
+add, and delete a new route:
+</P>
+<DL><DT><DD>
+<PRE>
+[/] $ route
+Destination     Gateway/Mask/Hw    Flags     Refs     Use Expire Interface
+default         192.168.1.14       UGS         0        0      0 eth1
+192.168.1.0     255.255.255.0      U           0        0      1 eth1
+192.168.1.14    00:A0:C8:1C:EE:28  UHL         1        0   1444 eth1
+192.168.1.51    00:1D:7E:0C:D0:7C  UHL         0    10844   1202 eth1
+192.168.1.151   00:1C:23:B2:0F:BB  UHL         2       37   1399 eth1
+[/] $  route add -net 192.168.3.0 gw 192.168.1.14
+[/] $ route
+Destination     Gateway/Mask/Hw    Flags     Refs     Use Expire Interface
+default         192.168.1.14       UGS         0        0      0 eth1
+192.168.1.0     255.255.255.0      U           0        0      1 eth1
+192.168.1.14    00:A0:C8:1C:EE:28  UHL         2        0   1498 eth1
+192.168.1.51    00:1D:7E:0C:D0:7C  UHL         0    14937   1202 eth1
+192.168.1.151   00:1C:23:B2:0F:BB  UHL         2       96   1399 eth1
+192.168.3.0     192.168.1.14       UGS         0        0      0 eth1
+[/] $ route del -net 192.168.3.0 gw 192.168.1.14
+[/] $ route
+Destination     Gateway/Mask/Hw    Flags     Refs     Use Expire Interface
+default         192.168.1.14       UGS         0        0      0 eth1
+192.168.1.0     255.255.255.0      U           0        0      1 eth1
+192.168.1.14    00:A0:C8:1C:EE:28  UHL         1        0   1498 eth1
+192.168.1.51    00:1D:7E:0C:D0:7C  UHL         0    15945   1202 eth1
+192.168.1.151   00:1C:23:B2:0F:BB  UHL         2      117   1399 eth1
+</PRE>
+</DL>
+<H3>CONFIGURATION:</H3>
+<P>
+This command is included in the default shell command set.
+When building a custom command set, define
+<CODE>CONFIGURE_SHELL_COMMAND_ROUTE</CODE> to have this
+command included.
+</P>
+<P>
+This command can be excluded from the shell command set by
+defining <CODE>CONFIGURE_SHELL_NO_COMMAND_ROUTE</CODE> when all
+shell commands have been configured.
+</P>
+<H3>PROGRAMMING INFORMATION:</H3>
+<P>
+The <CODE>route</CODE> is implemented by a C language function
+which has the following prototype:
+</P>
+<DL><DT><DD>
+<PRE>
+int rtems_shell_rtems_main_route(
+  int    argc,
+  char **argv
+);
+</PRE>
+</DL>
+<P>
+The configuration structure for the <CODE>route</CODE> has the
+following prototype:
+</P>
+<DL><DT><DD>
+<PRE>
+extern rtems_shell_cmd_t rtems_shell_ROUTE_Command;
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="shell00091.html">
+<LINK REV="Precedes" HREF="shell00089.html">
+<LINK REV="Subdocument" HREF="shell00087.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="shell00089.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="shell00087.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="shell00091.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Shell User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

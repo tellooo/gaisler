@@ -1,0 +1,104 @@
+<HTML>
+<!-- created Dec 13 2011 from rtems.texi line 263 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>RTEMS Specific Commands stackuse - print per thread stack usage</TITLE>
+<LINK REL="Precedes" HREF="shell00071.html">
+<LINK REV="Precedes" HREF="shell00069.html">
+<LINK REV="Subdocument" HREF="shell00067.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="shell00069.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="shell00067.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="shell00071.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Shell User's Guide</CITE></P>
+<H3>5.2.3: stackuse - print per thread stack usage</H3>
+<H3>SYNOPSYS:</H3>
+<DL><DT><DD>
+<PRE>
+stackuse
+</PRE>
+</DL>
+<H3>DESCRIPTION:</H3>
+<P>
+This command prints a Stack Usage Report for all of the tasks
+and threads in the system.  On systems which support it, the
+usage of the interrupt stack is also included in the report.
+</P>
+<H3>EXIT STATUS:</H3>
+<P>
+This command always succeeds and returns 0.
+</P>
+<H3>NOTES:</H3>
+<P>
+The <CODE>CONFIGURE_STACK_CHECKER_ENABLED</CODE> <CODE>confdefs.h</CODE> constant
+must be defined when the application is configured for this
+command to have any information to report.
+</P>
+<H3>EXAMPLES:</H3>
+<P>
+The following is an example of how to use <CODE>stackuse</CODE>:
+</P>
+<DL><DT><DD>
+<PRE>
+SHLL [/] $ stackuse
+Stack usage by thread
+    ID      NAME    LOW          HIGH     CURRENT     AVAILABLE     USED
+0x09010001  IDLE 0x023d89a0 - 0x023d99af 0x023d9760      4096        608
+0x0a010001  UI1  0x023d9f30 - 0x023daf3f 0x023dad18      4096       1804
+0x0a010002  SHLL 0x023db4c0 - 0x023df4cf 0x023de9d0     16384       5116
+0xffffffff  INTR 0x023d2760 - 0x023d375f 0x00000000      4080        316
+</PRE>
+</DL>
+<H3>CONFIGURATION:</H3>
+<P>
+This command is included in the default shell command set.
+When building a custom command set, define
+<CODE>CONFIGURE_SHELL_COMMAND_STACKUSE</CODE> to have this
+command included.
+</P>
+<P>
+This command can be excluded from the shell command set by
+defining <CODE>CONFIGURE_SHELL_NO_COMMAND_STACKUSE</CODE> when all
+shell commands have been configured.
+</P>
+<H3>PROGRAMMING INFORMATION:</H3>
+<P>
+The <CODE>stackuse</CODE> is implemented by a C language function
+which has the following prototype:
+</P>
+<DL><DT><DD>
+<PRE>
+int rtems_shell_rtems_main_stackuse(
+  int    argc,
+  char **argv
+);
+</PRE>
+</DL>
+<P>
+The configuration structure for the <CODE>stackuse</CODE> has the
+following prototype:
+</P>
+<DL><DT><DD>
+<PRE>
+extern rtems_shell_cmd_t rtems_shell_STACKUSE_Command;
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="shell00071.html">
+<LINK REV="Precedes" HREF="shell00069.html">
+<LINK REV="Subdocument" HREF="shell00067.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="shell00069.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="shell00067.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="shell00071.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Shell User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

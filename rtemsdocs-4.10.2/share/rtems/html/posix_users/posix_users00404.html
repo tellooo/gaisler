@@ -1,0 +1,88 @@
+<HTML>
+<!-- created Dec 13 2011 from status.texi line 10 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Status of Implementation</TITLE>
+<LINK REL="Precedes" HREF="">
+<LINK REV="Precedes" HREF="">
+<LINK REV="Subdocument" HREF="index.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="prev"></A>
+<A HREF="index.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="next"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<H1>Chapter 22: Status of Implementation</H1>
+<P>
+This chapter provides an overview of the status of the implementation
+of the POSIX API for RTEMS.  The <EM>POSIX 1003.1b Compliance Guide</EM>
+provides more detailed information regarding the implementation of
+each of the numerous functions, constants, and macros specified by
+the POSIX 1003.1b standard.
+</P>
+<P>
+RTEMS supports many of the process and user/group oriented services
+in a &quot;single user/single process&quot; manner.  This means that although
+these services may be of limited usefulness or functionality, they
+are provided and do work in a coherent manner.  This is significant
+when porting existing code from UNIX to RTEMS.
+</P>
+<UL>
+<LI>Implementation
+
+<UL>
+<LI>The current implementation of <CODE>dup()</CODE> is insufficient.
+<LI>FIFOs <CODE>mkfifo()</CODE> are not currently implemented.
+<LI>Asynchronous IO is not implemented.
+<LI>The <CODE>flockfile()</CODE> family is not implemented
+<LI>getc/putc unlocked family is not implemented
+<LI>Shared Memory is not implemented
+<LI>Mapped Memory is not implemented
+<LI>NOTES:
+
+<UL>
+<LI>For Shared Memory and Mapped Memory services, it is unclear what
+level of support is appropriate and possible for RTEMS.
+</UL>
+</UL>
+
+<LI>Functional Testing
+
+<UL>
+<LI>Tests for unimplemented services
+</UL>
+
+<LI>Performance Testing
+
+<UL>
+<LI>There are no POSIX Performance Tests.
+</UL>
+
+<LI>Documentation
+
+<UL>
+<LI>Many of the service description pages are not complete in this
+manual.  These need to be completed and information added to the
+background and operations sections.
+<LI>Example programs (not just tests) would be very nice.
+</UL>
+
+</UL>
+<P><HR>
+<LINK REL="Precedes" HREF="">
+<LINK REV="Precedes" HREF="">
+<LINK REV="Subdocument" HREF="index.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="prev"></A>
+<A HREF="index.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="next"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

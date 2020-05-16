@@ -1,0 +1,54 @@
+<HTML>
+<!-- created Dec 13 2011 from framebuffer.texi line 26 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Frame Buffer Driver Introduction</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00138.html">
+<LINK REV="Precedes" HREF="bsp_howto00136.html">
+<LINK REV="Subdocument" HREF="bsp_howto00136.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00136.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00136.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00138.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H2>17.1: Introduction</H2>
+<P>
+The purpose of the frame buffer driver is to provide an abstraction for
+graphics hardware.
+By using the frame buffer interface, an application can display graphics
+without knowing anything about the low-level details of interfacing to a
+particular graphics adapter. The parameters governing the mapping of
+memory to displayed pixels (planar or linear, bit depth, etc) is still
+implementation-specific, but device-independent methods are provided to
+determine and potentially modify these parameters.
+</P>
+<P>
+The frame buffer driver is commonly located in the <CODE>console</CODE>
+directory of the BSP and registered by the name <STRONG>/dev/fb0</STRONG>.
+Additional frame buffers (if available) are named <STRONG>/dev/fb1</STRONG>,
+<STRONG>/dev/fb2</STRONG>, etc.
+</P>
+<P>
+To work with the frame buffer, the following operation sequence is used:
+<CODE>open()</CODE>, <CODE>ioctls()</CODE> to get the frame buffer info, <CODE>read()</CODE> and/or
+<CODE>write()</CODE>, and <CODE>close()</CODE>.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00138.html">
+<LINK REV="Precedes" HREF="bsp_howto00136.html">
+<LINK REV="Subdocument" HREF="bsp_howto00136.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00136.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00136.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00138.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

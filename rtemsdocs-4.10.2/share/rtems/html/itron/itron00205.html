@@ -1,0 +1,122 @@
+<HTML>
+<!-- created Dec 13 2011 from status.texi line 581 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>ITRON Implementation Status Interrupt</TITLE>
+<LINK REL="Precedes" HREF="itron00206.html">
+<LINK REV="Precedes" HREF="itron00204.html">
+<LINK REV="Subdocument" HREF="itron00196.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00204.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00196.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00206.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<H2>14.9: Interrupt</H2>
+<UL>
+<LI>Implementation
+
+<UL>
+<LI>def_int - Stub, Needs to be Fleshed Out
+<LI>ret_int - Stub, Needs to be Fleshed Out
+<LI>ret_wup - Stub, Needs to be Fleshed Out
+<LI>loc_cpu - Stub, Needs to be Fleshed Out
+<LI>unl_cpu - Stub, Needs to be Fleshed Out
+<LI>dis_int - Stub, Needs to be Fleshed Out
+<LI>ena_int - Stub, Needs to be Fleshed Out
+<LI>chg_iXX - Stub, Needs to be Fleshed Out
+<LI>ref_iXX - Stub, Needs to be Fleshed Out
+
+<LI>Notes:
+
+<UL>
+<LI>This quote from the ITRON specification needs to be thought about:<BR>
+<BR>
+<EM>&quot;When an interrupt is invoked, the interrupt handler defined with this system call is started directly by the interrupt processing mechanism of the CPU hardware.  Accordingly, code at the beginning and end of an interrupt handler must save and restore any registers used by the interrupt handler.&quot;</EM><BR>
+<BR>
+
+Based on another comment, in the ret_int description, I think this means
+that RTEMS will not support the TA_ASM style of interrupt handlers --
+only the TA_HLNG style.<BR>
+<BR>
+
+<EM>When TA_HLNG is specified, a high-level language environment setting program (a high-level language support routine) is called before branching to the inthdr address.  The least significant bit (LSB) of the system attribute bits is used for this specification.</EM>
+
+<LI>Specification allows special &quot;interrupt-only&quot; versions of system
+calls named i???_??? (i.e. sig_sem and isig_sem).  This does not seem
+to be something that would be implemented with RTEMS.  We could provide
+macros mapping them onto the default versions if this is an issue.
+
+<LI>How this operates versus the behavior of a true TRON chip is
+up for discussion.
+
+<LI>ret_wup is questionable in only high-level language ISRs.
+
+<LI>dis_int and ena_int refer to a specific interrupt number.  These
+may require hooking back out to the BSP.
+
+<LI>for chg_iXX and reg_iXX, the XX should be replaced with something
+that is meaningful on a particular CPU.
+</UL>
+
+</UL>
+<LI>Executive Modifications
+
+<UL>
+<LI>None Expected
+</UL>
+
+<LI>Testing
+
+<UL>
+<LI>No Tests Written
+<LI>No Timing Tests
+</UL>
+
+<LI>Documentation
+
+<UL>
+<LI>Shell, Needs to be Fleshed Out
+</UL>
+
+<LI>ITRON 3.0 API Conformance
+
+<UL>
+<LI>Level E - Extended Functionality
+
+<UL>
+<LI>
+</UL>
+
+<LI>Level C - CPU Dependent Functionality
+
+<UL>
+<LI>NA
+</UL>
+
+<LI>Level N - Connection Functionality
+
+<UL>
+<LI>Not implemented
+</UL>
+</UL>
+
+</UL>
+<P><HR>
+<LINK REL="Precedes" HREF="itron00206.html">
+<LINK REV="Precedes" HREF="itron00204.html">
+<LINK REV="Subdocument" HREF="itron00196.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00204.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00196.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00206.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,57 @@
+<HTML>
+<!-- created Dec 13 2011 from rtmon.texi line 809 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Rate Monotonic Manager Manipulating a Period</TITLE>
+<LINK REL="Precedes" HREF="c_user00343.html">
+<LINK REV="Precedes" HREF="c_user00341.html">
+<LINK REV="Subdocument" HREF="c_user00327.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00341.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00327.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00343.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H3>19.3.2: Manipulating a Period</H3>
+<P>
+The <CODE>rtems_rate_monotonic_period</CODE> directive is used to
+establish and maintain periodic execution utilizing a previously
+created rate monotonic period.   Once initiated by the
+<CODE>rtems_rate_monotonic_period</CODE> directive, the period is
+said to run until it either expires or is reinitiated.  The state of the rate
+monotonic period results in one of the following scenarios:
+</P>
+<UL>
+<LI>If the rate monotonic period is running, the calling
+task will be blocked for the remainder of the outstanding period
+and, upon completion of that period, the period will be
+reinitiated with the specified period.
+
+<LI>If the rate monotonic period is not currently running
+and has not expired, it is initiated with a length of period
+ticks and the calling task returns immediately.
+
+<LI>If the rate monotonic period has expired before the task
+invokes the <CODE>rtems_rate_monotonic_period</CODE> directive,
+the period will be initiated with a length of period ticks and the calling task
+returns immediately with a timeout error status.
+
+</UL>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00343.html">
+<LINK REV="Precedes" HREF="c_user00341.html">
+<LINK REV="Subdocument" HREF="c_user00327.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00341.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00327.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00343.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

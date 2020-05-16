@@ -1,0 +1,80 @@
+<HTML>
+<!-- created Dec 13 2011 from syscalls.texi line 584 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>fstat</TITLE>
+<LINK REL="Precedes" HREF="filesystem00028.html">
+<LINK REV="Precedes" HREF="filesystem00026.html">
+<LINK REV="Subdocument" HREF="filesystem00014.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="filesystem00026.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="filesystem00014.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00028.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<H2>4.13: fstat</H2>
+<H3>File:</H3>
+<P>
+fstat.c
+</P>
+<H3>Processing:</H3>
+<P>
+This routine will return information concerning a file or network
+connection. If the file descriptor is associated with a network
+connection, the current implementation of <CODE>fstat()</CODE> will return a
+mode set to <CODE>S_IFSOCK</CODE>. In a later version, this routine will map the
+status of a network connection to an external handler routine.
+</P>
+<P>
+If the file descriptor is associated with a node under a filesystem, the
+fstat()  routine will map to the fstat() function taken from the node
+handler table.
+</P>
+<H3>Development Comments:</H3>
+<P>
+This routine validates that the struct stat pointer is not NULL so that
+the return location is valid.
+</P>
+<P>
+The struct stat is then initialized to all zeros.
+</P>
+<P>
+rtems_file_descriptor_type() is then used to determine if the file
+descriptor is associated with a network connection. If it is, network
+status processing is performed. In the current implementation, the file
+descriptor type processing needs to be improved. It currently just drops
+into the normal processing for file system nodes.
+</P>
+<P>
+If the file descriptor is associated with a node under a filesystem, the
+following steps are performed:
+</P>
+<OL>
+<LI>Obtain the file control block that is associated with the file descriptor
+index.
+
+<LI>Range check the file descriptor index.
+
+<LI>Test to see if there is a non-NULL function pointer in the handler
+table for the fstat() function. If there is, invoke the function with the
+file control block and the pointer to the stat structure.
+
+</OL>
+<P><HR>
+<LINK REL="Precedes" HREF="filesystem00028.html">
+<LINK REV="Precedes" HREF="filesystem00026.html">
+<LINK REV="Subdocument" HREF="filesystem00014.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="filesystem00026.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="filesystem00014.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00028.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

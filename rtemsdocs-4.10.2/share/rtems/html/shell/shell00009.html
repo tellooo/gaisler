@@ -1,0 +1,78 @@
+<HTML>
+<!-- created Dec 13 2011 from confinit.texi line 208 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Configuration and Initialization Attached to a Serial Port</TITLE>
+<LINK REL="Precedes" HREF="shell00010.html">
+<LINK REV="Precedes" HREF="shell00005.html">
+<LINK REV="Subdocument" HREF="shell00005.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="shell00005.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="shell00005.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="shell00010.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Shell User's Guide</CITE></P>
+<H3>1.3.1: Attached to a Serial Port</H3>
+<P>
+Starting the shell attached to the console or a serial
+port is very simple. The user invokes <CODE>rtems_shell_init</CODE>
+with parameters to indicate the characteristics of the task
+that will be executing the shell including name, stack size,
+and priority.  The user also specifies the device that the
+shell is to be attached to.
+</P>
+<P>
+This example is taken from the <CODE>fileio</CODE> sample test.
+This shell portion of this test can be run on any target which
+provides a console with input and output capabilities.  It does
+not include any commands which cannot be supported on all BSPs.
+The source code for this test is in <CODE>testsuites/samples/fileio</CODE>
+with the shell configuration in the <CODE>init.c</CODE> file.
+</P>
+<DL><DT><DD>
+<PRE>
+#include &lt;rtems/shell.h&gt;
+
+void start_shell(void)
+{
+  printf(&quot; =========================\n&quot;);
+  printf(&quot; starting shell\n&quot;);
+  printf(&quot; =========================\n&quot;);
+  rtems_shell_init(
+    &quot;SHLL&quot;,                       /* task name */
+    RTEMS_MINIMUM_STACK_SIZE * 4, /* task stack size */
+    100,                          /* task priority */
+    &quot;/dev/console&quot;,               /* device name */
+    false,                        /* run forever */
+    true,                         /* wait for shell to terminate */
+    rtems_shell_login_check       /* login check function,
+                                     use NULL to disable a login check */
+  );
+}
+</PRE>
+</DL>
+<P>
+In the above example, the call to <CODE>rtems_shell_init</CODE>
+spawns a task to run the RTEMS Shell attached to <CODE>/dev/console</CODE>
+and executing at priority 100.  The caller suspends itself and
+lets the shell take over the console device.  When the shell
+is exited by the user, then control returns to the caller.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="shell00010.html">
+<LINK REV="Precedes" HREF="shell00005.html">
+<LINK REV="Subdocument" HREF="shell00005.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="shell00005.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="shell00005.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="shell00010.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Shell User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

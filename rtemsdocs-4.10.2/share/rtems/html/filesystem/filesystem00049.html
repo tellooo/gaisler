@@ -1,0 +1,112 @@
+<HTML>
+<!-- created Dec 13 2011 from fsrequirements.texi line 213 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>File/Device/Directory function access via file control block - rtems_libio_t structure</TITLE>
+<LINK REL="Precedes" HREF="filesystem00050.html">
+<LINK REV="Precedes" HREF="filesystem00048.html">
+<LINK REV="Subdocument" HREF="filesystem00046.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="filesystem00048.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="filesystem00046.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00050.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<H3>5.3.2: File/Device/Directory function access via file control block - rtems_libio_t structure</H3>
+<P>
+The POSIX open() function returns an integer file descriptor that is used
+as a reference to file control block information for a specific file. The
+file control block contains information that is used to locate node, file
+system, mount table and functional handler information. The diagram in
+Figure 8 depicts the relationship between and among the following
+components.
+</P>
+<OL>
+<LI>File Descriptor Table
+
+<P>
+This is an internal RTEMS structure that tracks all currently defined file
+descriptors in the system. The index that is returned by the file open()
+operation references a slot in this table. The slot contains a pointer to
+the file descriptor table entry for this file. The rtems_libio_t structure
+represents the file control block.
+</P>
+<LI>Allocation of entry in the File Descriptor Table
+
+<P>
+Access to the file descriptor table is controlled through a semaphore that
+is implemented using the rtems_libio_allocate() function. This routine
+will grab a semaphore and then scan the file control blocks to determine
+which slot is free for use. The first free slot is marked as used and the
+index to this slot is returned as the file descriptor for the open()
+request. After the alterations have been made to the file control block
+table, the semaphore is released to allow further operations on the table.
+</P>
+<LI>Maximum number of entries in the file descriptor table is
+configurable through the src/exec/sapi/headers/confdefs.h file. If the
+CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS constant is defined its value
+will represent the maximum number of file descriptors that are allowed.
+If CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS is not specified a default
+value of 20 will be used as the maximum number of file descriptors
+allowed.
+
+<LI>File control block - rtems_libio_t structure
+
+<DL><DT><DD>
+<PRE>
+struct rtems_libio_tt {
+  rtems_driver_name_t              *driver;
+  off_t                             size;
+  off_t                             offset;
+  unsigned32                        flags;
+  rtems_filesystem_location_info_t  pathinfo;
+  Objects_Id                        sem;
+  unsigned32                        data0;
+  void                              data1;
+  void                              file_info;
+  rtems_filesystem_file_handlers_r  handlers;
+};
+</PRE>
+</DL>
+<P>
+A file control block can exist for regular files, devices and directories.
+The following fields are important for regular file and directory access:
+</P>
+<UL>
+<LI>Size - For a file this represents the number of bytes currently
+stored in a file. For a directory this field is not filled in.
+
+<LI>Offset - For a file this is the byte file position index relative to
+the start of the file. For a directory this is the byte offset into a
+sequence of dirent structures.
+
+<LI>Pathinfo - This is a structure that provides a pointer to node
+information, OPS table functions, Handler functions and the mount table
+entry associated with this node.
+
+<LI>file_info - A pointer to node information that is used by Handler
+functions
+
+<LI>handlers - A pointer to a table of handler functions that operate on
+a file, device or directory through a file descriptor index
+
+</UL>
+</OL>
+<P><HR>
+<LINK REL="Precedes" HREF="filesystem00050.html">
+<LINK REV="Precedes" HREF="filesystem00048.html">
+<LINK REV="Subdocument" HREF="filesystem00046.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="filesystem00048.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="filesystem00046.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00050.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

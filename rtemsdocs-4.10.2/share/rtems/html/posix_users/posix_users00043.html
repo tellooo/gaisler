@@ -1,0 +1,72 @@
+<HTML>
+<!-- created Dec 13 2011 from signal.texi line 878 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Signal Manager sigtimedwait - Synchronously Accept a Signal with Timeout</TITLE>
+<LINK REL="Precedes" HREF="posix_users00044.html">
+<LINK REV="Precedes" HREF="posix_users00042.html">
+<LINK REV="Subdocument" HREF="posix_users00022.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00042.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00022.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00044.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<H3>2.4.16: sigtimedwait - Synchronously Accept a Signal with Timeout</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+#include &lt;signal.h&gt;
+
+int sigtimedwait(
+  const sigset_t        *set,
+  siginfo_t             *info,
+  const struct timespec *timeout
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<DL>
+<DT><STRONG>EAGAIN</STRONG>
+<DD>
+Timed out while waiting for the specified signal set.
+
+<DT><STRONG>EINVAL</STRONG>
+<DD>
+Nanoseconds field of the timeout argument is invalid.
+
+<DT><STRONG>EINTR</STRONG>
+<DD>
+Signal interrupted this function.
+
+</DL>
+<H3>DESCRIPTION:</H3>
+<P>
+This function selects a pending signal based on the set specified in
+<CODE>set</CODE>, atomically clears it from the set of pending signals, and
+returns information about that signal in <CODE>info</CODE>. The calling thread
+will block up to <CODE>timeout</CODE> waiting for the signal to arrive.
+</P>
+<H3>NOTES:</H3>
+<P>
+If <CODE>timeout</CODE> is NULL, then the calling thread will wait forever for
+the specified signal set.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="posix_users00044.html">
+<LINK REV="Precedes" HREF="posix_users00042.html">
+<LINK REV="Subdocument" HREF="posix_users00022.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00042.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00022.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00044.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

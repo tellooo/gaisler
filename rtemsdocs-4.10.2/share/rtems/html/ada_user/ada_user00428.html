@@ -1,0 +1,128 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/conf.texi line 447 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Configuring a System Device Driver Table</TITLE>
+<LINK REL="Precedes" HREF="ada_user00429.html">
+<LINK REV="Precedes" HREF="ada_user00427.html">
+<LINK REV="Subdocument" HREF="ada_user00414.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00427.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00414.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00429.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>23.2.4: Device Driver Table</H3>
+<P>
+This section defines the configuration parameters related
+to the automatic generation of a Device Driver Table.  As
+<CODE>rtems/confdefs.h</CODE> only is aware of a small set of
+standard device drivers, the generated Device Driver
+Table is suitable for simple applications with no
+custom device drivers.
+</P>
+<UL>
+<LI><CODE>CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE</CODE> is defined if
+the application wishes to provide their own Device Driver Table.
+The table generated is an array of <CODE>rtems_driver_address_table</CODE>
+entries named <CODE>Device_drivers</CODE>.  By default, this is not
+defined indicating the <CODE>rtems/confdefs.h</CODE> is providing the
+device driver table.
+
+<LI><CODE>CONFIGURE_MAXIMUM_DRIVERS</CODE> is defined
+as the number of device drivers per node.  By default, this is
+set to 10.
+
+<LI><CODE>CONFIGURE_MAXIMUM_DEVICES</CODE> is defined
+to the number of individual devices that may be registered
+in the system.  By default, this is set to 4.
+
+<LI><CODE>CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER</CODE>
+is defined
+if the application wishes to include the Console Device Driver.
+This device driver is responsible for providing standard input
+and output using &quot;/dev/console&quot;.  By default, this is not
+defined.
+
+<LI><CODE>CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER</CODE>
+is defined
+if the application wishes to include the Clock Device Driver.
+This device driver is responsible for providing a regular
+interrupt which invokes the <CODE>rtems_clock_tick</CODE> directive.
+By default, this is not defined.
+
+<LI><CODE>CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER</CODE>
+is defined if the application wishes to include the Timer Driver.
+This device driver is used to benchmark execution times
+by the RTEMS Timing Test Suites.  By default, this is not
+defined.
+
+<LI><CODE>CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER</CODE> is defined
+when the application does <STRONG>NOT</STRONG> want the Clock Device Driver
+and is <STRONG>NOT</STRONG> using the Timer Driver.  The inclusion or
+exclusion of the Clock Driver must be explicit in typical
+user applications.  This is intended to prevent the common
+user error of using the Hello World example as the baseline
+for an application and leaving out a clock tick source.
+
+<LI><CODE>CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER</CODE>
+is defined if the application wishes to include the Real-Time Clock Driver.
+By default, this is not defined.
+
+<LI><CODE>CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER</CODE>
+is defined if the application wishes to include the Watchdog Driver.
+By default, this is not defined.
+
+<LI><CODE>CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER</CODE>
+is defined
+if the application wishes to include the BSP's Frame Buffer Device Driver.
+Most BSPs do not provide a Frame Buffer Device Driver.  If this is
+defined and the BSP does not have this device driver, then the user
+will get a link time error for an undefined symbol.
+By default, this is not defined.
+
+<LI><CODE>CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER</CODE>
+is defined if the application wishes to include the Stub Device Driver.
+This device driver simply provides entry points that return
+successful and is primarily a test fixture.
+By default, this is not defined.
+
+<LI><CODE>CONFIGURE_BSP_PREREQUISITE_DRIVERS</CODE> is defined if the
+BSP has device drivers it needs to include in the Device Driver
+Table.  This should be defined to the set of device driver entries that
+will be placed in the table at the <STRONG>FRONT</STRONG> of the Device Driver Table
+and initialized before any other drivers <STRONG>INCLUDING</STRONG> any application
+prerequisite drivers.  By default,this is not defined.
+
+<LI><CODE>CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS</CODE> is defined if the
+application has device drivers it needs to include in the Device Driver
+Table.  This should be defined to the set of device driver entries that
+will be placed in the table at the <STRONG>FRONT</STRONG> of the Device Driver Table
+and initialized before any other drivers <STRONG>EXCEPT</STRONG> any BSP prerequisite
+drivers.  By default,this is not defined.
+
+<LI><CODE>CONFIGURE_APPLICATION_EXTRA_DRIVERS</CODE> is defined if the
+application has device drivers it needs to include in the Device Driver
+Table.  This should be defined to the set of device driver entries that
+will be placed in the table at the <STRONG>END</STRONG> of the Device Driver Table.
+By default,this is not defined.
+
+</UL>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00429.html">
+<LINK REV="Precedes" HREF="ada_user00427.html">
+<LINK REV="Subdocument" HREF="ada_user00414.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00427.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00414.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00429.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

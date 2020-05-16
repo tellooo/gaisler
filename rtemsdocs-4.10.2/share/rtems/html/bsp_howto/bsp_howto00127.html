@@ -1,0 +1,116 @@
+<HTML>
+<!-- created Dec 13 2011 from shmsupp.texi line 34 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Shared Memory Support Driver Shared Memory Configuration Table</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00128.html">
+<LINK REV="Precedes" HREF="bsp_howto00126.html">
+<LINK REV="Subdocument" HREF="bsp_howto00126.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00126.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00126.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00128.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H2>16.1: Shared Memory Configuration Table</H2>
+<P>
+The Shared Memory Configuration Table is defined in the following
+structure:
+</P>
+<DL><DT><DD>
+<PRE>
+typedef volatile uint32_t vol_u32;
+
+typedef struct {
+  vol_u32 *address;        /* write here for interrupt    */
+  vol_u32  value;          /* this value causes interrupt */
+  vol_u32  length;         /* for this length (0,1,2,4)   */
+} Shm_Interrupt_information;
+
+struct shm_config_info {
+  vol_u32           *base;       /* base address of SHM         */
+  vol_u32            length;     /* length (in bytes) of SHM    */
+  vol_u32            format;     /* SHM is big or little endian */
+  vol_u32          (*convert)(); /* neutral conversion routine  */
+  vol_u32            poll_intr;  /* POLLED or INTR driven mode  */
+  void             (*cause_intr)( uint32_t );
+  Shm_Interrupt_information   Intr; /* cause intr information   */
+};
+
+typedef struct shm_config_info shm_config_table;
+</PRE>
+</DL>
+<P>
+where the fields are defined as follows:
+</P>
+<DL>
+<DT><STRONG>base</STRONG>
+<DD>
+is the base address of the shared memory buffer used to pass
+messages between the nodes in the system.
+
+<DT><STRONG>length</STRONG>
+<DD>
+is the length (in bytes) of the shared memory buffer used to pass
+messages between the nodes in the system.
+
+<DT><STRONG>format</STRONG>
+<DD>
+is either SHM_BIG or SHM_LITTLE to indicate that the neutral format
+of the shared memory area is big or little endian.  The format
+of the memory should be chosen to match most of the inter-node traffic.
+
+<DT><STRONG>convert</STRONG>
+<DD>
+is the address of a routine which converts from native format to
+neutral format.   Ideally, the neutral format is the same as the
+native format so this routine is quite simple.
+
+<DT><STRONG>poll_intr</STRONG>
+<DD>
+is either INTR_MODE or POLLED_MODE to indicate how the node will be
+informed of incoming messages.
+
+<DT><STRONG>cause_intr</STRONG>
+<DD>
+<DT><STRONG>Intr</STRONG>
+<DD>
+is the information required to cause an interrupt on a node.  This
+structure contains the following fields:
+
+<DL>
+<DT><STRONG>address</STRONG>
+<DD>
+is the address to write at to cause an interrupt on that node.
+For a polled node, this should be NULL.
+
+<DT><STRONG>value</STRONG>
+<DD>
+is the value to write to cause an interrupt.
+
+<DT><STRONG>length</STRONG>
+<DD>
+is the length of the entity to write on the node to cause an interrupt.
+This can be 0 to indicate polled operation, 1 to write a byte, 2 to
+write a sixteen-bit entity, and 4 to write a thirty-two bit entity.
+</DL>
+</DL>
+
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00128.html">
+<LINK REV="Precedes" HREF="bsp_howto00126.html">
+<LINK REV="Subdocument" HREF="bsp_howto00126.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00126.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00126.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00128.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,62 @@
+<HTML>
+<!-- created Dec 13 2011 from sample.texi line 149 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Sample Applications Hello World</TITLE>
+<LINK REL="Precedes" HREF="develenv00013.html">
+<LINK REV="Precedes" HREF="develenv00011.html">
+<LINK REV="Subdocument" HREF="develenv00010.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="develenv00011.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="develenv00010.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="develenv00013.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Development Environment Guide</CITE></P>
+<H2>3.2: Hello World</H2>
+<P>
+This sample application is in the following directory:
+</P>
+<DL><DT><DD>
+<PRE>
+${RTEMS_ROOT}/testsuites/samples/hello/
+</PRE>
+</DL>
+<P>
+It provides a rudimentary test of the BSP start up
+code and the console output routine.  The C version of this
+sample application uses the printf function from the RTEMS
+Standard C Library to output messages.   The Ada version of this
+sample uses the TEXT_IO package to output the hello messages.
+The following messages are printed:
+</P>
+<DL><DT><DD>
+<PRE>
+*** HELLO WORLD TEST ***
+Hello World
+*** END OF HELLO WORLD TEST ***
+</PRE>
+</DL>
+<P>
+These messages are printed from the application's
+single initialization task.  If the above messages are not
+printed correctly, then either the BSP start up code or the
+console output routine is not operating properly.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="develenv00013.html">
+<LINK REV="Precedes" HREF="develenv00011.html">
+<LINK REV="Subdocument" HREF="develenv00010.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="develenv00011.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="develenv00010.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="develenv00013.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Development Environment Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

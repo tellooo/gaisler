@@ -1,0 +1,196 @@
+<HTML>
+<!-- created Dec 13 2011 from buildc.texi line 519 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Using configure and make</TITLE>
+<LINK REL="Precedes" HREF="started00032.html">
+<LINK REV="Precedes" HREF="started00043.html">
+<LINK REV="Subdocument" HREF="started00037.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started00043.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started00037.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started00032.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with RTEMS</CITE></P>
+<H4>4.1.4.2: Using configure and make</H4>
+<P>
+NOTE:  The procedures described in the following sections must
+be completed before this step:
+</P>
+<UL>
+<LI><A HREF="started00034.html">Obtain Source and Patches for BINUTILS GCC and NEWLIB</A>
+<LI><A HREF="started00035.html">Unarchiving the Tools</A>
+<LI><A HREF="started00036.html">Applying RTEMS Patches</A>
+</UL>
+
+<P>
+This section describes the process of building binutils, gcc, and
+newlib manually using <CODE>configure</CODE> and <CODE>make</CODE> directly.
+</P>
+<H3>Configuring and Building BINUTILS</H3>
+<P>
+The following example illustrates the invocation of
+<CODE>configure</CODE> and <CODE>make</CODE>
+to build and install binutils-2.18.91 for the
+sparc-rtems4.10 target:
+</P>
+<DL><DT><DD>
+<PRE>
+mkdir b-binutils
+cd b-binutils
+../binutils-2.18.91/configure --target=sparc-rtems4.10 \
+  --prefix=/opt/rtems-4.10
+make
+make install
+</PRE>
+</DL>
+<P>
+After binutils-2.18.91 is built and installed the
+build directory <CODE>b-binutils</CODE> may be removed.
+</P>
+<P>
+For more information on the invocation of <CODE>configure</CODE>, please
+refer to the documentation for binutils-2.18.91 or
+invoke the binutils-2.18.91 <CODE>configure</CODE> command with the
+<CODE>--help</CODE> option.
+</P>
+<P>
+NOTE: The shell PATH variable needs to be updated to include the path
+the binutils user executables have  been installed in.  The directory
+containing the executables is the prefix used above with
+`<CODE>bin</CODE>' post-fixed.
+</P>
+<DL><DT><DD>
+<PRE>
+export PATH=/opt/rtems-4.10/bin:${PATH}
+</PRE>
+</DL>
+<P>
+Failure to have the binutils in the path will cause the GCC and NEWLIB
+build to fail with an error message similar to:
+</P>
+<DL><DT><DD>
+<PRE>
+sparc-rtems4.10-ar: command not found
+</PRE>
+</DL>
+<H3>Configuring and Building GCC and NEWLIB</H3>
+<P>
+Before building gcc-4.3.2 and newlib-1.16.0,
+binutils-2.18.91 must be installed and the directory
+containing those executables must be in your PATH.
+</P>
+<P>
+The C Library is built as a subordinate component of
+gcc-4.3.2.  Because of this, the newlib-1.16.0
+directory source must be available inside the gcc-4.3.2
+source tree.  This is normally accomplished using a symbolic
+link as shown in this example:
+</P>
+<DL><DT><DD>
+<PRE>
+cd gcc-4.3.2
+ln -s ../newlib-1.16.0/newlib .
+</PRE>
+</DL>
+<P>
+The following example illustrates the invocation of
+<CODE>configure</CODE> and <CODE>make</CODE>
+to build and install gcc-4.3.2 with only
+C and C++ support for the sparc-rtems4.10 target:
+</P>
+<DL><DT><DD>
+<PRE>
+mkdir b-gcc
+cd b-gcc
+../gcc-4.3.2/configure --target=sparc-rtems4.10 \
+   --with-gnu-as --with-gnu-ld --with-newlib --verbose \
+   --enable-threads --enable-languages=&quot;c,c++&quot; \
+   --prefix=/opt/rtems-4.10
+make all
+make info
+make install
+</PRE>
+</DL>
+<P>
+After gcc-4.3.2 is built and installed the
+build directory <CODE>b-gcc</CODE> may be removed.
+</P>
+<P>
+For more information on the invocation of <CODE>configure</CODE>, please
+refer to the documentation for gcc-4.3.2 or
+invoke the gcc-4.3.2 <CODE>configure</CODE> command with the
+As you will need to frequently run various commands in the
+/opt/rtems-4.10/bin, you can update your <CODE>~/.bashrc</CODE> to include this
+line. After doing that, don't forget to run
+</P>
+<DL><DT><DD>
+<PRE>
+source ~/.bashrc
+</PRE>
+</DL>
+<P>
+for the changes to take place.
+</P>
+<P>
+<CODE>--help</CODE> option.
+</P>
+<H3>Building GCC with Ada Support</H3>
+<P>
+If you want a GCC toolset that includes support for Ada
+(e.g. GNAT), there are some additional requirements on
+the host environment and additional build steps to perform.
+It is critical that you use the same version of GCC/GNAT as
+the native compiler.  GNAT must be compiled with an Ada compiler
+and when building a GNAT cross-compiler, it should be
+the same version of GNAT itself.
+</P>
+<P>
+The build procedure is the same until the configure step.
+A GCC toolset with GNAT enabled requires that <CODE>ada</CODE>
+be included in the set of enabled languages.
+The following example illustrates the invocation of
+<CODE>configure</CODE> and <CODE>make</CODE>
+to build and install gcc-4.3.2 with only
+C, C++, and Ada support for the sparc-rtems4.10 target:
+</P>
+<DL><DT><DD>
+<PRE>
+mkdir b-gcc
+cd gcc-4.3.2/gcc/ada
+touch treeprs.ads [es]info.h nmake.ad[bs]
+cd ../../../b-gcc
+../gcc-4.3.2/configure --target=sparc-rtems4.10 \
+   --with-gnu-as --with-gnu-ld --with-newlib --verbose \
+   --enable-threads --enable-languages=&quot;c,c++,ada&quot; \
+   --prefix=/opt/rtems-4.10
+make all
+make info
+make -C gcc cross-gnattools
+make -C gcc ada.all.cross
+make -C gcc GNATLIBCFLAGS=&quot;USER_SELECTED_CPU_CFLAGS&quot; gnatlib
+make install
+</PRE>
+</DL>
+<P>
+After gcc-4.3.2 is built and installed the
+build directory <CODE>b-gcc</CODE> may be removed.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="started00032.html">
+<LINK REV="Precedes" HREF="started00043.html">
+<LINK REV="Subdocument" HREF="started00037.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started00043.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started00037.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started00032.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with RTEMS</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

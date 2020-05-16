@@ -1,0 +1,40 @@
+<HTML>
+<!-- created Dec 13 2011 from msg.texi line 254 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Message Manager Broadcasting a Message</TITLE>
+<LINK REL="Precedes" HREF="c_user00192.html">
+<LINK REV="Precedes" HREF="c_user00190.html">
+<LINK REV="Subdocument" HREF="c_user00181.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00190.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00181.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00192.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H3>10.3.5: Broadcasting a Message</H3>
+<P>
+The <CODE>rtems_message_queue_broadcast</CODE> directive sends the same
+message to every task waiting on the specified message queue as
+an atomic operation.  The message is copied to each waiting
+task's message buffer and each task is unblocked.  The number of
+tasks which were unblocked is returned to the caller.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00192.html">
+<LINK REV="Precedes" HREF="c_user00190.html">
+<LINK REV="Subdocument" HREF="c_user00181.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00190.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00181.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00192.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

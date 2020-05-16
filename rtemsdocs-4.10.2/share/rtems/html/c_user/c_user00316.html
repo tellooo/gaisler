@@ -1,0 +1,68 @@
+<HTML>
+<!-- created Dec 13 2011 from schedule.texi line 30 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Scheduling Concepts Introduction</TITLE>
+<LINK REL="Precedes" HREF="c_user00317.html">
+<LINK REV="Precedes" HREF="c_user00315.html">
+<LINK REV="Subdocument" HREF="c_user00315.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00315.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00315.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00317.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H2>18.1: Introduction</H2>
+<P>
+The concept of scheduling in real-time systems
+dictates the ability to provide immediate response to specific
+external events, particularly the necessity of scheduling tasks
+to run within a specified time limit after the occurrence of an
+event.  For example, software embedded in life-support systems
+used to monitor hospital patients must take instant action if a
+change in the patient's status is detected.
+</P>
+<P>
+The component of RTEMS responsible for providing this
+capability is appropriately called the scheduler.  The
+scheduler's sole purpose is to allocate the all important
+resource of processor time to the various tasks competing for
+attention.  The RTEMS scheduler allocates the processor using a
+priority-based, preemptive algorithm augmented to provide
+round-robin characteristics within individual priority groups.
+The goal of this algorithm is to guarantee that the task which
+is executing on the processor at any point in time is the one
+with the highest priority among all tasks in the ready state.
+</P>
+<P>
+There are two common methods of accomplishing the
+mechanics of this algorithm.  Both ways involve a list or chain
+of tasks in the ready state.  One method is to randomly place
+tasks in the ready chain forcing the scheduler to scan the
+entire chain to determine which task receives the processor.
+The other method is to schedule the task by placing it in the
+proper place on the ready chain based on the designated
+scheduling criteria at the time it enters the ready state.
+Thus, when the processor is free, the first task on the ready
+chain is allocated the processor.  RTEMS schedules tasks using
+the second method to guarantee faster response times to external
+events.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00317.html">
+<LINK REV="Precedes" HREF="c_user00315.html">
+<LINK REV="Subdocument" HREF="c_user00315.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00315.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00315.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00317.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

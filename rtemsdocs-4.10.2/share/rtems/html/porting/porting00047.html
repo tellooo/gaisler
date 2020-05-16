@@ -1,0 +1,90 @@
+<HTML>
+<!-- created Dec 13 2011 from taskcontext.texi line 247 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Task Context Management Performing a Context Switch</TITLE>
+<LINK REL="Precedes" HREF="porting00048.html">
+<LINK REV="Precedes" HREF="porting00046.html">
+<LINK REV="Subdocument" HREF="porting00040.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00046.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00040.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00048.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<H3>6.3.3: Performing a Context Switch</H3>
+<P>
+The _CPU_Context_switch performs a normal non-FP context switch from the
+context of the current executing thread to the context of the heir thread.
+</P>
+<DL><DT><DD>
+<PRE>
+void _CPU_Context_switch(
+  Context_Control  *run,
+  Context_Control  *heir
+);
+</PRE>
+</DL>
+<P>
+This routine begins by saving the current state of the
+CPU (i.e. the context) in the context area at <CODE>run</CODE>.
+Then the routine should load the CPU context pointed to
+by <CODE>heir</CODE>.  Loading the new context will cause a
+branch to its task code, so the task that invoked
+<CODE>_CPU_Context_switch</CODE> will not run for a while.
+When, eventually, a context switch is made to load
+context from <CODE>*run</CODE> again, this task will resume
+and <CODE>_CPU_Context_switch</CODE> will return to its caller.
+</P>
+<P>
+Care should be exercise when writing this routine.  All
+registers assumed to be preserved across subroutine calls
+must be preserved.  These registers may be saved in
+the task's context area or on its stack.  However, the
+stack pointer and address to resume executing the task
+at must be included in the context (normally the subroutine
+return address to the caller of <CODE>_Thread_Dispatch</CODE>.
+The decision of where to store the task's context is based
+on numerous factors including the capabilities of
+the CPU architecture itself and simplicity as well
+as external considerations such as debuggers wishing
+to examine a task's context.  In this case, it is
+often simpler to save all data in the context area.
+</P>
+<P>
+Also there may be special considerations
+when loading the stack pointers or interrupt level of the
+incoming task.  Independent of CPU specific considerations,
+if some context is saved on the task stack, then the porter
+must ensure that the stack pointer is adjusted <STRONG>BEFORE</STRONG>
+to make room for this context information before the
+information is written.  Otherwise, an interrupt could
+occur writing over the context data.  The following is
+an example of an <STRONG>INCORRECT</STRONG> sequence:
+</P>
+<DL><DT><DD>
+<PRE>
+save part of context beyond current top of stack
+interrupt pushes context -- overwriting written context
+interrupt returns
+adjust stack pointer
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="porting00048.html">
+<LINK REV="Precedes" HREF="porting00046.html">
+<LINK REV="Subdocument" HREF="porting00040.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00046.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00040.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00048.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,68 @@
+<HTML>
+<!-- created Dec 13 2011 from memorypool.texi line 417 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Memory Pool Manager ref_mpl - Reference Variable-Size Memorypool Status</TITLE>
+<LINK REL="Precedes" HREF="">
+<LINK REV="Precedes" HREF="itron00149.html">
+<LINK REV="Subdocument" HREF="itron00143.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00149.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00143.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="next"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<H3>9.4.7: ref_mpl - Reference Variable-Size Memorypool Status</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+ER ref_mpl(
+  T_RMPL *pk_rmpl,
+  ID mplid
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<P>
+<CODE>E_OK</CODE> - Normal Completion
+</P>
+<P>
+<CODE>E_ID</CODE> - Invalid ID number (mplid was invalid or could not be used)
+</P>
+<P>
+<CODE>E_NOEXS</CODE> - Object does not exist (the memorypool specified by mplid does not exist)
+</P>
+<P>
+<CODE>E_OACV</CODE> - Object access violation (A mplid less than -4 was specified from
+a user task.  This is implementation dependent.) Note: User tasks can issue ref_mpl in order to reference memorypools of mplid = TMPL_OS = -4.  Whether or not memorypools of mplid = -3 or -2 may be specified to ref_mpl by user tasks is implementation dependent.
+</P>
+<P>
+<CODE>E_PAR</CODE> - Parameter error (the packet address for the return parameters
+could not be used)
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This system call refers to the state of the variable-size memorypool specified by mplid, and returns the total free memory size currently available (frsz), the maximum continuous memory size of readily available free memory (maxsz), information of a task waiting to be allocated memory (wtsk), and its extended information (exinf).  Wtsk indicates, whether or not there is a task waiting to be allocated memory from the variable-size memorypool specified.  If there is no waiting task, wtsk is returned as FALSE = 0.  If there is a waiting task, wtsk is returned as a value other than 0.
+</P>
+<H3>NOTES:</H3>
+<P>
+In some implementations, memorypools having mplid = -3 or -2 may be referred with ref_mpl as memorypools used by implementation-dependent parts of the OS (such as those used for the stack only).  This system call can provide more detailed information regarding remaining memory if the usage of memorypools having mplid = -3 or -2 is more clearly defined.  Whether or not this feature is used and any details regarding information provided are implementation dependent.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="">
+<LINK REV="Precedes" HREF="itron00149.html">
+<LINK REV="Subdocument" HREF="itron00143.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00149.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00143.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="next"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

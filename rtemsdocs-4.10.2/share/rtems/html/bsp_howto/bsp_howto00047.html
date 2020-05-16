@@ -1,0 +1,59 @@
+<HTML>
+<!-- created Dec 13 2011 from init.texi line 304 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Initialization Code RTEMS Pretasking Callback</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00048.html">
+<LINK REV="Precedes" HREF="bsp_howto00046.html">
+<LINK REV="Subdocument" HREF="bsp_howto00038.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00046.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00038.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00048.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H3>7.3.4: RTEMS Pretasking Callback</H3>
+<P>
+The method <CODE>bsp_pretasking_hook()</CODE> is the BSP specific routine
+invoked once RTEMS API initialization is complete but before interrupts
+and tasking are enabled.  No tasks -- not even the IDLE task -- have
+been created when this hook is invoked.  The pretasking hook is optional
+and the user may use the shared version.
+</P>
+<P>
+The <CODE>bsp_pretasking_hook()</CODE> routine is the appropriate place to
+initialize any support components which depend on the RTEMS APIs.
+Older BSPs that do not take full advantage of <CODE>boot_card()</CODE>
+may initialize the RTEMS C Library in their implementation of
+<CODE>bsp_pretasking_hook()</CODE>.  This initialization includes the
+application heap used by the <CODE>malloc</CODE> family of routines as well
+as the reentrancy support for the C Library.
+</P>
+<P>
+The routine <CODE>bsp_libc_init</CODE> routine invoked from the
+either <CODE>boot_card()</CODE> or (less preferable) the BSP specific
+<CODE>bsp_pretasking_hook()</CODE> routine is passed the starting address,
+length, and growth amount passed to <CODE>sbrk</CODE>.  This &quot;sbrk amount&quot;
+is only used if the heap runs out of memory.  In this case, the RTEMS
+malloc implementation will invoked <CODE>sbrk</CODE> to obtain more memory.
+See <A HREF="bsp_howto00029.html">Miscellaneous Support Files sbrk() Implementation</A> for more
+details.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00048.html">
+<LINK REV="Precedes" HREF="bsp_howto00046.html">
+<LINK REV="Subdocument" HREF="bsp_howto00038.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00046.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00038.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00048.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

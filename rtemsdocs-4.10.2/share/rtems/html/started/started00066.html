@@ -1,0 +1,95 @@
+<HTML>
+<!-- created Dec 13 2011 from sample.texi line 165 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>C/C++ Sample Applications</TITLE>
+<LINK REL="Precedes" HREF="started00067.html">
+<LINK REV="Precedes" HREF="started00065.html">
+<LINK REV="Subdocument" HREF="started00063.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started00065.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started00063.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started00067.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with RTEMS</CITE></P>
+<H2>6.3: C/C++ Sample Applications</H2>
+<P>
+The C/C++ sample application set includes a number of simple applications.
+Some demonstrate some basic functionality in RTEMS such as writing
+a file, closing it, and reading it back while others can serve as
+starting points for RTEMS applications or libraries.  Start by
+unarchiving them so you can peruse them.  Use a command similar to
+the following to unarchive the sample applications:
+</P>
+<DL><DT><DD>
+<PRE>
+cd tools
+tar xjf ../archive/examples-VERSION.tgz
+</PRE>
+</DL>
+<P>
+The sample applications most likely to be of interest to you are:
+</P>
+<UL>
+<LI>hello_world_c - C Hello World application with a simple
+RTEMS configuration and an entry point not called <CODE>main()</CODE>.
+
+<LI>simple_main - Very simple program starting at <CODE>main()</CODE>
+and shutting down RTEMS via <CODE>exit()</CODE> without any other operations.
+It uses the default configuration inside RTEMS which is only
+intended to satisfy <CODE>autoconf</CODE> probes and extremely simple
+console-based applications.
+
+<LI>libcpp - Simple C++ library for RTEMS showing how to build an
+application library written in C++.
+
+<LI>psx_sched_report - POSIX Scheduler Reporter is a program
+that prints out some scheduler attributes of the RTEMS POSIX API.
+
+</UL>
+<P>
+Each tests is found in a separate subdirectory and built using the
+same command sequence.  The <CODE>hello_world_c</CODE> sample will be used
+as an example.
+</P>
+<H3>Build the C Hello World Application</H3>
+<P>
+Use the following command to start the build of the sample hello
+world application:
+</P>
+<DL><DT><DD>
+<PRE>
+cd hello_world_c
+make
+</PRE>
+</DL>
+<P>
+If the sample application has successfully been built, then the application
+executable is placed in the following directory:
+</P>
+<DL><DT><DD>
+<PRE>
+hello_world_c/o-optimize/&lt;filename&gt;.exe
+</PRE>
+</DL>
+<P>
+The other C/C++ sample applications are built using a similar procedure.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="started00067.html">
+<LINK REV="Precedes" HREF="started00065.html">
+<LINK REV="Subdocument" HREF="started00063.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started00065.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started00063.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started00067.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with RTEMS</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

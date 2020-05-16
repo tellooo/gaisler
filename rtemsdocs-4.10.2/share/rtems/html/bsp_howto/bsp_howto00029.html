@@ -1,0 +1,56 @@
+<HTML>
+<!-- created Dec 13 2011 from support.texi line 202 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Miscellaneous Support Files sbrk() Implementation</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00030.html">
+<LINK REV="Precedes" HREF="bsp_howto00028.html">
+<LINK REV="Subdocument" HREF="bsp_howto00020.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00028.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00020.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00030.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H2>5.8: sbrk() Implementation</H2>
+<P>
+Although nearly all BSPs give all possible memory to the C Program Heap
+at initialization, it is possible for a BSP to configure the initial
+size of the heap small and let it grow on demand.  If the BSP wants
+to dynamically extend the heap used by the C Library memory allocation
+routines (i.e. <CODE>malloc</CODE> family), then the<CODE>sbrk</CODE> routine must
+be functional.  The following is the prototype for this routine:
+</P>
+<DL><DT><DD>
+<PRE>
+void * sbrk(size_t increment)
+</PRE>
+</DL>
+<P>
+The <CODE>increment</CODE> amount is based upon the <CODE>sbrk_amount</CODE>
+parameter passed to the <CODE>bsp_libc_init</CODE> during system initialization.
+Historically initialization of the C Library was done as part of the
+BSP's Pretasking Hook but now the BSP Boot Card Framework can perform
+this operation.
+</P>
+<P>
+If your BSP does not want to support dynamic heap extension, then you do not have to do anything special.  However, if you want to support <CODE>sbrk</CODE>, you must provide an implementation of this method and define <CODE>CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK</CODE> in <CODE>bsp.h</CODE>.  This informs <CODE>rtems/confdefs.h</CODE> to configure the Malloc Family Extensions which support <CODE>sbrk</CODE>.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00030.html">
+<LINK REV="Precedes" HREF="bsp_howto00028.html">
+<LINK REV="Subdocument" HREF="bsp_howto00020.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00028.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00020.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00030.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

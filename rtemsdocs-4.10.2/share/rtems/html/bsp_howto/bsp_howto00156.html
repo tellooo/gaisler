@@ -1,0 +1,74 @@
+<HTML>
+<!-- created Dec 13 2011 from discrete.texi line 10 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Discrete Driver</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00157.html">
+<LINK REV="Precedes" HREF="">
+<LINK REV="Subdocument" HREF="index.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="prev"></A>
+<A HREF="index.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00157.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H1>Chapter 19: Discrete Driver</H1>
+<MENU>
+<LI><A HREF="bsp_howto00157.html">Discrete Driver Major and Minor Numbers</A>
+<LI><A HREF="bsp_howto00158.html">Discrete Driver Discrete I/O Driver Configuration</A>
+<LI><A HREF="bsp_howto00159.html">Discrete Driver Initialize a Discrete I/O Board</A>
+<LI><A HREF="bsp_howto00160.html">Discrete Driver Open a Particular Discrete Bitfield</A>
+<LI><A HREF="bsp_howto00161.html">Discrete Driver Close a Particular Discrete Bitfield</A>
+<LI><A HREF="bsp_howto00162.html">Discrete Driver Read from a Particular Discrete Bitfield</A>
+<LI><A HREF="bsp_howto00163.html">Discrete Driver Write to a Particular Discrete Bitfield</A>
+<LI><A HREF="bsp_howto00164.html">Discrete Driver Disable Discrete Outputs</A>
+<LI><A HREF="bsp_howto00165.html">Discrete Driver Enable Discrete Outputs</A>
+<LI><A HREF="bsp_howto00166.html">Discrete Driver Reinitialize Outputs</A>
+<LI><A HREF="bsp_howto00167.html">Discrete Driver Get Last Written Values</A>
+</MENU>
+<P>
+The Discrete driver is responsible for providing an
+interface to Discrete Input/Outputs.  The capabilities provided
+by this class of device driver are:
+</P>
+<UL>
+<LI>Initialize a Discrete I/O Board
+<LI>Open a Particular Discrete Bitfield
+<LI>Close a Particular Discrete Bitfield
+<LI>Read from a Particular Discrete Bitfield
+<LI>Write to a Particular Discrete Bitfield
+<LI>Reset DACs
+<LI>Reinitialize DACS
+</UL>
+
+<P>
+Most discrete I/O devices are found on I/O cards that support many
+bits of discrete I/O on a single card.  This driver model is centered
+on the notion of reading bitfields from the card.
+</P>
+<P>
+There are currently no discrete I/O device drivers included in the
+RTEMS source tree.  The information provided in this chapter
+is based on drivers developed for applications using RTEMS.
+It is hoped that this driver model information can form the
+discrete I/O driver model that can be supported in future RTEMS
+distribution.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00157.html">
+<LINK REV="Precedes" HREF="">
+<LINK REV="Subdocument" HREF="index.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="prev"></A>
+<A HREF="index.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00157.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

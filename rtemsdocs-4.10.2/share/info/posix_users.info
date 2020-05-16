@@ -1,0 +1,425 @@
+This is posix_users.info, produced by makeinfo version 4.13 from
+posix_users.texi.
+
+INFO-DIR-SECTION RTEMS On-Line Manual
+START-INFO-DIR-ENTRY
+* RTEMS Posix API User's Guide: (posix_users).
+                                       Posix API User's Guide Plan
+END-INFO-DIR-ENTRY
+
+
+Indirect:
+posix_users.info-1: 277
+posix_users.info-2: 298998
+
+Tag Table:
+(Indirect)
+Node: Preface277
+Node: Process Creation and Execution Manager1847
+Node: Process Creation and Execution Manager Introduction2301
+Node: Process Creation and Execution Manager Background3175
+Node: Process Creation and Execution Manager Operations4044
+Node: Process Creation and Execution Manager Directives4560
+Node: Process Creation and Execution Manager fork - Create a Process5864
+Node: Process Creation and Execution Manager execl - Execute a File6468
+Node: Process Creation and Execution Manager execv - Execute a File7114
+Node: Process Creation and Execution Manager execle - Execute a File7763
+Node: Process Creation and Execution Manager execve - Execute a File8413
+Node: Process Creation and Execution Manager execlp - Execute a File9082
+Node: Process Creation and Execution Manager execvp - Execute a File9733
+Node: Process Creation and Execution Manager pthread_atfork - Register Fork Handlers10402
+Node: Process Creation and Execution Manager wait - Wait for Process Termination11176
+Node: Process Creation and Execution Manager waitpid - Wait for Process Termination11909
+Node: Process Creation and Execution Manager _exit - Terminate a Process12626
+Node: Signal Manager13288
+Node: Signal Manager Introduction13550
+Node: Signal Manager Background14845
+Node: Signal Manager Signals15096
+Node: Signal Manager Signal Delivery16314
+Node: Signal Manager Operations17792
+Node: Signal Manager Signal Set Management18127
+Node: Signal Manager Blocking Until Signal Generation18702
+Node: Signal Manager Sending a Signal19197
+Node: Signal Manager Directives19646
+Node: Signal Manager sigaddset - Add a Signal to a Signal Set21215
+Node: Signal Manager sigdelset - Delete a Signal from a Signal Set21851
+Node: Signal Manager sigfillset - Fill a Signal Set22520
+Node: Signal Manager sigismember - Is Signal a Member of a Signal Set23157
+Node: Signal Manager sigemptyset - Empty a Signal Set23857
+Node: Signal Manager sigaction - Examine and Change Signal Action24504
+Node: Signal Manager pthread_kill - Send a Signal to a Thread25452
+Node: Signal Manager sigprocmask - Examine and Change Process Blocked Signals26205
+Node: Signal Manager pthread_sigmask - Examine and Change Thread Blocked Signals27605
+Node: Signal Manager kill - Send a Signal to a Process29007
+Node: Signal Manager sigpending - Examine Pending Signals29836
+Node: Signal Manager sigsuspend - Wait for a Signal30670
+Node: Signal Manager pause - Suspend Process Execution31460
+Node: Signal Manager sigwait - Synchronously Accept a Signal32158
+Node: Signal Manager sigwaitinfo - Synchronously Accept a Signal32992
+Node: Signal Manager sigtimedwait - Synchronously Accept a Signal with Timeout33822
+Node: Signal Manager sigqueue - Queue a Signal to a Process35036
+Node: Signal Manager alarm - Schedule Alarm36177
+Node: Signal Manager ualarm - Schedule Alarm in Microseconds37343
+Node: Process Environment Manager38637
+Node: Process Environment Manager Introduction39003
+Node: Process Environment Manager Background40382
+Node: Process Environment Manager Users and Groups40788
+Node: Process Environment Manager User and Group Names41927
+Node: Process Environment Manager Environment Variables42996
+Node: Process Environment Manager Operations43713
+Node: Process Environment Manager Accessing User and Group Ids44109
+Node: Process Environment Manager Accessing Environment Variables44594
+Node: Process Environment Manager Directives45056
+Node: Process Environment Manager getpid - Get Process ID47066
+Node: Process Environment Manager getppid - Get Parent Process ID47580
+Node: Process Environment Manager getuid - Get User ID48135
+Node: Process Environment Manager geteuid - Get Effective User ID48675
+Node: Process Environment Manager getgid - Get Real Group ID49235
+Node: Process Environment Manager getegid - Get Effective Group ID49776
+Node: Process Environment Manager setuid - Set User ID50339
+Node: Process Environment Manager setgid - Set Group ID50872
+Node: Process Environment Manager getgroups - Get Supplementary Group IDs51416
+Node: Process Environment Manager getlogin - Get User Name52118
+Node: Process Environment Manager getlogin_r - Reentrant Get User Name52826
+Node: Process Environment Manager getpgrp - Get Process Group ID53574
+Node: Process Environment Manager setsid - Create Session and Set Process Group ID54270
+Node: Process Environment Manager setpgid - Set Process Group ID for Job Control55040
+Node: Process Environment Manager uname - Get System Name55751
+Node: Process Environment Manager times - Get process times56690
+Node: Process Environment Manager getenv - Get Environment Variables57827
+Node: Process Environment Manager setenv - Set Environment Variables58646
+Node: Process Environment Manager ctermid - Generate Terminal Pathname59483
+Node: Process Environment Manager ttyname - Determine Terminal Device Name60656
+Node: Process Environment Manager ttyname_r - Reentrant Determine Terminal Device Name61535
+Node: Process Environment Manager isatty - Determine if File Descriptor is Terminal62451
+Node: Process Environment Manager sysconf - Get Configurable System Variables63197
+Node: Files and Directories Manager64233
+Node: Files and Directories Manager Introduction64615
+Node: Files and Directories Manager Background66541
+Node: Files and Directories Manager Path Name Evaluation66858
+Node: Files and Directories Manager Operations67875
+Node: Files and Directories Manager Directives68170
+Node: Files and Directories Manager opendir - Open a Directory71122
+Node: Files and Directories Manager readdir - Reads a directory72280
+Node: Files and Directories Manager rewinddir - Resets the readdir() pointer73621
+Node: Files and Directories Manager scandir - Scan a directory for matching entries74566
+Node: Files and Directories Manager telldir - Return current location in directory stream75825
+Node: Files and Directories Manager closedir - Ends directory read operation76656
+Node: Files and Directories Manager chdir - Changes the current working directory77644
+Node: Files and Directories Manager fchdir - Changes the current working directory78944
+Node: Files and Directories Manager getcwd - Gets current working directory80236
+Node: Files and Directories Manager open - Opens a file81491
+Node: Files and Directories Manager creat - Create a new file or rewrite an existing one84664
+Node: Files and Directories Manager umask - Sets a file creation mask.86525
+Node: Files and Directories Manager link - Creates a link to a file87794
+Node: Files and Directories Manager symlink - Creates a symbolic link to a file89414
+Node: Files and Directories Manager readlink - Obtain the name of a symbolic link destination90937
+Node: Files and Directories Manager mkdir - Makes a directory92395
+Node: Files and Directories Manager mkfifo - Makes a FIFO special file93842
+Node: Files and Directories Manager unlink - Removes a directory entry95042
+Node: Files and Directories Manager rmdir - Delete a directory96426
+Node: Files and Directories Manager rename - Renames a file98292
+Node: Files and Directories Manager stat - Gets information about a file100265
+Node: Files and Directories Manager fstat - Gets file status101542
+Node: Files and Directories Manager lstat - Gets file status102508
+Node: Files and Directories Manager access - Check permissions for a file103549
+Node: Files and Directories Manager chmod - Changes file mode.105036
+Node: Files and Directories Manager fchmod - Changes permissions of a file106459
+Node: Files and Directories Manager getdents - Get directory entries107900
+Node: Files and Directories Manager chown - Changes the owner and/or group of a file.109189
+Node: Files and Directories Manager utime - Change access and/or modification times of an inode111122
+Node: Files and Directories Manager ftruncate - truncate a file to a specified length112170
+Node: Files and Directories Manager truncate - truncate a file to a specified length113988
+Node: Files and Directories Manager pathconf - Gets configuration values for files115802
+Node: Files and Directories Manager fpathconf - Gets configuration values for files118449
+Node: Files and Directories Manager mknod - create a directory120945
+Node: Input and Output Primitives Manager123474
+Node: Input and Output Primitives Manager Introduction123904
+Node: Input and Output Primitives Manager Background125394
+Node: Input and Output Primitives Manager Operations125705
+Node: Input and Output Primitives Manager Directives126014
+Node: Input and Output Primitives Manager pipe - Create an Inter-Process Channel128382
+Node: Input and Output Primitives Manager dup - Duplicates an open file descriptor129004
+Node: Input and Output Primitives Manager dup2 - Duplicates an open file descriptor129987
+Node: Input and Output Primitives Manager close - Closes a file131103
+Node: Input and Output Primitives Manager read - Reads from a file132054
+Node: Input and Output Primitives Manager write - Writes to a file134217
+Node: Input and Output Primitives Manager fcntl - Manipulates an open file descriptor135770
+Node: Input and Output Primitives Manager lseek - Reposition read/write file offset139422
+Node: Input and Output Primitives Manager fsync - Synchronize file complete in-core state with that on disk141185
+Node: Input and Output Primitives Manager fdatasync - Synchronize file in-core data with that on disk142311
+Node: Input and Output Primitives Manager sync - Schedule file system updates144079
+Node: Input and Output Primitives Manager mount - Mount a file system144916
+Node: Input and Output Primitives Manager unmount - Unmount file systems146199
+Node: Input and Output Primitives Manager readv - Vectored read from a file146873
+Node: Input and Output Primitives Manager writev - Vectored write to a file148339
+Node: Input and Output Primitives Manager aio_read - Asynchronous Read150102
+Node: Input and Output Primitives Manager aio_write - Asynchronous Write150713
+Node: Input and Output Primitives Manager lio_listio - List Directed I/O151326
+Node: Input and Output Primitives Manager aio_error - Retrieve Error Status of Asynchronous I/O Operation151975
+Node: Input and Output Primitives Manager aio_return - Retrieve Return Status Asynchronous I/O Operation152721
+Node: Input and Output Primitives Manager aio_cancel - Cancel Asynchronous I/O Request153480
+Node: Input and Output Primitives Manager aio_suspend - Wait for Asynchronous I/O Request154187
+Node: Input and Output Primitives Manager aio_fsync - Asynchronous File Synchronization154884
+Node: Device- and Class- Specific Functions Manager155486
+Node: Device- and Class- Specific Functions Manager Introduction155996
+Node: Device- and Class- Specific Functions Manager Background157057
+Node: Device- and Class- Specific Functions Manager Operations157408
+Node: Device- and Class- Specific Functions Manager Directives157757
+Node: Device- and Class- Specific Functions Manager cfgetispeed - Reads terminal input baud rate159462
+Node: Device- and Class- Specific Functions Manager cfgetospeed - Reads terminal output baud rate160693
+Node: Device- and Class- Specific Functions Manager cfsetispeed - Sets terminal input baud rate161997
+Node: Device- and Class- Specific Functions Manager cfsetospeed - Sets terminal output baud rate163238
+Node: Device- and Class- Specific Functions Manager tcgetattr - Gets terminal attributes164595
+Node: Device- and Class- Specific Functions Manager tcsetattr - Set terminal attributes165593
+Node: Device- and Class- Specific Functions Manager tcsendbreak - Sends a break to a terminal166353
+Node: Device- and Class- Specific Functions Manager tcdrain - Waits for all output to be transmitted to the terminal.167095
+Node: Device- and Class- Specific Functions Manager tcflush - Discards terminal data168109
+Node: Device- and Class- Specific Functions Manager tcflow - Suspends/restarts terminal output.168828
+Node: Device- and Class- Specific Functions Manager tcgetpgrp - Gets foreground process group ID169549
+Node: Device- and Class- Specific Functions Manager tcsetpgrp - Sets foreground process group ID170273
+Node: Language-Specific Services for the C Programming Language Manager170899
+Node: Language-Specific Services for the C Programming Language Manager Introduction171569
+Node: Language-Specific Services for the C Programming Language Manager Background173338
+Node: Language-Specific Services for the C Programming Language Manager Operations173769
+Node: Language-Specific Services for the C Programming Language Manager Directives174198
+Node: Language-Specific Services for the C Programming Language Manager setlocale - Set the Current Locale177377
+Node: Language-Specific Services for the C Programming Language Manager fileno - Obtain File Descriptor Number for this File178040
+Node: Language-Specific Services for the C Programming Language Manager fdopen - Associate Stream with File Descriptor178772
+Node: Language-Specific Services for the C Programming Language Manager flockfile - Acquire Ownership of File Stream179502
+Node: Language-Specific Services for the C Programming Language Manager ftrylockfile - Poll to Acquire Ownership of File Stream180234
+Node: Language-Specific Services for the C Programming Language Manager funlockfile - Release Ownership of File Stream180991
+Node: Language-Specific Services for the C Programming Language Manager getc_unlocked - Get Character without Locking181730
+Node: Language-Specific Services for the C Programming Language Manager getchar_unlocked - Get Character from stdin without Locking182473
+Node: Language-Specific Services for the C Programming Language Manager putc_unlocked - Put Character without Locking183246
+Node: Language-Specific Services for the C Programming Language Manager putchar_unlocked - Put Character to stdin without Locking184000
+Node: Language-Specific Services for the C Programming Language Manager setjmp - Save Context for Non-Local Goto184764
+Node: Language-Specific Services for the C Programming Language Manager longjmp - Non-Local Jump to a Saved Context185482
+Node: Language-Specific Services for the C Programming Language Manager sigsetjmp - Save Context with Signal Status for Non-Local Goto186212
+Node: Language-Specific Services for the C Programming Language Manager siglongjmp - Non-Local Jump with Signal Status to a Saved Context187007
+Node: Language-Specific Services for the C Programming Language Manager tzset - Initialize Time Conversion Information187812
+Node: Language-Specific Services for the C Programming Language Manager strtok_r - Reentrant Extract Token from String188558
+Node: Language-Specific Services for the C Programming Language Manager asctime_r - Reentrant struct tm to ASCII Time Conversion189298
+Node: Language-Specific Services for the C Programming Language Manager ctime_r - Reentrant time_t to ASCII Time Conversion190064
+Node: Language-Specific Services for the C Programming Language Manager gmtime_r - Reentrant UTC Time Conversion190812
+Node: Language-Specific Services for the C Programming Language Manager localtime_r - Reentrant Local Time Conversion191528
+Node: Language-Specific Services for the C Programming Language Manager rand_r - Reentrant Random Number Generation192249
+Node: System Databases Manager192846
+Node: System Databases Manager Introduction193188
+Node: System Databases Manager Background193941
+Node: System Databases Manager Operations194208
+Node: System Databases Manager Directives194473
+Node: System Databases Manager getgrgid - Get Group File Entry for ID195543
+Node: System Databases Manager getgrgid_r - Reentrant Get Group File Entry196044
+Node: System Databases Manager getgrnam - Get Group File Entry for Name196587
+Node: System Databases Manager getgrnam_r - Reentrant Get Group File Entry for Name197136
+Node: System Databases Manager getpwuid - Get Password File Entry for UID197710
+Node: System Databases Manager getpwuid_r - Reentrant Get Password File Entry for UID198276
+Node: System Databases Manager getpwnam - Password File Entry for Name198855
+Node: System Databases Manager getpwnam_r - Reentrant Get Password File Entry for Name199415
+Node: Semaphore Manager199921
+Node: Semaphore Manager Introduction200207
+Node: Semaphore Manager Background201053
+Node: Semaphore Manager Theory201379
+Node: Semaphore Manager "sem_t" Structure202250
+Node: Semaphore Manager Building a Semaphore Attribute Set202662
+Node: Semaphore Manager Operations202948
+Node: Semaphore Manager Using as a Binary Semaphore203241
+Node: Semaphore Manager Directives204070
+Node: Semaphore Manager sem_init - Initialize an unnamed semaphore205140
+Node: Semaphore Manager sem_destroy - Destroy an unnamed semaphore206513
+Node: Semaphore Manager sem_open - Open a named semaphore207626
+Node: Semaphore Manager sem_close - Close a named semaphore209901
+Node: Semaphore Manager sem_unlink - Unlink a semaphore210886
+Node: Semaphore Manager sem_wait - Wait on a Semaphore212329
+Node: Semaphore Manager sem_trywait - Non-blocking Wait on a Semaphore213458
+Node: Semaphore Manager sem_timedwait - Wait on a Semaphore for a Specified Time214781
+Node: Semaphore Manager sem_post - Unlock a Semaphore216392
+Node: Semaphore Manager sem_getvalue - Get the value of a semaphore217559
+Node: Mutex Manager218884
+Node: Mutex Manager Introduction219138
+Node: Mutex Manager Background220643
+Node: Mutex Manager Mutex Attributes220918
+Node: Mutex Manager PTHREAD_MUTEX_INITIALIZER221466
+Node: Mutex Manager Operations222096
+Node: Mutex Manager Services222332
+Node: Mutex Manager pthread_mutexattr_init - Initialize a Mutex Attribute Set223876
+Node: Mutex Manager pthread_mutexattr_destroy - Destroy a Mutex Attribute Set224724
+Node: Mutex Manager pthread_mutexattr_setprotocol - Set the Blocking Protocol225659
+Node: Mutex Manager pthread_mutexattr_getprotocol - Get the Blocking Protocol227176
+Node: Mutex Manager pthread_mutexattr_setprioceiling - Set the Priority Ceiling228220
+Node: Mutex Manager pthread_mutexattr_getprioceiling - Get the Priority Ceiling229432
+Node: Mutex Manager pthread_mutexattr_setpshared - Set the Visibility230473
+Node: Mutex Manager pthread_mutexattr_getpshared - Get the Visibility231276
+Node: Mutex Manager pthread_mutex_init - Initialize a Mutex232079
+Node: Mutex Manager pthread_mutex_destroy - Destroy a Mutex233053
+Node: Mutex Manager pthread_mutex_lock - Lock a Mutex233758
+Node: Mutex Manager pthread_mutex_trylock - Poll to Lock a Mutex234557
+Node: Mutex Manager pthread_mutex_timedlock - Lock a Mutex with Timeout235393
+Node: Mutex Manager pthread_mutex_unlock - Unlock a Mutex236483
+Node: Mutex Manager pthread_mutex_setprioceiling - Dynamically Set the Priority Ceiling237106
+Node: Mutex Manager pthread_mutex_getprioceiling - Get the Current Priority Ceiling238003
+Node: Condition Variable Manager238734
+Node: Condition Variable Manager Introduction239094
+Node: Condition Variable Manager Background240090
+Node: Condition Variable Manager Operations240367
+Node: Condition Variable Manager Directives240642
+Node: Condition Variable Manager pthread_condattr_init - Initialize a Condition Variable Attribute Set242043
+Node: Condition Variable Manager pthread_condattr_destroy - Destroy a Condition Variable Attribute Set242840
+Node: Condition Variable Manager pthread_condattr_setpshared - Set Process Shared Attribute243637
+Node: Condition Variable Manager pthread_condattr_getpshared - Get Process Shared Attribute244422
+Node: Condition Variable Manager pthread_cond_init - Initialize a Condition Variable245201
+Node: Condition Variable Manager pthread_cond_destroy - Destroy a Condition Variable246265
+Node: Condition Variable Manager pthread_cond_signal - Signal a Condition Variable247041
+Node: Condition Variable Manager pthread_cond_broadcast - Broadcast a Condition Variable247872
+Node: Condition Variable Manager pthread_cond_wait - Wait on a Condition Variable248715
+Node: Condition Variable Manager pthread_cond_timedwait - Wait with Timeout a Condition Variable249714
+Node: Memory Management Manager250811
+Node: Memory Management Manager Introduction251163
+Node: Memory Management Manager Background252014
+Node: Memory Management Manager Operations252287
+Node: Memory Management Manager Directives252558
+Node: Memory Management Manager mlockall - Lock the Address Space of a Process253789
+Node: Memory Management Manager munlockall - Unlock the Address Space of a Process254327
+Node: Memory Management Manager mlock - Lock a Range of the Process Address Space254914
+Node: Memory Management Manager munlock - Unlock a Range of the Process Address Space255501
+Node: Memory Management Manager mmap - Map Process Addresses to a Memory Object256095
+Node: Memory Management Manager munmap - Unmap Previously Mapped Addresses256667
+Node: Memory Management Manager mprotect - Change Memory Protection257213
+Node: Memory Management Manager msync - Memory Object Synchronization257737
+Node: Memory Management Manager shm_open - Open a Shared Memory Object258258
+Node: Memory Management Manager shm_unlink - Remove a Shared Memory Object258791
+Node: Scheduler Manager259264
+Node: Scheduler Manager Introduction259552
+Node: Scheduler Manager Background260041
+Node: Scheduler Manager Priority260318
+Node: Scheduler Manager Scheduling Policies260760
+Node: Scheduler Manager Operations262102
+Node: Scheduler Manager Directives262350
+Node: Scheduler Manager sched_get_priority_min - Get Minimum Priority Value263071
+Node: Scheduler Manager sched_get_priority_max - Get Maximum Priority Value263870
+Node: Scheduler Manager sched_rr_get_interval - Get Timeslicing Quantum264707
+Node: Scheduler Manager sched_yield - Yield the Processor265694
+Node: Clock Manager266350
+Node: Clock Manager Introduction266606
+Node: Clock Manager Background267417
+Node: Clock Manager Operations267642
+Node: Clock Manager Directives267865
+Node: Clock Manager clock_gettime - Obtain Time of Day268704
+Node: Clock Manager clock_settime - Set Time of Day269395
+Node: Clock Manager clock_getres - Get Clock Resolution270177
+Node: Clock Manager sleep - Delay Process Execution270942
+Node: Clock Manager usleep - Delay Process Execution in Microseconds271639
+Node: Clock Manager nanosleep - Delay with High Resolution273056
+Node: Clock Manager gettimeofday - Get the Time of Day273985
+Node: Clock Manager time - Get time in seconds274974
+Node: Timer Manager275620
+Node: Timer Manager Introduction275878
+Node: Timer Manager Background276379
+Node: Timer Manager Operations276559
+Node: Timer Manager System Calls276739
+Node: Timer Manager timer_create - Create a Per-Process Timer277461
+Node: Timer Manager timer_delete - Delete a Per-Process Timer278076
+Node: Timer Manager timer_settime - Set Next Timer Expiration278623
+Node: Timer Manager timer_gettime - Get Time Remaining on Timer279308
+Node: Timer Manager timer_getoverrun - Get Timer Overrun Count279907
+Node: Message Passing Manager280401
+Node: Message Passing Manager Introduction280737
+Node: Message Passing Manager Background281537
+Node: Message Passing Manager Theory282068
+Node: Message Passing Manager Messages282574
+Node: Message Passing Manager Message Queues283125
+Node: Message Passing Manager Building a Message Queue Attribute Set284210
+Node: Message Passing Manager Notification of a Message on the Queue286066
+Node: Message Passing Manager POSIX Interpretation Issues287848
+Node: Message Passing Manager Operations288706
+Node: Message Passing Manager Opening or Creating a Message Queue289502
+Node: Message Passing Manager Closing a Message Queue290325
+Node: Message Passing Manager Removing a Message Queue290855
+Node: Message Passing Manager Sending a Message to a Message Queue291650
+Node: Message Passing Manager Receiving a Message from a Message Queue292663
+Node: Message Passing Manager Notification of Receipt of a Message on an Empty Queue293984
+Node: Message Passing Manager Setting the Attributes of a Message Queue295787
+Node: Message Passing Manager Getting the Attributes of a Message Queue297090
+Node: Message Passing Manager Directives297954
+Node: Message Passing Manager mq_open - Open a Message Queue298998
+Node: Message Passing Manager mq_close - Close a Message Queue302717
+Node: Message Passing Manager mq_unlink - Remove a Message Queue303926
+Node: Message Passing Manager mq_send - Send a Message to a Message Queue305454
+Node: Message Passing Manager mq_receive - Receive a Message from a Message Queue307822
+Node: Message Passing Manager mq_notify - Notify Process that a Message is Available310181
+Node: Message Passing Manager mq_setattr - Set Message Queue Attributes312767
+Node: Message Passing Manager mq_getattr - Get Message Queue Attributes314791
+Node: Thread Manager316107
+Node: Thread Manager Introduction316369
+Node: Thread Manager Background318289
+Node: Thread Manager Thread Attributes318527
+Node: Thread Manager Operations320442
+Node: Thread Manager Services320674
+Node: Thread Manager pthread_attr_init - Initialize a Thread Attribute Set322792
+Node: Thread Manager pthread_attr_destroy - Destroy a Thread Attribute Set324094
+Node: Thread Manager pthread_attr_setdetachstate - Set Detach State324991
+Node: Thread Manager pthread_attr_getdetachstate - Get Detach State326223
+Node: Thread Manager pthread_attr_setstacksize - Set Thread Stack Size327194
+Node: Thread Manager pthread_attr_getstacksize - Get Thread Stack Size328336
+Node: Thread Manager pthread_attr_setstackaddr - Set Thread Stack Address329402
+Node: Thread Manager pthread_attr_getstackaddr - Get Thread Stack Address330508
+Node: Thread Manager pthread_attr_setscope - Set Thread Scheduling Scope331587
+Node: Thread Manager pthread_attr_getscope - Get Thread Scheduling Scope333072
+Node: Thread Manager pthread_attr_setinheritsched - Set Inherit Scheduler Flag334269
+Node: Thread Manager pthread_attr_getinheritsched - Get Inherit Scheduler Flag335944
+Node: Thread Manager pthread_attr_setschedpolicy - Set Scheduling Policy337123
+Node: Thread Manager pthread_attr_getschedpolicy - Get Scheduling Policy338510
+Node: Thread Manager pthread_attr_setschedparam - Set Scheduling Parameters339704
+Node: Thread Manager pthread_attr_getschedparam - Get Scheduling Parameters340890
+Node: Thread Manager pthread_create - Create a Thread342076
+Node: Thread Manager pthread_exit - Terminate the Current Thread344661
+Node: Thread Manager pthread_detach - Detach a Thread346617
+Node: Thread Manager pthread_join - Wait for Thread Termination347595
+Node: Thread Manager pthread_self - Get Thread ID348968
+Node: Thread Manager pthread_equal - Compare Thread IDs349559
+Node: Thread Manager pthread_once - Dynamic Package Initialization350331
+Node: Thread Manager pthread_setschedparam - Set Thread Scheduling Parameters351589
+Node: Thread Manager pthread_getschedparam - Get Thread Scheduling Parameters353131
+Node: Key Manager354342
+Node: Key Manager Introduction354582
+Node: Key Manager Background355059
+Node: Key Manager Operations355276
+Node: Key Manager Directives355491
+Node: Key Manager pthread_key_create - Create Thread Specific Data Key356183
+Node: Key Manager pthread_key_delete - Delete Thread Specific Data Key356866
+Node: Key Manager pthread_setspecific - Set Thread Specific Key Value357491
+Node: Key Manager pthread_getspecific - Get Thread Specific Key Value358147
+Node: Thread Cancellation Manager358803
+Node: Thread Cancellation Manager Introduction359171
+Node: Thread Cancellation Manager Background359846
+Node: Thread Cancellation Manager Operations360127
+Node: Thread Cancellation Manager Directives360406
+Node: Thread Cancellation Manager pthread_cancel - Cancel Execution of a Thread361382
+Node: Thread Cancellation Manager pthread_setcancelstate - Set Cancelability State361929
+Node: Thread Cancellation Manager pthread_setcanceltype - Set Cancelability Type362526
+Node: Thread Cancellation Manager pthread_testcancel - Create Cancellation Point363119
+Node: Thread Cancellation Manager pthread_cleanup_push - Establish Cancellation Handler363714
+Node: Thread Cancellation Manager pthread_cleanup_pop - Remove Cancellation Handler364328
+Node: Services Provided by C Library (libc)364851
+Node: Services Provided by C Library (libc) Introduction365926
+Node: Services Provided by C Library (libc) Standard Utility Functions (stdlib.h)366294
+Node: Services Provided by C Library (libc) Character Type Macros and Functions (ctype.h)368259
+Node: Services Provided by C Library (libc) Input and Output (stdio.h)369378
+Node: Services Provided by C Library (libc) Strings and Memory (string.h)371768
+Node: Services Provided by C Library (libc) Signal Handling (signal.h)373477
+Node: Services Provided by C Library (libc) Time Functions (time.h)373918
+Node: Services Provided by C Library (libc) Locale (locale.h)374731
+Node: Services Provided by C Library (libc) Reentrant Versions of Functions375103
+Node: Services Provided by C Library (libc) Miscellaneous Macros and Functions377772
+Node: Services Provided by C Library (libc) Variable Argument Lists378218
+Node: Services Provided by C Library (libc) Reentrant System Calls378821
+Node: Services Provided by the Math Library (libm)379347
+Node: Services Provided by the Math Library (libm) Introduction379753
+Node: Services Provided by the Math Library (libm) Standard Math Functions (math.h)380154
+Node: Status of Implementation381901
+Node: Top383640
+Node: Command and Variable Index384571
+Node: Concept Index431918
+
+End Tag Table

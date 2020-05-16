@@ -1,0 +1,99 @@
+<HTML>
+<!-- created Dec 13 2011 from mp.texi line 293 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Multiprocessing Manager Multiprocessor Communications Interface Layer</TITLE>
+<LINK REL="Precedes" HREF="c_user00449.html">
+<LINK REV="Precedes" HREF="c_user00448.html">
+<LINK REV="Subdocument" HREF="c_user00437.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00448.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00437.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00449.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H2>24.3: Multiprocessor Communications Interface Layer</H2>
+<MENU>
+<LI><A HREF="c_user00449.html">Multiprocessing Manager INITIALIZATION</A>
+<LI><A HREF="c_user00450.html">Multiprocessing Manager GET_PACKET</A>
+<LI><A HREF="c_user00451.html">Multiprocessing Manager RETURN_PACKET</A>
+<LI><A HREF="c_user00452.html">Multiprocessing Manager RECEIVE_PACKET</A>
+<LI><A HREF="c_user00453.html">Multiprocessing Manager SEND_PACKET</A>
+<LI><A HREF="c_user00454.html">Multiprocessing Manager Supporting Heterogeneous Environments</A>
+</MENU>
+<P>
+The Multiprocessor Communications Interface Layer
+(MPCI) is a set of user-provided procedures which enable the
+nodes in a multiprocessor system to communicate with one
+another.  These routines are invoked by RTEMS at various times
+in the preparation and processing of remote requests.
+Interrupts are enabled when an MPCI procedure is invoked.  It is
+assumed that if the execution mode and/or interrupt level are
+altered by the MPCI layer, that they will be restored prior to
+returning to RTEMS.
+</P>
+<P>
+The MPCI layer is responsible for managing a pool of
+buffers called packets and for sending these packets between
+system nodes.  Packet buffers contain the messages sent between
+the nodes.  Typically, the MPCI layer will encapsulate the
+packet within an envelope which contains the information needed
+by the MPCI layer.  The number of packets available is dependent
+on the MPCI layer implementation.
+</P>
+<P>
+The entry points to the routines in the user's MPCI
+layer should be placed in the Multiprocessor Communications
+Interface Table.  The user must provide entry points for each of
+the following table entries in a multiprocessor system:
+</P>
+<UL>
+<LI>initialization 	initialize the MPCI
+<LI>get_packet 	obtain a packet buffer
+<LI>return_packet 	return a packet buffer
+<LI>send_packet 	send a packet to another node
+<LI>receive_packet 	called to get an arrived packet
+</UL>
+
+<P>
+A packet is sent by RTEMS in each of the following situations:
+</P>
+<UL>
+<LI>an RQ is generated on an originating node;
+<LI>an RR is generated on a destination node;
+<LI>a global object is created;
+<LI>a global object is deleted;
+<LI>a local task blocked on a remote object is deleted;
+<LI>during system initialization to check for system consistency.
+</UL>
+
+<P>
+If the target hardware supports it, the arrival of a
+packet at a node may generate an interrupt.  Otherwise, the
+real-time clock ISR can check for the arrival of a packet.  In
+any case, the
+<CODE>rtems_multiprocessing_announce</CODE> directive must be called
+to announce the arrival of a packet.  After exiting the ISR,
+control will be passed to the Multiprocessing Server to process
+the packet.  The Multiprocessing Server will call the get_packet
+entry to obtain a packet buffer and the receive_entry entry to
+copy the message into the buffer obtained.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00449.html">
+<LINK REV="Precedes" HREF="c_user00448.html">
+<LINK REV="Subdocument" HREF="c_user00437.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00448.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00437.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00449.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

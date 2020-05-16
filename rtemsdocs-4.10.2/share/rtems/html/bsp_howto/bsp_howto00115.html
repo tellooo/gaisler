@@ -1,0 +1,83 @@
+<HTML>
+<!-- created Dec 13 2011 from network.texi line 46 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Networking Driver Learn about the network device</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00116.html">
+<LINK REV="Precedes" HREF="bsp_howto00114.html">
+<LINK REV="Subdocument" HREF="bsp_howto00113.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00114.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00113.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00116.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H2>15.2: Learn about the network device</H2>
+<P>
+Before starting to write the network driver become completely
+familiar with the programmer's view of the device.
+The following points list some of the details of the
+device that must be understood before a driver can be written.
+</P>
+<UL>
+<LI>Does the device use DMA to transfer packets to and from
+memory or does the processor have to
+copy packets to and from memory on the device?
+
+<LI>If the device uses DMA, is it capable of forming a single
+outgoing packet from multiple fragments scattered in separate
+memory buffers?
+
+<LI>If the device uses DMA, is it capable of chaining multiple
+outgoing packets, or does each outgoing packet require
+intervention by the driver?
+
+<LI>Does the device automatically pad short frames to the minimum
+64 bytes or does the driver have to supply the padding?
+
+<LI>Does the device automatically retry a transmission on detection
+of a collision?
+
+<LI>If the device uses DMA, is it capable of buffering multiple
+packets to memory, or does the receiver have to be restarted
+after the arrival of each packet?
+
+<LI>How are packets that are too short, too long, or received with
+CRC errors handled?  Does the device automatically continue
+reception or does the driver have to intervene?
+
+<LI>How is the device Ethernet address set?  How is the device
+programmed to accept or reject broadcast and multicast packets?
+
+<LI>What interrupts does the device generate?  Does it generate an
+interrupt for each incoming packet, or only for packets received
+without error?  Does it generate an interrupt for each packet
+transmitted, or only when the transmit queue is empty?  What
+happens when a transmit error is detected?
+
+</UL>
+<P>
+In addition, some controllers have specific questions regarding
+board specific configuration.  For example, the SONIC Ethernet
+controller has a very configurable data bus interface.  It can
+even be configured for sixteen and thirty-two bit data buses.  This
+type of information should be obtained from the board vendor.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00116.html">
+<LINK REV="Precedes" HREF="bsp_howto00114.html">
+<LINK REV="Subdocument" HREF="bsp_howto00113.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00114.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00113.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00116.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

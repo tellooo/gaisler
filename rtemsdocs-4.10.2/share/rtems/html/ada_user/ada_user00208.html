@@ -1,0 +1,48 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/event.texi line 98 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Event Manager Building an Event Set or Condition</TITLE>
+<LINK REL="Precedes" HREF="ada_user00209.html">
+<LINK REV="Precedes" HREF="ada_user00207.html">
+<LINK REV="Subdocument" HREF="ada_user00204.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00207.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00204.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00209.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>11.2.2: Building an Event Set or Condition</H3>
+<P>
+An event set or condition is built by a bitwise OR of
+the desired events.  The set of valid events is <CODE>RTEMS.EVENT_0</CODE> through
+<CODE>RTEMS.EVENT_31</CODE>.  If an event is not explicitly specified in the set or
+condition, then it is not present.  Events are specifically
+designed to be mutually exclusive, therefore bitwise OR and
+addition operations are equivalent as long as each event appears
+exactly once in the event set list.
+</P>
+<P>
+For example, when sending the event set consisting of
+<CODE>RTEMS.EVENT_6</CODE>, <CODE>RTEMS.EVENT_15</CODE>, and <CODE>RTEMS.EVENT_31</CODE>,
+the event parameter to the <CODE>rtems.event_send</CODE>
+directive should be <CODE>RTEMS.EVENT_6 or RTEMS.EVENT_15 or RTEMS.EVENT_31</CODE>.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00209.html">
+<LINK REV="Precedes" HREF="ada_user00207.html">
+<LINK REV="Subdocument" HREF="ada_user00204.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00207.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00204.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00209.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

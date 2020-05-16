@@ -1,0 +1,71 @@
+<HTML>
+<!-- created Dec 13 2011 from confinit.texi line 34 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Configuration and Initialization Configuration</TITLE>
+<LINK REL="Precedes" HREF="shell00007.html">
+<LINK REV="Precedes" HREF="shell00003.html">
+<LINK REV="Subdocument" HREF="shell00002.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="shell00003.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="shell00002.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="shell00007.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Shell User's Guide</CITE></P>
+<H2>1.2: Configuration</H2>
+<MENU>
+<LI><A HREF="shell00007.html">Configuration and Initialization Customizing the Command Set</A>
+<LI><A HREF="shell00008.html">Configuration and Initialization Adding Custom Commands</A>
+</MENU>
+<P>
+The command set available to the application is user configurable.
+It is configured using a mechanism similar to the <CODE>confdefs.h</CODE>
+mechanism used to specify application configuration.
+</P>
+<P>
+In the simplest case, if the user wishes to configure a command
+set with all commands available that are neither filesystem
+management (e.g. mounting, formating, etc.) or network related,
+then the following is all that is required:
+</P>
+<DL><DT><DD>
+<PRE>
+#define CONFIGURE_SHELL_COMMANDS_INIT
+#define CONFIGURE_SHELL_COMMANDS_ALL
+
+#include &lt;rtems/shellconfig.h&gt;
+</PRE>
+</DL>
+<P>
+In a slightly more complex example, if the user wishes to include
+all networking commands as well as support for mounting MS-DOS and
+NFS filesystems, then the following is all that is required:
+</P>
+<DL><DT><DD>
+<PRE>
+#define CONFIGURE_SHELL_COMMANDS_INIT
+#define CONFIGURE_SHELL_COMMANDS_ALL
+#define CONFIGURE_SHELL_MOUNT_MSDOS
+#define CONFIGURE_SHELL_MOUNT_NFS
+
+#include &lt;rtems/shellconfig.h&gt;
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="shell00007.html">
+<LINK REV="Precedes" HREF="shell00003.html">
+<LINK REV="Subdocument" HREF="shell00002.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="shell00003.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="shell00002.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="shell00007.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Shell User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,93 @@
+<HTML>
+<!-- created Dec 13 2011 from buildada.texi line 618 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Running the bit_ada Script</TITLE>
+<LINK REL="Precedes" HREF="started_ada00026.html">
+<LINK REV="Precedes" HREF="started_ada00024.html">
+<LINK REV="Subdocument" HREF="started_ada00013.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started_ada00024.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started_ada00013.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started_ada00026.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with GNAT/RTEMS</CITE></P>
+<H2>3.12: Running the bit_ada Script</H2>
+<P>
+After the <CODE>bit_ada</CODE> script has been modified to reflect the
+local installation, the modified <CODE>bit_ada</CODE> script is run
+using the following sequence:
+</P>
+<DL><DT><DD>
+<PRE>
+cd tools
+./bit_ada &lt;target configuration&gt;
+</PRE>
+</DL>
+<P>
+Where &lt;target configuration&gt; is one of the following:
+</P>
+<UL>
+<LI>hppa1.1
+<LI>i386
+<LI>m68k
+<LI>powerpc
+<LI>sh
+<LI>sparc
+</UL>
+
+<P>
+NOTE:  The above list of target configurations is the list of RTEMS supported
+targets.  Only a subset of these have been tested with GNAT/RTEMS.  For more
+information, contact your GNAT/RTEMS representative.
+</P>
+<P>
+The build process can take a while to complete.  Many users find it
+handy to run the build process in the background, capture the output
+in a file, and monitor the output.  This can be done as follows:
+</P>
+<DL><DT><DD>
+<PRE>
+./bit_ada &lt;target configuration&gt; &gt;bit.log 2&gt;&amp;1 &amp;
+tail -f bit.log
+</PRE>
+</DL>
+<P>
+If no errors are encountered, the <CODE>bit_ada</CODE> script will conclude by
+printing messages similar to the following:
+</P>
+<DL><DT><DD>
+<PRE>
+
+The src and build-i386-tools subdirectory may now be removed.
+
+Started:  Fri Apr 10 10:14:07 CDT 1998
+Finished: Fri Apr 10 12:01:33 CDT 1998
+</PRE>
+</DL>
+<P>
+If the <CODE>bit_ada</CODE> script successfully completes, then the
+GNU C/C++ cross compilation tools are installed.
+</P>
+<P>
+If the <CODE>bit_ada</CODE> script does not successfully complete, then investigation
+will be required to determine the source of the error.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="started_ada00026.html">
+<LINK REV="Precedes" HREF="started_ada00024.html">
+<LINK REV="Subdocument" HREF="started_ada00013.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started_ada00024.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started_ada00013.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started_ada00026.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with GNAT/RTEMS</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

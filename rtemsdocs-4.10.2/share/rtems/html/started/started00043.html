@@ -1,0 +1,162 @@
+<HTML>
+<!-- created Dec 13 2011 from buildc.texi line 388 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Using RPM to Build BINUTILS GCC and NEWLIB</TITLE>
+<LINK REL="Precedes" HREF="started00042.html">
+<LINK REV="Precedes" HREF="started00037.html">
+<LINK REV="Subdocument" HREF="started00037.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started00037.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started00037.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started00042.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with RTEMS</CITE></P>
+<H4>4.1.4.1: Using RPM to Build BINUTILS GCC and NEWLIB</H4>
+<P>
+NOTE:  The procedures described in the following sections must
+be completed before this step:
+</P>
+<UL>
+<LI><A HREF="started00034.html">Obtain Source and Patches for BINUTILS GCC and NEWLIB</A>
+</UL>
+
+<P>
+RPM automatically unarchives the source and applies any needed
+patches so you do <STRONG>NOT</STRONG> have to manually perform the procedures
+described <A HREF="started00035.html">Unarchiving the Tools</A> and
+<A HREF="started00036.html">Applying RTEMS Patches</A>.
+</P>
+<P>
+This section describes the process of building binutils, gcc, and
+newlib using RPM.  RPM is a packaging format which can be used to
+distribute binary files as well as to capture the procedure and
+source code used to produce those binary files.  Before
+attempting to build any RPM from source, it is necessary to
+ensure that all required source and patches are in the <CODE>SOURCES</CODE>
+directory under the RPM root (probably <CODE>/usr/src/redhat</CODE> or
+<CODE>/usr/local/src/redhat</CODE>) on your machine.  This procedure
+starts by installing the source RPMs as shown in the following
+example:
+</P>
+<DL><DT><DD>
+<PRE>
+rpm -U rtems-4.10-i386-rtems4.10-binutils-2.18.91-1.src.rpm
+rpm -U rtems-4.10-i386-rtems4.10-gcc-4.3.2-3.src.rpm
+</PRE>
+</DL>
+<P>
+The RTEMS tool source RPMS are called &quot;nosrc&quot; to indicate that one or
+more source files required to produce the RPMs are not present.
+The RTEMS source RPMs typically include all required patches, but do not
+include the large <CODE>.tar.gz</CODE> or <CODE>.tgz</CODE> files for
+each component such as BINUTILS, GCC, or NEWLIB.  These are shared
+by all RTEMS RPMs regardless of target CPU and there was no reason
+to duplicate them.  You will have to get the required source
+archive files by hand and place them in the <CODE>SOURCES</CODE> directory
+before attempting to build.  If you forget to do this, RPM is
+smart -- it will tell you what is missing.  To determine what is
+included or referenced by a particular RPM, use a command like the
+following:
+</P>
+<DL><DT><DD>
+<PRE>
+$ rpm -q -l -p rtems-4.10-i386-rtems4.10-gcc-3.2.3-1.src.rpm
+gcc-3.2.3-rtems4.10-20030507a.diff
+rtems-4.10-i386-rtems4.7-gcc.spec
+newlib-1.11.0-rtems4.10-20030507.diff
+</PRE>
+</DL>
+<P>
+Notice that there are patch files (the <CODE>.diff</CODE> files) and a file
+describing the build procedure and files produced (the <CODE>.spec</CODE> file),
+but no source archives (the <CODE>*tar.*</CODE> files).
+When installing this source RPM
+(<CODE>rpm -U rtems-4.10-i386-rtems4.10-gcc-newlib-gcc3.2.3newlib1.11.0-1.src.rpm</CODE>),
+the <CODE>.spec</CODE> file is placed in the <CODE>SPECS</CODE> directory under the RPM root
+directory, while the <CODE>*.diff</CODE> files are placed into the <CODE>SOURCES</CODE>
+directory.
+</P>
+<H3>Configuring and Building BINUTILS using RPM</H3>
+<P>
+The following example illustrates the invocation of RPM to build a new,
+locally compiled, binutils binary RPM that matches the installed source
+RPM.  This example assumes that all of the required source is installed.
+</P>
+<DL><DT><DD>
+<PRE>
+cd &lt;RPM_ROOT_DIRECTORY&gt;/SPECS
+rpm -bb i386-rtems4.10-binutils-2.18.91.spec
+</PRE>
+</DL>
+<P>
+If the build completes successfully, RPMS like the following will
+be generated in a build-host architecture specific subdirectory
+of the RPMS directory under the RPM root directory.
+</P>
+<DL><DT><DD>
+<PRE>
+rtems-4.10-binutils-common-2.18.91-1.i386.rpm
+rtems-4.10-i386-rtems4.10-binutils-2.18.91-1.i386.rpm
+</PRE>
+</DL>
+<P>
+NOTE: It may be necessary to remove the build tree in the
+<CODE>BUILD</CODE> directory under the RPM root directory.
+</P>
+<H3>Configuring and Building GCC and NEWLIB using RPM</H3>
+<P>
+The following example illustrates the invocation of RPM to build a new,
+locally compiled, set of GCC and NEWLIB binary RPMs that match the
+installed source RPM.  It is also necessary to install the BINUTILS
+RPMs and place them in your PATH.  This example assumes that all of
+the required source is installed.
+</P>
+<DL><DT><DD>
+<PRE>
+cd &lt;RPM_ROOT_DIRECTORY&gt;/RPMS/i386
+rpm -U rtems-4.10-binutils-common-2.18.91-1.i386.rpm
+rpm -U rtems-4.10-i386-rtems4.10-binutils-2.18.91-1.i386.rpm
+export PATH=/opt/rtems-4.10/bin:$PATH
+cd &lt;RPM_ROOT_DIRECTORY&gt;/SPECS
+rpm -bb i386-rtems4.10-gcc-4.3.2-newlib-1.16.0.spec
+</PRE>
+</DL>
+<P>
+If the build completes successfully, a set of RPMS like the following will
+be generated in a build-host architecture specific subdirectory
+of the RPMS directory under the RPM root directory.
+</P>
+<DL><DT><DD>
+<PRE>
+rtems-4.10-gcc-common-4.3.2-3.i386.rpm
+rtems-4.10-i386-rtems4.10-newlib-1.16.0-3.i386.rpm
+rtems-4.10-i386-rtems4.10-gcc-4.3.2-3.i386.rpm
+rtems-4.10-i386-rtems4.10-gcc-c++-4.3.2-3.i386.rpm
+</PRE>
+</DL>
+<P>
+NOTE: Some targets do not support building all languages.
+</P>
+<P>
+NOTE: It may be necessary to remove the build tree in the
+<CODE>BUILD</CODE> directory under the RPM root directory.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="started00042.html">
+<LINK REV="Precedes" HREF="started00037.html">
+<LINK REV="Subdocument" HREF="started00037.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started00037.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started00037.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started00042.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with RTEMS</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

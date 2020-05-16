@@ -1,0 +1,74 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/task.texi line 1969 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Task Manager TASK_VARIABLE_GET - Obtain value of a per task variable</TITLE>
+<LINK REL="Precedes" HREF="ada_user00091.html">
+<LINK REV="Precedes" HREF="ada_user00089.html">
+<LINK REV="Subdocument" HREF="ada_user00053.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00089.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00053.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00091.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>5.4.18: TASK_VARIABLE_GET - Obtain value of a per task variable</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+procedure Task_Variable_Get (
+   ID                  : in     RTEMS.ID;
+   Task_Variable       :    out RTEMS.Address;
+   Task_Variable_Value :    out RTEMS.Address;
+   Result              :    out RTEMS.Status_Codes
+);
+</PRE>
+</DL>
+<H3>DIRECTIVE STATUS CODES:</H3>
+<P>
+<CODE>RTEMS.SUCCESSFUL</CODE> - per task variable added successfully<BR>
+
+<CODE>RTEMS.INVALID_ADDRESS</CODE> - <CODE>task_variable</CODE> is NULL<BR>
+
+<CODE>RTEMS.INVALID_ADDRESS</CODE> - <CODE>task_variable_value</CODE> is NULL<BR>
+
+<CODE>RTEMS.INVALID_ADDRESS</CODE> - <CODE>task_variable</CODE> is not found<BR>
+
+<CODE>RTEMS.NO_MEMORY</CODE> - invalid task id<BR>
+
+<CODE>RTEMS.ILLEGAL_ON_REMOTE_OBJECT</CODE> - not supported on remote tasks<BR>
+
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This directive looks up the private value of a task variable for a
+specified task and stores that value in the location pointed to by
+the result argument.  The specified task is usually not the calling
+task, which can get its private value by directly accessing the variable.
+</P>
+<H3>NOTES:</H3>
+<P>
+If you change memory which <CODE>task_variable_value</CODE> points to,
+remember to declare that memory as volatile, so that the compiler
+will optimize it correctly.  In this case both the pointer
+<CODE>task_variable_value</CODE> and data referenced by <CODE>task_variable_value</CODE>
+should be considered volatile.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00091.html">
+<LINK REV="Precedes" HREF="ada_user00089.html">
+<LINK REV="Subdocument" HREF="ada_user00053.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00089.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00053.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00091.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

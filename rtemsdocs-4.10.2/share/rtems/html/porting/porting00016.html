@@ -1,0 +1,54 @@
+<HTML>
+<!-- created Dec 13 2011 from interrupts.texi line 29 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Interrupts Interrupt Levels</TITLE>
+<LINK REL="Precedes" HREF="porting00020.html">
+<LINK REV="Precedes" HREF="porting00015.html">
+<LINK REV="Subdocument" HREF="porting00014.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00015.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00014.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00020.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<H2>5.2: Interrupt Levels</H2>
+<MENU>
+<LI><A HREF="porting00020.html">Interrupts Interrupt Level Mask</A>
+<LI><A HREF="porting00021.html">Interrupts Obtaining the Current Interrupt Level</A>
+<LI><A HREF="porting00022.html">Interrupts Set the Interrupt Level</A>
+<LI><A HREF="porting00023.html">Interrupts Disable Interrupts</A>
+<LI><A HREF="porting00024.html">Interrupts Enable Interrupts</A>
+<LI><A HREF="porting00025.html">Interrupts Flash Interrupts</A>
+</MENU>
+<P>
+RTEMS is designed assuming that a CPU family has a level associated with
+interrupts.  Interrupts below the current interrupt level are masked and
+do not interrupt the CPU until the interrupt level is lowered.  This
+design provides for 256 distinct interrupt levels even though most CPU
+implementations support far fewer levels.  Interrupt level 0 is assumed to
+map to the hardware settings for all interrupts enabled.
+</P>
+<P>
+Over the years that RTEMS has been available, there has been much
+discussion on how to handle CPU families which support very few interrupt
+levels such as the i386, PowerPC, and HP-PA RISC. XXX
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="porting00020.html">
+<LINK REV="Precedes" HREF="porting00015.html">
+<LINK REV="Subdocument" HREF="porting00014.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00015.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00014.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00020.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

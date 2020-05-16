@@ -1,0 +1,608 @@
+This is new_chapters.info, produced by makeinfo version 4.13 from
+new_chapters.texi.
+
+INFO-DIR-SECTION RTEMS On-Line Manual
+START-INFO-DIR-ENTRY
+* RTEMS New Chapters: (new_chapters).  Miscellaneous New Chapters
+END-INFO-DIR-ENTRY
+
+
+File: new_chapters.info,  Node: Error Reporting Support,  Next: Error Reporting Support Introduction,  Up: Top
+
+1 Error Reporting Support
+*************************
+
+* Menu:
+
+* Error Reporting Support Introduction::
+* Error Reporting Support Background::
+* Error Reporting Support Operations::
+* Error Reporting Support Routines::
+
+
+File: new_chapters.info,  Node: Error Reporting Support Introduction,  Next: Error Reporting Support Background,  Prev: Error Reporting Support,  Up: Error Reporting Support
+
+1.1 Introduction
+================
+
+These error reporting facilities are an RTEMS support component that
+provide convenient facilities for handling error conditions in an RTEMS
+application.  of each task using a period.  The services provided by
+the error reporting support component are:
+
+   * `rtems_error' - Report an Error
+
+   * `rtems_panic' - Report an Error and Panic
+
+   * `rtems_status_text' - ASCII Version of RTEMS Status
+
+
+File: new_chapters.info,  Node: Error Reporting Support Background,  Next: Error Reporting Support Error Handling in an Embedded System,  Prev: Error Reporting Support Introduction,  Up: Error Reporting Support
+
+1.2 Background
+==============
+
+* Menu:
+
+* Error Reporting Support Error Handling in an Embedded System::
+
+
+File: new_chapters.info,  Node: Error Reporting Support Error Handling in an Embedded System,  Next: Error Reporting Support Operations,  Prev: Error Reporting Support Background,  Up: Error Reporting Support Background
+
+1.2.1 Error Handling in an Embedded System
+------------------------------------------
+
+Error handling in an embedded system is a difficult problem.  If the
+error is severe, then the only recourse is to shut the system down in a
+safe manner.  Other errors can be detected and compensated for.  The
+error reporting routines in this support component - `rtems_error' and
+`rtems_panic' assume that if the error is severe enough, then the
+system should be shutdown.  If a simple shutdown with some basic
+diagnostic information is not sufficient, then these routines should
+not be used in that particular system.  In this case, use the
+`rtems_status_text' routine to construct an application specific error
+reporting routine.
+
+
+File: new_chapters.info,  Node: Error Reporting Support Operations,  Next: Error Reporting Support Reporting an Error,  Prev: Error Reporting Support Error Handling in an Embedded System,  Up: Error Reporting Support
+
+1.3 Operations
+==============
+
+* Menu:
+
+* Error Reporting Support Reporting an Error::
+
+
+File: new_chapters.info,  Node: Error Reporting Support Reporting an Error,  Next: Error Reporting Support Routines,  Prev: Error Reporting Support Operations,  Up: Error Reporting Support Operations
+
+1.3.1 Reporting an Error
+------------------------
+
+The `rtems_error' and `rtems_panic' routines can be used to print some
+diagnostic information and shut the system down.  The `rtems_error'
+routine is invoked with a user specified error level indicator.  This
+error indicator is used to determine if the system should be shutdown
+after reporting this error.
+
+
+File: new_chapters.info,  Node: Error Reporting Support Routines,  Next: Error Reporting Support rtems_status_text - ASCII Version of RTEMS Status,  Prev: Error Reporting Support Reporting an Error,  Up: Error Reporting Support
+
+1.4 Routines
+============
+
+* Menu:
+
+* Error Reporting Support rtems_status_text - ASCII Version of RTEMS Status::
+* Error Reporting Support rtems_error - Report an Error::
+* Error Reporting Support rtems_panic - Report an Error and Panic::
+
+This section details the error reporting support compenent's routine.
+A subsection is dedicated to each of this manager's routines and
+describes the calling sequence, related constants, usage, and status
+codes.
+
+
+File: new_chapters.info,  Node: Error Reporting Support rtems_status_text - ASCII Version of RTEMS Status,  Next: Error Reporting Support rtems_error - Report an Error,  Prev: Error Reporting Support Routines,  Up: Error Reporting Support Routines
+
+1.4.1 rtems_status_text - ASCII Version of RTEMS Status
+-------------------------------------------------------
+
+CALLING SEQUENCE:
+-----------------
+
+     const char *rtems_status_text(
+       rtems_status_code status
+     );
+
+STATUS CODES:
+-------------
+
+Returns a pointer to a constant string that describes the given RTEMS
+status code.
+
+DESCRIPTION:
+------------
+
+This routine returns a pointer to a string that describes the RTEMS
+status code specified by `status'.
+
+NOTES:
+------
+
+NONE
+
+
+File: new_chapters.info,  Node: Error Reporting Support rtems_error - Report an Error,  Next: Error Reporting Support rtems_panic - Report an Error and Panic,  Prev: Error Reporting Support rtems_status_text - ASCII Version of RTEMS Status,  Up: Error Reporting Support Routines
+
+1.4.2 rtems_error - Report an Error
+-----------------------------------
+
+CALLING SEQUENCE:
+-----------------
+
+     int rtems_error(
+       int         error_code,
+       const char *printf_format,
+       ...
+     );
+
+STATUS CODES:
+-------------
+
+Returns the number of characters written.
+
+DESCRIPTION:
+------------
+
+This routine prints the requested information as specified by the
+`printf_format' parameter and the zero or more optional arguments
+following that parameter.  The `error_code' parameter is an error
+number with either `RTEMS_ERROR_PANIC' or `RTEMS_ERROR_ABORT' bitwise
+or'ed with it.  If the `RTEMS_ERROR_PANIC' bit is set, then then the
+system is system is shutdown via a call to `_exit'.  If the
+`RTEMS_ERROR_ABORT' bit is set, then then the system is system is
+shutdown via a call to `abort'.
+
+NOTES:
+------
+
+NONE
+
+
+File: new_chapters.info,  Node: Error Reporting Support rtems_panic - Report an Error and Panic,  Prev: Error Reporting Support rtems_error - Report an Error,  Up: Error Reporting Support Routines
+
+1.4.3 rtems_panic - Report an Error and Panic
+---------------------------------------------
+
+CALLING SEQUENCE:
+-----------------
+
+     int rtems_panic(
+        const char *printf_format,
+        ...
+     );
+
+STATUS CODES:
+-------------
+
+Returns the number of characters written.
+
+DESCRIPTION:
+------------
+
+This routine is a wrapper for the `rtems_error' routine with an implied
+error level of `RTEMS_ERROR_PANIC'.  See `rtems_error' for more
+information.
+
+NOTES:
+------
+
+NONE
+
+
+File: new_chapters.info,  Node: Monitor Task,  Next: Monitor Task Introduction,  Up: Top
+
+2 Monitor Task
+**************
+
+* Menu:
+
+* Monitor Task Introduction::
+* Monitor Task Background::
+* Monitor Task Operations::
+* Monitor Task Routines::
+* Monitor Task Monitor Interactive Commands::
+
+
+File: new_chapters.info,  Node: Monitor Task Introduction,  Next: Monitor Task Background,  Prev: Monitor Task,  Up: Monitor Task
+
+2.1 Introduction
+================
+
+The monitor task is a simple interactive shell that allows the user to
+make inquries about he state of various system objects.  The routines
+provided by the monitor task manager are:
+
+   * `rtems_monitor_init' - Initialize the Monitor Task
+
+   * `rtems_monitor_wakeup' - Wakeup the Monitor Task
+
+
+File: new_chapters.info,  Node: Monitor Task Background,  Next: Monitor Task Operations,  Prev: Monitor Task Introduction,  Up: Monitor Task
+
+2.2 Background
+==============
+
+There is no background information.
+
+
+File: new_chapters.info,  Node: Monitor Task Operations,  Next: Monitor Task Initializing the Monitor,  Prev: Monitor Task Background,  Up: Monitor Task
+
+2.3 Operations
+==============
+
+* Menu:
+
+* Monitor Task Initializing the Monitor::
+
+
+File: new_chapters.info,  Node: Monitor Task Initializing the Monitor,  Next: Monitor Task Routines,  Prev: Monitor Task Operations,  Up: Monitor Task Operations
+
+2.3.1 Initializing the Monitor
+------------------------------
+
+The monitor is initialized by calling `rtems_monitor_init'.  When
+initialized, the monitor is created as an independent task.  An example
+of initializing the monitor is shown below:
+
+     #include <rtems/monitor.h>
+             ...
+     rtems_monitor_init(0);
+
+The "0" parameter to the `rtems_monitor_init' routine causes the
+monitor to immediately enter command mode.  This parameter is a
+bitfield.  If the monitor is to suspend itself on startup, then the
+`RTEMS_MONITOR_SUSPEND' bit should be set.
+
+
+File: new_chapters.info,  Node: Monitor Task Routines,  Next: Monitor Task rtems_monitor_init - Initialize the Monitor Task,  Prev: Monitor Task Initializing the Monitor,  Up: Monitor Task
+
+2.4 Routines
+============
+
+* Menu:
+
+* Monitor Task rtems_monitor_init - Initialize the Monitor Task::
+* Monitor Task rtems_monitor_wakeup - Wakeup the Monitor Task::
+
+This section details the monitor task manager's routines.  A subsection
+is dedicated to each of this manager's routines and describes the
+calling sequence, related constants, usage, and status codes.
+
+
+File: new_chapters.info,  Node: Monitor Task rtems_monitor_init - Initialize the Monitor Task,  Next: Monitor Task rtems_monitor_wakeup - Wakeup the Monitor Task,  Prev: Monitor Task Routines,  Up: Monitor Task Routines
+
+2.4.1 rtems_monitor_init - Initialize the Monitor Task
+------------------------------------------------------
+
+CALLING SEQUENCE:
+-----------------
+
+     void rtems_monitor_init(
+       unsigned32 monitor_flags
+     );
+
+STATUS CODES: NONE
+------------------
+
+DESCRIPTION:
+------------
+
+This routine initializes the RTEMS monitor task.  The `monitor_flags'
+parameter indicates how the server task is to start.  This parameter is
+a bitfield and has the following constants associated with it:
+
+   * RTEMS_MONITOR_SUSPEND - suspend monitor on startup
+
+   * RTEMS_MONITOR_GLOBAL - monitor should be global
+
+If the `RTEMS_MONITOR_SUSPEND' bit is set, then the monitor task will
+suspend itself after it is initialized.  A subsequent call to
+`rtems_monitor_wakeup' will be required to activate it.
+
+NOTES:
+------
+
+The monitor task is created with priority 1.  If there are application
+tasks at priority 1, then there may be times when the monitor task is
+not executing.
+
+
+File: new_chapters.info,  Node: Monitor Task rtems_monitor_wakeup - Wakeup the Monitor Task,  Next: Monitor Task Monitor Interactive Commands,  Prev: Monitor Task rtems_monitor_init - Initialize the Monitor Task,  Up: Monitor Task Routines
+
+2.4.2 rtems_monitor_wakeup - Wakeup the Monitor Task
+----------------------------------------------------
+
+CALLING SEQUENCE:
+-----------------
+
+     void rtems_monitor_wakeup( void );
+
+STATUS CODES: NONE
+------------------
+
+DESCRIPTION:
+------------
+
+This routine is used to activate the monitor task if it is suspended.
+
+NOTES:
+------
+
+NONE
+
+
+File: new_chapters.info,  Node: Monitor Task Monitor Interactive Commands,  Next: Monitor Task help - Obtain Help,  Prev: Monitor Task rtems_monitor_wakeup - Wakeup the Monitor Task,  Up: Monitor Task
+
+2.5 Monitor Interactive Commands
+================================
+
+* Menu:
+
+* Monitor Task help - Obtain Help::
+* Monitor Task pause - Pause Monitor for a Specified Number of Ticks::
+* Monitor Task exit - Invoke a Fatal RTEMS Error::
+* Monitor Task symbol - Show Entries from Symbol Table::
+* Monitor Task continue - Put Monitor to Sleep Waiting for Explicit Wakeup::
+* Monitor Task config - Show System Configuration::
+* Monitor Task itask - List Init Tasks::
+* Monitor Task mpci - List MPCI Config::
+* Monitor Task task - Show Task Information::
+* Monitor Task queue - Show Message Queue Information::
+* Monitor Task extension - User Extensions::
+* Monitor Task driver - Show Information About Named Drivers::
+* Monitor Task dname - Show Information About Named Drivers::
+* Monitor Task object - Generic Object Information::
+* Monitor Task node - Specify Default Node for Commands That Take IDs::
+
+The following commands are supported by the monitor task:
+
+   * `help' - Obtain Help
+
+   * `pause' - Pause Monitor for a Specified Number of Ticks
+
+   * `exit' - Invoke a Fatal RTEMS Error
+
+   * `symbol' - Show Entries from Symbol Table
+
+   * `continue' - Put Monitor to Sleep Waiting for Explicit Wakeup
+
+   * `config' - Show System Configuration
+
+   * `itask' - List Init Tasks
+
+   * `mpci' - List MPCI Config
+
+   * `task' - Show Task Information
+
+   * `queue' - Show Message Queue Information
+
+   * `extension' - User Extensions
+
+   * `driver' - Show Information About Named Drivers
+
+   * `dname' - Show Information About Named Drivers
+
+   * `object' - Generic Object Information
+
+   * `node' - Specify Default Node for Commands That Take IDs
+
+
+File: new_chapters.info,  Node: Monitor Task help - Obtain Help,  Next: Monitor Task pause - Pause Monitor for a Specified Number of Ticks,  Prev: Monitor Task Monitor Interactive Commands,  Up: Monitor Task Monitor Interactive Commands
+
+2.5.1 help - Obtain Help
+------------------------
+
+The `help' command prints out the list of commands.  If invoked with a
+command name as the first argument, detailed help information on that
+command is printed.
+
+
+File: new_chapters.info,  Node: Monitor Task pause - Pause Monitor for a Specified Number of Ticks,  Next: Monitor Task exit - Invoke a Fatal RTEMS Error,  Prev: Monitor Task help - Obtain Help,  Up: Monitor Task Monitor Interactive Commands
+
+2.5.2 pause - Pause Monitor for a Specified Number of Ticks
+-----------------------------------------------------------
+
+The `pause' command cause the monitor task to suspend itself for the
+specified number of ticks.  If this command is invoked with no
+arguments, then the task is suspended for 1 clock tick.
+
+
+File: new_chapters.info,  Node: Monitor Task exit - Invoke a Fatal RTEMS Error,  Next: Monitor Task symbol - Show Entries from Symbol Table,  Prev: Monitor Task pause - Pause Monitor for a Specified Number of Ticks,  Up: Monitor Task Monitor Interactive Commands
+
+2.5.3 exit - Invoke a Fatal RTEMS Error
+---------------------------------------
+
+The `exit' command invokes `rtems_error_occurred' directive with the
+specified error code.  If this command is invoked with no arguments,
+then the `rtems_error_occurred' directive is invoked with an arbitrary
+error code.
+
+
+File: new_chapters.info,  Node: Monitor Task symbol - Show Entries from Symbol Table,  Next: Monitor Task continue - Put Monitor to Sleep Waiting for Explicit Wakeup,  Prev: Monitor Task exit - Invoke a Fatal RTEMS Error,  Up: Monitor Task Monitor Interactive Commands
+
+2.5.4 symbol - Show Entries from Symbol Table
+---------------------------------------------
+
+The `symbol' command lists the specified entries in the symbol table.
+If this command is invoked with no arguments, then all the symbols in
+the symbol table are printed.
+
+
+File: new_chapters.info,  Node: Monitor Task continue - Put Monitor to Sleep Waiting for Explicit Wakeup,  Next: Monitor Task config - Show System Configuration,  Prev: Monitor Task symbol - Show Entries from Symbol Table,  Up: Monitor Task Monitor Interactive Commands
+
+2.5.5 continue - Put Monitor to Sleep Waiting for Explicit Wakeup
+-----------------------------------------------------------------
+
+The `continue' command suspends the monitor task with no timeout.
+
+
+File: new_chapters.info,  Node: Monitor Task config - Show System Configuration,  Next: Monitor Task itask - List Init Tasks,  Prev: Monitor Task continue - Put Monitor to Sleep Waiting for Explicit Wakeup,  Up: Monitor Task Monitor Interactive Commands
+
+2.5.6 config - Show System Configuration
+----------------------------------------
+
+The `config' command prints the system configuration.
+
+
+File: new_chapters.info,  Node: Monitor Task itask - List Init Tasks,  Next: Monitor Task mpci - List MPCI Config,  Prev: Monitor Task config - Show System Configuration,  Up: Monitor Task Monitor Interactive Commands
+
+2.5.7 itask - List Init Tasks
+-----------------------------
+
+The `itask' command lists the tasks in the initialization tasks table.
+
+
+File: new_chapters.info,  Node: Monitor Task mpci - List MPCI Config,  Next: Monitor Task task - Show Task Information,  Prev: Monitor Task itask - List Init Tasks,  Up: Monitor Task Monitor Interactive Commands
+
+2.5.8 mpci - List MPCI Config
+-----------------------------
+
+The `mpci' command shows the MPCI configuration information
+
+
+File: new_chapters.info,  Node: Monitor Task task - Show Task Information,  Next: Monitor Task queue - Show Message Queue Information,  Prev: Monitor Task mpci - List MPCI Config,  Up: Monitor Task Monitor Interactive Commands
+
+2.5.9 task - Show Task Information
+----------------------------------
+
+The `task' command prints out information about one or more tasks in
+the system.  If invoked with no arguments, then information on all the
+tasks in the system is printed.
+
+
+File: new_chapters.info,  Node: Monitor Task queue - Show Message Queue Information,  Next: Monitor Task extension - User Extensions,  Prev: Monitor Task task - Show Task Information,  Up: Monitor Task Monitor Interactive Commands
+
+2.5.10 queue - Show Message Queue Information
+---------------------------------------------
+
+The `queue' command prints out information about one or more message
+queues in the system.  If invoked with no arguments, then information
+on all the message queues in the system is printed.
+
+
+File: new_chapters.info,  Node: Monitor Task extension - User Extensions,  Next: Monitor Task driver - Show Information About Named Drivers,  Prev: Monitor Task queue - Show Message Queue Information,  Up: Monitor Task Monitor Interactive Commands
+
+2.5.11 extension - User Extensions
+----------------------------------
+
+The `extension' command prints out information about the user
+extensions.
+
+
+File: new_chapters.info,  Node: Monitor Task driver - Show Information About Named Drivers,  Next: Monitor Task dname - Show Information About Named Drivers,  Prev: Monitor Task extension - User Extensions,  Up: Monitor Task Monitor Interactive Commands
+
+2.5.12 driver - Show Information About Named Drivers
+----------------------------------------------------
+
+The `driver' command prints information about the device driver table.
+
+
+File: new_chapters.info,  Node: Monitor Task dname - Show Information About Named Drivers,  Next: Monitor Task object - Generic Object Information,  Prev: Monitor Task driver - Show Information About Named Drivers,  Up: Monitor Task Monitor Interactive Commands
+
+2.5.13 dname - Show Information About Named Drivers
+---------------------------------------------------
+
+The `dname' command prints information about the named device drivers.
+
+
+File: new_chapters.info,  Node: Monitor Task object - Generic Object Information,  Next: Monitor Task node - Specify Default Node for Commands That Take IDs,  Prev: Monitor Task dname - Show Information About Named Drivers,  Up: Monitor Task Monitor Interactive Commands
+
+2.5.14 object - Generic Object Information
+------------------------------------------
+
+The `object' command prints information about RTEMS objects.
+
+
+File: new_chapters.info,  Node: Monitor Task node - Specify Default Node for Commands That Take IDs,  Prev: Monitor Task object - Generic Object Information,  Up: Monitor Task Monitor Interactive Commands
+
+2.5.15 node - Specify Default Node for Commands That Take IDs
+-------------------------------------------------------------
+
+The `node' command sets the default node for commands that look at
+object ID ranges.
+
+
+File: new_chapters.info,  Node: Top,  Prev: (dir),  Up: (dir)
+
+posix_users_new
+***************
+
+This is the online version of the RTEMS POSIX API User's Guide
+
+* Menu:
+
+* Error Reporting Support::
+* Monitor Task::
+* Command and Variable Index::
+* Concept Index::
+
+
+File: new_chapters.info,  Node: Command and Variable Index,  Next: Concept Index,  Up: Top
+
+Command and Variable Index
+**************************
+
+There are currently no Command and Variable Index entries.
+
+
+File: new_chapters.info,  Node: Concept Index,  Prev: Command and Variable Index,  Up: Top
+
+Concept Index
+*************
+
+There are currently no Concept Index entries.
+
+
+
+Tag Table:
+Node: Error Reporting Support231
+Node: Error Reporting Support Introduction564
+Node: Error Reporting Support Background1174
+Node: Error Reporting Support Error Handling in an Embedded System1494
+Node: Error Reporting Support Operations2438
+Node: Error Reporting Support Reporting an Error2746
+Node: Error Reporting Support Routines3308
+Node: Error Reporting Support rtems_status_text - ASCII Version of RTEMS Status3992
+Node: Error Reporting Support rtems_error - Report an Error4735
+Node: Error Reporting Support rtems_panic - Report an Error and Panic5850
+Node: Monitor Task6528
+Node: Monitor Task Introduction6819
+Node: Monitor Task Background7283
+Node: Monitor Task Operations7495
+Node: Monitor Task Initializing the Monitor7734
+Node: Monitor Task Routines8464
+Node: Monitor Task rtems_monitor_init - Initialize the Monitor Task9024
+Node: Monitor Task rtems_monitor_wakeup - Wakeup the Monitor Task10210
+Node: Monitor Task Monitor Interactive Commands10796
+Node: Monitor Task help - Obtain Help12647
+Node: Monitor Task pause - Pause Monitor for a Specified Number of Ticks13100
+Node: Monitor Task exit - Invoke a Fatal RTEMS Error13655
+Node: Monitor Task symbol - Show Entries from Symbol Table14224
+Node: Monitor Task continue - Put Monitor to Sleep Waiting for Explicit Wakeup14760
+Node: Monitor Task config - Show System Configuration15233
+Node: Monitor Task itask - List Init Tasks15628
+Node: Monitor Task mpci - List MPCI Config15982
+Node: Monitor Task task - Show Task Information16319
+Node: Monitor Task queue - Show Message Queue Information16793
+Node: Monitor Task extension - User Extensions17312
+Node: Monitor Task driver - Show Information About Named Drivers17709
+Node: Monitor Task dname - Show Information About Named Drivers18145
+Node: Monitor Task object - Generic Object Information18587
+Node: Monitor Task node - Specify Default Node for Commands That Take IDs19010
+Node: Top19429
+Node: Command and Variable Index19695
+Node: Concept Index19904
+
+End Tag Table

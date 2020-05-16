@@ -1,0 +1,51 @@
+<HTML>
+<!-- created Dec 13 2011 from sem.texi line 349 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Semaphore Manager Creating a Semaphore</TITLE>
+<LINK REL="Precedes" HREF="c_user00168.html">
+<LINK REV="Precedes" HREF="c_user00159.html">
+<LINK REV="Subdocument" HREF="c_user00159.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00159.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00159.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00168.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H3>9.3.1: Creating a Semaphore</H3>
+<P>
+The <CODE>rtems_semaphore_create</CODE> directive creates a binary or
+counting semaphore with a user-specified name as well as an
+initial count.  If a binary semaphore is created with a count of
+zero (0) to indicate that it has been allocated, then the task
+creating the semaphore is considered the current holder of the
+semaphore.  At create time the method for ordering waiting tasks
+in the semaphore's task wait queue (by FIFO or task priority) is
+specified.  Additionally, the priority inheritance or priority
+ceiling algorithm may be selected for local, binary semaphores
+that use the priority task wait queue blocking discipline.  If
+the priority ceiling algorithm is selected, then the highest
+priority of any task which will attempt to obtain this semaphore
+must be specified.  RTEMS allocates a Semaphore Control Block
+(SMCB) from the SMCB free list.  This data structure is used by
+RTEMS to manage the newly created semaphore.  Also, a unique
+semaphore ID is generated and returned to the calling task.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00168.html">
+<LINK REV="Precedes" HREF="c_user00159.html">
+<LINK REV="Subdocument" HREF="c_user00159.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00159.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00159.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00168.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

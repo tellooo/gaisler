@@ -1,0 +1,106 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/rtmon.texi line 86 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Rate Monotonic Manager Period Statistics</TITLE>
+<LINK REL="Precedes" HREF="ada_user00331.html">
+<LINK REV="Precedes" HREF="ada_user00329.html">
+<LINK REV="Subdocument" HREF="ada_user00326.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00329.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00326.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00331.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>19.2.2: Period Statistics</H3>
+<P>
+This manager maintains a set of statistics on each period.  These
+statistics are reset implictly at period creation time and may be
+reset or obtained at any time by the application.  The following
+is a list of the information kept:
+</P>
+<UL>
+<LI><CODE>owner</CODE>
+is the id of the thread that owns this period.
+
+<LI><CODE>count</CODE>
+is the total number of periods executed.
+
+<LI><CODE>missed_count</CODE>
+is the number of periods that were missed.
+
+<LI><CODE>min_cpu_time</CODE>
+is the minimum amount of CPU execution time consumed
+on any execution of the periodic loop.
+
+<LI><CODE>max_cpu_time</CODE>
+is the maximum amount of CPU execution time consumed
+on any execution of the periodic loop.
+
+<LI><CODE>total_cpu_time</CODE>
+is the total amount of CPU execution time consumed
+by executions of the periodic loop.
+
+<LI><CODE>min_wall_time</CODE>
+is the minimum amount of wall time that passed
+on any execution of the periodic loop.
+
+<LI><CODE>max_wall_time</CODE>
+is the maximum amount of wall time that passed
+on any execution of the periodic loop.
+
+<LI><CODE>total_wall_time</CODE>
+is the total amount of wall time that passed
+during executions of the periodic loop.
+
+</UL>
+<P>
+The period statistics information is inexpensive to maintain
+and can provide very useful insights into the execution
+characteristics of a periodic task loop.  But it is just information.
+The period statistics reported must be analyzed by the user in terms
+of what the applications is.  For example, in an application where
+priorities are assigned by the Rate Monotonic Algorithm, it would
+be very undesirable for high priority (i.e. frequency) tasks to
+miss their period.  Similarly, in nearly any application, if a
+task were supposed to execute its periodic loop every 10 milliseconds
+and it averaged 11 milliseconds, then application requirements
+are not being met.
+</P>
+<P>
+The information reported can be used to determine the &quot;hot spots&quot;
+in the application.  Given a period's id, the user can determine
+the length of that period.  From that information and the CPU usage,
+the user can calculate the percentage of CPU time consumed by that
+periodic task.  For example, a task executing for 20 milliseconds
+every 200 milliseconds is consuming 10 percent of the processor's
+execution time.  This is usually enough to make it a good candidate
+for optimization.
+</P>
+<P>
+However, execution time alone is not enough to gauge the value of
+optimizing a particular task.  It is more important to optimize
+a task executing 2 millisecond every 10 milliseconds (20 percent
+of the CPU) than one executing 10 milliseconds every 100 (10 percent
+of the CPU).  As a general rule of thumb, the higher frequency at
+which a task executes, the more important it is to optimize that
+task.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00331.html">
+<LINK REV="Precedes" HREF="ada_user00329.html">
+<LINK REV="Subdocument" HREF="ada_user00326.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00329.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00326.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00331.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,104 @@
+<HTML>
+<!-- created Dec 13 2011 from msgbuffer.texi line 581 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Message Buffer Manager rcv_mbf - Receive Message from Message Buffer</TITLE>
+<LINK REL="Precedes" HREF="itron00106.html">
+<LINK REV="Precedes" HREF="itron00104.html">
+<LINK REV="Subdocument" HREF="itron00097.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00104.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00097.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00106.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<H3>6.4.6: rcv_mbf - Receive Message from Message Buffer</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+ER rcv_mbf(
+  VP msg,
+  INT *p_msgsz,
+  ID mbfid
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<P>
+<CODE>E_OK</CODE> - Normal Completion
+</P>
+<P>
+<CODE>E_ID</CODE> - Invalid ID number (mbfid was invalid or could not be used)
+</P>
+<P>
+<CODE>E_NOEXS</CODE> - Object does not exist (the message buffer specified by
+mbfid does not exist)
+</P>
+<P>
+<CODE>E_OACV</CODE> - Object access violation (A mbfid less than -4 was
+specified from a user task.  This is implementation dependent.)
+</P>
+<P>
+<CODE>E_PAR</CODE> - Parameter error (values unsuitable for msg; tmout is -2
+or less)
+</P>
+<P>
+<CODE>E_DLT</CODE> - The object being waited for was deleted (the specified
+message buffer was deleted while waiting)
+</P>
+<P>
+<CODE>E_RLWAI</CODE> - WAIT state was forcibly released (rel_wai was received
+while waiting)
+</P>
+<P>
+<CODE>E_CTX</CODE> - Context error (issued from task-independent portions or a
+task in dispatch disabled state)
+</P>
+<P>
+<CODE>EN_OBJNO</CODE> - An object number which could not be accessed on the
+target node is specified.
+</P>
+<P>
+<CODE>EN_PAR</CODE> - A value outside the range supported by the target node
+and/or transmission packet format was specified as a parameter (a value
+outside supported range was specified for tmout)
+</P>
+<P>
+<CODE>EN_RPAR</CODE> - A value outside the range supported by the issuing node
+and/or transmission packet format was returned as a return parameter (msgsz is outside supported range for requesting node)
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+<CODE>Rcv_mbf</CODE> receives the message from the message buffer specified by
+<CODE>mbfid</CODE>, and stores it at the memory location given by <CODE>msg</CODE>.
+In other words, the content of the message at the head of the message
+buffer specified by <CODE>mbfid</CODE> is copied into an area which begins
+from <CODE>msg</CODE> and whose size is <CODE>msgsz</CODE>.
+</P>
+<P>
+If the message buffer is empty, the task issuing this system call will wait
+on a receive message wait queue until a message arrives.
+</P>
+<H3>NOTES:</H3>
+<P>
+Multiprocessing is not supported.  Thus none of the &quot;EN_&quot; status codes
+will be returned.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="itron00106.html">
+<LINK REV="Precedes" HREF="itron00104.html">
+<LINK REV="Subdocument" HREF="itron00097.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00104.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00097.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00106.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

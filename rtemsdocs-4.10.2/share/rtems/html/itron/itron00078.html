@@ -1,0 +1,123 @@
+<HTML>
+<!-- created Dec 13 2011 from eventflags.texi line 669 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Eventflags Manager pol_flg - Wait for Eventflag (Polling)</TITLE>
+<LINK REL="Precedes" HREF="itron00079.html">
+<LINK REV="Precedes" HREF="itron00077.html">
+<LINK REV="Subdocument" HREF="itron00069.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00077.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00069.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00079.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<H3>4.4.6: pol_flg - Wait for Eventflag (Polling)</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+ER pol_flg(
+  UINT *p_flgptn,
+  ID flgid,
+  UINT waiptn,
+  UINT wfmode
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<P>
+<CODE>E_OK</CODE> - Normal Completion
+</P>
+<P>
+<CODE>E_ID</CODE> - Invalid ID number (flgid was invalid or could not be used)
+</P>
+<P>
+<CODE>E_NOEXS</CODE> - Object does not exist (the eventflag specified by flgid
+does not exist)
+</P>
+<P>
+<CODE>E_OACV</CODE> - Object access violation (A flgid less than -4 was
+specified from a user task.  This is implementation dependent.)
+</P>
+<P>
+<CODE>E_PAR</CODE> - Parameter error (waiptn = 0, wfmode invalid, or tmout is -2
+or less)
+</P>
+<P>
+<CODE>E_OBJ</CODE> - Invalid object state (multiple tasks waiting for an
+eventflag with the TA_WSGL attribute)
+</P>
+<P>
+<CODE>E_DLT</CODE> - The object being waited for was deleted (the specified
+eventflag was deleted while waiting)
+</P>
+<P>
+<CODE>E_RLWAI</CODE> - WAIT state was forcibly released (rel_wai was received
+while waiting)
+</P>
+<P>
+<CODE>E_TMOUT</CODE> - Polling failure or timeout exceeded
+</P>
+<P>
+<CODE>E_CTX</CODE> - Context error (issued from task-independent portions or a
+task in dispatch disabled state)
+</P>
+<P>
+<CODE>EN_OBJNO</CODE> - An object number which could not be accessed on the
+target node is specified.
+</P>
+<P>
+<CODE>EN_PAR</CODE> - A value outside the range supported by the target node
+and/or transmission packet format was specified as a parameter (a value
+outside supported range was specified for waiptn and tmout)
+</P>
+<P>
+<CODE>EN_RPAR</CODE> - A value outside the range supported by the requesting
+node and/or transmission packet format was specified as a parameter (a
+value exceeding the range for the requesting node was specified for
+flgptn)
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+The <CODE>pol_flg</CODE> system call has the same function as <CODE>wai_flg</CODE>
+except for the waiting feature. <CODE>pol_flg</CODE> polls whether or not the
+task should wait if <CODE>wai_flg</CODE> is executed. The meanings of
+parameters to <CODE>pol_flg</CODE> are the same as for <CODE>wai_flg</CODE>.  The
+specific operations by <CODE>pol_flg</CODE> are as follows.
+</P>
+<UL>
+<LI>If the target eventflag already satisfies the conditions for
+releasing wait given by <CODE>wfmode</CODE>, processing is the same as
+<CODE>wai_flg</CODE>: the eventflag is cleared if <CODE>TWF_CLR</CODE> is specified
+and the system call completes normally.
+
+<LI>If the target eventflag does not yet satisfy the conditions for
+releasing wait given by <CODE>wfmode</CODE>, an <CODE>E_TMOUT</CODE> error is returned to
+indicate polling failed and the system call finishes. Unlike
+<CODE>wai_flg</CODE>, the issuing task does not wait in this case. The eventflag
+is not cleared in this case even if <CODE>TWF_CLR</CODE> has been specified.
+
+</UL>
+<H3>NOTES:</H3>
+<P>
+Multiprocessing is not supported. Thus none of the &quot;<CODE>EN_</CODE>&quot; status
+codes will be returned.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="itron00079.html">
+<LINK REV="Precedes" HREF="itron00077.html">
+<LINK REV="Subdocument" HREF="itron00069.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00077.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00069.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00079.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

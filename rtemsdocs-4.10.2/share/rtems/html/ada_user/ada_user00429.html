@@ -1,0 +1,67 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/conf.texi line 561 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Configuring a System Multiprocessing Configuration</TITLE>
+<LINK REL="Precedes" HREF="ada_user00430.html">
+<LINK REV="Precedes" HREF="ada_user00428.html">
+<LINK REV="Subdocument" HREF="ada_user00414.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00428.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00414.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00430.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>23.2.5: Multiprocessing Configuration</H3>
+<P>
+This section defines the multiprocessing related
+system configuration parameters supported by <CODE>rtems/confdefs.h</CODE>.
+This class of Configuration Constants are only applicable if
+<CODE>CONFIGURE_MP_APPLICATION</CODE> is defined.
+</P>
+<UL>
+<LI><CODE>CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE</CODE> is defined
+if the application wishes to provide their own Multiprocessing
+Configuration Table.  The generated table is named
+<CODE>Multiprocessing_configuration</CODE>.  By default, this
+is not defined.
+
+<LI><CODE>CONFIGURE_MP_NODE_NUMBER</CODE> is the node number of
+this node in a multiprocessor system.  The default node number
+is <CODE>NODE_NUMBER</CODE> which is set directly in RTEMS test Makefiles.
+
+<LI><CODE>CONFIGURE_MP_MAXIMUM_NODES</CODE> is the maximum number
+of nodes in a multiprocessor system.  The default is 2.
+
+<LI><CODE>CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS</CODE>
+is the maximum number
+of concurrently active global objects in a multiprocessor
+system.  The default is 32.
+
+<LI><CODE>CONFIGURE_MP_MAXIMUM_PROXIES</CODE> is the maximum number
+of concurrently active thread/task proxies in a multiprocessor
+system.  The default is 32.
+
+<LI><CODE>CONFIGURE_MP_MPCI_TABLE_POINTER</CODE> is the pointer
+to the MPCI Configuration Table.  The default value of
+this field is <CODE>&amp;MPCI_table</CODE>.
+</UL>
+
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00430.html">
+<LINK REV="Precedes" HREF="ada_user00428.html">
+<LINK REV="Subdocument" HREF="ada_user00414.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00428.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00414.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00430.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

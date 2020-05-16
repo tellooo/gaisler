@@ -1,0 +1,68 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/fatal.texi line 162 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Fatal Error Manager FATAL_ERROR_OCCURRED - Invoke the fatal error handler</TITLE>
+<LINK REL="Precedes" HREF="ada_user00315.html">
+<LINK REV="Precedes" HREF="ada_user00313.html">
+<LINK REV="Subdocument" HREF="ada_user00313.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00313.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00313.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00315.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>17.4.1: FATAL_ERROR_OCCURRED - Invoke the fatal error handler</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+procedure Fatal_Error_Occurred (
+   The_Error : in     RTEMS.Unsigned32
+);
+</PRE>
+</DL>
+<H3>DIRECTIVE STATUS CODES</H3>
+<P>
+NONE
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This directive processes fatal errors.  If the FATAL
+error extension is defined in the configuration table, then the
+user-defined error extension is called.  If configured and the
+provided FATAL error extension returns, then the RTEMS default
+error handler is invoked.  This directive can be invoked by
+RTEMS or by the user's application code including initialization
+tasks, other tasks, and ISRs.
+</P>
+<H3>NOTES:</H3>
+<P>
+This directive supports local operations only.
+</P>
+<P>
+Unless the user-defined error extension takes special
+actions such as restarting the calling task, this directive WILL
+NOT RETURN to the caller.
+</P>
+<P>
+The user-defined extension for this directive may
+wish to initiate a global shutdown.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00315.html">
+<LINK REV="Precedes" HREF="ada_user00313.html">
+<LINK REV="Subdocument" HREF="ada_user00313.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00313.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00313.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00315.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

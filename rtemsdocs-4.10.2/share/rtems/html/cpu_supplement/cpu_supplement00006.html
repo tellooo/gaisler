@@ -1,0 +1,88 @@
+<HTML>
+<!-- created Dec 13 2011 from general.texi line 263 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Port Specific Information Interrupt Processing</TITLE>
+<LINK REL="Precedes" HREF="cpu_supplement00016.html">
+<LINK REV="Precedes" HREF="cpu_supplement00015.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00002.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00015.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00002.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00016.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<H2>1.4: Interrupt Processing</H2>
+<MENU>
+<LI><A HREF="cpu_supplement00016.html">Port Specific Information Vectoring of an Interrupt Handler</A>
+<LI><A HREF="cpu_supplement00017.html">Port Specific Information Interrupt Levels</A>
+<LI><A HREF="cpu_supplement00018.html">Port Specific Information Disabling of Interrupts by RTEMS</A>
+</MENU>
+<P>
+Different types of processors respond to the occurrence of an interrupt
+in its own unique fashion. In addition, each processor type provides
+a control mechanism to allow for the proper handling of an interrupt.
+The processor dependent response to the interrupt modifies the current
+execution state and results in a change in the execution stream.  Most
+processors require that an interrupt handler utilize some special control
+mechanisms to return to the normal processing stream.  Although RTEMS
+hides many of the processor dependent details of interrupt processing,
+it is important to understand how the RTEMS interrupt manager is mapped
+onto the processor's unique architecture.
+</P>
+<P>
+RTEMS supports a dedicated interrupt stack for all architectures.
+On architectures with hardware support for a dedicated interrupt stack,
+it will be initialized such that when an interrupt occurs, the processor
+automatically switches to this dedicated stack.  On architectures without
+hardware support for a dedicated interrupt stack which is separate from
+those of the tasks, RTEMS will support switching to a dedicated stack
+for interrupt processing.
+</P>
+<P>
+Without a dedicated interrupt stack, every task in
+the system MUST have enough stack space to accommodate the worst
+case stack usage of that particular task and the interrupt
+service routines COMBINED.  By supporting a dedicated interrupt
+stack, RTEMS significantly lowers the stack requirements for
+each task.
+</P>
+<P>
+A nested interrupt is processed similarly with the exception that since
+the CPU is already executing on the interrupt stack, there is no need
+to switch to the interrupt stack.
+</P>
+<P>
+In some configurations, RTEMS allocates the interrupt stack from the
+Workspace Area.  The amount of memory allocated for the interrupt stack
+is user configured and based upon the <CODE>confdefs.h</CODE> parameter
+<CODE>CONFIGURE_INTERRUPT_STACK_SIZE</CODE>.  This parameter is described
+in detail in the Configuring a System chapter of the User's Guide.
+On configurations in which RTEMS allocates the interrupt stack, during
+the initialization process, RTEMS will also install its interrupt stack.
+In other configurations, the interrupt stack is allocated and installed
+by the Board Support Package (BSP).
+</P>
+<P>
+In each of the architecture specific chapters, this section discesses
+the interrupt response and control mechanisms of the architecture as
+they pertain to RTEMS.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="cpu_supplement00016.html">
+<LINK REV="Precedes" HREF="cpu_supplement00015.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00002.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00015.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00002.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00016.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

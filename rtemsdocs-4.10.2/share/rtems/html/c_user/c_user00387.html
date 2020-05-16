@@ -1,0 +1,58 @@
+<HTML>
+<!-- created Dec 13 2011 from bsp.texi line 298 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Board Support Packages Tightly-Coupled Systems</TITLE>
+<LINK REL="Precedes" HREF="c_user00388.html">
+<LINK REV="Precedes" HREF="c_user00381.html">
+<LINK REV="Subdocument" HREF="c_user00381.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00381.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00381.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00388.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H3>21.5.1: Tightly-Coupled Systems</H3>
+<P>
+A tightly-coupled system is a multiprocessor
+configuration in which the processors communicate solely via
+shared global memory.  The MPCI can simply place the RTEMS
+packets in the shared memory space.  The two primary
+considerations when designing an MPCI for a tightly-coupled
+system are data consistency and informing another node of a
+packet.
+</P>
+<P>
+The data consistency problem may be solved using
+atomic &quot;test and set&quot; operations to provide a &quot;lock&quot; in the
+shared memory.  It is important to minimize the length of time
+any particular processor locks a shared data structure.
+</P>
+<P>
+The problem of informing another node of a packet can
+be addressed using one of two techniques.  The first technique
+is to use an interprocessor interrupt capability to cause an
+interrupt on the receiving node.  This technique requires that
+special support hardware be provided by either the processor
+itself or the target platform.  The second technique is to have
+a node poll for arrival of packets.  The drawback to this
+technique is the overhead associated with polling.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00388.html">
+<LINK REV="Precedes" HREF="c_user00381.html">
+<LINK REV="Subdocument" HREF="c_user00381.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00381.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00381.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00388.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

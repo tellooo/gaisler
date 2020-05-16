@@ -1,0 +1,139 @@
+<HTML>
+<!-- created Dec 13 2011 from file.texi line 2446 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>File and Directory Commands mkrfs - format RFS file system</TITLE>
+<LINK REL="Precedes" HREF="shell00054.html">
+<LINK REV="Precedes" HREF="shell00052.html">
+<LINK REV="Subdocument" HREF="shell00031.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="shell00052.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="shell00031.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="shell00054.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Shell User's Guide</CITE></P>
+<H3>3.2.22: mkrfs - format RFS file system</H3>
+<H3>SYNOPSYS:</H3>
+<DL><DT><DD>
+<PRE>
+mkrfs [-vsbiIo] device
+</PRE>
+</DL>
+<H3>DESCRIPTION:</H3>
+<P>
+Format the block device with the RTEMS File System (RFS). The default
+configuration with not parameters selects a suitable block size based
+on the size of the media being formatted.
+</P>
+<P>
+The media is broken up into groups of blocks. The number of blocks in
+a group is based on the number of bits a block contains. The large a
+block the more blocks a group contains and the fewer groups in the
+file system.
+</P>
+<P>
+The following options are provided:
+</P>
+<DL>
+<DT><STRONG>-v</STRONG>
+<DD>
+Display configuration and progress of the format.
+
+<DT><STRONG>-s</STRONG>
+<DD>
+Set the block size in bytes.
+
+<DT><STRONG>-b</STRONG>
+<DD>
+The number of blocks in a group. The block count must be equal or less
+than the number of bits in a block.
+
+<DT><STRONG>-i</STRONG>
+<DD>
+Number of inodes in a group. The inode count must be equal or less
+than the number of bits in a block.
+
+<DT><STRONG>-I</STRONG>
+<DD>
+Initialise the inodes. The default is not to initialise the inodes and
+to rely on the inode being initialised when allocated. Initialising
+the inode table helps recovery if a problem appears.
+
+<DT><STRONG>-o</STRONG>
+<DD>
+Integer percentage of the media used by inodes. The default is 1%.
+
+<DT><STRONG>device</STRONG>
+<DD>
+Path of the device to format.
+</DL>
+
+<H3>EXIT STATUS:</H3>
+<P>
+This command returns 0 on success and non-zero if an error is encountered.
+</P>
+<H3>NOTES:</H3>
+<P>
+NONE
+</P>
+<H3>EXAMPLES:</H3>
+<P>
+The following is an example of how to use <CODE>mkrfs</CODE>:
+</P>
+<DL><DT><DD>
+<PRE>
+SHLL [/] $ mkrfs /dev/fdda
+</PRE>
+</DL>
+<H3>CONFIGURATION:</H3>
+<P>
+This command is included in the default shell command set.
+When building a custom command set, define
+<CODE>CONFIGURE_SHELL_COMMAND_MKRFS</CODE> to have this
+command included.
+</P>
+<P>
+This command can be excluded from the shell command set by
+defining <CODE>CONFIGURE_SHELL_NO_COMMAND_MKRFS</CODE> when all
+shell commands have been configured.
+</P>
+<H3>PROGRAMMING INFORMATION:</H3>
+<P>
+The <CODE>mkrfs</CODE> command is implemented by a C language function which
+has the following prototype:
+</P>
+<DL><DT><DD>
+<PRE>
+int rtems_shell_rtems_main_mkrfs(
+  int    argc,
+  char **argv
+);
+</PRE>
+</DL>
+<P>
+The configuration structure for <CODE>mkrfs</CODE> has the following
+prototype:
+</P>
+<DL><DT><DD>
+<PRE>
+extern rtems_shell_cmd_t rtems_shell_MKRFS_Command;
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="shell00054.html">
+<LINK REV="Precedes" HREF="shell00052.html">
+<LINK REV="Subdocument" HREF="shell00031.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="shell00052.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="shell00031.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="shell00054.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Shell User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,65 @@
+<HTML>
+<!-- created Dec 13 2011 from init.texi line 59 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Base Filesystem</TITLE>
+<LINK REL="Precedes" HREF="filesystem00008.html">
+<LINK REV="Precedes" HREF="filesystem00006.html">
+<LINK REV="Subdocument" HREF="filesystem00006.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="filesystem00006.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="filesystem00006.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00008.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<H2>2.1: Base Filesystem</H2>
+<MENU>
+<LI><A HREF="filesystem00008.html">Base Filesystem Mounting</A>
+</MENU>
+<P>
+RTEMS initially mounts a RAM based file system known as the base file system.
+The root directory of this file system tree serves as the logical root of the
+directory hierarchy (Figure 3). Under the root directory a `/dev' directory
+is created under which all I/O device directories and files are registered as
+part of the file system hierarchy.
+</P>
+<DL><DT><DD>
+<PRE>
+Figure of the tree structure goes here.
+</PRE>
+</DL>
+<P>
+A RAM based file system draws its management resources from memory. File and
+directory nodes are simply allocated blocks of memory. Data associated with
+regular files is stored in collections of memory blocks. When the system is
+turned off or restarted all memory-based components of the file system are
+lost.
+</P>
+<P>
+The base file system serves as a starting point for the mounting of file
+systems that are resident on semi-permanent storage media. Examples of such
+media include non- volatile memory, flash memory and IDE hard disk drives
+(Figure 3). File systems of other types will be mounted onto mount points
+within the base file system or other file systems that are subordinate to the
+base file system. The framework set up under the base file system will allow
+for these new file system types and the unique data and functionality that is
+required to manage the future file systems.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="filesystem00008.html">
+<LINK REV="Precedes" HREF="filesystem00006.html">
+<LINK REV="Subdocument" HREF="filesystem00006.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="filesystem00006.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="filesystem00006.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00008.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

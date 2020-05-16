@@ -1,0 +1,67 @@
+<HTML>
+<!-- created Dec 13 2011 from clock.texi line 124 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Clock Manager clock_settime - Set Time of Day</TITLE>
+<LINK REL="Precedes" HREF="posix_users00294.html">
+<LINK REV="Precedes" HREF="posix_users00292.html">
+<LINK REV="Subdocument" HREF="posix_users00291.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00292.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00291.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00294.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<H3>14.4.2: clock_settime - Set Time of Day</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+#include &lt;time.h&gt;
+
+int clock_settime(
+  clockid_t              clock_id,
+  const struct timespec *tp
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<P>
+On error, this routine returns -1 and sets errno to one of the following:
+</P>
+<DL>
+<DT><STRONG>EINVAL</STRONG>
+<DD>
+The tp pointer parameter is invalid.
+
+<DT><STRONG>EINVAL</STRONG>
+<DD>
+The clock_id specified is invalid.
+
+<DT><STRONG>EINVAL</STRONG>
+<DD>
+The contents of the tp structure are invalid.
+
+</DL>
+<H3>DESCRIPTION:</H3>
+<H3>NOTES:</H3>
+<P>
+NONE
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="posix_users00294.html">
+<LINK REV="Precedes" HREF="posix_users00292.html">
+<LINK REV="Subdocument" HREF="posix_users00291.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00292.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00291.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00294.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

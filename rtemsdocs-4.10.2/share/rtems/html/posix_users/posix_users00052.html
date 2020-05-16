@@ -1,0 +1,51 @@
+<HTML>
+<!-- created Dec 13 2011 from procenv.texi line 71 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Process Environment Manager Users and Groups</TITLE>
+<LINK REL="Precedes" HREF="posix_users00053.html">
+<LINK REV="Precedes" HREF="posix_users00049.html">
+<LINK REV="Subdocument" HREF="posix_users00049.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00049.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00049.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00053.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<H3>3.2.1: Users and Groups</H3>
+<P>
+RTEMS provides a single process, multi-threaded execution environment.
+In this light, the notion of user and group is somewhat without meaning.
+But RTEMS does provide services to provide a synthetic version of
+user and group.  By default, a single user and group is associated
+with the application.  Thus unless special actions are taken,
+every thread in the application shares the same user and group Id.
+The initial rationale for providing user and group Id functionality
+in RTEMS was for the filesystem infrastructure to implement
+file permission checks.  The effective user/group Id capability
+has since been used to implement permissions checking by
+the <CODE>ftpd</CODE> server.
+</P>
+<P>
+In addition to the &quot;real&quot; user and group Ids, a process may
+have an effective user/group Id.  This allows a process to
+function using a more limited permission set for certain operations.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="posix_users00053.html">
+<LINK REV="Precedes" HREF="posix_users00049.html">
+<LINK REV="Subdocument" HREF="posix_users00049.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00049.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00049.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00053.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,122 @@
+<HTML>
+<!-- created Dec 13 2011 from semaphore.texi line 250 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Semaphore Manager cre_sem - Create Semaphore</TITLE>
+<LINK REL="Precedes" HREF="itron00059.html">
+<LINK REV="Precedes" HREF="itron00052.html">
+<LINK REV="Subdocument" HREF="itron00052.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00052.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00052.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00059.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<H3>3.4.1: cre_sem - Create Semaphore</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+ER cre_sem(
+  ID semid,
+  T_CSEM *pk_csem
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<P>
+<CODE>E_OK</CODE> - Normal Completion
+</P>
+<P>
+<CODE>E_ID</CODE> - Invalid ID number (semid was invalid or could not be used)
+</P>
+<P>
+<CODE>E_NOMEM</CODE> - Insufficient memory (Memory for control block cannot be
+allocated)
+</P>
+<P>
+<CODE>E_OACV</CODE> - Object access violation (A semid less than -4 was
+specified from a user task.)
+</P>
+<P>
+<CODE>E_RSATR</CODE> - Reserved attribute (sematr was invalid or could not be
+used)
+</P>
+<P>
+<CODE>E_OBJ</CODE> - Invalid object state (a semaphore of the same ID already
+exists)
+</P>
+<P>
+<CODE>E_PAR</CODE> - Parameter error (pk_csem is invalid and/or isemcnt or
+maxsem is negative or invalid)
+</P>
+<P>
+<CODE>EN_OBJNO</CODE> - An object number which could not be accessed on the
+target node is specified.
+</P>
+<P>
+<CODE>EN_CTXID</CODE> - Specified an object on another node when the system call
+was issued from a task in dispatch disabled state or from a task-
+independent portion
+</P>
+<P>
+<CODE>EN_PAR</CODE> - A value outside the range supported by the target node
+and/or transmission packet format was specified as a parameter (a value
+outside supported range was specified for exinf, sematr, isemcnt and/or
+maxsem)
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This routine creates a semaphore that resides on the local node.  The
+semaphore is initialized based on the attributes specified in the
+<CODE>pk_csem</CODE> structure.  The initial and maximum counts of the
+semaphore are set based on the <CODE>isemcnt</CODE> and <CODE>maxsem</CODE> fields
+in this structure.
+</P>
+<P>
+Specifying <CODE>TA_TPRI</CODE> in the <CODE>sematr</CODE> field of the
+semaphore attributes structure causes tasks
+waiting for a semaphore to be serviced according to task
+priority.  When <CODE>TA_TFIFO</CODE> is selected, tasks are serviced in First
+In-First Out order.
+</P>
+<H3>NOTES:</H3>
+<P>
+Multiprocessing is not supported.  Thus none of the &quot;EN_&quot; status codes
+will be returned.
+</P>
+<P>
+All memory is preallocated for RTEMS ITRON objects.  Thus, no dynamic
+memory allocation is performed by <CODE>cre_sem</CODE> and the <CODE>E_NOMEM</CODE>
+error can not be returned.
+</P>
+<P>
+This directive will not cause the running task to be preempted.
+</P>
+<P>
+The following semaphore attribute constants are
+defined by RTEMS:
+</P>
+<UL>
+<LI><CODE>TA_TFIFO</CODE> - tasks wait by FIFO
+
+<LI><CODE>TA_TPRI</CODE> - tasks wait by priority
+
+</UL>
+<P><HR>
+<LINK REL="Precedes" HREF="itron00059.html">
+<LINK REV="Precedes" HREF="itron00052.html">
+<LINK REV="Subdocument" HREF="itron00052.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00052.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00052.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00059.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

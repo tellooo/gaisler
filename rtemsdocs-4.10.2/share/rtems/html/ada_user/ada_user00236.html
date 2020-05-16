@@ -1,0 +1,56 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/part.texi line 76 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Partition Manager Building a Partition Attribute Set</TITLE>
+<LINK REL="Precedes" HREF="ada_user00233.html">
+<LINK REV="Precedes" HREF="ada_user00235.html">
+<LINK REV="Subdocument" HREF="ada_user00232.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00235.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00232.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00233.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>13.2.2: Building a Partition Attribute Set</H3>
+<P>
+In general, an attribute set is built by a bitwise OR
+of the desired attribute components.  The set of valid partition
+attributes is provided in the following table:
+</P>
+<UL>
+<LI><CODE>RTEMS.LOCAL</CODE> - local task (default)
+<LI><CODE>RTEMS.GLOBAL</CODE> - global task
+</UL>
+
+<P>
+Attribute values are specifically designed to be
+mutually exclusive, therefore bitwise OR and addition operations
+are equivalent as long as each attribute appears exactly once in
+the component list.  An attribute listed as a default is not
+required to appear in the attribute list, although it is a good
+programming practice to specify default attributes.  If all
+defaults are desired, the attribute
+<CODE>RTEMS.DEFAULT_ATTRIBUTES</CODE> should be
+specified on this call.  The attribute_set parameter should be
+<CODE>RTEMS.GLOBAL</CODE> to indicate that the partition
+is to be known globally.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00233.html">
+<LINK REV="Precedes" HREF="ada_user00235.html">
+<LINK REV="Subdocument" HREF="ada_user00232.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00235.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00232.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00233.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

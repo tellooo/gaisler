@@ -1,0 +1,86 @@
+<HTML>
+<!-- created Dec 13 2011 from buildc.texi line 156 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Unarchiving the Tools</TITLE>
+<LINK REL="Precedes" HREF="started00036.html">
+<LINK REV="Precedes" HREF="started00034.html">
+<LINK REV="Subdocument" HREF="started00031.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started00034.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started00031.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started00036.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with RTEMS</CITE></P>
+<H3>4.1.2: Unarchiving the Tools</H3>
+<P>
+NOTE: This step is required if building BINUTILS, GCC, and NEWLIB
+using the procedure described in <A HREF="started00042.html">Using configure and make</A>.
+It is <STRONG>NOT</STRONG> required if using the procedure
+described in <A HREF="started00043.html">Using RPM to Build BINUTILS GCC and NEWLIB</A>.
+</P>
+<P>
+GNU source distributions are archived using <CODE>tar</CODE> and
+compressed using either <CODE>gzip</CODE> or <CODE>bzip</CODE>.
+If compressed with <CODE>gzip</CODE>, the extension <CODE>.gz</CODE> is used.
+If compressed with <CODE>bzip</CODE>, the extension <CODE>.bz2</CODE> is used.
+</P>
+<P>
+While in the <CODE>tools</CODE> directory, unpack the compressed
+tar files for BINUTILS, GCC, and NEWLIB using the appropriate
+command based upon the compression program used.
+</P>
+<DL><DT><DD>
+<PRE>
+cd tools
+tar xzf ../archive/TOOLNAME.tar.gz  # for gzip'ed tools
+tar xjf ../archive/TOOLNAME.tar.bz2 # for bzip'ed tools
+</PRE>
+</DL>
+<P>
+After the compressed tar files have been unpacked using
+the appropriate commands, the following
+directories will have been created under tools.
+</P>
+<UL>
+<LI>binutils-2.18.91
+<LI>gcc-4.3.2
+<LI>newlib-1.16.0
+</UL>
+
+<P>
+The tree should look something like the following figure:
+</P>
+<DL><DT><DD>
+<PRE>
+/whatever/prefix/you/choose/
+        archive/
+            gcc-4.3.2.tar.bz2
+            binutils-2.18.91.tar.gz
+            newlib-1.16.0.tar.gz
+            gcc-4.3.2-rtems4.10-20080917.diff
+            newlib-1.16.0-rtems4.10-20080925.diff
+        tools/
+            binutils-2.18.91/
+            gcc-4.3.2/
+            newlib-1.16.0/
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="started00036.html">
+<LINK REV="Precedes" HREF="started00034.html">
+<LINK REV="Subdocument" HREF="started00031.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started00034.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started00031.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started00036.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with RTEMS</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

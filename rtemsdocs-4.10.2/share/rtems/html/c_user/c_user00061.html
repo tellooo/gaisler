@@ -1,0 +1,70 @@
+<HTML>
+<!-- created Dec 13 2011 from task.texi line 363 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Task Manager Per Task Variables</TITLE>
+<LINK REL="Precedes" HREF="c_user00062.html">
+<LINK REV="Precedes" HREF="c_user00060.html">
+<LINK REV="Subdocument" HREF="c_user00051.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00060.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00051.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00062.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H3>5.2.8: Per Task Variables</H3>
+<P>
+Per task variables are used to support global variables whose value
+may be unique to a task. After indicating that a variable should be
+treated as private (i.e. per-task) the task can access and modify the
+variable, but the modifications will not appear to other tasks, and
+other tasks' modifications to that variable will not affect the value
+seen by the task.  This is accomplished by saving and restoring the
+variable's value each time a task switch occurs to or from the calling task.
+</P>
+<P>
+The value seen by other tasks, including those which have not added the
+variable to their set and are thus accessing the variable as a common
+location shared among tasks, can not be affected by a task once it has
+added a variable to its local set.  Changes made to the variable by
+other tasks will not affect the value seen by a task which has added the
+variable to its private set.
+</P>
+<P>
+This feature can be used when a routine is to be spawned repeatedly as
+several independent tasks.  Although each task will have its own stack,
+and thus separate stack variables, they will all share the same static and
+global variables.  To make a variable not shareable (i.e. a &quot;global&quot; variable
+that is specific to a single task), the tasks can call
+<CODE>rtems_task_variable_add</CODE> to make a separate copy of the variable
+for each task, but all at the same physical address.
+</P>
+<P>
+Task variables increase the context switch time to and from the
+tasks that own them so it is desirable to minimize the number of
+task variables.  One efficient method is to have a single task
+variable that is a pointer to a dynamically allocated structure
+containing the task's private &quot;global&quot; data.
+</P>
+<P>
+A critical point with per-task variables is that each task must separately
+request that the same global variable is per-task private.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00062.html">
+<LINK REV="Precedes" HREF="c_user00060.html">
+<LINK REV="Subdocument" HREF="c_user00051.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00060.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00051.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00062.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

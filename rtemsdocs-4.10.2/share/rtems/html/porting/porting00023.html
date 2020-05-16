@@ -1,0 +1,68 @@
+<HTML>
+<!-- created Dec 13 2011 from interrupts.texi line 112 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Interrupts Disable Interrupts</TITLE>
+<LINK REL="Precedes" HREF="porting00024.html">
+<LINK REV="Precedes" HREF="porting00022.html">
+<LINK REV="Subdocument" HREF="porting00016.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00022.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00016.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00024.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<H3>5.2.4: Disable Interrupts</H3>
+<P>
+The _CPU_ISR_Disable routine disable all external interrupts.  It returns
+the previous interrupt level in the single parameter _isr_cookie.  This
+routine is used to disable interrupts during a critical section in the
+RTEMS executive.  Great care is taken inside the executive to ensure that
+interrupts are disabled for a minimum length of time.  It is important to
+note that the way the previous level is returned forces the implementation
+to be a macro that translates to either inline assembly language or a
+function call whose return value is placed into _isr_cookie.
+</P>
+<P>
+It is important for the porter to realize that the value of _isr_cookie
+has no defined meaning except that it is the most convenient format for
+the _CPU_ISR_Disable, _CPU_ISR_Enable, and _CPU_ISR_Disable routines to
+manipulate.  It is typically the contents of the processor status
+register.  It is NOT the same format as manipulated by the
+_CPU_ISR_Get_level and _CPU_ISR_Set_level routines. The following is a
+dummy implementation that simply sets the previous level to 0.
+</P>
+<DL><DT><DD>
+<PRE>
+#define _CPU_ISR_Disable( _isr_cookie ) \
+  { \
+    (_isr_cookie) = 0;   /* do something to prevent warnings */ \
+  }
+</PRE>
+</DL>
+<P>
+The following is the implementation from the Motorola M68K port:
+</P>
+<DL><DT><DD>
+<PRE>
+XXX insert m68k port here
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="porting00024.html">
+<LINK REV="Precedes" HREF="porting00022.html">
+<LINK REV="Subdocument" HREF="porting00016.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00022.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00016.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00024.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

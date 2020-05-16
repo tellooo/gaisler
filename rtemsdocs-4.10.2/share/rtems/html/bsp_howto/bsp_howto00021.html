@@ -1,0 +1,81 @@
+<HTML>
+<!-- created Dec 13 2011 from support.texi line 29 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Miscellaneous Support Files GCC Compiler Specifications File</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00023.html">
+<LINK REV="Precedes" HREF="bsp_howto00020.html">
+<LINK REV="Subdocument" HREF="bsp_howto00020.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00020.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00020.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00023.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H2>5.1: GCC Compiler Specifications File</H2>
+<P>
+The file <CODE>bsp_specs</CODE> defines the start files and libraries
+that are always used with this BSP.  The format of this file
+is admittedly cryptic and this document will make no attempt
+to explain it completely.  Below is the <CODE>bsp_specs</CODE>
+file from the PowerPC psim BSP:
+</P>
+<DL><DT><DD>
+<PRE>
+%rename endfile old_endfile
+%rename startfile old_startfile
+%rename link old_link
+
+*startfile:
+%{!qrtems: %(old_startfile)} \
+%{!nostdlib: %{qrtems: ecrti%O%s rtems_crti%O%s crtbegin.o%s start.o%s}}
+
+*link:
+%{!qrtems: %(old_link)} %{qrtems: -Qy -dp -Bstatic -e _start -u __vectors}
+
+*endfile:
+%{!qrtems: %(old_endfile)} %{qrtems: crtend.o%s ecrtn.o%s}
+</PRE>
+</DL>
+<P>
+The first section of this file renames the built-in definition of
+some specification variables so they can be augmented without
+embedded their original definition.  The subsequent sections
+specify what behavior is expected when the <CODE>-qrtems</CODE> or
+<CODE>-qrtems_debug</CODE> option is specified.
+</P>
+<P>
+The <CODE>*startfile</CODE> section specifies that the BSP specific file
+<CODE>start.o</CODE> will be used instead of <CODE>crt0.o</CODE>.  In addition,
+various EABI support files (<CODE>ecrti.o</CODE> etc.) will be linked in with
+the executable.
+</P>
+<P>
+The <CODE>*link</CODE> section adds some arguments to the linker when it is
+invoked by GCC to link an application for this BSP.
+</P>
+<P>
+The format of this file is specific to the GNU Compiler Suite.  The
+argument used to override and extend the compiler built-in specifications
+is available in all recent GCC versions.  The <CODE>-specs</CODE> option is
+present in all <CODE>egcs</CODE> distributions and <CODE>gcc</CODE> distributions
+starting with version 2.8.0.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00023.html">
+<LINK REV="Precedes" HREF="bsp_howto00020.html">
+<LINK REV="Subdocument" HREF="bsp_howto00020.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00020.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00020.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00023.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

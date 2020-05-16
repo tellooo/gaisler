@@ -1,0 +1,101 @@
+<HTML>
+<!-- created Dec 13 2011 from io.texi line 413 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Input and Output Primitives Manager write - Writes to a file</TITLE>
+<LINK REL="Precedes" HREF="posix_users00131.html">
+<LINK REV="Precedes" HREF="posix_users00129.html">
+<LINK REV="Subdocument" HREF="posix_users00124.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00129.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00124.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00131.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<H3>5.4.6: write - Writes to a file</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+#include &lt;unistd.h&gt;
+
+int write(
+  int           fildes,
+  const void   *buf,
+  unsigned int  nbytes
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<DL>
+<DT><STRONG>EAGAIN</STRONG>
+<DD>
+The O_NONBLOCK flag is set for a file descriptor and the process
+would be delayed in the I/O operation.
+
+<DT><STRONG>EBADF</STRONG>
+<DD>
+Invalid file descriptor
+
+<DT><STRONG>EFBIG</STRONG>
+<DD>
+An attempt was made to write to a file that exceeds the maximum file
+size
+
+<DT><STRONG>EINTR</STRONG>
+<DD>
+The function was interrupted by a signal.
+
+<DT><STRONG>EIO</STRONG>
+<DD>
+Input or output error.
+
+<DT><STRONG>ENOSPC</STRONG>
+<DD>
+No space left on disk.
+
+<DT><STRONG>EPIPE</STRONG>
+<DD>
+Attempt to write to a pope or FIFO with no reader.
+
+<DT><STRONG>EINVAL</STRONG>
+<DD>
+Bad buffer pointer
+
+</DL>
+<H3>DESCRIPTION:</H3>
+<P>
+The <CODE>write()</CODE> function writes <CODE>nbyte</CODE> from the array pointed
+to by <CODE>buf</CODE> into the file associated with <CODE>fildes</CODE>.
+</P>
+<P>
+If <CODE>nybte</CODE> is zero and the file is a regular file, the <CODE>write()</CODE>
+function returns zero and has no other effect. If <CODE>nbyte</CODE> is zero
+and the file is a special file, te results are not portable.
+</P>
+<P>
+The <CODE>write()</CODE> function returns the number of bytes written. This
+number will be less than <CODE>nbytes</CODE> if there is an error. It will never
+be greater than <CODE>nbytes</CODE>.
+</P>
+<H3>NOTES:</H3>
+<P>
+NONE
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="posix_users00131.html">
+<LINK REV="Precedes" HREF="posix_users00129.html">
+<LINK REV="Subdocument" HREF="posix_users00124.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00129.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00124.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00131.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

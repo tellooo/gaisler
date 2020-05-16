@@ -1,0 +1,51 @@
+<HTML>
+<!-- created Dec 13 2011 from m68k.texi line 190 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>M68xxx and Coldfire Specific Information Memory Model</TITLE>
+<LINK REL="Precedes" HREF="cpu_supplement00096.html">
+<LINK REV="Precedes" HREF="cpu_supplement00106.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00092.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00106.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00092.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00096.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<H2>7.3: Memory Model</H2>
+<P>
+The MC68xxx family supports a flat 32-bit address
+space with addresses ranging from 0x00000000 to 0xFFFFFFFF (4
+gigabytes).  Each address is represented by a 32-bit value and
+is byte addressable.  The address may be used to reference a
+single byte, word (2-bytes), or long word (4 bytes).  Memory
+accesses within this address space are performed in big endian
+fashion by the processors in this family.
+</P>
+<P>
+Some of the MC68xxx family members such as the
+MC68020, MC68030, and MC68040 support virtual memory and
+segmentation.  The MC68020 requires external hardware support
+such as the MC68851 Paged Memory Management Unit coprocessor
+which is typically used to perform address translations for
+these systems.  RTEMS does not support virtual memory or
+segmentation on any of the MC68xxx family members.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="cpu_supplement00096.html">
+<LINK REV="Precedes" HREF="cpu_supplement00106.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00092.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00106.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00092.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00096.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

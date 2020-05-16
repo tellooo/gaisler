@@ -1,0 +1,91 @@
+<HTML>
+<!-- created Dec 13 2011 from m68k.texi line 256 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>M68xxx and Coldfire Specific Information Models With Separate Interrupt Stacks</TITLE>
+<LINK REL="Precedes" HREF="cpu_supplement00108.html">
+<LINK REV="Precedes" HREF="cpu_supplement00110.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00107.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00110.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00107.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00108.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<H4>7.4.1.2: Models With Separate Interrupt Stacks</H4>
+<P>
+Upon receipt of an interrupt the MC68xxx family members with separate
+interrupt stacks automatically perform the following actions:
+</P>
+<UL>
+<LI>saves the current status register (SR),
+
+<LI>clears the master/interrupt (M) bit of the SR to
+indicate the switch from master state to interrupt state,
+
+<LI>sets the privilege mode to supervisor,
+
+<LI>suppresses tracing,
+
+<LI>sets the interrupt mask level equal to the level of the
+interrupt being serviced,
+
+<LI>pushes an interrupt stack frame (ISF), which includes
+the program counter (PC), the status register (SR), and the
+format/exception vector offset (FVO) word, onto the supervisor
+and interrupt stacks,
+
+<LI>switches the current stack to the interrupt stack and
+vectors to an interrupt service routine (ISR).  If the ISR was
+installed with the interrupt_catch directive, then the RTEMS
+interrupt handler will begin execution.  The RTEMS interrupt
+handler saves all registers which are not preserved according to
+the calling conventions and invokes the application's ISR.
+</UL>
+
+<P>
+A nested interrupt is processed similarly by these
+CPU models with the exception that only a single ISF is placed
+on the interrupt stack and the current stack need not be
+switched.
+</P>
+<P>
+The FVO word in the Interrupt Stack Frame is examined
+by RTEMS to determine when an outer most interrupt is being
+exited. Since the FVO is used by RTEMS for this purpose, the
+user application code MUST NOT modify this field.
+</P>
+<P>
+The following shows the Interrupt Stack Frame for
+MC68xxx CPU models with separate interrupt stacks:
+</P>
+<CENTER>
+  <TABLE COLS=2 WIDTH="40%" BORDER=2>
+<TR><TD ALIGN=center><STRONG>Status Register</STRONG></TD>
+    <TD ALIGN=center>0x0</TD></TR>
+<TR><TD ALIGN=center><STRONG>Program Counter High</STRONG></TD>
+    <TD ALIGN=center>0x2</TD></TR>
+<TR><TD ALIGN=center><STRONG>Program Counter Low</STRONG></TD>
+    <TD ALIGN=center>0x4</TD></TR>
+<TR><TD ALIGN=center><STRONG>Format/Vector Offset</STRONG></TD>
+    <TD ALIGN=center>0x6</TD></TR>
+  </TABLE>
+</CENTER>
+<P><HR>
+<LINK REL="Precedes" HREF="cpu_supplement00108.html">
+<LINK REV="Precedes" HREF="cpu_supplement00110.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00107.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00110.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00107.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00108.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

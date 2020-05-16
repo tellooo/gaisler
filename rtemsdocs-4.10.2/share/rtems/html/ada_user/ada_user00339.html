@@ -1,0 +1,74 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/rtmon.texi line 712 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Rate Monotonic Manager Relaxation of Assumptions</TITLE>
+<LINK REL="Precedes" HREF="ada_user00340.html">
+<LINK REV="Precedes" HREF="ada_user00338.html">
+<LINK REV="Subdocument" HREF="ada_user00333.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00338.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00333.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00340.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H4>19.2.5.6: Relaxation of Assumptions</H4>
+<P>
+The assumptions used to develop the RMS
+schedulability rules are uncommon in most real-time systems.
+For example, it was assumed that tasks have constant unvarying
+execution time.  It is possible to relax this assumption, simply
+by using the worst-case execution time of each task.
+</P>
+<P>
+Another assumption is that the tasks are independent.
+This means that the tasks do not wait for one another or
+contend for resources.  This assumption can be relaxed by
+accounting for the amount of time a task spends waiting to
+acquire resources.  Similarly, each task's execution time must
+account for any I/O performed and any RTEMS directive calls.
+</P>
+<P>
+In addition, the assumptions did not account for the
+time spent executing interrupt service routines.  This can be
+accounted for by including all the processor utilization by
+interrupt service routines in the utilization calculation.
+Similarly, one should also account for the impact of delays in
+accessing local memory caused by direct memory access and other
+processors accessing local dual-ported memory.
+</P>
+<P>
+The assumption that nonperiodic tasks are used only
+for initialization or failure-recovery can be relaxed by placing
+all periodic tasks in the critical task set.  This task set can
+be scheduled and analyzed using RMS.  All nonperiodic tasks are
+placed in the non-critical task set.  Although the critical task
+set can be guaranteed to execute even under transient overload,
+the non-critical task set is not guaranteed to execute.
+</P>
+<P>
+In conclusion, the application designer must be fully
+cognizant of the system and its run-time behavior when
+performing schedulability analysis for a system using RMS.
+Every hardware and software factor which impacts the execution
+time of each task must be accounted for in the schedulability
+analysis.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00340.html">
+<LINK REV="Precedes" HREF="ada_user00338.html">
+<LINK REV="Subdocument" HREF="ada_user00333.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00338.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00333.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00340.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

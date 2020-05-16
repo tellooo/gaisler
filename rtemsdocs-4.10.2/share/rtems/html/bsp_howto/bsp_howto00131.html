@@ -1,0 +1,48 @@
+<HTML>
+<!-- created Dec 13 2011 from shmsupp.texi line 145 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Shared Memory Support Driver Get Configuration</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00132.html">
+<LINK REV="Precedes" HREF="bsp_howto00130.html">
+<LINK REV="Subdocument" HREF="bsp_howto00128.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00130.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00128.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00132.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H3>16.2.2: Get Configuration</H3>
+<P>
+The <CODE>Shm_Get_configuration</CODE> routine is responsible for filling in the
+Shared Memory Configuration Table passed to it.
+</P>
+<DL><DT><DD>
+<PRE>
+void Shm_Get_configuration(
+  uint32_t           localnode,
+  shm_config_table **shmcfg
+)
+{
+   fill in the Shared Memory Configuration Table
+}
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00132.html">
+<LINK REV="Precedes" HREF="bsp_howto00130.html">
+<LINK REV="Subdocument" HREF="bsp_howto00128.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00130.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00128.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00132.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

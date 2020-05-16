@@ -1,0 +1,72 @@
+<HTML>
+<!-- created Dec 13 2011 from fixedblock.texi line 402 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Fixed Block Manager ref_mpf - Reference Fixed-Size Memorypool Status</TITLE>
+<LINK REL="Precedes" HREF="">
+<LINK REV="Precedes" HREF="itron00161.html">
+<LINK REV="Subdocument" HREF="itron00155.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00161.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00155.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="next"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<H3>10.4.7: ref_mpf - Reference Fixed-Size Memorypool Status</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+ER ref_mpf(
+  T_RMPF *pk_rmpf,
+  ID mpfid
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<P>
+<CODE>E_OK</CODE> - Normal Completion
+</P>
+<P>
+<CODE>E_ID</CODE> - Invalid ID number (mpfid was invalid or could not be used)
+</P>
+<P>
+<CODE>E_NOEXS</CODE> - Object does not exist \(the memorypool specified by mpfid does
+not exist.)
+</P>
+<P>
+<CODE>E_OACV</CODE> - Object access violation (A mpfid less than -4 was specified from
+a user task.  This is implementation dependent.)
+</P>
+<P>
+<CODE>E_PAR</CODE> - Parameter error (the packet address for the return parameters
+could not be used)
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This system call refers to the state of the fixed-size memorypool specified by mpfid, and returns the current number of free blocks (frbcnt), information of a task waiting to be allocated memory (wtsk), and its extended information (exinf).  Wtsk indicates whether or not there is a task waiting to be allocated memory from the fixed-size memorypool specified.  If there is no waiting task, wtsk is returned as FALSE = 0.  If there is a waiting task, wtsk is returned as a value other than 0.
+</P>
+<H3>NOTES:</H3>
+<P>
+While the frsz return parameter of ref_mpl returns the total size of free memory, the frbcnt return parameter of ref_mpf returns the number of free blocks.
+</P>
+<P>
+Depending on the implementation, additional information besides wtsk and frbcnt (such as memorypool attributes, mpfatr) may also be referred.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="">
+<LINK REV="Precedes" HREF="itron00161.html">
+<LINK REV="Subdocument" HREF="itron00155.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00161.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00155.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="next"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

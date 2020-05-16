@@ -1,0 +1,66 @@
+<HTML>
+<!-- created Dec 13 2011 from clock.texi line 85 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Clock Driver Initialization</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00070.html">
+<LINK REV="Precedes" HREF="bsp_howto00074.html">
+<LINK REV="Subdocument" HREF="bsp_howto00066.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00074.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00066.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00070.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H2>9.3: Initialization</H2>
+<P>
+The initialization routine is responsible for
+programming the hardware that will periodically
+generate an interrupt.  A programmable interval timer is commonly
+used as the source of the clock tick.
+</P>
+<P>
+The device should be programmed such that an interrupt is generated
+every <EM>m</EM> microseconds, where <EM>m</EM> is equal to
+<CODE>rtems_configuration_get_microseconds_per_tick()</CODE>. Sometimes
+the periodic interval timer can use a prescaler so you have to look
+carefully at your user's manual to determine the correct value.
+</P>
+<P>
+You must use the RTEMS primitive <CODE>rtems_interrupt_catch</CODE> to install
+your clock interrupt service routine:
+</P>
+<DL><DT><DD>
+<PRE>
+rtems_interrupt_catch (Clock_ISR, CLOCK_VECTOR, &amp;old_handler);
+</PRE>
+</DL>
+<P>
+Since there is currently not a driver entry point invoked at system
+shutdown, many clock device drivers use the <CODE>atexit</CODE> routine
+to schedule their <CODE>Clock_exit</CODE> routine to execute when the
+system is shutdown.
+</P>
+<P>
+By convention, many of the clock drivers do not install the clock
+tick if the <CODE>ticks_per_timeslice</CODE> field of the Configuration
+Table is 0.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00070.html">
+<LINK REV="Precedes" HREF="bsp_howto00074.html">
+<LINK REV="Subdocument" HREF="bsp_howto00066.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00074.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00066.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00070.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

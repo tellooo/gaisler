@@ -1,0 +1,79 @@
+<HTML>
+<!-- created Dec 13 2011 from network.texi line 142 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Networking Driver Network Driver Makefile</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00118.html">
+<LINK REV="Precedes" HREF="bsp_howto00116.html">
+<LINK REV="Subdocument" HREF="bsp_howto00113.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00116.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00113.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00118.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H2>15.4: Network Driver Makefile</H2>
+<P>
+Network drivers are considered part of the BSD network package and as such
+are to be compiled with the appropriate flags.  This can be accomplished by
+adding <CODE>-D__INSIDE_RTEMS_BSD_TCPIP_STACK__</CODE> to the <CODE>command line</CODE>.
+If the driver is inside the RTEMS source tree or is built using the
+RTEMS application Makefiles, then adding the following line accomplishes
+this:
+</P>
+<DL><DT><DD>
+<PRE>
+DEFINES += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
+</PRE>
+</DL>
+<P>
+This is equivalent to the following list of definitions.  Early versions
+of the RTEMS BSD network stack required that all of these be defined.
+</P>
+<DL><DT><DD>
+<PRE>
+-D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS \
+    -DDIAGNOSTIC -DBOOTP_COMPAT
+</PRE>
+</DL>
+<P>
+Defining these macros tells the network header files that the driver
+is to be compiled with extended visibility into the network stack.  This
+is in sharp contrast to applications that simply use the network stack.
+Applications do not require this level of visibility and should stick
+to the portable application level API.
+</P>
+<P>
+As a direct result of being logically internal to the network stack,
+network drivers use the BSD memory allocation routines   This means,
+for example, that malloc takes three arguments.  See the SONIC
+device driver (<CODE>c/src/lib/libchip/network/sonic.c</CODE>) for an example
+of this.  Because of this, network drivers should not include
+<CODE>&lt;stdlib.h&gt;</CODE>.  Doing so will result in conflicting definitions
+of <CODE>malloc()</CODE>.
+</P>
+<P>
+<STRONG>Application level</STRONG> code including network servers such as the FTP
+daemon are <STRONG>not</STRONG> part of the BSD kernel network code and should not be
+compiled with the BSD network flags.  They should include
+<CODE>&lt;stdlib.h&gt;</CODE> and not define the network stack visibility
+macros.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00118.html">
+<LINK REV="Precedes" HREF="bsp_howto00116.html">
+<LINK REV="Subdocument" HREF="bsp_howto00113.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00116.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00113.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00118.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

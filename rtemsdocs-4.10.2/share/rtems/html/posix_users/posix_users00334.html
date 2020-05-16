@@ -1,0 +1,85 @@
+<HTML>
+<!-- created Dec 13 2011 from message.texi line 664 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Message Passing Manager mq_notify - Notify Process that a Message is Available</TITLE>
+<LINK REL="Precedes" HREF="posix_users00335.html">
+<LINK REV="Precedes" HREF="posix_users00333.html">
+<LINK REV="Subdocument" HREF="posix_users00314.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00333.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00314.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00335.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<H3>16.4.6: mq_notify - Notify Process that a Message is Available</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+#include &lt;mqueue.h&gt;
+
+int mq_notify(
+  mqd_t                  mqdes,
+  const struct sigevent *notification
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<P>
+<CODE>EBADF</CODE> - The descriptor does not refer to a valid message queue
+<CODE>EBUSY</CODE> - A notification request is already attached to the queue
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+If the argument notification is not NULL, this function registers the
+calling process to be notified of message arrival at an empty message
+queue associated with the specified message queue descriptor, mqdes.
+</P>
+<P>
+Every message queue has the ability to notify one (and only one) process
+whenever the queue's state changes from empty (0 messages) to nonempty.
+This means that the process does not have to block or constantly poll
+while it waits for a message. By calling mq_notify, a notification
+request is attached to a message queue. When a message is received by an
+empty queue, if there are no processes blocked and waiting for the
+message, then the queue notifies the requesting process of a message
+arrival. There is only one signal sent by the message queue, after that
+the notification request is de-registered and another process can attach
+its notification request. After receipt of a notification, a process must
+re-register if it wishes to be notified again.
+</P>
+<P>
+If there is a process blocked and waiting for the message, that process
+gets the message, and notification is not be sent. Only one process can
+have a notification request attached to a message queue at any one time.
+If another process attempts to register a notification request, it fails.
+You can de-register for a message queue by passing a NULL to mq_notify;
+this removes any notification request attached to the queue. Whenever the
+message queue is closed, all notification attachments are removed.
+</P>
+<P>
+Upon successful completion, mq_notify returns a value of zero; otherwise,
+the function returns a value of -1 and sets errno to indicate the error.
+</P>
+<H3>NOTES:</H3>
+<P>
+It is possible for another process to receive the message after the notification is sent but before the notified process has sent its receive request.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="posix_users00335.html">
+<LINK REV="Precedes" HREF="posix_users00333.html">
+<LINK REV="Subdocument" HREF="posix_users00314.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00333.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00314.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00335.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

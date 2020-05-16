@@ -1,0 +1,130 @@
+<HTML>
+<!-- created Dec 13 2011 from init.texi line 174 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Initialization Code boot_card() - Boot the Card</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00046.html">
+<LINK REV="Precedes" HREF="bsp_howto00044.html">
+<LINK REV="Subdocument" HREF="bsp_howto00038.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00044.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00038.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00046.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H3>7.3.2: boot_card() - Boot the Card</H3>
+<P>
+The <CODE>boot_card()</CODE> is the first C code invoked.  This file is the
+core component in the RTEMS BSP Initialization Framework and provides
+the proper sequencing of initialization steps for the BSP, RTEMS and
+device drivers. All BSPs use the same shared version of <CODE>boot_card()</CODE>
+which is located in the following file:
+</P>
+<DL><DT><DD>
+<PRE>
+c/src/lib/libbsp/shared/bootcard.c
+</PRE>
+</DL>
+<P>
+The <CODE>boot_card()</CODE> routine performs the following functions:
+</P>
+<UL>
+<LI>It disables processor interrupts.
+
+<LI>It sets the global program name and command line argument variables
+for later use by the application.
+
+<LI>If the macro is BSP_BOOTCARD_HANDLES_RAM_ALLOCATION is defined, it
+will invoke the BSP specific <CODE>bsp_get_work_area</CODE> function to obtain
+information on the amount and location of BSP RAM that is available to
+be allocated to the C Program Heap and RTEMS Workspace.  If the amount
+of memory available for the RTEMS Workspace is less than that required
+by the application (e.g. <CODE>rtems_configuration_get_work_space_size()</CODE>,
+then a message is printed using <CODE>printk</CODE>, <CODE>bsp_cleanup</CODE> is
+invoked, and -1 is return to the assembly language start code.  BSPs which
+use this memory allocation functionality in <CODE>bootcard.c</CODE>
+must invoke the RTEMS specific autoconf macro
+<CODE>RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION</CODE> in the BSP's
+<CODE>configure.ac</CODE> file.
+
+<LI>It invokes the BSP specific routine <CODE>bsp_start()</CODE> which is
+written in C and thus able to perform more advanced initialization.
+Often MMU and bus initialization occurs here.
+
+<LI>It invokes the RTEMS directive
+<CODE>rtems_initialize_data_structures()</CODE> to initialize the RTEMS
+executive to a state where objects can be created but tasking is not
+enabled.
+
+<LI>If the macro is BSP_BOOTCARD_HANDLES_RAM_ALLOCATION is defined,
+it will calculate the memory available for the C Program Heap and invoke
+the initialization routine for the C Library with this information.
+
+<LI>It invokes the BSP specific routine <CODE>bsp_pretasking_hook</CODE>. On
+most BSPs which utilize the framework, this routine does nothing.
+
+<LI>If <CODE>RTEMS_DEBUG</CODE> is enabled, then the RTEMS debug mask level
+is inialized appropriately.
+
+<LI>It invokes the RTEMS directive
+<CODE>rtems_initialize_before_drivers()</CODE> to initialize the MPCI Server
+thread in a multiprocessor configuration and execute API specific
+extensions.
+
+<LI>It invokes the BSP specific routine <CODE>bsp_predriver_hook</CODE>. For
+most BSPs, the implementation of this routine does nothing.  However,
+on some BSPs, required subsystems which utilize the C Library
+(e.g. <CODE>malloc</CODE> in particular) may be initialized at this point.
+
+<LI>It invokes the RTEMS directive
+<CODE>rtems_initialize_device_drivers()</CODE> to initialize the statically
+configured set of device drivers in the order they were specified in
+the Configuration Table.
+
+<LI>It invokes the BSP specific routine <CODE>bsp_postdriver_hook</CODE>. For
+most BSPs, the implementation of this routine does nothing.  However, some
+BSPs use this hook and perform some initialization which must be done at
+this point in the initialization sequence.  This is the last opportunity
+for the BSP to insert BSP specific code into the initialization sequence.
+
+<LI>It invokes the RTEMS directive
+<CODE>rtems_initialize_start_multitasking()</CODE> which starts multitasking and context switches to the first task.  <CODE>boot_card()</CODE> will not return until the application is shutdown.  As part of this sequence the following actions occur:
+
+<UL>
+<LI>RTEMS will context switch to the first application task.  As a
+side-effect of this context switch, processor interrupts will be enabled.
+This is often the source of a fatal error during BSP development because
+the BSP did not clear and/or disable all interrupt sources and a spurious
+interrupt will occur .
+
+<LI>When in the context of the first task but before its body has been
+entered, any C++ Global Constructors will be invoked.
+
+</UL>
+<LI>Finally after the application shutsdown RTEMS and control is
+return to <CODE>boot_card()</CODE> from RTEMS, it invokes the BSP specific
+routine <CODE>bsp_cleanup()</CODE> to perform any necessary board specific
+shutdown actions.
+
+</UL>
+<P>
+That's it.  We just went through the entire sequence.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00046.html">
+<LINK REV="Precedes" HREF="bsp_howto00044.html">
+<LINK REV="Subdocument" HREF="bsp_howto00038.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00044.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00038.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00046.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

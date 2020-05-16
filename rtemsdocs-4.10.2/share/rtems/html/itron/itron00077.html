@@ -1,0 +1,184 @@
+<HTML>
+<!-- created Dec 13 2011 from eventflags.texi line 521 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Eventflags Manager wai_flg - Wait on Eventflag</TITLE>
+<LINK REL="Precedes" HREF="itron00078.html">
+<LINK REV="Precedes" HREF="itron00076.html">
+<LINK REV="Subdocument" HREF="itron00069.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00076.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00069.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00078.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<H3>4.4.5: wai_flg - Wait on Eventflag</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+ER wai_flg(
+  UINT *p_flgptn,
+  ID flgid,
+  UINT waiptn,
+  UINT wfmode
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<P>
+<CODE>E_OK</CODE> - Normal Completion
+</P>
+<P>
+<CODE>E_ID</CODE> - Invalid ID number (flgid was invalid or could not be used)
+</P>
+<P>
+<CODE>E_NOEXS</CODE> - Object does not exist (the eventflag specified by flgid
+does not exist)
+</P>
+<P>
+<CODE>E_OACV</CODE> - Object access violation (A flgid less than -4 was
+specified from a user task.  This is implementation dependent.)
+</P>
+<P>
+<CODE>E_PAR</CODE> - Parameter error (waiptn = 0, wfmode invalid, or tmout is -2
+or less)
+</P>
+<P>
+<CODE>E_OBJ</CODE> - Invalid object state (multiple tasks waiting for an
+eventflag with the TA_WSGL attribute)
+</P>
+<P>
+<CODE>E_DLT</CODE> - The object being waited for was deleted (the specified
+eventflag was deleted while waiting)
+</P>
+<P>
+<CODE>E_RLWAI</CODE> - WAIT state was forcibly released (rel_wai was received
+while waiting)
+</P>
+<P>
+<CODE>E_TMOUT</CODE> - Polling failure or timeout exceeded
+</P>
+<P>
+<CODE>E_CTX</CODE> - Context error (issued from task-independent portions or a
+task in dispatch disabled state)
+</P>
+<P>
+<CODE>EN_OBJNO</CODE> - An object number which could not be accessed on the
+target node is specified.
+</P>
+<P>
+<CODE>EN_PAR</CODE> - A value outside the range supported by the target node
+and/or transmission packet format was specified as a parameter (a value
+outside supported range was specified for waiptn and tmout)
+</P>
+<P>
+<CODE>EN_RPAR</CODE> - A value outside the range supported by the requesting
+node and/or transmission packet format was specified as a parameter (a
+value exceeding the range for the requesting node was specified for
+flgptn)
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+The <CODE>wai_flg</CODE> system call waits for the eventflag specified by
+<CODE>flgid</CODE> to be set to satisfy the wait release condition specified by
+<CODE>wfmode</CODE>. The Eventflags bit-pattern will be returned with a pointer <CODE>p_flgptn</CODE>.
+</P>
+<P>
+If the eventflag specified by <CODE>flgid</CODE> already satisfies the wait
+release conditions given by <CODE>wfmode</CODE>, the issuing task will continue
+execution without waiting.  <CODE>wfmode</CODE> may be specified as follows.
+</P>
+<DL><DT><DD>
+<PRE>
+        wfmode = TWF_ANDW (or TWF_ORW) | TWF_CLR(optional)
+</PRE>
+</DL>
+<P>
+If <CODE>TWF_ORW</CODE> is specified, the issuing task will wait for any of the
+bits specified by <CODE>waiptn</CODE> to be set for the eventflag given by
+<CODE>flgid</CODE> (OR wait).  If <CODE>TWF_ANDW</CODE> is specified, the issuing task
+will wait for all of the bits specified by <CODE>waiptn</CODE> to be set for the
+eventflag given by <CODE>flgid</CODE> (AND wait).
+</P>
+<P>
+If the <CODE>TWF_CLR</CODE> specification is not present, the eventflag value
+will remain unchanged even after the wait conditions have been satisfied
+and the task has been released from the WAIT state.  If <CODE>TWF_CLR</CODE> is
+specified, all bits of the eventflag will be cleared to 0 once the wait
+conditions of the waiting task have been satisfied.
+</P>
+<P>
+The return parameter <CODE>flgptn</CODE> returns the value of the eventflag after the
+wait state of a task has been released due to this system call.  If
+<CODE>TWF_CLR</CODE> was specified, the value before eventflag bits were cleared
+is returned.  The value returned by <CODE>flgptn</CODE> fulfills the wait
+release conditions of this system call.
+</P>
+<P>
+An <CODE>E_PAR</CODE> parameter error will result if <CODE>waiptn</CODE> is 0.
+</P>
+<P>
+A task can not execute any of <CODE>wai_flg, twai_flg</CODE> or <CODE>pol_flg</CODE>
+on an eventflag having the <CODE>TA_WSGL</CODE> attribute if another task is
+already waiting for that eventflag.  An <CODE>E_OBJ</CODE> error will be
+returned to a task which executes <CODE>wai_flg</CODE> at a later time
+regardless as to whether or not the task that executes <CODE>wai_flg</CODE> or
+<CODE>twai_flg</CODE> later will be placed in a WAIT state (conditions for
+releasing wait state be satisfied).  An <CODE>E_OBJ</CODE> error will be
+returned even to tasks which just execute <CODE>pol_flg</CODE>, again regardless
+as to whether or not wait release conditions for that task were satisfied.
+</P>
+<P>
+On the other hand, multiple tasks can wait at the same time for the same
+eventflag if that eventflag has the <CODE>TA_WMUL</CODE> attribute.  This means
+that event flags can make queues for tasks to wait on.  When such
+eventflags are used, a single <CODE>set_flg</CODE> call may release multiple
+waiting tasks.
+</P>
+<P>
+The following processing takes place if a queue for allowing multiple
+tasks to wait has been created for an eventflag with the <CODE>TA_WMUL</CODE>
+attribute.
+</P>
+<UL>
+<LI>The waiting order on the queue is FIFO.  (However, depending on
+<CODE>waiptn</CODE> and <CODE>wfmode</CODE>, task at the head of the queue will not
+always be released from waiting.)
+
+<LI>If a task specifying that the eventflag be cleared is on the queue,
+the flag is cleared when that task is released from waiting.
+
+<LI>Since any tasks behind a task which clears the eventflag (by
+specifying <CODE>TWF_CLR</CODE>) will check the eventflag after it is cleared,
+they will not be released from waiting.
+
+</UL>
+<P>
+If multiple tasks having the same priority are released from waiting
+simultaneously due to <CODE>set_flg</CODE>, the order of tasks on the ready
+queue after release will be the same as their original order on the
+eventflag queue.
+</P>
+<H3>NOTES:</H3>
+<P>
+Multiprocessing is not supported. Thus none of the &quot;<CODE>EN_</CODE>&quot; status
+codes will be returned.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="itron00078.html">
+<LINK REV="Precedes" HREF="itron00076.html">
+<LINK REV="Subdocument" HREF="itron00069.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00076.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00069.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00078.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

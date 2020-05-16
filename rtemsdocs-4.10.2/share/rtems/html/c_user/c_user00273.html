@@ -1,0 +1,51 @@
+<HTML>
+<!-- created Dec 13 2011 from dpmem.texi line 44 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Dual-Ported Memory Manager Background</TITLE>
+<LINK REL="Precedes" HREF="c_user00274.html">
+<LINK REV="Precedes" HREF="c_user00272.html">
+<LINK REV="Subdocument" HREF="c_user00271.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00272.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00271.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00274.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H2>15.2: Background</H2>
+<P>
+A dual-ported memory area (DPMA) is an contiguous
+block of RAM owned by a particular processor but which can be
+accessed by other processors in the system.  The owner accesses
+the memory using internal addresses, while other processors must
+use external addresses.  RTEMS defines a port as a particular
+mapping of internal and external addresses.
+</P>
+<P>
+There are two system configurations in which
+dual-ported memory is commonly found.  The first is
+tightly-coupled multiprocessor computer systems where the
+dual-ported memory is shared between all nodes and is used for
+inter-node communication.  The second configuration is computer
+systems with intelligent peripheral controllers.  These
+controllers typically utilize the DPMA for high-performance data
+transfers.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00274.html">
+<LINK REV="Precedes" HREF="c_user00272.html">
+<LINK REV="Subdocument" HREF="c_user00271.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00272.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00271.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00274.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

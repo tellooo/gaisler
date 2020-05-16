@@ -1,0 +1,84 @@
+<HTML>
+<!-- created Dec 13 2011 from task.texi line 346 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Task Manager sta_tsk - Start Task</TITLE>
+<LINK REL="Precedes" HREF="itron00020.html">
+<LINK REV="Precedes" HREF="itron00018.html">
+<LINK REV="Subdocument" HREF="itron00006.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00018.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00006.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00020.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<H3>1.4.3: sta_tsk - Start Task</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+ER sta_tsk(
+  ID tskid,
+  INT stacd
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<P>
+<CODE>E_OK</CODE> - Normal Completion
+</P>
+<P>
+<CODE>E_ID</CODE> - Invalid ID Number (tskid was invalid or could not be used)
+</P>
+<P>
+<CODE>E_NOEXS</CODE> - Object does not exist (the task specified by tskid does not exist)
+</P>
+<P>
+<CODE>E_OACV</CODE> - Object access violation (A tskid less than -4 was specified from a user task.  This is implementation dependent.)
+</P>
+<P>
+<CODE>E_OBJ</CODE> - Invalid object state (the target task is not in DORMANT state)
+</P>
+<P>
+<CODE>EN_OBJNO</CODE> - An object number which could not be accessed on the target node is specified.
+</P>
+<P>
+<CODE>EN_CTXID</CODE> - Specified an object on another node when the system call was issued from a task in dispatch disabled state or from a task-independent portion
+</P>
+<P>
+<CODE>EN_PAR</CODE> - A value outside the range supported by the target node and/or transmission packet format was specified as a parameter (a value outside supported range was specified for stacd)
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This system call starts the task specified by tskid.  Specifically, it changes the state of the task specified by tskid from DORMANT into RUN/READY.
+</P>
+<P>
+Stacd can be used to specify parameters to be passed to the task when it is started.  This parameter can be read by the task being started, and may be used for transmitting simple messages.
+</P>
+<P>
+The task priority on starting the task is given by the initial task priority parameter (itskpri) specified when the task was created.
+</P>
+<P>
+Start request is not queued in this this system call.  In other words, if this system call is issued when the target task is not in DORMANT state, the system call will be ignored, and an E_OBJ error returned to the issuing task.
+</P>
+<P>
+If cre_tsk [level EN] is not implemented on a system, tasks are created statically when the system is started.  Parameters required for creating a task, such as task starting address (task) and initial task priority (itskpri) are also specified statically at system startup.
+</P>
+<H3>NOTES:</H3>
+<P><HR>
+<LINK REL="Precedes" HREF="itron00020.html">
+<LINK REV="Precedes" HREF="itron00018.html">
+<LINK REV="Subdocument" HREF="itron00006.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00018.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00006.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00020.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

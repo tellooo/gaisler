@@ -1,0 +1,126 @@
+<HTML>
+<!-- created Dec 13 2011 from console.texi line 200 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Console Driver Basics</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00058.html">
+<LINK REV="Precedes" HREF="bsp_howto00056.html">
+<LINK REV="Subdocument" HREF="bsp_howto00056.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00056.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00056.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00058.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H3>8.4.1: Basics</H3>
+<P>
+You need to include the following header files in your Termios device driver
+source file:
+</P>
+<DL><DT><DD>
+<PRE>
+#include &lt;unistd.h&gt;
+#include &lt;termios.h&gt;
+
+#include &lt;rtems.h&gt;
+#include &lt;rtems/libio.h&gt;
+#include &lt;rtems/console.h&gt;
+</PRE>
+</DL>
+<P>
+You need to provide a data structure for the Termios driver interface.  The
+functions are described later in this chapter.  The functions should return
+zero on succes and minus one in case of an error.  Currently the return value
+will be not checked from the Termios infrastructure in most cases.  One notable
+exception is the polled read function, here is the return value important.
+</P>
+<P>
+If you want to use polled IO it should look like the following.  You may also
+have a look at <CODE>c/src/lib/libbsp/shared/console-polled.c</CODE> for a shared
+implementation of the basic framework.  Termios must be told the addresses of
+the functions that are to be used for simple character IO, i.e. pointers to the
+<CODE>my_driver_poll_read</CODE> and <CODE>my_driver_poll_write</CODE> functions described
+later in <A HREF="bsp_howto00058.html">Console Driver Termios and Polled IO</A>.
+</P>
+<DL><DT><DD>
+<PRE>
+static const rtems_termios_callbacks my_driver_callbacks_polled = {
+    .firstOpen = my_driver_first_open,
+    .lastClose = my_driver_last_close,
+    .pollRead = my_driver_poll_read,
+    .write = my_driver_poll_write,
+    .setAttributes = my_driver_set_attributes,
+    .stopRemoteTx = NULL,
+    .startRemoteTx = NULL,
+    .outputUsesInterrupts = TERMIOS_POLLED
+};
+</PRE>
+</DL>
+<P>
+For an interrupt driven implementation you need the following.  The driver
+functioning is quite different in this mode.  There is no device driver read
+function to be passed to Termios.  Indeed a <CODE>console_read</CODE> call returns
+the contents of Termios input buffer.  This buffer is filled in the driver
+interrupt subroutine, see also
+<A HREF="bsp_howto00059.html">Console Driver Termios and Interrupt Driven IO</A>.
+The driver is responsible for providing a pointer to the
+<CODE>my_driver_interrupt_write</CODE> function.
+</P>
+<DL><DT><DD>
+<PRE>
+static const rtems_termios_callbacks my_driver_callbacks_interrupt = {
+    .firstOpen = my_driver_first_open,
+    .lastClose = my_driver_last_close,
+    .pollRead = NULL,
+    .write = my_driver_interrupt_write,
+    .setAttributes = my_driver_set_attributes,
+    .stopRemoteTx = NULL,
+    .startRemoteTx = NULL,
+    .outputUsesInterrupts = TERMIOS_IRQ_DRIVEN
+};
+</PRE>
+</DL>
+<P>
+You can also provide callback functions for remote transmission control.  This
+is not covered in this manual, so thay are set to <CODE>NULL</CODE> in the above
+examples.
+</P>
+<P>
+Normally the device specific data structures are stored in a table which is
+indexed by the minor number.  You may need an entry for the Termios handler
+pointer in your data structure.  For simplicity of the console initialization
+example the device name is also present.
+</P>
+<DL><DT><DD>
+<PRE>
+/* Driver specific data structure */
+typedef struct {
+    const char *device_name;
+    struct rtems_termios_tty *tty;
+} my_driver_entry;
+
+/*
+ * This table contains the driver specific data.  It is later
+ * indexed by the minor number.
+ */
+static my_driver_entry my_driver_table [MY_DRIVER_DEVICE_NUMBER];
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00058.html">
+<LINK REV="Precedes" HREF="bsp_howto00056.html">
+<LINK REV="Subdocument" HREF="bsp_howto00056.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00056.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00056.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00058.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

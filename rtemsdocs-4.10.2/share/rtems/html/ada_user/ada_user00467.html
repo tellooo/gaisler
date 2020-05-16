@@ -1,0 +1,54 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/stackchk.texi line 181 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Stack Bounds Checker When a Task Overflows the Stack</TITLE>
+<LINK REL="Precedes" HREF="ada_user00461.html">
+<LINK REV="Precedes" HREF="ada_user00466.html">
+<LINK REV="Subdocument" HREF="ada_user00460.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00466.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00460.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00461.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>25.3.4: When a Task Overflows the Stack</H3>
+<P>
+When the stack bounds checker determines that a stack overflow has occurred,
+it will attempt to print a message using <CODE>printk</CODE> identifying the
+task and then shut the system down.  If the stack overflow has caused
+corruption, then it is possible that the message can not be printed.
+</P>
+<P>
+The following is an example of the output generated:
+</P>
+<DL><DT><DD>
+<PRE>
+BLOWN STACK!!! Offending task(0x3eb360): id=0x08010002; name=0x54413120
+  stack covers range 0x003e5750 - 0x003e7b57 (9224 bytes)
+  Damaged pattern begins at 0x003e5758 and is 128 bytes long
+</PRE>
+</DL>
+<P>
+The above includes the task id and a pointer to the task control block as
+well as enough information so one can look at the task's stack and
+see what was happening.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00461.html">
+<LINK REV="Precedes" HREF="ada_user00466.html">
+<LINK REV="Subdocument" HREF="ada_user00460.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00466.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00460.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00461.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,88 @@
+<HTML>
+<!-- created Dec 13 2011 from task.texi line 306 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Task Manager Floating Point Considerations</TITLE>
+<LINK REL="Precedes" HREF="c_user00061.html">
+<LINK REV="Precedes" HREF="c_user00059.html">
+<LINK REV="Subdocument" HREF="c_user00051.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00059.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00051.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00061.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H3>5.2.7: Floating Point Considerations</H3>
+<P>
+Creating a task with the <CODE>RTEMS_FLOATING_POINT</CODE> attribute
+flag results
+in additional memory being allocated for the TCB to store the state of the
+numeric coprocessor during task switches.  This additional memory is
+<STRONG>NOT</STRONG> allocated for <CODE>RTEMS_NO_FLOATING_POINT</CODE> tasks. Saving
+and restoring the context of a <CODE>RTEMS_FLOATING_POINT</CODE> task
+takes longer than that of a <CODE>RTEMS_NO_FLOATING_POINT</CODE> task
+because of the relatively large amount of time required for the numeric
+coprocessor to save or restore its computational state.
+</P>
+<P>
+Since RTEMS was designed specifically for embedded military applications
+which are floating point intensive, the executive is optimized to avoid
+unnecessarily saving and restoring the state of the numeric coprocessor.
+The state of the numeric coprocessor is only saved when a
+<CODE>RTEMS_FLOATING_POINT</CODE> task is dispatched and that task was
+not the last task to utilize the coprocessor.  In a system with only one
+<CODE>RTEMS_FLOATING_POINT</CODE> task, the state of the numeric
+coprocessor will never be saved or restored.
+</P>
+<P>
+Although the overhead imposed by <CODE>RTEMS_FLOATING_POINT</CODE> tasks
+is minimal, some applications may wish to completely avoid the overhead
+associated with <CODE>RTEMS_FLOATING_POINT</CODE> tasks and still
+utilize a numeric coprocessor.  By preventing a task from being preempted
+while performing a sequence of floating point operations, a
+<CODE>RTEMS_NO_FLOATING_POINT</CODE> task can utilize the numeric
+coprocessor without incurring the overhead of a
+<CODE>RTEMS_FLOATING_POINT</CODE> context switch.  This approach also
+avoids the allocation of a floating point context area.  However, if this
+approach is taken by the application designer, NO tasks should be created
+as <CODE>RTEMS_FLOATING_POINT</CODE> tasks.  Otherwise, the floating
+point context will not be correctly maintained because RTEMS assumes that
+the state of the numeric coprocessor will not be altered by
+<CODE>RTEMS_NO_FLOATING_POINT</CODE> tasks.
+</P>
+<P>
+If the supported processor type does not have hardware floating
+capabilities or a standard numeric coprocessor, RTEMS will not provide
+built-in support for hardware floating point on that processor.  In this
+case, all tasks are considered <CODE>RTEMS_NO_FLOATING_POINT</CODE>
+whether created as <CODE>RTEMS_FLOATING_POINT</CODE> or
+<CODE>RTEMS_NO_FLOATING_POINT</CODE> tasks.  A floating point emulation
+software library must be utilized for floating point operations.
+</P>
+<P>
+On some processors, it is possible to disable the floating point unit
+dynamically.  If this capability is supported by the target processor, then
+RTEMS will utilize this capability to enable the floating point unit only
+for tasks which are created with the <CODE>RTEMS_FLOATING_POINT</CODE>
+attribute.  The consequence of a <CODE>RTEMS_NO_FLOATING_POINT</CODE>
+task attempting to access the floating point unit is CPU dependent but will
+generally result in an exception condition.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00061.html">
+<LINK REV="Precedes" HREF="c_user00059.html">
+<LINK REV="Subdocument" HREF="c_user00051.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00059.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00051.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00061.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,77 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/mp.texi line 26 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Multiprocessing Manager Introduction</TITLE>
+<LINK REL="Precedes" HREF="ada_user00439.html">
+<LINK REV="Precedes" HREF="ada_user00437.html">
+<LINK REV="Subdocument" HREF="ada_user00437.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00437.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00437.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00439.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H2>24.1: Introduction</H2>
+<P>
+In multiprocessor real-time systems, new
+requirements, such as sharing data and global resources between
+processors, are introduced.  This requires an efficient and
+reliable communications vehicle which allows all processors to
+communicate with each other as necessary.  In addition, the
+ramifications of multiple processors affect each and every
+characteristic of a real-time system, almost always making them
+more complicated.
+</P>
+<P>
+RTEMS addresses these issues by providing simple and
+flexible real-time multiprocessing capabilities.  The executive
+easily lends itself to both tightly-coupled and loosely-coupled
+configurations of the target system hardware.  In addition,
+RTEMS supports systems composed of both homogeneous and
+heterogeneous mixtures of processors and target boards.
+</P>
+<P>
+A major design goal of the RTEMS executive was to
+transcend the physical boundaries of the target hardware
+configuration.  This goal is achieved by presenting the
+application software with a logical view of the target system
+where the boundaries between processor nodes are transparent.
+As a result, the application developer may designate objects
+such as tasks, queues, events, signals, semaphores, and memory
+blocks as global objects.  These global objects may then be
+accessed by any task regardless of the physical location of the
+object and the accessing task.  RTEMS automatically determines
+that the object being accessed resides on another processor and
+performs the actions required to access the desired object.
+Simply stated, RTEMS allows the entire system, both hardware and
+software, to be viewed logically as a single system.
+</P>
+<P>
+Multiprocessing operations are transparent at the application level.
+Operations on remote objects are implicitly processed as remote
+procedure calls.  Although remote operations on objects are supported
+from Ada tasks, the calls used to support the multiprocessing
+communications should be implemented in C and are not supported
+in the Ada binding.  Since there is no Ada binding for RTEMS
+multiprocessing support services, all examples and data structures
+shown in this chapter are in C.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00439.html">
+<LINK REV="Precedes" HREF="ada_user00437.html">
+<LINK REV="Subdocument" HREF="ada_user00437.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00437.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00437.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00439.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

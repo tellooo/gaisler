@@ -1,0 +1,75 @@
+<HTML>
+<!-- created Dec 13 2011 from signal.texi line 1029 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Signal Manager ualarm - Schedule Alarm in Microseconds</TITLE>
+<LINK REL="Precedes" HREF="">
+<LINK REV="Precedes" HREF="posix_users00045.html">
+<LINK REV="Subdocument" HREF="posix_users00022.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00045.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00022.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="next"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<H3>2.4.19: ualarm - Schedule Alarm in Microseconds</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+#include &lt;unistd.h&gt;
+
+useconds_t ualarm(
+  useconds_t useconds,
+  useconds_t interval
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<P>
+This call always succeeds.
+</P>
+<P>
+If there was a previous <CODE>ualarm()</CODE> request with time remaining,
+then this routine returns the number of seconds until that outstanding
+alarm would have fired. If no previous <CODE>alarm()</CODE> request was
+outstanding, then zero is returned.
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+The <CODE>ualarm()</CODE> service causes the <CODE>SIGALRM</CODE> signal to
+be generated after the number of microseconds specified by
+<CODE>useconds</CODE> has elapsed.
+</P>
+<P>
+When <CODE>interval</CODE> is non-zero, repeated timeout notification occurs
+with a period in microseconds specified by <CODE>interval</CODE>.
+</P>
+<H3>NOTES:</H3>
+<P>
+Alarm requests do not queue.  If <CODE>alarm</CODE> is called while
+a previous request is outstanding, the call will result in
+rescheduling the time at which the <CODE>SIGALRM</CODE> signal
+will be generated.
+</P>
+<P>
+If the notification signal, <CODE>SIGALRM</CODE>, is not caught or ignored, the
+calling process is terminated.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="">
+<LINK REV="Precedes" HREF="posix_users00045.html">
+<LINK REV="Subdocument" HREF="posix_users00022.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00045.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00022.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="next"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

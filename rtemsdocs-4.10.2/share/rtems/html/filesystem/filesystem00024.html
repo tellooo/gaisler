@@ -1,0 +1,65 @@
+<HTML>
+<!-- created Dec 13 2011 from syscalls.texi line 399 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>fcntl()</TITLE>
+<LINK REL="Precedes" HREF="filesystem00025.html">
+<LINK REV="Precedes" HREF="filesystem00023.html">
+<LINK REV="Subdocument" HREF="filesystem00014.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="filesystem00023.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="filesystem00014.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00025.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<H2>4.10: fcntl()</H2>
+<H3>File:</H3>
+<P>
+fcntl.c
+</P>
+<H3>Processing:</H3>
+<P>
+This routine currently only interacts with the file control block. If the
+structure of the file control block and the associated meanings do not
+change, the partial implementation of fcntl() should remain unaltered for
+other filesystem implementations.
+</P>
+<H3>Development Comments:</H3>
+<P>
+The only commands that have been implemented are the F_GETFD and F_SETFD.
+The commands manipulate the LIBIO_FLAGS_CLOSE_ON_EXEC bit in the
+<CODE>flags</CODE> element of the file control block associated with the file
+descriptor index.
+</P>
+<P>
+The current implementation of the function performs the sequence of
+operations below:
+</P>
+<OL>
+<LI>Test to see if we are trying to operate on a file descriptor
+associated with a network connection
+
+<LI>Obtain the file control block that is associated with the file
+descriptor index
+
+<LI>Perform a range check on the file descriptor index.
+
+</OL>
+<P><HR>
+<LINK REL="Precedes" HREF="filesystem00025.html">
+<LINK REV="Precedes" HREF="filesystem00023.html">
+<LINK REV="Subdocument" HREF="filesystem00014.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="filesystem00023.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="filesystem00014.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00025.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

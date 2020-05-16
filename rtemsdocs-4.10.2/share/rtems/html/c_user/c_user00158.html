@@ -1,0 +1,85 @@
+<HTML>
+<!-- created Dec 13 2011 from sem.texi line 47 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Semaphore Manager Background</TITLE>
+<LINK REL="Precedes" HREF="c_user00161.html">
+<LINK REV="Precedes" HREF="c_user00157.html">
+<LINK REV="Subdocument" HREF="c_user00156.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00157.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00156.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00161.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H2>9.2: Background</H2>
+<MENU>
+<LI><A HREF="c_user00161.html">Semaphore Manager Nested Resource Access</A>
+<LI><A HREF="c_user00162.html">Semaphore Manager Priority Inversion</A>
+<LI><A HREF="c_user00163.html">Semaphore Manager Priority Inheritance</A>
+<LI><A HREF="c_user00164.html">Semaphore Manager Priority Ceiling</A>
+<LI><A HREF="c_user00165.html">Semaphore Manager Building a Semaphore Attribute Set</A>
+<LI><A HREF="c_user00166.html">Semaphore Manager Building a SEMAPHORE_OBTAIN Option Set</A>
+</MENU>
+<P>
+A semaphore can be viewed as a protected variable
+whose value can be modified only with the
+<CODE>rtems_semaphore_create</CODE>,
+<CODE>rtems_semaphore_obtain</CODE>, and
+<CODE>rtems_semaphore_release</CODE> directives.  RTEMS
+supports both binary and counting semaphores. A binary semaphore
+is restricted to values of zero or one, while a counting
+semaphore can assume any non-negative integer value.
+</P>
+<P>
+A binary semaphore can be used to control access to a
+single resource.  In particular, it can be used to enforce
+mutual exclusion for a critical section in user code.  In this
+instance, the semaphore would be created with an initial count
+of one to indicate that no task is executing the critical
+section of code.  Upon entry to the critical section, a task
+must issue the <CODE>rtems_semaphore_obtain</CODE>
+directive to prevent other tasks from entering the critical section.
+Upon exit from the critical section, the task must issue the
+<CODE>rtems_semaphore_release</CODE> directive to
+allow another task to execute the critical section.
+</P>
+<P>
+A counting semaphore can be used to control access to
+a pool of two or more resources.  For example, access to three
+printers could be administered by a semaphore created with an
+initial count of three.  When a task requires access to one of
+the printers, it issues the <CODE>rtems_semaphore_obtain</CODE>
+directive to obtain access to a printer.  If a printer is not currently
+available, the task can wait for a printer to become available or return
+immediately.  When the task has completed printing, it should
+issue the <CODE>rtems_semaphore_release</CODE>
+directive to allow other tasks access to the printer.
+</P>
+<P>
+Task synchronization may be achieved by creating a
+semaphore with an initial count of zero.  One task waits for the
+arrival of another task by issuing a <CODE>rtems_semaphore_obtain</CODE>
+directive when it reaches a synchronization point.  The other task
+performs a corresponding <CODE>rtems_semaphore_release</CODE>
+operation when it reaches its synchronization point, thus unblocking
+the pending task.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00161.html">
+<LINK REV="Precedes" HREF="c_user00157.html">
+<LINK REV="Subdocument" HREF="c_user00156.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00157.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00156.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00161.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,64 @@
+<HTML>
+<!-- created Dec 13 2011 from sample.texi line 33 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Set the Environment Variable RTEMS_MAKEFILE_PATH</TITLE>
+<LINK REL="Precedes" HREF="started00065.html">
+<LINK REV="Precedes" HREF="started00063.html">
+<LINK REV="Subdocument" HREF="started00063.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started00063.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started00063.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started00065.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with RTEMS</CITE></P>
+<H2>6.1: Set the Environment Variable RTEMS_MAKEFILE_PATH</H2>
+<P>
+The sample application sets use the RTEMS Application Makefiles.
+This requires that the environment variable
+<CODE>RTEMS_MAKEFILE_PATH</CODE> point to the appropriate directory containing
+the installed RTEMS image built to target your particular CPU and
+board support package combination.
+</P>
+<DL><DT><DD>
+<PRE>
+export RTEMS_MAKEFILE_PATH=&lt;INSTALLATION_POINT&gt;/&lt;CPU&gt;-rtems/&lt;BOARD_SUPPORT_PACKAGE&gt;
+</PRE>
+</DL>
+<P>
+Where &lt;INSTALLATION_POINT&gt; and &lt;BOARD_SUPPORT_PACKAGE&gt; are those used when
+configuring and installing RTEMS.
+</P>
+<P>
+<STRONG>NOTE</STRONG>:  In release 4.0, BSPs were installed at
+<CODE>&lt;INSTALLATION_POINT&gt;/rtems/&lt;BOARD_SUPPORT_PACKAGE&gt;</CODE>.  This
+was changed to be more in compliance with GNU standards.
+</P>
+<P>
+<STRONG>NOTE</STRONG>: GNU make is the preferred <CODE>make</CODE> utility.  Other <CODE>make</CODE>
+implementations may work but all testing is done with GNU make.
+</P>
+<P>
+If no errors are detected during the sample application build, it is
+reasonable to assume that the build of the GNU Cross Compiler Tools
+for RTEMS and RTEMS itself for the selected host and target
+combination was done properly.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="started00065.html">
+<LINK REV="Precedes" HREF="started00063.html">
+<LINK REV="Subdocument" HREF="started00063.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started00063.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started00063.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started00065.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with RTEMS</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

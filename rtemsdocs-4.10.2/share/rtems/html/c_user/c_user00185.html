@@ -1,0 +1,65 @@
+<HTML>
+<!-- created Dec 13 2011 from msg.texi line 90 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Message Manager Building a Message Queue Attribute Set</TITLE>
+<LINK REL="Precedes" HREF="c_user00186.html">
+<LINK REV="Precedes" HREF="c_user00184.html">
+<LINK REV="Subdocument" HREF="c_user00180.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00184.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00180.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00186.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H3>10.2.3: Building a Message Queue Attribute Set</H3>
+<P>
+In general, an attribute set is built by a bitwise OR
+of the desired attribute components.  The set of valid message
+queue attributes is provided in the following table:
+</P>
+<UL>
+<LI><CODE>RTEMS_FIFO</CODE> - tasks wait by FIFO (default)
+<LI><CODE>RTEMS_PRIORITY</CODE> - tasks wait by priority
+<LI><CODE>RTEMS_LOCAL</CODE> - local message queue (default)
+<LI><CODE>RTEMS_GLOBAL</CODE> - global message queue
+</UL>
+
+<P>
+An attribute listed as a default is not required to
+appear in the attribute list, although it is a good programming
+practice to specify default attributes.  If all defaults are
+desired, the attribute <CODE>RTEMS_DEFAULT_ATTRIBUTES</CODE>
+should be specified on this call.
+</P>
+<P>
+This example demonstrates the attribute_set parameter
+needed to create a local message queue with the task priority
+waiting queue discipline.  The attribute_set parameter to the
+<CODE>rtems_message_queue_create</CODE> directive could be either
+<CODE>RTEMS_PRIORITY</CODE> or
+<CODE>RTEMS_LOCAL | RTEMS_PRIORITY</CODE>.
+The attribute_set parameter can be set to <CODE>RTEMS_PRIORITY</CODE>
+because <CODE>RTEMS_LOCAL</CODE> is the default for all created
+message queues.  If a similar message queue were to be known globally, then the
+attribute_set parameter would be
+<CODE>RTEMS_GLOBAL | RTEMS_PRIORITY</CODE>.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00186.html">
+<LINK REV="Precedes" HREF="c_user00184.html">
+<LINK REV="Subdocument" HREF="c_user00180.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00184.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00180.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00186.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

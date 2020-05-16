@@ -1,0 +1,53 @@
+<HTML>
+<!-- created Dec 13 2011 from timer.texi line 67 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Timer Manager Timers</TITLE>
+<LINK REL="Precedes" HREF="c_user00136.html">
+<LINK REV="Precedes" HREF="c_user00134.html">
+<LINK REV="Subdocument" HREF="c_user00131.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00134.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00131.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00136.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H3>8.2.2: Timers</H3>
+<P>
+A timer is an RTEMS object which allows the
+application to schedule operations to occur at specific times in
+the future.  User supplied timer service routines are invoked by
+either the <CODE>rtems_clock_tick</CODE> directive or
+a special Timer Server task when the timer fires.  Timer service
+routines may perform any operations or directives which normally
+would be performed by the application code which invoked the
+<CODE>rtems_clock_tick</CODE> directive.
+</P>
+<P>
+The timer can be used to implement watchdog routines
+which only fire to denote that an application error has
+occurred.  The timer is reset at specific points in the
+application to ensure that the watchdog does not fire.  Thus, if
+the application does not reset the watchdog timer, then the
+timer service routine will fire to indicate that the application
+has failed to reach a reset point.  This use of a timer is
+sometimes referred to as a &quot;keep alive&quot; or a &quot;deadman&quot; timer.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00136.html">
+<LINK REV="Precedes" HREF="c_user00134.html">
+<LINK REV="Subdocument" HREF="c_user00131.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00134.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00131.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00136.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

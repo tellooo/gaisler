@@ -1,0 +1,73 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/fatal.texi line 38 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Fatal Error Manager Background</TITLE>
+<LINK REL="Precedes" HREF="ada_user00312.html">
+<LINK REV="Precedes" HREF="ada_user00310.html">
+<LINK REV="Subdocument" HREF="ada_user00309.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00310.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00309.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00312.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H2>17.2: Background</H2>
+<P>
+The fatal error manager is called upon detection of
+an irrecoverable error condition by either RTEMS or the
+application software.  Fatal errors can be detected from three
+sources:
+</P>
+<UL>
+<LI>the executive (RTEMS)
+<LI>user system code
+<LI>user application code
+</UL>
+
+<P>
+RTEMS automatically invokes the fatal error manager
+upon detection of an error it considers to be fatal.  Similarly,
+the user should invoke the fatal error manager upon detection of
+a fatal error.
+</P>
+<P>
+Each status or dynamic user extension set may include
+a fatal error handler.  The fatal error handler in the static
+extension set can be used to provide access to debuggers and
+monitors which may be present on the target hardware.  If any
+user-supplied fatal error handlers are installed, the fatal
+error manager will invoke them.  If no user handlers are
+configured or if all the user handler return control to the
+fatal error manager, then the RTEMS default fatal error handler
+is invoked.  If the default fatal error handler is invoked, then
+the system state is marked as failed.
+</P>
+<P>
+Although the precise behavior of the default fatal
+error handler is processor specific, in general, it will disable
+all maskable interrupts, place the error code in a known
+processor dependent place (generally either on the stack or in a
+register), and halt the processor.  The precise actions of the
+RTEMS fatal error are discussed in the Default Fatal Error
+Processing chapter of the Applications Supplement document for
+a specific target processor.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00312.html">
+<LINK REV="Precedes" HREF="ada_user00310.html">
+<LINK REV="Subdocument" HREF="ada_user00309.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00310.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00309.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00312.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

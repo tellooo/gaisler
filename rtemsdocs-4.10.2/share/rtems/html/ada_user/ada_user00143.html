@@ -1,0 +1,45 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/timer.texi line 236 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Timer Manager Resetting a Timer</TITLE>
+<LINK REL="Precedes" HREF="ada_user00144.html">
+<LINK REV="Precedes" HREF="ada_user00142.html">
+<LINK REV="Subdocument" HREF="ada_user00132.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00142.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00132.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00144.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>8.3.6: Resetting a Timer</H3>
+<P>
+The <CODE>rtems.timer_reset</CODE> directive is used to restore an
+interval timer initiated by a previous invocation of
+<CODE>rtems.timer_fire_after</CODE> or
+<CODE>rtems.timer_server_fire_after</CODE> to
+its original interval length.  If the
+timer has not been used or the last usage of this timer
+was by the <CODE>rtems.timer_fire_when</CODE>
+or <CODE>rtems.timer_server_fire_when</CODE>
+directive, then an error is returned.  The timer service routine
+is not changed or fired by this directive.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00144.html">
+<LINK REV="Precedes" HREF="ada_user00142.html">
+<LINK REV="Subdocument" HREF="ada_user00132.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00142.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00132.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00144.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

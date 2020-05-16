@@ -1,0 +1,84 @@
+<HTML>
+<!-- created Dec 13 2011 from sample.texi line 269 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Sample Applications Base Multiple Processor Application</TITLE>
+<LINK REL="Precedes" HREF="develenv00016.html">
+<LINK REV="Precedes" HREF="develenv00014.html">
+<LINK REV="Subdocument" HREF="develenv00010.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="develenv00014.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="develenv00010.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="develenv00016.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Development Environment Guide</CITE></P>
+<H2>3.5: Base Multiple Processor Application</H2>
+<P>
+This sample application is in the following directory:
+</P>
+<DL><DT><DD>
+<PRE>
+${RTEMS_ROOT}/testsuites/samples/base_mp/
+</PRE>
+</DL>
+<P>
+It provides a framework from which a multiprocessor
+RTEMS application can be developed. This directory has a
+subdirectory for each node in the multiprocessor system.  The
+task argument is used to distinguish the node on which the
+application task is executed.  The first node will print the
+following messages:
+</P>
+<DL><DT><DD>
+<PRE>
+*** SAMPLE MULTIPROCESSOR APPLICATION ***
+Creating and starting an application task
+This task was invoked with the node argument (1)
+This task has the id of 0x10002
+*** END OF SAMPLE MULTIPROCESSOR APPLICATION ***
+</PRE>
+</DL>
+<P>
+The second node will print the following messages:
+</P>
+<DL><DT><DD>
+<PRE>
+*** SAMPLE MULTIPROCESSOR APPLICATION ***
+Creating and starting an application task
+This task was invoked with the node argument (2)
+This task has the id of 0x20002
+*** END OF SAMPLE MULTIPROCESSOR APPLICATION ***
+</PRE>
+</DL>
+<P>
+The herald is printed from the application's single
+initialization task on each node.  The final messages are
+printed from the single application task on each node.
+</P>
+<P>
+In this sample application, all source code is shared
+between the nodes except for the node dependent configuration
+files.  These files contains the definition of the node number
+used in the initialization of the  RTEMS Multiprocessor
+Configuration Table. This file is not shared because the node
+number field in the RTEMS Multiprocessor Configuration Table
+must be unique on each node.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="develenv00016.html">
+<LINK REV="Precedes" HREF="develenv00014.html">
+<LINK REV="Subdocument" HREF="develenv00010.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="develenv00014.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="develenv00010.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="develenv00016.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Development Environment Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

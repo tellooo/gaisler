@@ -1,0 +1,202 @@
+<HTML>
+<!-- created Dec 13 2011 from direct.texi line 10 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Directory Structure</TITLE>
+<LINK REL="Precedes" HREF="develenv00003.html">
+<LINK REV="Precedes" HREF="develenv00001.html">
+<LINK REV="Subdocument" HREF="index.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="develenv00001.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="index.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="develenv00003.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Development Environment Guide</CITE></P>
+<H1>Chapter 2: Directory Structure</H1>
+<MENU>
+<LI><A HREF="develenv00003.html">Directory Structure c/ Directory</A>
+<LI><A HREF="develenv00004.html">Directory Structure CPU Kit Directory</A>
+<LI><A HREF="develenv00005.html">Directory Structure testsuites/ Test Suites</A>
+<LI><A HREF="develenv00006.html">Directory Structure Documentation Directory</A>
+</MENU>
+<P>
+The RTEMS directory structure is designed to meet
+the following requirements:
+</P>
+<UL>
+<LI>encourage development of modular components.
+
+<LI>isolate processor and target dependent code, while
+allowing as much common source code as possible to be shared
+across multiple processors and target boards.
+
+<LI>allow multiple RTEMS users to perform simultaneous
+compilation of RTEMS and its support facilities for different
+processors and targets.
+</UL>
+
+<P>
+The resulting directory structure has processor and
+board dependent source files isolated from generic files.  When
+RTEMS is configured and built, object directories and
+an install point will be automatically created based upon
+the target CPU family and BSP selected.
+</P>
+<P>
+The placement of object files based upon the selected BSP name
+ensures that object files are not mixed across CPUs or targets.
+This in combination with the makefiles allows the specific
+compilation options to be tailored for a particular target
+board.  For example, the efficiency of the memory subsystem for
+a particular target board may be sensitive to the alignment of
+data structures, while on another target board with the same
+processor memory may be very limited.  For the first target, the
+options could specify very strict alignment requirements, while
+on the second the data structures could be <EM>packed</EM> to conserve
+memory.  It is impossible to achieve this degree of flexibility
+without providing source code.
+</P>
+<P>
+The RTEMS source tree is organized based on the following variables:
+</P>
+<UL>
+<LI>functionality,
+<LI>target processor family,
+<LI>target processor model,
+<LI>peripherals, and
+<LI>target board.
+
+</UL>
+<P>
+Each of the following sections will describe the
+contents of the directories in the RTEMS source
+tree.  The top of the tree will be referenced
+as <CODE>${RTEMS_ROOT}</CODE> in this discussion.
+</P>
+<DL><DT><DD>
+<PRE>
+                      rtems-VERSION
+                           |
+   +--------+----+----+----+--+-----+---+-------+--------+
+   |        |    |    |       |     |   |       |        |
+aclocal automake c contrib  cpukit doc make testsuites tools
+</PRE>
+</DL>
+<DL>
+<DT><CODE>${RTEMS_ROOT}/aclocal/</CODE>
+<DD>
+This directory contains the custom M4 macros which are available to
+the various GNU autoconf <CODE>configure.ac</CODE> scripts throughout
+the RTEMS source tree.  GNU autoconf interprets <CODE>configure.ac</CODE>
+files to produce the <CODE>configure</CODE> files used to tailor
+RTEMS build for a particular host and target environment.  The
+contents of this directory will not be discussed further in this
+document.
+
+<DT><CODE>${RTEMS_ROOT}/automake/</CODE>
+<DD>
+This directory contains the custom GNU automake fragments
+which are used to support the various <CODE>Makefile.am</CODE>
+files throughout the RTEMS source tree.  The
+contents of this directory will not be discussed
+further in this document.
+
+<DT><CODE>${RTEMS_ROOT}/c/</CODE>
+<DD>
+This directory is the root of the portions of the RTEMS source
+tree which must be built tailored for a particular CPU model
+or BSP.  The contents of this directory will be discussed
+in the <A HREF="develenv00003.html">Directory Structure c/ Directory</A> section.
+
+<DT><CODE>${RTEMS_ROOT}/contrib/</CODE>
+<DD>
+This directory contains contributed support software.  Currently
+this directory contains the RPM specifications for cross-compilers
+hosted on GNU/Linux that target various operating systems
+including MinGW, Cygwin, FreeBSD, and Solaris.  The
+cross-compilers produced using these specifications are then
+used in a Canadian cross build procedure to produce the various
+RTEMS toolsets on a GNU/Linux host.
+
+<P>
+This directory also contains RPM specifications for the
+prebuilt cross-compilation toolsets provided by the
+RTEMS project.  There are separate subdirectories
+for each of the components in the RTEMS Cross Compilation
+Environment unde the  <CODE>contrib/crossrpms/</CODE> directory.
+This directory is configured, built, and installed separately
+from the RTEMS executive and tests.  This directory will not
+be discussed further in this document.
+</P>
+<DT><CODE>${RTEMS_ROOT}/cpukit/</CODE>
+<DD>
+This directory is the root for all of the &quot;multilib'able&quot;
+portions of RTEMS.  This is a GNU way of saying the
+contents of this directory can be compiled like the
+C Library (<CODE>libc.a</CODE>) and the functionality is
+neither CPU model nor BSP specific.  The source code
+for most RTEMS services reside under this directory.
+The contents of this directory will be discussed
+in the <A HREF="develenv00004.html">Directory Structure CPU Kit Directory</A> section.
+
+<DT><CODE>${RTEMS_ROOT}/doc/</CODE>
+<DD>
+This directory is the root for all RTEMS documentation.
+The source for RTEMS is written in GNU TeXinfo and
+used to produce HTML, PDF, and &quot;info&quot; files.
+The RTEMS documentation is configured, built,
+and installed separately from the RTEMS executive and tests.
+The contents of this directory will be discussed
+in the <A HREF="develenv00006.html">Directory Structure Documentation Directory</A> section.
+
+<DT><CODE>${RTEMS_ROOT}/make/</CODE>
+<DD>
+This directory contains files which support the
+RTEMS Makefile's.  From a user's perspective, the
+most important parts are found in the <CODE>custom/</CODE>
+subdirectory.  Each &quot;.cfg&quot; file in this directory
+is associated with a specific BSP and describes
+the CPU model, compiler flags, and procedure to
+produce an executable for the target board.
+These files are described in detail in the
+<STRONG>RTEMS BSP and Device Driver Development Guide</STRONG>
+and will not be discussed further in this document.
+
+<DT><CODE>${RTEMS_ROOT}/testsuites/</CODE>
+<DD>
+This directory contains the test suites for the
+various RTEMS APIs and support libraries.  The
+contents of this directory are discussed in the
+<A HREF="develenv00005.html">Directory Structure testsuites/ Test Suites</A> section.
+
+<DT><CODE>${RTEMS_ROOT}/tools/</CODE>
+<DD>
+This directory contains RTEMS specific support utilities which
+execute on the development host.  These utilities are divided
+into subdirectories based upon whether they are used in the process
+of building RTEMS and applications, are CPU specific, or are
+used to assist in updating the RTEMS source tree and applications.
+The support utilities used in the process of building RTEMS are
+described in <A HREF="develenv00007.html">RTEMS Specific Utilities</A>.  These are the
+only components of this subtree that will be discussed in this
+document.
+
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="develenv00003.html">
+<LINK REV="Precedes" HREF="develenv00001.html">
+<LINK REV="Subdocument" HREF="index.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="develenv00001.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="index.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="develenv00003.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Development Environment Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

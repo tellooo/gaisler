@@ -1,0 +1,133 @@
+<HTML>
+<!-- created Dec 13 2011 from console.texi line 363 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Console Driver Termios and Interrupt Driven IO</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00060.html">
+<LINK REV="Precedes" HREF="bsp_howto00058.html">
+<LINK REV="Subdocument" HREF="bsp_howto00056.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00058.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00056.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00060.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H3>8.4.3: Termios and Interrupt Driven IO</H3>
+<P>
+The UART generally generates interrupts when it is ready to accept or to emit a
+number of characters.  In this mode, the interrupt subroutine is the core of
+the driver.
+</P>
+<P>
+The <CODE>my_driver_interrupt_handler</CODE> is responsible for processing
+asynchronous interrupts from the UART.  There may be multiple interrupt
+handlers for a single UART.  Some UARTs can generate a unique interrupt vector
+for each interrupt source such as a character has been received or the
+transmitter is ready for another character.
+</P>
+<P>
+In the simplest case, the <CODE>my_driver_interrupt_handler</CODE> will have to check
+the status of the UART and determine what caused the interrupt.  The following
+describes the operation of an <CODE>my_driver_interrupt_handler</CODE> which has to
+do this:
+</P>
+<DL><DT><DD>
+<PRE>
+static void my_driver_interrupt_handler(
+    rtems_vector_number vector,
+    void *arg
+)
+{
+    my_driver_entry *e = (my_driver_entry *) arg;
+    char buf [N];
+    int n = 0;
+
+    /*
+     * Check if we have received something.  The function reads the
+     * received characters from the device and stores them in the
+     * buffer.  It returns the number of read characters.
+     */
+    n = my_driver_read_received_chars(e, buf, N);
+    if (n &gt; 0) {
+        /* Hand the data over to the Termios infrastructure */
+        rtems_termios_enqueue_raw_characters(e-&gt;tty, buf, n);
+    }
+
+    /*
+     * Check if we have something transmitted.  The functions returns
+     * the number of transmitted characters since the last write to the
+     * device.
+     */
+    n = my_driver_transmitted_chars(e);
+    if (n &gt; 0) {
+        /*
+         * Notify Termios that we have transmitted some characters.  It
+         * will call now the interrupt write function if more characters
+         * are ready for transmission.
+         */
+        rtems_termios_dequeue_characters(e-&gt;tty, n);
+    }
+}
+</PRE>
+</DL>
+<P>
+The <CODE>my_driver_interrupt_write</CODE> function is responsible for telling the
+device that the <CODE>n</CODE> characters at <CODE>buf</CODE> are to be transmitted.  The
+return value may be arbitrary since it is not checked from Termios.  It is
+guaranteed that <CODE>n</CODE> is greater than zero.  This routine is invoked either
+from task context with disabled interrupts to start a new transmission process
+with exactly one character in case of an idle output state or from the
+interrupt handler to refill the transmitter.  If the routine is invoked to
+start the transmit process the output state will become busy and Termios starts
+to fill the output buffer.  If the transmit interrupt arises before Termios was
+able to fill the transmit buffer you will end up with one interrupt per
+character.
+</P>
+<P>
+On error, the function should return <CODE>-1</CODE>. On success, it should return
+<CODE>0</CODE>, since it the interrupt handler will report the actual number of
+characters transmitted.
+</P>
+<DL><DT><DD>
+<PRE>
+static ssize_t my_driver_interrupt_write(int minor, const char *buf, size_t n)
+{
+    my_driver_entry *e = &amp;my_driver_table [minor];
+
+    /*
+     * There is no need to check the minor number since it is derived
+     * from a file descriptor.  The upper layer takes care that it is
+     * in a valid range.
+     */
+
+    /*
+     * Tell the device to transmit some characters from buf (less than
+     * or equal to n).  When the device is finished it should raise an
+     * interrupt.  The interrupt handler will notify Termios that these
+     * characters have been transmitted and this may trigger this write
+     * function again.  You may have to store the number of outstanding
+     * characters in the device data structure.
+     */
+
+    return 0;
+}
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00060.html">
+<LINK REV="Precedes" HREF="bsp_howto00058.html">
+<LINK REV="Subdocument" HREF="bsp_howto00056.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00058.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00056.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00060.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

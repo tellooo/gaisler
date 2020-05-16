@@ -1,0 +1,134 @@
+<HTML>
+<!-- created Dec 13 2011 from conf.texi line 66 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Configuring a System Automatic Generation of System Configuration</TITLE>
+<LINK REL="Precedes" HREF="c_user00425.html">
+<LINK REV="Precedes" HREF="c_user00413.html">
+<LINK REV="Subdocument" HREF="c_user00043.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00413.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00043.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00425.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H2>23.2: Automatic Generation of System Configuration</H2>
+<MENU>
+<LI><A HREF="c_user00425.html">Configuring a System Library Support Definitions</A>
+<LI><A HREF="c_user00426.html">Configuring a System Basic System Information</A>
+<LI><A HREF="c_user00427.html">Configuring a System Idle Task Configuration</A>
+<LI><A HREF="c_user00428.html">Configuring a System Device Driver Table</A>
+<LI><A HREF="c_user00429.html">Configuring a System Multiprocessing Configuration</A>
+<LI><A HREF="c_user00430.html">Configuring a System Classic API Configuration</A>
+<LI><A HREF="c_user00431.html">Configuring a System Classic API Initialization Tasks Table Configuration</A>
+<LI><A HREF="c_user00432.html">Configuring a System POSIX API Configuration</A>
+<LI><A HREF="c_user00433.html">Configuring a System POSIX Initialization Threads Table Configuration</A>
+<LI><A HREF="c_user00434.html">Configuring a System ITRON API Configuration</A>
+<LI><A HREF="c_user00435.html">Configuring a System ITRON Initialization Task Table Configuration</A>
+<LI><A HREF="c_user00436.html">Configuring a System Ada Tasks</A>
+</MENU>
+<P>
+RTEMS provides the <CODE>rtems/confdefs.h</CODE> C language header file that
+based on the setting of a variety of macros can automatically
+produce nearly all of the configuration tables required
+by an RTEMS application.  Rather than building the individual
+tables by hand, the application simply specifies the values
+for the configuration parameters it wishes to set.  In the following
+example, the configuration information for a simple system with
+a message queue and a time slice of 50 milliseconds is configured:
+</P>
+<DL><DT><DD>
+<PRE>
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_MICROSECONDS_PER_TICK   1000 /* 1 millisecond */
+#define CONFIGURE_TICKS_PER_TIMESLICE       50 /* 50 milliseconds */
+
+#define CONFIGURE_MAXIMUM_TASKS 4
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+</PRE>
+</DL>
+<P>
+This system will begin execution with the single initialization task
+named <CODE>Init</CODE>.  It will be configured to have both a console
+device driver (for standard I/O) and a clock tick device driver.
+</P>
+<P>
+For each configuration parameter in the configuration tables, the
+macro corresponding to that field is discussed.  Most systems
+can be easily configured using the <CODE>rtems/confdefs.h</CODE> mechanism.
+</P>
+<P>
+The <CODE>CONFIGURE_INIT</CODE> constant must be defined in order to
+make <CODE>rtems/confdefs.h</CODE> instantiate the configuration data
+structures.  This can only be defined in one source file per
+application that includes <CODE>rtems/confdefs.h</CODE> or the symbol
+table will be instantiated multiple times and linking errors
+produced.
+</P>
+<P>
+The user should be aware that the defaults are intentionally
+set as low as possible.  By default, no application resources
+are configured.  The <CODE>rtems/confdefs.h</CODE> file ensures that
+at least one application tasks or thread is configured
+and that at least one of the initialization task/thread
+tables is configured.
+</P>
+<P>
+The <CODE>rtems/confdefs.h</CODE> file estimates the amount of
+memory required for the RTEMS Executive Workspace.  This
+estimate is only as accurate as the information given
+to <CODE>rtems/confdefs.h</CODE> and may be either too high or too
+low for a variety of reasons.  Some of the reasons that
+<CODE>rtems/confdefs.h</CODE> may reserve too much memory for RTEMS
+are:
+</P>
+<UL>
+<LI>All tasks/threads are assumed to be floating point.
+</UL>
+
+<P>
+Conversely, there are many more reasons, the resource
+estimate could be too low:
+</P>
+<UL>
+<LI>Task/thread stacks greater than minimum size must be
+accounted for explicitly by developer.
+
+<LI>Memory for messages is not included.
+
+<LI>Device driver requirements are not included.
+
+<LI>Network stack requirements are not included.
+
+<LI>Requirements for add-on libraries are not included.
+</UL>
+
+<P>
+In general, <CODE>rtems/confdefs.h</CODE> is very accurate when given
+enough information.  However, it is quite easy to use
+a library and not account for its resources.
+</P>
+<P>
+The following subsection list all of the constants which can be
+set by the user.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00425.html">
+<LINK REV="Precedes" HREF="c_user00413.html">
+<LINK REV="Subdocument" HREF="c_user00043.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00413.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00043.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00425.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

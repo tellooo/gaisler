@@ -1,0 +1,72 @@
+<HTML>
+<!-- created Dec 13 2011 from init.texi line 10 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>System Initialization</TITLE>
+<LINK REL="Precedes" HREF="filesystem00007.html">
+<LINK REV="Precedes" HREF="">
+<LINK REV="Subdocument" HREF="index.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="prev"></A>
+<A HREF="index.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00007.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<H1>Chapter 2: System Initialization</H1>
+<MENU>
+<LI><A HREF="filesystem00007.html">Base Filesystem</A>
+</MENU>
+<P>
+After the RTEMS initialization is performed, the application's
+initialization will be performed. Part of initialization is a call to
+rtems_filesystem_initialize(). This routine will mount the `In Memory File
+System' as the base filesystem.  Mounting the base filesystem consists
+of the following:
+</P>
+<UL>
+<LI>Initialization of mount table chain control structure
+
+<LI>Allocation of a <CODE>jnode</CODE> structure that will server as the root node
+of the `In Memory Filesystem'
+
+<LI>Initialization of the allocated <CODE>jnode</CODE> with the appropriate OPS,
+directory handlers and pathconf limits and options.
+
+<LI>Allocation of a memory region for filesystem specific global
+management variables
+
+<LI>Creation of first mount table entry for the base filesystem
+
+<LI>Initialization of the first mount table chain entry to indicate that
+the mount point is NULL and the mounted filesystem is the base file
+system
+
+</UL>
+<P>
+After the base filesystem has been mounted, the following operations are
+performed under its directory structure:
+</P>
+<UL>
+<LI>Creation of the /dev directory
+
+<LI>Registration of devices under /dev directory
+
+</UL>
+<P><HR>
+<LINK REL="Precedes" HREF="filesystem00007.html">
+<LINK REV="Precedes" HREF="">
+<LINK REV="Subdocument" HREF="index.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="prev"></A>
+<A HREF="index.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00007.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

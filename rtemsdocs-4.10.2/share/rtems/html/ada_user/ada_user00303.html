@@ -1,0 +1,59 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/io.texi line 546 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>I/O Manager IO_LOOKUP_NAME - Lookup a device</TITLE>
+<LINK REL="Precedes" HREF="ada_user00304.html">
+<LINK REV="Precedes" HREF="ada_user00302.html">
+<LINK REV="Subdocument" HREF="ada_user00289.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00302.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00289.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00304.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>16.4.5: IO_LOOKUP_NAME - Lookup a device</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+procedure IO_Lookup_Name (
+   Name         : in     String;
+   Device_Info  :    out RTEMS.Driver_Name_t_Pointer;
+   Result       :    out RTEMS.Status_Codes
+);
+</PRE>
+</DL>
+<H3>DIRECTIVE STATUS CODES:</H3>
+<P>
+<CODE>RTEMS.SUCCESSFUL</CODE> - successfully initialized<BR>
+
+<CODE>RTEMS.UNSATISFIED</CODE> - name not registered
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This directive returns the major/minor number pair
+associated with the given device name in <CODE>device_info</CODE>.
+</P>
+<H3>NOTES:</H3>
+<P>
+This directive will not cause the calling task to be
+preempted.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00304.html">
+<LINK REV="Precedes" HREF="ada_user00302.html">
+<LINK REV="Subdocument" HREF="ada_user00289.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00302.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00289.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00304.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,135 @@
+<HTML>
+<!-- created Dec 13 2011 from intr.texi line 214 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Interrupt Manager Directives Allowed from an ISR</TITLE>
+<LINK REL="Precedes" HREF="c_user00096.html">
+<LINK REV="Precedes" HREF="c_user00100.html">
+<LINK REV="Subdocument" HREF="c_user00095.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00100.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00095.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00096.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H3>6.3.2: Directives Allowed from an ISR</H3>
+<P>
+Using the interrupt manager ensures that RTEMS knows
+when a directive is being called from an ISR.  The ISR may then
+use system calls to synchronize itself with an application task.
+The synchronization may involve messages, events or signals
+being passed by the ISR to the desired task.  Directives invoked
+by an ISR must operate only on objects which reside on the local
+node.  The following is a list of RTEMS system calls that may be
+made from an ISR:
+</P>
+<UL>
+<LI>Task Management
+
+<P>
+Although it is acceptable to operate on the RTEMS_SELF task (e.g.
+the currently executing task), while in an ISR, this will refer
+to the interrupted task.  Most of the time, it is an application
+implementation error to use RTEMS_SELF from an ISR.
+</P>
+<UL>
+<LI>rtems_task_get_note
+<LI>rtems_task_set_note
+<LI>rtems_task_suspend
+<LI>rtems_task_resume
+</UL>
+
+<LI>Interrupt Management
+
+<UL>
+<LI>rtems_interrupt_enable
+<LI>rtems_interrupt_disable
+<LI>rtems_interrupt_flash
+<LI>rtems_interrupt_is_in_progress
+<LI>rtems_interrupt_catch
+</UL>
+
+<LI>Clock Management
+
+<UL>
+<LI>rtems_clock_set
+<LI>rtems_clock_get
+<LI>rtems_clock_get_tod
+<LI>rtems_clock_get_tod_timeval
+<LI>rtems_clock_get_seconds_since_epoch
+<LI>rtems_clock_get_ticks_per_second
+<LI>rtems_clock_get_ticks_since_boot
+<LI>rtems_clock_get_uptime
+<LI>rtems_clock_set_nanoseconds_extension
+<LI>rtems_clock_tick
+</UL>
+
+<LI>Message, Event, and Signal Management
+
+<UL>
+<LI>rtems_message_queue_send
+<LI>rtems_message_queue_urgent
+<LI>rtems_event_send
+<LI>rtems_signal_send
+</UL>
+
+<LI>Semaphore Management
+
+<UL>
+<LI>rtems_semaphore_release
+</UL>
+
+<LI>Dual-Ported Memory Management
+
+<UL>
+<LI>rtems_port_external_to_internal
+<LI>rtems_port_internal_to_external
+</UL>
+
+<LI>IO Management
+
+<P>
+The following services are safe to call from an ISR if and only if
+the device driver service invoked is also safe.  The IO Manager itself
+is safe but the invoked driver entry point may or may not be.
+</P>
+<UL>
+<LI>rtems_io_initialize
+<LI>rtems_io_open
+<LI>rtems_io_close
+<LI>rtems_io_read
+<LI>rtems_io_write
+<LI>rtems_io_control
+</UL>
+
+<LI>Fatal Error Management
+
+<UL>
+<LI>rtems_fatal_error_occurred
+</UL>
+
+<LI>Multiprocessing
+
+<UL>
+<LI>rtems_multiprocessing_announce
+</UL>
+</UL>
+
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00096.html">
+<LINK REV="Precedes" HREF="c_user00100.html">
+<LINK REV="Subdocument" HREF="c_user00095.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00100.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00095.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00096.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

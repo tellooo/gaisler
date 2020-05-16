@@ -1,0 +1,82 @@
+<HTML>
+<!-- created Dec 13 2011 from buildada.texi line 729 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Error Messages Indicating Configuration Problems</TITLE>
+<LINK REL="Precedes" HREF="started_ada00030.html">
+<LINK REV="Precedes" HREF="started_ada00028.html">
+<LINK REV="Subdocument" HREF="started_ada00026.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started_ada00028.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started_ada00026.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started_ada00030.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with GNAT/RTEMS</CITE></P>
+<H3>3.13.2: Error Messages Indicating Configuration Problems</H3>
+<P>
+If you see error messages like the following,
+</P>
+<UL>
+<LI>cannot configure libiberty
+<LI>coff-emulation not found
+<LI>etc.
+
+</UL>
+<P>
+Then it is likely that one or more of your gnu tools is
+already configured locally in its source tree.  You can check
+for this by searching for the <CODE>config.status</CODE> file
+in the various tool source trees.  The following command
+does this for the binutils source:
+</P>
+<DL><DT><DD>
+<PRE>
+find binutils-2.10 -name config.status -print
+</PRE>
+</DL>
+<P>
+The solution for this is to execute the command
+<CODE>make distclean</CODE> in each of the GNU tools
+root source directory.  This should remove all
+generated files including Makefiles.
+</P>
+<P>
+This situation usually occurs when you have previously
+built the tool source for some non-RTEMS target.  The
+generated configuration specific files are still in
+the source tree and the include path specified during
+the RTEMS build accidentally picks up the previous
+configuration.  The include path used is something like
+this:
+</P>
+<DL><DT><DD>
+<PRE>
+-I../../binutils-2.10/gcc -I/binutils-2.10/gcc/include -I.
+</PRE>
+</DL>
+<P>
+Note that the tool source directory is searched before the
+build directory.
+</P>
+<P>
+This situation can be avoided entirely by never using
+the source tree as the build directory -- even for
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="started_ada00030.html">
+<LINK REV="Precedes" HREF="started_ada00028.html">
+<LINK REV="Subdocument" HREF="started_ada00026.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started_ada00028.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started_ada00026.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started_ada00030.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with GNAT/RTEMS</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

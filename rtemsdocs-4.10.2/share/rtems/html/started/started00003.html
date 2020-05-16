@@ -1,0 +1,79 @@
+<HTML>
+<!-- created Dec 13 2011 from intro.texi line 93 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Cross Development</TITLE>
+<LINK REL="Precedes" HREF="started00004.html">
+<LINK REV="Precedes" HREF="started00002.html">
+<LINK REV="Subdocument" HREF="started00001.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started00002.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started00001.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started00004.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with RTEMS</CITE></P>
+<H2>1.2: Cross Development</H2>
+<P>
+Today almost all real-time embedded software systems are developed in a
+<STRONG>cross development</STRONG> environment using cross development tools. In the cross
+development environment, software development activities are typically
+performed on one computer system, the <STRONG>build-host</STRONG> system, while the result of the
+development effort (produced by the cross tools) is a software system that
+executes on the <STRONG>target</STRONG> platform. The requirements for the target platform are
+usually incompatible and quite often in direct conflict with the requirements
+for the build-host.  Moreover, the target hardware is often custom designed for a
+particular project.  This means that the cross development toolset must allow
+the developer to customize the tools to address target specific run-time
+issues.  The toolset must have provisions for board dependent initialization
+code, device drivers, and error handling code.
+</P>
+<P>
+The build-host computer is optimized to support the code development cycle with
+support for code editors, compilers, and linkers requiring large disk drives,
+user development windows, and multiple developer connections.  Thus the build-host
+computer is typically a traditional UNIX workstation such as those available
+from SUN or Silicon Graphics, or a PC running either a version of MS-Windows
+or UNIX.  The build-host system may also be required to execute
+office productivity applications to allow the software developer
+to write  documentation, make presentations, or track the project's
+progress using a project management tool.  This necessitates that the
+build-host computer be general purpose with resources such as a
+thirty-two or sixty-four bit processor, large amounts of
+RAM, a  monitor, mouse, keyboard, hard and floppy disk drives, CD-ROM drive,
+and a graphics card.  It is likely that the system will be multimedia capable
+and have some networking capability.
+</P>
+<P>
+Conversely, the target platform generally has limited traditional computer
+resources.  The hardware is designed for the particular functionality and
+requirements of the embedded system and optimized to perform those tasks
+effectively.  Instead of hard drives and keyboards, it is composed of
+sensors, relays, and stepper motors. The per-unit cost of the target platform
+is typically a critical concern.  No hardware component is included without
+being cost justified.  As a result, the processor of the target system is
+often from a different processor family than that of the build-host system and
+usually has lower performance.  In addition to the processor families
+designed only for use in embedded systems, there are versions of nearly every
+general-purpose processor specifically tailored for real-time embedded
+systems.  For example, many of the processors targeting the embedded market
+do not include hardware floating point units, but do include peripherals such
+as timers, serial controllers, or network interfaces.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="started00004.html">
+<LINK REV="Precedes" HREF="started00002.html">
+<LINK REV="Subdocument" HREF="started00001.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started00002.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started00001.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started00004.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with RTEMS</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,173 @@
+<HTML>
+<!-- created Dec 13 2011 from imfs.texi line 25 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>IMFS Per Node Data Structure</TITLE>
+<LINK REL="Precedes" HREF="filesystem00084.html">
+<LINK REV="Precedes" HREF="filesystem00082.html">
+<LINK REV="Subdocument" HREF="filesystem00082.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="filesystem00082.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="filesystem00082.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00084.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<H2>6.1: IMFS Per Node Data Structure</H2>
+<P>
+Each regular file, device, hard link, and directory is represented by a data
+structure called a <CODE>jnode</CODE>. The <CODE>jnode</CODE> is formally represented by the
+structure:
+</P>
+<DL><DT><DD>
+<PRE>
+struct IMFS_jnode_tt {
+  Chain_Node          Node;             /* for chaining them together */
+  IMFS_jnode_t       *Parent;           /* Parent node */
+  char                name[NAME_MAX+1]; /* &quot;basename&quot; */
+  mode_t              st_mode;          /* File mode */
+  nlink_t             st_nlink;         /* Link count */
+  ino_t               st_ino;           /* inode */
+
+  uid_t               st_uid;           /* User ID of owner */
+  gid_t               st_gid;           /* Group ID of owner */
+  time_t              st_atime;         /* Time of last access */
+  time_t              st_mtime;         /* Time of last modification */
+  time_t              st_ctime;         /* Time of last status change */
+  IMFS_jnode_types_t  type;             /* Type of this entry */
+  IMFS_typs_union     info;
+};
+</PRE>
+</DL>
+<P>
+The key elements of this structure are listed below together with a brief
+explanation of their role in the filesystem.
+</P>
+<DL>
+<DT><STRONG>Node</STRONG>
+<DD>
+exists to allow the entire <CODE>jnode</CODE> structure to be included in a chain.
+
+<DT><STRONG>Parent</STRONG>
+<DD>
+is a pointer to another <CODE>jnode</CODE> structure that is the logical parent of the
+node in which it appears.  This field may be NULL if the file associated with
+this node is deleted but there are open file descriptors on this file or
+there are still hard links to this node.
+
+<DT><STRONG>name</STRONG>
+<DD>
+is the name of this node within the filesystem hierarchical tree. Example:  If
+the fully qualified pathname to the <CODE>jnode</CODE> was <CODE>/a/b/c</CODE>, the
+<CODE>jnode</CODE> name field would contain the null terminated string <CODE>&quot;c&quot;</CODE>.
+
+<DT><STRONG>st_mode</STRONG>
+<DD>
+is the standard Unix access permissions for the file or directory.
+
+<DT><STRONG>st_nlink</STRONG>
+<DD>
+is the number of hard links to this file. When a <CODE>jnode</CODE> is first created
+its link count is set to 1. A <CODE>jnode</CODE> and its associated resources
+cannot be deleted unless its link count is less than 1.
+
+<DT><STRONG>st_ino</STRONG>
+<DD>
+is a unique node identification number
+
+<DT><STRONG>st_uid</STRONG>
+<DD>
+is the user ID of the file's owner
+
+<DT><STRONG>st_gid</STRONG>
+<DD>
+is the group ID of the file's owner
+
+<DT><STRONG>st_atime</STRONG>
+<DD>
+is the time of the last access to this file
+
+<DT><STRONG>st_mtime</STRONG>
+<DD>
+is the time of the last modification of this file
+
+<DT><STRONG>st_ctime</STRONG>
+<DD>
+is the time of the last status change to the file
+
+<DT><STRONG>type</STRONG>
+<DD>
+is the indication of node type must be one of the following states:
+
+<UL>
+<LI>IMFS_DIRECTORY
+<LI>IMFS_MEMORY_FILE
+<LI>IMFS_HARD_LINK
+<LI>IMFS_SYM_LINK
+<LI>IMFS_DEVICE
+</UL>
+
+<DT><STRONG>info</STRONG>
+<DD>
+is this contains a structure that is unique to file type (See IMFS_typs_union
+in imfs.h).
+
+<UL>
+<LI>IMFS_DIRECTORY
+
+<P>
+An IMFS directory contains a dynamic chain structure that
+records all files and directories that are subordinate to the directory node.
+</P>
+<LI>IMFS_MEMORY_FILE
+
+<P>
+Under the in memory filesystem regular files hold data. Data is dynamically
+allocated to the file in 128 byte chunks of memory.  The individual chunks of
+memory are tracked by arrays of pointers that record the address of the
+allocated chunk of memory. Single, double, and triple indirection pointers
+are used to record the locations of all segments of the file.  The
+memory organization of an IMFS file are discussed elsewhere in this manual.
+</P>
+<LI>IMFS_HARD_LINK
+
+<P>
+The IMFS filesystem supports the concept of hard links to other nodes in the
+IMFS filesystem.  These hard links are actual pointers to other nodes in the
+same filesystem. This type of link cannot cross-filesystem boundaries.
+</P>
+<LI>IMFS_SYM_LINK
+
+<P>
+The IMFS filesystem supports the concept of symbolic links to other nodes in
+any filesystem. A symbolic link consists of a pointer to a character string
+that represents the pathname to the target node. This type of link can
+cross-filesystem boundaries.  Just as with most versions of UNIX supporting
+symbolic links, a symbolic link can point to a non-existent file.
+</P>
+<LI>IMFS_DEVICE
+
+<P>
+All RTEMS devices now appear as files under the in memory filesystem. On
+system initialization, all devices are registered as nodes under the file
+system.
+</P>
+</UL>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="filesystem00084.html">
+<LINK REV="Precedes" HREF="filesystem00082.html">
+<LINK REV="Subdocument" HREF="filesystem00082.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="filesystem00082.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="filesystem00082.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00084.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

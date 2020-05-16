@@ -1,0 +1,65 @@
+<HTML>
+<!-- created Dec 13 2011 from eventflags.texi line 161 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Eventflags Manager T_RFLG Structure</TITLE>
+<LINK REL="Precedes" HREF="itron00068.html">
+<LINK REV="Precedes" HREF="itron00071.html">
+<LINK REV="Subdocument" HREF="itron00067.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00071.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00067.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00068.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<H3>4.2.3: T_RFLG Structure</H3>
+<P>
+The T_RFLG structire is used to define the characteristics of an eventflag
+and passed as an argument to the <CODE>ref_flg</CODE> service. The structure is
+defined as follows:
+</P>
+<DL><DT><DD>
+<PRE>
+/* Reference Eventflags (ref_flg) Structure */
+typedef struct t_rflg {
+ VP       exinf;  /* extended information */
+ BOOL_ID  wtsk;   /* indicates whether or not there is a waiting task */
+ UINT     flgptn; /* eventflag bit pattern */
+ /* additional implementation dependent information may be included */
+} T_RFLG;
+</PRE>
+</DL>
+<DL>
+<DT><STRONG>exinf</STRONG>
+<DD>
+see <CODE>T_CFLG</CODE>.
+
+<DT><STRONG>wtsk</STRONG>
+<DD>
+indicates whether or not there is a task waiting for the eventflag in
+question.  If there is no waiting task, <CODE>wtsk</CODE> is returned as FALSE = 0.
+If there is a waiting task, <CODE>wtsk</CODE> is returned as a value other than 0.
+
+<DT><STRONG>flgptn</STRONG>
+<DD>
+is the eventflag pattern.
+
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="itron00068.html">
+<LINK REV="Precedes" HREF="itron00071.html">
+<LINK REV="Subdocument" HREF="itron00067.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00071.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00067.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00068.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

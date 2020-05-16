@@ -1,0 +1,90 @@
+<HTML>
+<!-- created Dec 13 2011 from buildrt.texi line 181 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Using the RTEMS configure Script Directly</TITLE>
+<LINK REL="Precedes" HREF="started_ada00040.html">
+<LINK REV="Precedes" HREF="started_ada00036.html">
+<LINK REV="Subdocument" HREF="started_ada00036.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started_ada00036.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started_ada00036.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started_ada00040.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with GNAT/RTEMS</CITE></P>
+<H3>4.6.1: Using the RTEMS configure Script Directly</H3>
+<P>
+Make a build directory under tools and build the RTEMS product in this
+directory. The <CODE>../rtems-DATE/configure</CODE>
+command has numerous command line
+arguments. These arguments are discussed in detail in documentation that
+comes with the RTEMS distribution. A full list of these arguments can be
+obtained by running <CODE>../rtems-DATE/configure --help</CODE>
+If you followed the procedure
+described in the section <A HREF="started_ada00032.html">Unarchive the RTEMS Source</A>, these
+configuration options can be found in the file
+tools/rtems-DATE/README.configure.
+</P>
+<P>
+<STRONG>NOTE</STRONG>: The GNAT/RTEMS run-time implementation is based on the POSIX
+API.  Thus the RTEMS configuration for a GNAT/RTEMS environment MUST
+include the <CODE>--enable-posix</CODE> flag.
+</P>
+<P>
+The following shows the command sequence required to configure,
+compile, and install RTEMS with the POSIX API, FreeBSD TCP/IP,
+and C++ support disabled.  RTEMS will be built to target
+the <CODE>BOARD_SUPPORT_PACKAGE</CODE> board.
+</P>
+<DL><DT><DD>
+<PRE>
+mkdir build-rtems
+cd build-rtems
+../rtems-DATE/configure --target=&lt;TARGET_CONFIGURATION&gt; \
+    --disable-posix --disable-networking --disable-cxx \
+    --enable-rtemsbsp=&lt;BOARD_SUPPORT_PACKAGE&gt;\
+    --prefix=&lt;INSTALL_POINT&gt;
+make all
+make install
+</PRE>
+</DL>
+<P>
+Where the list of currently supported &lt;TARGET_CONFIGURATION&gt;'s and
+&lt;BOARD_SUPPORT_PACKAGE&gt;'s can be found in
+tools/rtems-DATE/README.configure.
+</P>
+<P>
+&lt;INSTALL_POINT&gt; is typically the installation point for the
+tools and defaults to <CODE>/opt/rtems-4.10</CODE>.
+</P>
+<P>
+BSP is a supported BSP for the selected CPU family.  The list of
+supported BSPs may be found in the file
+tools/rtems-DATE/README.configure
+in the RTEMS source tree.  If the BSP parameter is not specified,
+then all supported BSPs for the selected CPU family will be built.
+</P>
+<P>
+<STRONG>NOTE:</STRONG>  The POSIX API must be enabled to use GNAT/RTEMS.
+</P>
+<P>
+<STRONG>NOTE:</STRONG> The <CODE>make</CODE> utility used should be GNU make.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="started_ada00040.html">
+<LINK REV="Precedes" HREF="started_ada00036.html">
+<LINK REV="Subdocument" HREF="started_ada00036.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started_ada00036.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started_ada00036.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started_ada00040.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with GNAT/RTEMS</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

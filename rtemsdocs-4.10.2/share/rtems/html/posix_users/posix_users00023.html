@@ -1,0 +1,57 @@
+<HTML>
+<!-- created Dec 13 2011 from signal.texi line 67 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Signal Manager Signals</TITLE>
+<LINK REL="Precedes" HREF="posix_users00024.html">
+<LINK REV="Precedes" HREF="posix_users00020.html">
+<LINK REV="Subdocument" HREF="posix_users00020.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00020.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00020.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00024.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<H3>2.2.1: Signals</H3>
+<P>
+POSIX signals are an asynchronous event mechanism.  Each process
+and thread has a set of signals associated with it.  Individual
+signals may be enabled (e.g. unmasked) or blocked (e.g. ignored)
+on both a per-thread and process level.  Signals which are
+enabled have a signal handler associated with them.  When the
+signal is generated and conditions are met, then the signal
+handler is invoked in the proper process or thread context
+asynchronous relative to the logical thread of execution.
+</P>
+<P>
+If a signal has been blocked when it is generated, then it
+is queued and kept pending until the thread or process unblocks
+the signal or explicitly checks for it.
+Traditional, non-real-time POSIX signals do not queue.  Thus
+if a process or thread has blocked a particular signal, then
+multiple occurrences of that signal are recorded as a
+single occurrence of that signal.
+</P>
+<P>
+One can check for the set of outstanding signals that have been
+blocked.   Services are provided to check for outstanding process
+or thread directed signals.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="posix_users00024.html">
+<LINK REV="Precedes" HREF="posix_users00020.html">
+<LINK REV="Subdocument" HREF="posix_users00020.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00020.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00020.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00024.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

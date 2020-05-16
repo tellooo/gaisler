@@ -1,0 +1,60 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/mp.texi line 399 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Multiprocessing Manager GET_PACKET</TITLE>
+<LINK REL="Precedes" HREF="ada_user00451.html">
+<LINK REV="Precedes" HREF="ada_user00449.html">
+<LINK REV="Subdocument" HREF="ada_user00440.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00449.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00440.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00451.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>24.3.2: GET_PACKET</H3>
+<P>
+The GET_PACKET component of the user-provided MPCI
+layer is called when RTEMS must obtain a packet buffer to send
+or broadcast a message.  This component should be adhere to the
+following prototype:
+</P>
+<DL><DT><DD>
+<PRE>
+rtems_mpci_entry user_mpci_get_packet(
+  rtems_packet_prefix **packet
+);
+</PRE>
+</DL>
+<P>
+where packet is the address of a pointer to a packet.
+This routine always succeeds and, upon return, packet will
+contain the address of a packet.  If for any reason, a packet
+cannot be successfully obtained, then the fatal error manager
+should be invoked.
+</P>
+<P>
+RTEMS has been optimized to avoid the need for
+obtaining a packet each time a message is sent or broadcast.
+For example, RTEMS sends response messages (RR) back to the
+originator in the same packet in which the request message (RQ)
+arrived.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00451.html">
+<LINK REV="Precedes" HREF="ada_user00449.html">
+<LINK REV="Subdocument" HREF="ada_user00440.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00449.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00440.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00451.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

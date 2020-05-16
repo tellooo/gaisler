@@ -1,0 +1,108 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/rtmon.texi line 202 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Rate Monotonic Manager Rate Monotonic Scheduling Algorithm</TITLE>
+<LINK REL="Precedes" HREF="ada_user00333.html">
+<LINK REV="Precedes" HREF="ada_user00331.html">
+<LINK REV="Subdocument" HREF="ada_user00326.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00331.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00326.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00333.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>19.2.4: Rate Monotonic Scheduling Algorithm</H3>
+<P>
+The Rate Monotonic Scheduling Algorithm (RMS) is
+important to real-time systems designers because it allows one
+to guarantee that a set of tasks is schedulable.  A set of tasks
+is said to be schedulable if all of the tasks can meet their
+deadlines.  RMS provides a set of rules which can be used to
+perform a guaranteed schedulability analysis for a task set.
+This analysis determines whether a task set is schedulable under
+worst-case conditions and emphasizes the predictability of the
+system's behavior.  It has been proven that:
+</P>
+<UL>
+<P>
+<STRONG>RMS is an optimal static priority algorithm for scheduling independent, preemptible, periodic tasks on a single processor.</STRONG>
+</UL>
+</P>
+<P>
+RMS is optimal in the sense that if a set of tasks
+can be scheduled by any static priority algorithm, then RMS will
+be able to schedule that task set.  RMS bases it schedulability
+analysis on the processor utilization level below which all
+deadlines can be met.
+</P>
+<P>
+RMS calls for the static assignment of task
+priorities based upon their period.  The shorter a task's
+period, the higher its priority.  For example, a task with a 1
+millisecond period has higher priority than a task with a 100
+millisecond period.  If two tasks have the same period, then RMS
+does not distinguish between the tasks.  However, RTEMS
+specifies that when given tasks of equal priority, the task
+which has been ready longest will execute first.  RMS's priority
+assignment scheme does not provide one with exact numeric values
+for task priorities.  For example, consider the following task
+set and priority assignments:
+</P>
+<CENTER>
+  <TABLE COLS=3 WIDTH="80%" BORDER=2>
+<TR><TD ALIGN=center><STRONG>Task</STRONG></TD>
+    <TD ALIGN=center><STRONG>Period (in milliseconds)</STRONG></TD>
+    <TD ALIGN=center><STRONG>Priority</STRONG></TD></TR>
+<TR><TD ALIGN=center>1</TD>
+    <TD ALIGN=center>100 </TD>
+    <TD ALIGN=center>Low</TD></TR>
+<TR><TD ALIGN=center>2</TD>
+    <TD ALIGN=center>50 </TD>
+    <TD ALIGN=center>Medium</TD></TR>
+<TR><TD ALIGN=center>3</TD>
+    <TD ALIGN=center>50 </TD>
+    <TD ALIGN=center>Medium</TD></TR>
+<TR><TD ALIGN=center>4</TD>
+    <TD ALIGN=center>25 </TD>
+    <TD ALIGN=center>High</TD></TR>
+  </TABLE>
+</CENTER>
+<P>
+RMS only calls for task 1 to have the lowest
+priority, task 4 to have the highest priority, and tasks 2 and 3
+to have an equal priority between that of tasks 1 and 4.  The
+actual RTEMS priorities assigned to the tasks must only adhere
+to those guidelines.
+</P>
+<P>
+Many applications have tasks with both hard and soft
+deadlines.  The tasks with hard deadlines are typically referred
+to as the critical task set, with the soft deadline tasks being
+the non-critical task set.  The critical task set can be
+scheduled using RMS, with the non-critical tasks not executing
+under transient overload, by simply assigning priorities such
+that the lowest priority critical task (i.e. longest period) has
+a higher priority than the highest priority non-critical task.
+Although RMS may be used to assign priorities to the
+non-critical tasks, it is not necessary.  In this instance,
+schedulability is only guaranteed for the critical task set.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00333.html">
+<LINK REV="Precedes" HREF="ada_user00331.html">
+<LINK REV="Subdocument" HREF="ada_user00326.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00331.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00326.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00333.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

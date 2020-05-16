@@ -1,0 +1,68 @@
+<HTML>
+<!-- created Dec 13 2011 from direct.texi line 329 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Directory Structure c/src/lib/libbsp BSP Directory</TITLE>
+<LINK REL="Precedes" HREF="develenv00004.html">
+<LINK REV="Precedes" HREF="develenv00008.html">
+<LINK REV="Subdocument" HREF="develenv00008.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="develenv00008.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="develenv00008.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="develenv00004.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Development Environment Guide</CITE></P>
+<H4>2.1.1.1: c/src/lib/libbsp BSP Directory</H4>
+<P>
+The &quot;libbsp&quot; directory contains a directory for each CPU family supported
+by RTEMS.  Beneath each CPU directory is a directory for each BSP for that
+processor family.
+</P>
+<P>
+The &quot;libbsp&quot; directory provides all the BSPs provided with this
+release of the RTEMS executive.  The subdirectories are
+divided,  as discussed previously, based on specific processor
+family, then further broken down into specific target board
+environments.  The &quot;no_cpu&quot; subdirectory provides a starting point
+template BSP which can be used to develop a specific BSP for an
+unsupported target board.  The files in this subdirectory may aid
+in preliminary testing of the RTEMS development environment that has
+been built for no particular target in mind.
+</P>
+<P>
+Below each CPU dependent directory is a directory for each target BSP
+supported in this release.
+</P>
+<P>
+Each BSP provides the modules which comprise an RTEMS BSP.  The
+modules are separated into the subdirectories &quot;clock&quot;, &quot;console&quot;,
+&quot;include&quot;, &quot;shmsupp&quot;, &quot;startup&quot;, and &quot;timer&quot; as shown in the following
+figure:
+</P>
+<DL><DT><DD>
+<PRE>
+                           Each BSP
+                               |
+  +-----------+----------+-----+-----+----------+----------+
+  |           |          |           |          |          |
+clock      console    include     shmsupp    startup     timer
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="develenv00004.html">
+<LINK REV="Precedes" HREF="develenv00008.html">
+<LINK REV="Subdocument" HREF="develenv00008.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="develenv00008.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="develenv00008.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="develenv00004.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Development Environment Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

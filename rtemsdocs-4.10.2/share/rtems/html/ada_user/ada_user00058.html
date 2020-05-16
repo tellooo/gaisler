@@ -1,0 +1,103 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/task.texi line 194 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Task Manager Task Mode</TITLE>
+<LINK REL="Precedes" HREF="ada_user00059.html">
+<LINK REV="Precedes" HREF="ada_user00057.html">
+<LINK REV="Subdocument" HREF="ada_user00051.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00057.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00051.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00059.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>5.2.5: Task Mode</H3>
+<P>
+A task's execution mode is a combination of the following
+four components:
+</P>
+<UL>
+<LI>preemption
+<LI>ASR processing
+<LI>timeslicing
+<LI>interrupt level
+</UL>
+
+<P>
+It is used to modify RTEMS' scheduling process and to alter the
+execution environment of the task.  The data type
+<CODE>rtems.task_mode</CODE> is used to manage the task
+execution mode.
+</P>
+<P>
+The preemption component allows a task to determine when control of the
+processor is relinquished.  If preemption is disabled
+(<CODE>RTEMS.NO_PREEMPT</CODE>), the task will retain control of the
+processor as long as it is in the executing state -- even if a higher
+priority task is made ready.  If preemption is enabled
+(<CODE>RTEMS.PREEMPT</CODE>)  and a higher priority task is made ready,
+then the processor will be taken away from the current task immediately and
+given to the higher priority task.
+</P>
+<P>
+The timeslicing component is used by the RTEMS scheduler to determine how
+the processor is allocated to tasks of equal priority.  If timeslicing is
+enabled (<CODE>RTEMS.TIMESLICE</CODE>), then RTEMS will limit the amount
+of time the task can execute before the processor is allocated to another
+ready task of equal priority. The length of the timeslice is application
+dependent and specified in the Configuration Table.  If timeslicing is
+disabled (<CODE>RTEMS.NO_TIMESLICE</CODE>), then the task will be
+allowed to execute until a task of higher priority is made ready.  If
+<CODE>RTEMS.NO_PREEMPT</CODE> is selected, then the timeslicing
+component is ignored by the scheduler.
+</P>
+<P>
+The asynchronous signal processing component is used to determine when
+received signals are to be processed by the task.
+If signal processing is enabled (<CODE>RTEMS.ASR</CODE>), then signals
+sent to the task will be processed the next time the task executes.  If
+signal processing is disabled (<CODE>RTEMS.NO_ASR</CODE>), then all
+signals received by the task will remain posted until signal processing is
+enabled.  This component affects only tasks which have established a
+routine to process asynchronous signals.
+</P>
+<P>
+The interrupt level component is used to determine which
+interrupts will be enabled when the task is executing.
+<CODE>RTEMS.INTERRUPT_LEVEL(n)</CODE>
+specifies that the task will execute at interrupt level n.
+</P>
+<UL>
+<LI><CODE>RTEMS.PREEMPT</CODE> - enable preemption (default)
+<LI><CODE>RTEMS.NO_PREEMPT</CODE> - disable preemption
+<LI><CODE>RTEMS.NO_TIMESLICE</CODE> - disable timeslicing (default)
+<LI><CODE>RTEMS.TIMESLICE</CODE> - enable timeslicing
+<LI><CODE>RTEMS.ASR</CODE> - enable ASR processing (default)
+<LI><CODE>RTEMS.NO_ASR</CODE> - disable ASR processing
+<LI><CODE>RTEMS.INTERRUPT_LEVEL(0)</CODE> - enable all interrupts (default)
+<LI><CODE>RTEMS.INTERRUPT_LEVEL(n)</CODE> - execute at interrupt level n
+</UL>
+
+<P>
+The set of default modes may be selected by specifying the
+<CODE>RTEMS.DEFAULT_MODES</CODE> constant.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00059.html">
+<LINK REV="Precedes" HREF="ada_user00057.html">
+<LINK REV="Subdocument" HREF="ada_user00051.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00057.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00051.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00059.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

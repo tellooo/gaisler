@@ -1,0 +1,40 @@
+<HTML>
+<!-- created Dec 13 2011 from driver.texi line 317 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Write the Driver Transmit Task</TITLE>
+<LINK REL="Precedes" HREF="networking00012.html">
+<LINK REV="Precedes" HREF="networking00010.html">
+<LINK REV="Subdocument" HREF="networking00003.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="networking00010.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="networking00003.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="networking00012.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Network Supplement</CITE></P>
+<H2>2.8: Write the Driver Transmit Task</H2>
+<P>
+This task is reponsible for removing packets from the driver send queue and sending them to the device.  The task should block waiting for an event from the
+driver start function indicating that packets are waiting to be transmitted.
+When the transmit task has drained the driver send queue the task should clear
+the <CODE>IFF_OACTIVE</CODE> bit in <CODE>if_flags</CODE> and block until another outgoing
+packet is queued.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="networking00012.html">
+<LINK REV="Precedes" HREF="networking00010.html">
+<LINK REV="Subdocument" HREF="networking00003.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="networking00010.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="networking00003.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="networking00012.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Network Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,119 @@
+<HTML>
+<!-- created Dec 13 2011 from networkapp.texi line 529 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Socket Options</TITLE>
+<LINK REL="Precedes" HREF="networking00030.html">
+<LINK REV="Precedes" HREF="networking00028.html">
+<LINK REV="Subdocument" HREF="networking00020.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="networking00028.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="networking00020.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="networking00030.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Network Supplement</CITE></P>
+<H3>3.4.3: Socket Options</H3>
+<P>
+RTEMS adds two new <CODE>SOL_SOCKET</CODE> level options for <CODE>setsockopt</CODE> and
+<CODE>getsockopt</CODE>: <CODE>SO_SNDWAKEUP</CODE> and <CODE>SO_RCVWAKEUP</CODE>.  For both, the
+option value should point to a sockwakeup structure.  The sockwakeup
+structure has the following fields:
+</P>
+<DL><DT><DD>
+<PRE>
+  void    (*sw_pfn) (struct socket *, caddr_t);
+  caddr_t sw_arg;
+</PRE>
+</DL>
+<P>
+These options are used to set a callback function to be called when, for
+example, there is
+data available from the socket (<CODE>SO_RCVWAKEUP</CODE>) and when there is space
+available to accept data written to the socket (<CODE>SO_SNDWAKEUP</CODE>).
+</P>
+<P>
+If <CODE>setsockopt</CODE> is called with the <CODE>SO_RCVWAKEUP</CODE> option, and the
+<CODE>sw_pfn</CODE> field is not zero, then when there is data
+available to be read from
+the socket, the function pointed to by the <CODE>sw_pfn</CODE> field will be
+called.  A pointer to the socket structure will be passed as the first
+argument to the function.  The <CODE>sw_arg</CODE> field set by the
+<CODE>SO_RCVWAKEUP</CODE> call will be passed as the second argument to the function.
+</P>
+<P>
+If <CODE>setsockopt</CODE> is called with the <CODE>SO_SNDWAKEUP</CODE>
+function, and the <CODE>sw_pfn</CODE> field is not zero, then when
+there is space available to accept data written to the socket,
+the function pointed to by the <CODE>sw_pfn</CODE> field
+will be called.  The arguments passed to the function will be as with
+<CODE>SO_SNDWAKEUP</CODE>.
+</P>
+<P>
+When the function is called, the network semaphore will be locked and
+the callback function runs in the context of the networking task.
+The function must be careful not to call any networking functions.  It
+is OK to call an RTEMS function; for example, it is OK to send an
+RTEMS event.
+</P>
+<P>
+The purpose of these callback functions is to permit a more efficient
+alternative to the select call when dealing with a large number of
+sockets.
+</P>
+<P>
+The callbacks are called by the same criteria that the select
+function uses for indicating &quot;ready&quot; sockets. In Stevens <CITE>Unix Network Programming</CITE> on page 153-154 in the section &quot;Under what Conditions
+Is a Descriptor Ready?&quot; you will find the definitive list of conditions
+for readable and writable that also determine when the functions are
+called.
+</P>
+<P>
+When the number of received bytes equals or exceeds the socket receive
+buffer &quot;low water mark&quot; (default 1 byte) you get a readable callback. If
+there are 100 bytes in the receive buffer and you only read 1, you will
+not immediately get another callback. However, you will get another
+callback after you read the remaining 99 bytes and at least 1 more byte
+arrives. Using a non-blocking socket you should probably read until it
+produces error  EWOULDBLOCK and then allow the readable callback to tell
+you when more data has arrived.  (Condition 1.a.)
+</P>
+<P>
+For sending, when the socket is connected and the free space becomes at
+or above the &quot;low water mark&quot; for the send buffer (default 4096 bytes)
+you will receive a writable callback. You don't get continuous callbacks
+if you don't write anything. Using a non-blocking write socket, you can
+then call write until it returns a value less than the amount of data
+requested to be sent or it produces error EWOULDBLOCK (indicating buffer
+full and no longer writable). When this happens you can
+try the write again, but it is often better to go do other things and
+let the writable callback tell you when space is available to send
+again. You only get a writable callback when the free space transitions
+to above the &quot;low water mark&quot; and not every time you
+write to a non-full send buffer. (Condition 2.a.)
+</P>
+<P>
+The remaining conditions enumerated by Stevens handle the fact that
+sockets become readable and/or writable when connects, disconnects and
+errors occur, not just when data is received or sent. For example, when
+a server &quot;listening&quot; socket becomes readable it indicates that a client
+has connected and accept can be called without blocking, not that
+network data was received (Condition 1.c).
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="networking00030.html">
+<LINK REV="Precedes" HREF="networking00028.html">
+<LINK REV="Subdocument" HREF="networking00020.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="networking00028.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="networking00020.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="networking00030.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Network Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

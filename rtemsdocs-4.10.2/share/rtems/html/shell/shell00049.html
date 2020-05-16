@@ -1,0 +1,310 @@
+<HTML>
+<!-- created Dec 13 2011 from file.texi line 1804 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>File and Directory Commands dd - convert and copy a file</TITLE>
+<LINK REL="Precedes" HREF="shell00050.html">
+<LINK REV="Precedes" HREF="shell00048.html">
+<LINK REV="Subdocument" HREF="shell00031.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="shell00048.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="shell00031.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="shell00050.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Shell User's Guide</CITE></P>
+<H3>3.2.18: dd - convert and copy a file</H3>
+<H3>SYNOPSYS:</H3>
+<DL><DT><DD>
+<PRE>
+dd [operands ...]
+</PRE>
+</DL>
+<H3>DESCRIPTION:</H3>
+<P>
+The dd utility copies the standard input to the standard output.
+Input data is read and written in 512-byte blocks.  If input reads are
+short, input from multiple reads are aggregated to form the output
+block.  When finished, dd displays the number of complete and partial
+input and output blocks and truncated input records to the standard
+error output.
+</P>
+<P>
+The following operands are available:
+</P>
+<DL>
+<DT><STRONG>bs=n</STRONG>
+<DD>
+Set both input and output block size, superseding the ibs and obs
+operands.  If no conversion values other than noerror, notrunc or sync
+are specified, then each input block is copied to the output as a
+single block without any aggregation of short blocks.
+
+<DT><STRONG>cbs=n</STRONG>
+<DD>
+Set the conversion record size to n bytes.  The conversion record size
+is required by the record oriented conversion values.
+
+<DT><STRONG>count=n</STRONG>
+<DD>
+Copy only n input blocks.
+
+<DT><STRONG>files=n</STRONG>
+<DD>
+Copy n input files before terminating.  This operand is only
+applicable when the input device is a tape.
+
+<DT><STRONG>ibs=n</STRONG>
+<DD>
+Set the input block size to n bytes instead of the default 512.
+
+<DT><STRONG>if=file</STRONG>
+<DD>
+Read input from file instead of the standard input.
+
+<DT><STRONG>obs=n</STRONG>
+<DD>
+Set the output block size to n bytes instead of the default 512.
+
+<DT><STRONG>of=file</STRONG>
+<DD>
+Write output to file instead of the standard output.  Any regular
+output file is truncated unless the notrunc conversion value is
+specified.  If an initial portion of the output file is skipped (see
+the seek operand) the output file is truncated at that point.
+
+<DT><STRONG>seek=n</STRONG>
+<DD>
+Seek n blocks from the beginning of the output before copying.  On
+non-tape devices, a <EM>lseek</EM> operation is used.  Otherwise, existing
+blocks are read and the data discarded.  If the seek operation is past
+the end of file, space from the current end of file to the specified
+offset is filled with blocks of NUL bytes.
+
+<DT><STRONG>skip=n</STRONG>
+<DD>
+Skip n blocks from the beginning of the input before copying.  On
+input which supports seeks, a <EM>lseek</EM> operation is used.  Otherwise,
+input data is read and discarded.  For pipes, the correct number of
+bytes is read.  For all other devices, the correct number of blocks is
+read without distinguishing between a partial or complete block being
+read.
+
+<DT><STRONG>progress=n</STRONG>
+<DD>
+Switch on display of progress if n is set to any non-zero value.  This
+will cause a ``.'' to be printed (to the standard error output) for
+every n full or partial blocks written to the output file.
+
+<DT><STRONG>conv=value[,value...]</STRONG>
+<DD>
+Where value is one of the symbols from the following list.
+
+<DL>
+<DT><STRONG>ascii, oldascii</STRONG>
+<DD>
+The same as the unblock value except that characters are translated
+from EBCDIC to ASCII before the records are converted.  (These values
+imply unblock if the operand cbs is also specified.)  There are two
+conversion maps for ASCII.  The value ascii specifies the recom-
+mended one which is compatible with AT&amp;T System V UNIX.  The value
+oldascii specifies the one used in historic AT&amp;T and pre 4.3BSD-Reno
+systems.
+
+<DT><STRONG>block</STRONG>
+<DD>
+Treats the input as a sequence of newline or end-of-file terminated
+variable length records independent of input and output block
+boundaries.  Any trailing newline character is discarded.  Each
+input record is converted to a fixed length output record where the
+length is specified by the cbs operand.  Input records shorter than
+the conversion record size are padded with spaces.  Input records
+longer than the conversion record size are truncated.  The number of
+truncated input records, if any, are reported to the standard error
+output at the completion of the copy.
+
+<DT><STRONG>ebcdic, ibm, oldebcdic, oldibm</STRONG>
+<DD>
+The same as the block value except that characters are translated from
+ASCII to EBCDIC after the records are converted.  (These values imply
+block if the operand cbs is also specified.)  There are four
+conversion maps for EBCDIC.  The value ebcdic specifies the
+recommended one which is compatible with AT&amp;T System V UNIX.  The
+value ibm is a slightly different mapping, which is compatible with
+the AT&amp;T System V UNIX ibm value.  The values oldebcdic and oldibm are
+maps used in historic AT&amp;T and pre 4.3BSD-Reno systems.
+
+<DT><STRONG>lcase</STRONG>
+<DD>
+Transform uppercase characters into lowercase characters.
+
+<DT><STRONG>noerror</STRONG>
+<DD>
+Do not stop processing on an input error.  When an input error occurs,
+a diagnostic message followed by the current input and output block
+counts will be written to the standard error output in the same format
+as the standard completion message.  If the sync conversion is also
+specified, any missing input data will be replaced with NUL bytes (or
+with spaces if a block oriented conversion value was specified) and
+processed as a normal input buffer.  If the sync conversion is not
+specified, the input block is omitted from the output.  On input files
+which are not tapes or pipes, the file offset will be positioned past
+the block in which the error occurred using lseek(2).
+
+<DT><STRONG>notrunc</STRONG>
+<DD>
+Do not truncate the output file.  This will preserve any blocks in the
+output file not explicitly written by dd.  The notrunc value is not
+supported for tapes.
+
+<DT><STRONG>osync</STRONG>
+<DD>
+Pad the final output block to the full output block size.  If the
+input file is not a multiple of the output block size after
+conversion, this conversion forces the final output block to be the
+same size as preceding blocks for use on devices that require
+regularly sized blocks to be written.  This option is incompatible
+with use of the bs=n block size specification.
+
+<DT><STRONG>sparse</STRONG>
+<DD>
+If one or more non-final output blocks would consist solely of NUL
+bytes, try to seek the output file by the required space instead of
+filling them with NULs.  This results in a sparse file on some file
+systems.
+
+<DT><STRONG>swab</STRONG>
+<DD>
+Swap every pair of input bytes.  If an input buffer has an odd number
+of bytes, the last byte will be ignored during swapping.
+
+<DT><STRONG>sync</STRONG>
+<DD>
+Pad every input block to the input buffer size.  Spaces are used for
+pad bytes if a block oriented conversion value is specified, otherwise
+NUL bytes are used.
+
+<DT><STRONG>ucase</STRONG>
+<DD>
+Transform lowercase characters into uppercase characters.
+
+<DT><STRONG>unblock</STRONG>
+<DD>
+Treats the input as a sequence of fixed length records independent of
+input and output block boundaries.  The length of the input records is
+specified by the cbs operand.  Any trailing space characters are
+discarded and a newline character is appended.
+</DL>
+</DL>
+
+<P>
+Where sizes are specified, a decimal number of bytes is expected.  Two
+or more numbers may be separated by an ``x'' to indicate a product.
+Each number may have one of the following optional suffixes:
+</P>
+<DL>
+<DT><STRONG>b</STRONG>
+<DD>
+Block; multiply by 512
+<DT><STRONG>k</STRONG>
+<DD>
+Kibi; multiply by 1024 (1 KiB)
+<DT><STRONG>m</STRONG>
+<DD>
+Mebi; multiply by 1048576 (1 MiB)
+<DT><STRONG>g</STRONG>
+<DD>
+Gibi; multiply by 1073741824 (1 GiB)
+<DT><STRONG>t</STRONG>
+<DD>
+Tebi; multiply by 1099511627776 (1 TiB)
+<DT><STRONG>w</STRONG>
+<DD>
+Word; multiply by the number of bytes in an integer
+</DL>
+
+<P>
+When finished, dd displays the number of complete and partial input
+and output blocks, truncated input records and odd-length
+byte-swapping ritten.  Partial output blocks to tape devices are
+considered fatal errors.  Otherwise, the rest of the block will be
+written.  Partial output blocks to character devices will produce a
+warning message.  A truncated input block is one where a variable
+length record oriented conversion value was specified and the input
+line was too long to fit in the conversion record or was not newline
+terminated.
+</P>
+<P>
+Normally, data resulting from input or conversion or both are
+aggregated into output blocks of the specified size.  After the end of
+input is reached, any remaining output is written as a block.  This
+means that the final output block may be shorter than the output block
+size.
+</P>
+<H3>EXIT STATUS:</H3>
+<P>
+This command returns 0 on success and non-zero if an error is encountered.
+</P>
+<H3>NOTES:</H3>
+<P>
+NONE
+</P>
+<H3>EXAMPLES:</H3>
+<P>
+The following is an example of how to use <CODE>dd</CODE>:
+</P>
+<DL><DT><DD>
+<PRE>
+SHLL [/] $ dd if=/nfs/boot-image of=/dev/hda1
+</PRE>
+</DL>
+<H3>CONFIGURATION:</H3>
+<P>
+This command is included in the default shell command set.  When
+building a custom command set, define
+<CODE>CONFIGURE_SHELL_COMMAND_DD</CODE> to have this command included.
+</P>
+<P>
+This command can be excluded from the shell command set by defining
+<CODE>CONFIGURE_SHELL_NO_COMMAND_DD</CODE> when all shell commands have been
+configured.
+</P>
+<H3>PROGRAMMING INFORMATION:</H3>
+<P>
+The <CODE>dd</CODE> command is implemented by a C language function which
+has the following prototype:
+</P>
+<DL><DT><DD>
+<PRE>
+int rtems_shell_rtems_main_dd(
+  int    argc,
+  char **argv
+);
+</PRE>
+</DL>
+<P>
+The configuration structure for the <CODE>dd</CODE> has the following
+prototype:
+</P>
+<DL><DT><DD>
+<PRE>
+extern rtems_shell_cmd_t rtems_shell_DD_Command;
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="shell00050.html">
+<LINK REV="Precedes" HREF="shell00048.html">
+<LINK REV="Subdocument" HREF="shell00031.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="shell00048.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="shell00031.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="shell00050.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Shell User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,82 @@
+<HTML>
+<!-- created Dec 13 2011 from io.texi line 336 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>I/O Manager IO_REGISTER_DRIVER - Register a device driver</TITLE>
+<LINK REL="Precedes" HREF="c_user00300.html">
+<LINK REV="Precedes" HREF="c_user00289.html">
+<LINK REV="Subdocument" HREF="c_user00289.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00289.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00289.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00300.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H3>16.4.1: IO_REGISTER_DRIVER - Register a device driver</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+rtems_status_code rtems_io_register_driver(
+  rtems_device_major_number   major,
+  rtems_driver_address_table *driver_table,
+  rtems_device_major_number  *registered_major
+);
+</PRE>
+</DL>
+<H3>DIRECTIVE STATUS CODES:</H3>
+<P>
+<CODE>RTEMS_SUCCESSFUL</CODE> - successfully registered<BR>
+
+<CODE>RTEMS_INVALID_ADDRESS</CODE> - invalid registered major pointer<BR>
+
+<CODE>RTEMS_INVALID_ADDRESS</CODE> - invalid driver table<BR>
+
+<CODE>RTEMS_INVALID_NUMBER</CODE> - invalid major device number<BR>
+
+<CODE>RTEMS_TOO_MANY</CODE> - no available major device table slot<BR>
+
+<CODE>RTEMS_RESOURCE_IN_USE</CODE> - major device number entry in use
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This directive attempts to add a new device driver to the Device Driver
+Table. The user can specify a specific major device number via the
+directive's <CODE>major</CODE> parameter, or let the registration routine find
+the next available major device number by specifing a major number of
+<CODE>0</CODE>. The selected major device number is returned via the
+<CODE>registered_major</CODE> directive parameter. The directive automatically
+allocation major device numbers from the highest value down.
+</P>
+<P>
+This directive automatically invokes the IO_INITIALIZE directive if
+the driver address table has an initialization and open entry.
+</P>
+<P>
+The directive returns RTEMS_TOO_MANY if Device Driver Table is
+full, and RTEMS_RESOURCE_IN_USE if a specific major device
+number is requested and it is already in use.
+</P>
+<H3>NOTES:</H3>
+<P>
+The Device Driver Table size is specified in the Configuration Table
+condiguration. This needs to be set to maximum size the application
+requires.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00300.html">
+<LINK REV="Precedes" HREF="c_user00289.html">
+<LINK REV="Subdocument" HREF="c_user00289.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00289.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00289.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00300.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

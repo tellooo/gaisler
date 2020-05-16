@@ -1,0 +1,59 @@
+<HTML>
+<!-- created Dec 13 2011 from analog.texi line 138 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Analog Driver Read from a Particular Analog</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00152.html">
+<LINK REV="Precedes" HREF="bsp_howto00150.html">
+<LINK REV="Subdocument" HREF="bsp_howto00145.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00150.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00145.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00152.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H2>18.6: Read from a Particular Analog</H2>
+<P>
+This corresponds to the driver read call.  After validating the minor
+number and arguments, this call reads the indicated device.  Most analog
+devices store the last value written to a DAC.  Since DACs are output
+only devices, saving the last written value gives the appearance that
+DACs can be read from also.  If the device is an ADC, then it is sampled.
+</P>
+<P>
+<STRONG>NOTE:</STRONG> Many boards have multiple analog inputs but only one ADC.  On
+these boards, it will be necessary to provide some type of mutual exclusion
+during reads.  On these boards, there is a MUX which must be switched
+before sampling the ADC.  After the MUX is switched, the driver must
+delay some short period of time (usually microseconds) before the
+signal is stable and can be sampled.  To make matters worse, some ADCs
+cannot respond to wide voltage swings in a single sample.  On these
+ADCs, one must do two samples when the voltage swing is too large.
+On a practical basis, this means that the driver usually ends up
+double sampling the ADC on these systems.
+</P>
+<P>
+The value returned is a single precision floating point number
+representing the voltage read.  This value is stored in the
+<CODE>argument_block</CODE> passed in to the call.  By returning the
+voltage, the caller is freed from having to know the number of
+bits in the analog and board dependent conversion algorithm.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00152.html">
+<LINK REV="Precedes" HREF="bsp_howto00150.html">
+<LINK REV="Subdocument" HREF="bsp_howto00145.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00150.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00145.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00152.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

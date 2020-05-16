@@ -1,0 +1,87 @@
+<HTML>
+<!-- created Dec 13 2011 from memorypool.texi line 184 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Memory Pool Manager get_blk - Get Variable-Size Memory Block</TITLE>
+<LINK REL="Precedes" HREF="itron00147.html">
+<LINK REV="Precedes" HREF="itron00145.html">
+<LINK REV="Subdocument" HREF="itron00143.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00145.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00143.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00147.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<H3>9.4.3: get_blk - Get Variable-Size Memory Block</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+ER get_blk(
+  VP *p_blk,
+  ID mplid,
+  INT blksz
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<P>
+<CODE>E_OK</CODE> - Normal Completion
+</P>
+<P>
+<CODE>E_ID</CODE> - Invalid ID number (mplid was invalid or could not be used)
+</P>
+<P>
+<CODE>E_NOEXS</CODE> - Object does not exist (the memorypool specified by mplid does not exist)
+</P>
+<P>
+<CODE>E_OACV</CODE> - Object access violation (A mplid less than -4 was specified from
+a user task.  This is implementation dependent.)
+</P>
+<P>
+<CODE>E_PAR</CODE> - Parameter error (tmout is -2 or less, blksz is negative or invalid)
+</P>
+<P>
+<CODE>E_DLT</CODE> - The object being waited for was deleted (the specified memorypool
+was deleted while waiting)
+</P>
+<P>
+<CODE>E_RLWAI</CODE> - WAIT state was forcibly released (rel_wai was received while
+waiting)
+</P>
+<P>
+<CODE>E_TMOUT</CODE> - Polling failure or timeout
+</P>
+<P>
+<CODE>E_CTX</CODE> - Context error (issued from task-independent portions or a
+task in dispatch disabled state; implementation dependent for
+pget_blk and tget_blk(tmout=TMO_POL))
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+A memory block of the size in bytes given by blksz is allocated from the variable-size memorypool specified by mplid.  The start address of the memory block allocated is returned in blk.  The allocated memory block is not cleared to zero.  The contents of the memory block allocated are undefined.  If the memory block cannot be obtained from the specified memorypool when get_blk is issued, the task issuing get_blk will be placed on the memory allocation queue of the specified memorypool, and wait until it can get the memory it requires.
+</P>
+<P>
+The order in which tasks wait on the queue when waiting to be allocated memory blocks is according to either FIFO or task priority.  The specification whereby tasks wait according to task priority is considered an extended function [level X] for which compatibility is not guaranteed.  Furthermore, when tasks form a memory allocation queue, it is implementation dependent whether priority is given to tasks requesting the smaller size of memory or those at the head of the queue.
+</P>
+<H3>NOTES:</H3>
+<P>
+Pget_blk and get_blk represent the same processing as specifying certain values (TMO_POL or TMO_FEVR) to tget_blk for tmout.  It is allowed that only tget_blk is implemented in the kernel and that pget_blk and get_blk are implemented as macros which call tget_blk.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="itron00147.html">
+<LINK REV="Precedes" HREF="itron00145.html">
+<LINK REV="Subdocument" HREF="itron00143.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00145.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00143.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00147.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

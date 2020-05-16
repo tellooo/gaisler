@@ -1,0 +1,116 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/mp.texi line 514 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Multiprocessing Manager Supporting Heterogeneous Environments</TITLE>
+<LINK REL="Precedes" HREF="ada_user00441.html">
+<LINK REV="Precedes" HREF="ada_user00453.html">
+<LINK REV="Subdocument" HREF="ada_user00440.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00453.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00440.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00441.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>24.3.6: Supporting Heterogeneous Environments</H3>
+<P>
+Developing an MPCI layer for a heterogeneous system
+requires a thorough understanding of the differences between the
+processors which comprise the system.  One difficult problem is
+the varying data representation schemes used by different
+processor types.  The most pervasive data representation problem
+is the order of the bytes which compose a data entity.
+Processors which place the least significant byte at the
+smallest address are classified as little endian processors.
+Little endian byte-ordering is shown below:
+</P>
+<DL><DT><DD>
+<PRE>
++---------------+----------------+---------------+----------------+
+|               |                |               |                |
+|    Byte 3     |     Byte 2     |    Byte 1     |    Byte 0      |
+|               |                |               |                |
++---------------+----------------+---------------+----------------+
+</PRE>
+</DL>
+<P>
+Conversely, processors which place the most
+significant byte at the smallest address are classified as big
+endian processors.  Big endian byte-ordering is shown below:
+</P>
+<DL><DT><DD>
+<PRE>
++---------------+----------------+---------------+----------------+
+|               |                |               |                |
+|    Byte 0     |     Byte 1     |    Byte 2     |    Byte 3      |
+|               |                |               |                |
++---------------+----------------+---------------+----------------+
+</PRE>
+</DL>
+<P>
+Unfortunately, sharing a data structure between big
+endian and little endian processors requires translation into a
+common endian format.  An application designer typically chooses
+the common endian format to minimize conversion overhead.
+</P>
+<P>
+Another issue in the design of shared data structures
+is the alignment of data structure elements.  Alignment is both
+processor and compiler implementation dependent.  For example,
+some processors allow data elements to begin on any address
+boundary, while others impose restrictions.  Common restrictions
+are that data elements must begin on either an even address or
+on a long word boundary.  Violation of these restrictions may
+cause an exception or impose a performance penalty.
+</P>
+<P>
+Other issues which commonly impact the design of
+shared data structures include the representation of floating
+point numbers, bit fields, decimal data, and character strings.
+In addition, the representation method for negative integers
+could be one's or two's complement.  These factors combine to
+increase the complexity of designing and manipulating data
+structures shared between processors.
+</P>
+<P>
+RTEMS addressed these issues in the design of the
+packets used to communicate between nodes.  The RTEMS packet
+format is designed to allow the MPCI layer to perform all
+necessary conversion without burdening the developer with the
+details of the RTEMS packet format.  As a result, the MPCI layer
+must be aware of the following:
+</P>
+<UL>
+<LI>All packets must begin on a four byte boundary.
+
+<LI>Packets are composed of both RTEMS and application data.
+All RTEMS data is treated as thirty-two (32) bit unsigned
+quantities and is in the first <CODE>RTEMS.MINIMUM_UNSIGNED32S_TO_CONVERT</CODE>
+thirty-two (32) quantities of the packet.
+
+<LI>The RTEMS data component of the packet must be in native
+endian format.  Endian conversion may be performed by either the
+sending or receiving MPCI layer.
+
+<LI>RTEMS makes no assumptions regarding the application
+data component of the packet.
+</UL>
+
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00441.html">
+<LINK REV="Precedes" HREF="ada_user00453.html">
+<LINK REV="Subdocument" HREF="ada_user00440.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00453.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00440.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00441.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

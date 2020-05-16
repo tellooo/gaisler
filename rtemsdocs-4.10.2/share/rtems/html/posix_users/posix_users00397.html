@@ -1,0 +1,153 @@
+<HTML>
+<!-- created Dec 13 2011 from libc.texi line 223 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Services Provided by C Library (libc) Reentrant Versions of Functions</TITLE>
+<LINK REL="Precedes" HREF="posix_users00398.html">
+<LINK REV="Precedes" HREF="posix_users00396.html">
+<LINK REV="Subdocument" HREF="posix_users00388.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00396.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00388.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00398.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<H2>20.9: Reentrant Versions of Functions</H2>
+<UL>
+<LI>Equivalent for errno variable:
+
+<UL>
+<LI><CODE>errno_r</CODE> - XXX
+</UL>
+
+<LI>Locale functions:
+
+<UL>
+<LI><CODE>localeconv_r</CODE> - XXX
+<LI><CODE>setlocale_r</CODE> - XXX
+</UL>
+
+<LI>Equivalents for stdio variables:
+
+<UL>
+<LI><CODE>stdin_r</CODE> - XXX
+<LI><CODE>stdout_r</CODE> - XXX
+<LI><CODE>stderr_r</CODE> - XXX
+</UL>
+
+<LI>Stdio functions:
+
+<UL>
+<LI><CODE>fdopen_r</CODE> - XXX
+<LI><CODE>perror_r</CODE> - XXX
+<LI><CODE>tempnam_r</CODE> - XXX
+<LI><CODE>fopen_r</CODE> - XXX
+<LI><CODE>putchar_r</CODE> - XXX
+<LI><CODE>tmpnam_r</CODE> - XXX
+<LI><CODE>getchar_r</CODE> - XXX
+<LI><CODE>puts_r</CODE> - XXX
+<LI><CODE>tmpfile_r</CODE> - XXX
+<LI><CODE>gets_r</CODE> - XXX
+<LI><CODE>remove_r</CODE> - XXX
+<LI><CODE>vfprintf_r</CODE> - XXX
+<LI><CODE>iprintf_r</CODE> - XXX
+<LI><CODE>rename_r</CODE> - XXX
+<LI><CODE>vsnprintf_r</CODE> - XXX
+<LI><CODE>mkstemp_r</CODE> - XXX
+<LI><CODE>snprintf_r</CODE> - XXX
+<LI><CODE>vsprintf_r</CODE> - XXX
+<LI><CODE>mktemp_t</CODE> - XXX
+<LI><CODE>sprintf_r</CODE> - XXX
+</UL>
+
+<LI>Signal functions:
+
+<UL>
+<LI><CODE>init_signal_r</CODE> - XXX
+<LI><CODE>signal_r</CODE> - XXX
+<LI><CODE>kill_r</CODE> - XXX
+<LI><CODE>_sigtramp_r</CODE> - XXX
+<LI><CODE>raise_r</CODE> - XXX
+</UL>
+
+<LI>Stdlib functions:
+
+<UL>
+<LI><CODE>calloc_r</CODE> - XXX
+<LI><CODE>mblen_r</CODE> - XXX
+<LI><CODE>srand_r</CODE> - XXX
+<LI><CODE>dtoa_r</CODE> - XXX
+<LI><CODE>mbstowcs_r</CODE> - XXX
+<LI><CODE>strtod_r</CODE> - XXX
+<LI><CODE>free_r</CODE> - XXX
+<LI><CODE>mbtowc_r</CODE> - XXX
+<LI><CODE>strtol_r</CODE> - XXX
+<LI><CODE>getenv_r</CODE> - XXX
+<LI><CODE>memalign_r</CODE> - XXX
+<LI><CODE>strtoul_r</CODE> - XXX
+<LI><CODE>mallinfo_r</CODE> - XXX
+<LI><CODE>mstats_r</CODE> - XXX
+<LI><CODE>system_r</CODE> - XXX
+<LI><CODE>malloc_r</CODE> - XXX
+<LI><CODE>rand_r</CODE> - XXX
+<LI><CODE>wcstombs_r</CODE> - XXX
+<LI><CODE>malloc_r</CODE> - XXX
+<LI><CODE>realloc_r</CODE> - XXX
+<LI><CODE>wctomb_r</CODE> - XXX
+<LI><CODE>malloc_stats_r</CODE> - XXX
+<LI><CODE>setenv_r</CODE> - XXX
+</UL>
+
+<LI>String functions:
+
+<UL>
+<LI><CODE>strtok_r</CODE> - XXX
+</UL>
+
+<LI>System functions:
+
+<UL>
+<LI><CODE>close_r</CODE> - XXX
+<LI><CODE>link_r</CODE> - XXX
+<LI><CODE>unlink_r</CODE> - XXX
+<LI><CODE>execve_r</CODE> - XXX
+<LI><CODE>lseek_r</CODE> - XXX
+<LI><CODE>wait_r</CODE> - XXX
+<LI><CODE>fcntl_r</CODE> - XXX
+<LI><CODE>open_r</CODE> - XXX
+<LI><CODE>write_r</CODE> - XXX
+<LI><CODE>fork_r</CODE> - XXX
+<LI><CODE>read_r</CODE> - XXX
+<LI><CODE>fstat_r</CODE> - XXX
+<LI><CODE>sbrk_r</CODE> - XXX
+<LI><CODE>gettimeofday_r</CODE> - XXX
+<LI><CODE>stat_r</CODE> - XXX
+<LI><CODE>getpid_r</CODE> - XXX
+<LI><CODE>times_r</CODE> - XXX
+</UL>
+
+<LI>Time function:
+
+<UL>
+<LI><CODE>asctime_r</CODE> - XXX
+</UL>
+
+</UL>
+<P><HR>
+<LINK REL="Precedes" HREF="posix_users00398.html">
+<LINK REV="Precedes" HREF="posix_users00396.html">
+<LINK REV="Subdocument" HREF="posix_users00388.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00396.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00388.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00398.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

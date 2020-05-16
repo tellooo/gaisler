@@ -1,0 +1,76 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/sem.texi line 175 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Semaphore Manager Priority Ceiling</TITLE>
+<LINK REL="Precedes" HREF="ada_user00165.html">
+<LINK REV="Precedes" HREF="ada_user00163.html">
+<LINK REV="Subdocument" HREF="ada_user00158.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00163.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00158.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00165.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>9.2.4: Priority Ceiling</H3>
+<P>
+Priority ceiling is an algorithm that calls for the
+lower priority task holding a resource to have its priority
+increased to that of the highest priority task which will EVER
+block waiting for that resource.  This algorithm addresses the
+problem of priority inversion although it avoids the possibility
+of changing the priority of the task holding the resource
+multiple times.  The priority ceiling algorithm will only change
+the priority of the task holding the resource a maximum of one
+time.  The ceiling priority is set at creation time and must be
+the priority of the highest priority task which will ever
+attempt to acquire that semaphore.
+</P>
+<P>
+RTEMS supports priority ceiling for local, binary
+semaphores that use the priority task wait queue blocking
+discipline.   When a task of lower priority than the ceiling
+priority successfully obtains the semaphore, its priority is
+raised to the ceiling priority.  When the task holding the task
+completely releases the binary semaphore (i.e. not for a nested
+release), the holder's priority is restored to the value it had
+before any higher priority was put into effect.
+</P>
+<P>
+The need to identify the highest priority task which
+will attempt to obtain a particular semaphore can be a difficult
+task in a large, complicated system.  Although the priority
+ceiling algorithm is more efficient than the priority
+inheritance algorithm with respect to the maximum number of task
+priority changes which may occur while a task holds a particular
+semaphore, the priority inheritance algorithm is more forgiving
+in that it does not require this apriori information.
+</P>
+<P>
+The RTEMS implementation of the priority ceiling
+algorithm takes into account the scenario in which a task holds
+more than one binary semaphore.  The holding task will execute
+at the priority of the higher of the highest ceiling priority or
+at the priority of the highest priority task blocked waiting for
+any of the semaphores the task holds.  Only when the task
+releases ALL of the binary semaphores it holds will its priority
+be restored to the normal value.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00165.html">
+<LINK REV="Precedes" HREF="ada_user00163.html">
+<LINK REV="Subdocument" HREF="ada_user00158.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00163.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00158.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00165.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

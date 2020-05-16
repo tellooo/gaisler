@@ -1,0 +1,88 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/task.texi line 1395 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Task Manager TASK_SET_PRIORITY - Set task priority</TITLE>
+<LINK REL="Precedes" HREF="ada_user00083.html">
+<LINK REV="Precedes" HREF="ada_user00081.html">
+<LINK REV="Subdocument" HREF="ada_user00053.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00081.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00053.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00083.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>5.4.10: TASK_SET_PRIORITY - Set task priority</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+procedure Task_Set_Priority (
+   ID           : in     RTEMS.ID;
+   New_Priority : in     RTEMS.Task_Priority;
+   Old_Priority :    out RTEMS.Task_Priority;
+   Result       :    out RTEMS.Status_Codes
+);
+</PRE>
+</DL>
+<H3>DIRECTIVE STATUS CODES:</H3>
+<P>
+<CODE>RTEMS.SUCCESSFUL</CODE> - task priority set successfully<BR>
+
+<CODE>RTEMS.INVALID_ID</CODE> - invalid task id<BR>
+
+<CODE>RTEMS.INVALID_ADDRESS</CODE> - invalid return argument pointer<BR>
+
+<CODE>RTEMS.INVALID_PRIORITY</CODE> - invalid task priority
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This directive manipulates the priority of the task specified by
+id.  An id of <CODE>RTEMS.SELF</CODE> is used to indicate
+the calling task.  When new_priority is not equal to
+<CODE>RTEMS.CURRENT_PRIORITY</CODE>, the specified
+task's previous priority is returned in old_priority.  When
+new_priority is <CODE>RTEMS.CURRENT_PRIORITY</CODE>,
+the specified task's current
+priority is returned in old_priority.  Valid priorities range
+from a high of 1 to a low of 255.
+</P>
+<H3>NOTES:</H3>
+<P>
+The calling task may be preempted if its preemption mode is
+enabled and it lowers its own priority or raises another task's
+priority.
+</P>
+<P>
+Setting the priority of a global task which does not reside on
+the local node will generate a request to the remote node to
+change the priority of the specified task.
+</P>
+<P>
+If the task specified by id is currently holding any binary
+semaphores which use the priority inheritance algorithm, then
+the task's priority cannot be lowered immediately.  If the
+task's priority were lowered immediately, then priority
+inversion results.  The requested lowering of the task's
+priority will occur when the task has released all priority
+inheritance binary semaphores.  The task's priority can be
+increased regardless of the task's use of priority inheritance
+binary semaphores.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00083.html">
+<LINK REV="Precedes" HREF="ada_user00081.html">
+<LINK REV="Subdocument" HREF="ada_user00053.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00081.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00053.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00083.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

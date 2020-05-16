@@ -1,0 +1,77 @@
+<HTML>
+<!-- created Dec 13 2011 from buildc.texi line 679 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Building the GNU Debugger GDB</TITLE>
+<LINK REL="Precedes" HREF="started00044.html">
+<LINK REV="Precedes" HREF="started00042.html">
+<LINK REV="Subdocument" HREF="started00030.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started00042.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started00030.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started00044.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with RTEMS</CITE></P>
+<H2>4.2: Building the GNU Debugger GDB</H2>
+<MENU>
+<LI><A HREF="started00044.html">Obtain Source and Patches for GDB</A>
+<LI><A HREF="started00045.html">Unarchiving the GDB Distribution</A>
+<LI><A HREF="started00046.html">Applying RTEMS Patch to GDB</A>
+<LI><A HREF="started00047.html">Compiling and Installing the GNU Debugger GDB</A>
+</MENU>
+<P>
+NOTE: This step is NOT required if prebuilt executables for
+the GNU Debugger GDB were installed.
+</P>
+<P>
+The GNU Debugger GDB supports many configurations but requires some
+means of communicating between the host computer and target board.
+This communication can be via a serial port, Ethernet, BDM, or ROM emulator.
+The communication protocol can be the GDB remote protocol or GDB
+can talk directly to a ROM monitor.  This setup is target board
+specific.  The following configurations have been
+successfully used with RTEMS applications:
+</P>
+<UL>
+<LI>BDM with ColdFire, 683xx, MPC860 CPUs
+<LI>Motorola Mxxxbug found on M68xxx VME boards
+<LI>Motorola PPCbug found on PowerPC VME, CompactPCI, and MTX boards
+<LI>ARM based Cogent EDP7312
+<LI>PC's using various Intel and AMD CPUs including i386,
+i486, Pentium and above, and Athlon
+<LI>PowerPC Instruction Simulator in GDB (PSIM)
+<LI>MIPS Instruction Simulator in GDB (JMR3904)
+<LI>Sparc Instruction Simulator in GDB (SIS)
+<LI>Sparc Instruction Simulator (TSIM)
+<LI>DINK32 on various PowerPC boards
+</UL>
+
+<P>
+GDB is currently RTEMS thread/task aware only if you are using the
+remote debugging support via Ethernet.  These are configured
+using gdb targets of the form CPU-RTEMS.  Note the capital RTEMS.
+</P>
+<P>
+It is recommended that when toolset binaries are available for
+your particular host, that they be used.  Prebuilt binaries
+are much easier to install but in the case of gdb may or may
+not include support for your particular target board.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="started00044.html">
+<LINK REV="Precedes" HREF="started00042.html">
+<LINK REV="Subdocument" HREF="started00030.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="started00042.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="started00030.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="started00044.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>Getting Started with RTEMS</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

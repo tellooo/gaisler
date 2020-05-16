@@ -1,0 +1,82 @@
+<HTML>
+<!-- created Dec 13 2011 from console.texi line 465 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Console Driver Initialization</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00061.html">
+<LINK REV="Precedes" HREF="bsp_howto00059.html">
+<LINK REV="Subdocument" HREF="bsp_howto00056.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00059.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00056.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00061.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H3>8.4.4: Initialization</H3>
+<P>
+The driver initialization is called once during the RTEMS initialization
+process.
+</P>
+<P>
+The <CODE>console_initialize</CODE> function may look like this:
+</P>
+<DL><DT><DD>
+<PRE>
+rtems_device_driver console_initialize(
+    rtems_device_major_number major,
+    rtems_device_minor_number minor,
+    void *arg
+)
+{
+    rtems_status_code sc = RTEMS_SUCCESSFUL;
+    rtems_device_minor_number i = 0;
+
+    /*
+     * Initialize the Termios infrastructure.  If Termios has already
+     * been initialized by another device driver, then this call will
+     * have no effect.
+     */
+    rtems_termios_initialize();
+
+    /* Initialize each device */
+    for (i = 0; i &lt; MY_DRIVER_DEVICE_NUMBER; ++i) {
+        my_driver_entry *e = &amp;my_driver_table [i];
+
+        /*
+         * Register this device in the file system.  In order to use the
+         * console (i.e. being able to do printf, scanf etc. on stdin,
+         * stdout and stderr), some device must be registered
+         * as &quot;/dev/console&quot; (CONSOLE_DEVICE_NAME).
+         */
+        sc = rtems_io_register_name (e-&gt;device_name, major, i);
+        RTEMS_CHECK_SC(sc, &quot;Register IO device&quot;);
+
+        /*
+         * Initialize this device and install the interrupt handler if
+         * necessary.  You may also initialize the device in the first
+         * open call.
+         */
+    }
+
+    return RTEMS_SUCCESSFUL;
+}
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00061.html">
+<LINK REV="Precedes" HREF="bsp_howto00059.html">
+<LINK REV="Subdocument" HREF="bsp_howto00056.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00059.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00056.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00061.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

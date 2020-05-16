@@ -1,0 +1,70 @@
+<HTML>
+<!-- created Dec 13 2011 from signal.texi line 982 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Signal Manager alarm - Schedule Alarm</TITLE>
+<LINK REL="Precedes" HREF="posix_users00046.html">
+<LINK REV="Precedes" HREF="posix_users00044.html">
+<LINK REV="Subdocument" HREF="posix_users00022.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00044.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00022.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00046.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<H3>2.4.18: alarm - Schedule Alarm</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+#include &lt;unistd.h&gt;
+
+unsigned int alarm(
+  unsigned int seconds
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<P>
+This call always succeeds.
+</P>
+<P>
+If there was a previous <CODE>alarm()</CODE> request with time remaining,
+then this routine returns the number of seconds until that outstanding
+alarm would have fired. If no previous <CODE>alarm()</CODE> request was
+outstanding, then zero is returned.
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+The <CODE>alarm()</CODE> service causes the <CODE>SIGALRM</CODE> signal to
+be generated after the number of seconds specified by
+<CODE>seconds</CODE> has elapsed.
+</P>
+<H3>NOTES:</H3>
+<P>
+Alarm requests do not queue.  If <CODE>alarm</CODE> is called while
+a previous request is outstanding, the call will result in
+rescheduling the time at which the <CODE>SIGALRM</CODE> signal
+will be generated.
+</P>
+<P>
+If the notification signal, <CODE>SIGALRM</CODE>, is not caught or ignored, the
+calling process is terminated.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="posix_users00046.html">
+<LINK REV="Precedes" HREF="posix_users00044.html">
+<LINK REV="Subdocument" HREF="posix_users00022.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00044.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00022.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00046.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

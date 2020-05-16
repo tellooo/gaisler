@@ -1,0 +1,85 @@
+<HTML>
+<!-- created Dec 13 2011 from concepts.texi line 72 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Key Concepts Object Names</TITLE>
+<LINK REL="Precedes" HREF="c_user00023.html">
+<LINK REV="Precedes" HREF="c_user00018.html">
+<LINK REV="Subdocument" HREF="c_user00018.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00018.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00018.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00023.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H3>2.2.1: Object Names</H3>
+<P>
+An object name is an unsigned thirty-two bit entity
+associated with the object by the user.  The data type
+<CODE>rtems_name</CODE> is used to store object names.
+</P>
+<P>
+Although not required by RTEMS, object names are often
+composed of four ASCII characters which help identify that object.
+For example, a task which causes a light to blink might be
+called &quot;LITE&quot;.  The <CODE>rtems_build_name</CODE> routine
+is provided to build an object name from four ASCII characters.
+The following example illustrates this:
+</P>
+<DL><DT><DD>
+<PRE>
+rtems_object_name my_name;
+
+my_name = rtems_build_name( 'L', 'I', 'T', 'E' );
+</PRE>
+</DL>
+<P>
+However, it is not required that the application use ASCII
+characters to build object names.  For example, if an
+application requires one-hundred tasks, it would be difficult to
+assign meaningful ASCII names to each task.  A more convenient
+approach would be to name them the binary values one through
+one-hundred, respectively.
+</P>
+<P>
+RTEMS provides a helper routine, <CODE>rtems_object_get_name</CODE>,
+which can be used to obtain the name of any RTEMS object using just
+its ID.  This routine attempts to convert the name into a printable string.
+</P>
+<P>
+The following example illustrates the use of this method to print
+an object name:
+</P>
+<DL><DT><DD>
+<PRE>
+#include &lt;rtems.h&gt;
+#include &lt;rtems/bspIo.h&gt;
+
+void print_name(rtems_id id)
+{
+  char  buffer[10];   /* name assumed to be 10 characters or less */
+  char *result;
+
+  result = rtems_object_get_name( id, sizeof(buffer), buffer );
+  printk( &quot;ID=0x%08x name=%s\n&quot;, id, ((result) ? result : &quot;no name&quot;) );
+}
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00023.html">
+<LINK REV="Precedes" HREF="c_user00018.html">
+<LINK REV="Subdocument" HREF="c_user00018.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00018.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00018.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00023.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

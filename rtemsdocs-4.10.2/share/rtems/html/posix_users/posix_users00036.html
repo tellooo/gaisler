@@ -1,0 +1,83 @@
+<HTML>
+<!-- created Dec 13 2011 from signal.texi line 560 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Signal Manager pthread_sigmask - Examine and Change Thread Blocked Signals</TITLE>
+<LINK REL="Precedes" HREF="posix_users00037.html">
+<LINK REV="Precedes" HREF="posix_users00035.html">
+<LINK REV="Subdocument" HREF="posix_users00022.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00035.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00022.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00037.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<H3>2.4.9: pthread_sigmask - Examine and Change Thread Blocked Signals</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+#include &lt;signal.h&gt;
+
+int pthread_sigmask(
+  int             how,
+  const sigset_t *set,
+  sigset_t       *oset
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<DL>
+<DT><STRONG>EINVAL</STRONG>
+<DD>
+Invalid argument passed.
+
+</DL>
+<H3>DESCRIPTION:</H3>
+<P>
+This function is used to alter the set of currently blocked signals
+for the calling thread. A blocked signal will not be received by the
+process. The behavior of this function is dependent on the value of
+<CODE>how</CODE> which may be one of the following:
+</P>
+<DL>
+<DT><CODE>SIG_BLOCK</CODE>
+<DD>
+The set of blocked signals is set to the union of <CODE>set</CODE> and
+those signals currently blocked.
+
+<DT><CODE>SIG_UNBLOCK</CODE>
+<DD>
+The signals specific in <CODE>set</CODE> are removed from the currently
+blocked set.
+
+<DT><CODE>SIG_SETMASK</CODE>
+<DD>
+The set of currently blocked signals is set to <CODE>set</CODE>.
+
+</DL>
+<P>
+If <CODE>oset</CODE> is not <CODE>NULL</CODE>, then the set of blocked signals
+prior to this call is returned in <CODE>oset</CODE>.
+</P>
+<H3>NOTES:</H3>
+<P>
+It is not an error to unblock a signal which is not blocked.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="posix_users00037.html">
+<LINK REV="Precedes" HREF="posix_users00035.html">
+<LINK REV="Subdocument" HREF="posix_users00022.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00035.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00022.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00037.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,53 @@
+<HTML>
+<!-- created Dec 13 2011 from lm32.texi line 196 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Lattice Mico32 Specific Information Default Fatal Error Processing</TITLE>
+<LINK REL="Precedes" HREF="cpu_supplement00087.html">
+<LINK REV="Precedes" HREF="cpu_supplement00085.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00080.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00085.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00080.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00087.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<H2>6.6: Default Fatal Error Processing</H2>
+<P>
+Upon detection of a fatal error by either the application or RTEMS during
+initialization the <CODE>rtems_fatal_error_occurred</CODE> directive supplied
+by the Fatal Error Manager is invoked.  The Fatal Error Manager will
+invoke the user-supplied fatal error handlers.  If no user-supplied
+handlers are configured or all of them return without taking action to
+shutdown the processor or reset, a default fatal error handler is invoked.
+</P>
+<P>
+Most of the action performed as part of processing the fatal error are
+described in detail in the Fatal Error Manager chapter in the User's
+Guide.  However, the if no user provided extension or BSP specific fatal
+error handler takes action, the final default action is to invoke a
+CPU architecture specific function.  Typically this function disables
+interrupts and halts the processor.
+</P>
+<P>
+In each of the architecture specific chapters, this describes the precise
+operations of the default CPU specific fatal error handler.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="cpu_supplement00087.html">
+<LINK REV="Precedes" HREF="cpu_supplement00085.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00080.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00085.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00080.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00087.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

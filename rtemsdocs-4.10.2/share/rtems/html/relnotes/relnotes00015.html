@@ -1,0 +1,128 @@
+<HTML>
+<!-- created Dec 13 2011 from status.texi line 25 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Development Environment Status RTEMS Executive Status</TITLE>
+<LINK REL="Precedes" HREF="relnotes00016.html">
+<LINK REV="Precedes" HREF="relnotes00014.html">
+<LINK REV="Subdocument" HREF="relnotes00014.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="relnotes00014.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="relnotes00014.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="relnotes00016.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Release Notes</CITE></P>
+<H2>3.1: RTEMS Executive Status</H2>
+<P>
+Release 4.10.2 of the RTEMS Executive contains support
+for both the classic RTEMS API based on the RTEID specification as well
+as support for POSIX threads and real-time extensions.
+</P>
+<P>
+The classic RTEMS API has the following managers based upon the RTEID
+specification:
+</P>
+<UL>
+<LI>Task
+<LI>Initialization
+<LI>Clock
+<LI>Timer
+<LI>Interrupt
+<LI>Fatal Error
+<LI>Message
+<LI>Semaphore
+<LI>Event
+<LI>Signal
+<LI>Region
+<LI>Partition
+<LI>Dual Ported Memory
+<LI>I/O
+<LI>Multiprocessing
+<LI>Rate Monotonic
+<LI>User Extensions
+</UL>
+
+<P>
+RTEMS also has support for the following managers based upon the POSIX threads
+and real-time extensions:
+</P>
+<UL>
+<LI>Thread
+<LI>Clock
+<LI>Key
+<LI>Condition Variable
+<LI>Mutex
+<LI>Signal 
+<LI>Scheduler
+</UL>
+
+<P>
+This release of the C implementation supports the
+following processors and target boards:
+</P>
+<UL>
+<LI>Motorola M68k family
+
+<UL>
+<LI>DY-4 DMV152, SVME153
+<LI>Motorola IDP
+<LI>Motorola MVME135, MVME136
+<LI>Motorola MVME147, MVME147S
+<LI>Motorola MVME162
+<LI>EFI 68000 and 68332
+<LI>Generic 68302
+<LI>Generic 68360 and 68360 in companion mode with 68040
+</UL>
+
+<LI>Intel i386 family
+
+<UL>
+<LI>Force CPU386
+<LI>Intel i386ex eval board
+<LI>PC-AT i386 and above (go32)
+</UL>
+
+<LI>PowerPC
+
+<UL>
+<LI>Papyrus (proprietary controller)
+</UL>
+
+<LI>SPARC
+
+<UL>
+<LI>ERC32 (space-hardened V7)
+</UL>
+
+<LI>MIPS
+
+<UL>
+<LI>P4000 with R4600 or R4650
+</UL>
+
+</UL>
+<P>
+Support for the Cygnus NEWLIB Standard C Library is
+provided with this release which may be used on any of the RTEMS
+supported targets.  The BSPs only provide support for console
+I/O only using this library.  Support for the reentrancy
+capabilities of newlib is provided in the RTEMS distribution.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="relnotes00016.html">
+<LINK REV="Precedes" HREF="relnotes00014.html">
+<LINK REV="Subdocument" HREF="relnotes00014.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="relnotes00014.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="relnotes00014.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="relnotes00016.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Release Notes</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

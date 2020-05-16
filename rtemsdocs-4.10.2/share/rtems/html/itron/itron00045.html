@@ -1,0 +1,68 @@
+<HTML>
+<!-- created Dec 13 2011 from tasksync.texi line 326 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Task-Dependent Synchronization Manager tslp_tsk - Sleep Task with Timeout</TITLE>
+<LINK REL="Precedes" HREF="itron00046.html">
+<LINK REV="Precedes" HREF="itron00044.html">
+<LINK REV="Subdocument" HREF="itron00033.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00044.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00033.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00046.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<H3>2.3.5: tslp_tsk - Sleep Task with Timeout</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+ER ercd =tslp_tsk(
+  TMO tmout
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<P>
+<CODE>E_OK</CODE> - Normal Completion
+</P>
+<P>
+<CODE>E_PAR</CODE> - Parameter error (a timeout value -2 or less was specified)
+</P>
+<P>
+<CODE>E_RLWAI</CODE> - WAIT state was forcibly released (rel_wai was received while waiting)
+</P>
+<P>
+<CODE>E_TMOUT</CODE> - Polling failure or timeout exceeded
+</P>
+<P>
+<CODE>E_CTX</CODE> - Context error (issued from task-independent portions or a task in dispatch disabled state)
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+The tslp_tsk system call is the same as slp_tsk but with an additional timeout feature.  If a wup_tsk is issued before the period of time specified by tmout elapses, tslp_tsk will complete normally.  An E_TMOUT error will result if no wup_tsk is issued before the time specified by tmout expires.  Specifying tmout = TMO_FEVR = -1 can be used to set the timeout period to forever (no timeout).  In this case, tslp_tsk will function exactly the same as slp_tsk causing the issuing task to wait forever for wup_tsk to be issued.
+</P>
+<H3>NOTES:</H3>
+<P>
+Since the tslp_tsk system call causes the issuing task to enter WAIT state, tslp_tsk calls may not be nested.  It is possible, however, for another task to execute a sus_tsk on a task which has put itself in WAIT state using tslp_tsk.  If this happens, the task will enter the combined WAIT-SUSPEND state.
+</P>
+<P>
+If you simply wish to delay a task (make it wait for a while), use dly_tsk rather than tslp_tsk.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="itron00046.html">
+<LINK REV="Precedes" HREF="itron00044.html">
+<LINK REV="Subdocument" HREF="itron00033.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00044.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00033.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00046.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

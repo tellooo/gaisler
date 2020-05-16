@@ -1,0 +1,49 @@
+<HTML>
+<!-- created Dec 13 2011 from sh.texi line 140 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>SuperH Specific Information Flat Memory Model</TITLE>
+<LINK REL="Precedes" HREF="cpu_supplement00166.html">
+<LINK REV="Precedes" HREF="cpu_supplement00165.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00165.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00165.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00165.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00166.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<H3>10.3.1: Flat Memory Model</H3>
+<P>
+The SuperH family supports a flat 32-bit address
+space with addresses ranging from 0x00000000 to 0xFFFFFFFF (4
+gigabytes).  Each address is represented by a 32-bit value and
+is byte addressable.  The address may be used to reference a
+single byte, word (2-bytes), or long word (4 bytes).  Memory
+accesses within this address space are performed in big endian
+fashion by the processors in this family.
+</P>
+<P>
+Some of the SuperH family members support virtual memory and
+segmentation.  RTEMS does not support virtual memory or
+segmentation on any of the SuperH family members.  It is the
+responsibility of the BSP to initialize the mapping for
+a flat memory model.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="cpu_supplement00166.html">
+<LINK REV="Precedes" HREF="cpu_supplement00165.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00165.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00165.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00165.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00166.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

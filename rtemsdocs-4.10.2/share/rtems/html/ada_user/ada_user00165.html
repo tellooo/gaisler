@@ -1,0 +1,99 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/sem.texi line 219 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Semaphore Manager Building a Semaphore Attribute Set</TITLE>
+<LINK REL="Precedes" HREF="ada_user00166.html">
+<LINK REV="Precedes" HREF="ada_user00164.html">
+<LINK REV="Subdocument" HREF="ada_user00158.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00164.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00158.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00166.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>9.2.5: Building a Semaphore Attribute Set</H3>
+<P>
+In general, an attribute set is built by a bitwise OR
+of the desired attribute components.  The following table lists
+the set of valid semaphore attributes:
+</P>
+<UL>
+<LI><CODE>RTEMS.FIFO</CODE> - tasks wait by FIFO (default)
+
+<LI><CODE>RTEMS.PRIORITY</CODE> - tasks wait by priority
+
+<LI><CODE>RTEMS.BINARY_SEMAPHORE</CODE> - restrict values to
+0 and 1
+
+<LI><CODE>RTEMS.COUNTING_SEMAPHORE</CODE> - no restriction on values
+(default)
+
+<LI><CODE>RTEMS.SIMPLE_BINARY_SEMAPHORE</CODE> - restrict values to
+0 and 1, do not allow nested access, allow deletion of locked semaphore.
+
+<LI><CODE>RTEMS.NO_INHERIT_PRIORITY</CODE> - do not use priority
+inheritance (default)
+
+<LI><CODE>RTEMS.INHERIT_PRIORITY</CODE> - use priority inheritance
+
+<LI><CODE>RTEMS.PRIORITY_CEILING</CODE> - use priority ceiling
+
+<LI><CODE>RTEMS.NO_PRIORITY_CEILING</CODE> - do not use priority
+ceiling (default)
+
+<LI><CODE>RTEMS.LOCAL</CODE> - local task (default)
+
+<LI><CODE>RTEMS.GLOBAL</CODE> - global task
+</UL>
+
+<P>
+Attribute values are specifically designed to be
+mutually exclusive, therefore bitwise OR and addition operations
+are equivalent as long as each attribute appears exactly once in
+the component list.  An attribute listed as a default is not
+required to appear in the attribute list, although it is a good
+programming practice to specify default attributes.  If all
+defaults are desired, the attribute
+<CODE>RTEMS.DEFAULT_ATTRIBUTES</CODE> should be
+specified on this call.
+</P>
+<P>
+This example demonstrates the attribute_set parameter needed to create a
+local semaphore with the task priority waiting queue discipline.  The
+attribute_set parameter passed to the
+<CODE>rtems.semaphore_create</CODE> directive could be either
+<CODE>RTEMS.PRIORITY</CODE> or <CODE>RTEMS.LOCAL or RTEMS.PRIORITY</CODE>.  The attribute_set parameter can be set to
+<CODE>RTEMS.PRIORITY</CODE> because <CODE>RTEMS.LOCAL</CODE> is the
+default for all created tasks.  If a similar semaphore were to be known
+globally, then the attribute_set parameter would be
+<CODE>RTEMS.GLOBAL or RTEMS.PRIORITY</CODE>.
+</P>
+<P>
+Some combinatinos of these attributes are invalid.  For example, priority
+ordered blocking discipline must be applied to a binary semaphore in order
+to use either the priority inheritance or priority ceiling functionality.
+The following tree figure illustrates the valid combinations.
+</P>
+<P>
+<STRONG><CENTER>Valid Semaphore Attributes Combinations</CENTER></STRONG>
+</P>
+<IMG SRC="semaphore_attributes.png" WIDTH=550 HEIGHT=400 ALT="Valid Semaphore Attribute Combinations">
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00166.html">
+<LINK REV="Precedes" HREF="ada_user00164.html">
+<LINK REV="Subdocument" HREF="ada_user00158.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00164.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00158.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00166.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

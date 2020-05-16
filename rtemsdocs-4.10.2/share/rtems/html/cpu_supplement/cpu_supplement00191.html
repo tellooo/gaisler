@@ -1,0 +1,50 @@
+<HTML>
+<!-- created Dec 13 2011 from sparc.texi line 219 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>SPARC Specific Information Low Power Mode</TITLE>
+<LINK REL="Precedes" HREF="cpu_supplement00186.html">
+<LINK REV="Precedes" HREF="cpu_supplement00190.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00185.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00190.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00185.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00186.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<H4>11.1.1.5: Low Power Mode</H4>
+<P>
+The macro SPARC_HAS_LOW_POWER_MODE is set to one to
+indicate that this CPU model has a low power mode.  If low power
+is enabled, then there must be CPU model specific implementation
+of the IDLE task in cpukit/score/cpu/sparc/cpu.c.  The low
+power mode IDLE task should be of the form:
+</P>
+<DL><DT><DD>
+<PRE>
+while ( TRUE ) {
+  enter low power mode
+}
+</PRE>
+</DL>
+<P>
+The code required to enter low power mode is CPU model specific.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="cpu_supplement00186.html">
+<LINK REV="Precedes" HREF="cpu_supplement00190.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00185.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00190.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00185.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00186.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

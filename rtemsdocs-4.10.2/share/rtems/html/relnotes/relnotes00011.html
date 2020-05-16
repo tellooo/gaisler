@@ -1,0 +1,98 @@
+<HTML>
+<!-- created Dec 13 2011 from install.texi line 61 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Installation Procedure Unarchiving the RTEMS and GNU Components</TITLE>
+<LINK REL="Precedes" HREF="relnotes00012.html">
+<LINK REV="Precedes" HREF="relnotes00010.html">
+<LINK REV="Subdocument" HREF="relnotes00008.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="relnotes00010.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="relnotes00008.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="relnotes00012.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Release Notes</CITE></P>
+<H2>2.3: Unarchiving the RTEMS and GNU Components</H2>
+<P>
+Many of the components of the RTEMS release are
+&quot;tarred, zipped&quot; files and have the .tar.gz or .tgz extension.
+The GNU zip package is required to unarchives these files on the
+RTEMS ftp site.  If this package is not installed, the source
+can be found in the files
+<A HREF="ftp://ftp.gnu.org/pub/gnu/gzip/gzip-1.2.4.shar"></A> or
+<A HREF="ftp://ftp.gnu.org/pub/gnu/gzip/gzip-1.2.4.tar"></A>.  It may be
+restored using a command similar to the following:
+</P>
+<DL><DT><DD>
+<PRE>
+tar xvf gzip-1.2.4.tar
+
+OR
+
+sh gzip-1.2.4.shar
+</PRE>
+</DL>
+<P>
+This will create a subdirectory gzip-1.2.4 in the
+current directory.  Please examine the files README and INSTALL
+and follow the instructions provided there.
+</P>
+<P>
+[Note: The GNU tools follow a standard packaging procedure
+They will unarchive into a directory based on the package name and version
+number.  For detailed instructions on compilation and
+installation of the GNU tools, please refer to the instructions for
+each GNU tool.]
+</P>
+<P>
+Files which have been &quot;tarred, zipped&quot; (i.e.  .tar.gz
+or .tgz extension) may be unarchived with a command similar to
+one of the following:
+</P>
+<DL><DT><DD>
+<PRE>
+gzcat &lt;file&gt;.tgz | tar xvof -
+
+OR
+
+gunzip -c &lt;file&gt;.tgz | tar xvof -
+
+OR
+
+gtar xzvf &lt;file&gt;.tgz
+</PRE>
+</DL>
+<P>
+NOTE: gunzip -c is equivalent to gzcat, while gtar is GNU tar.
+</P>
+<P>
+Given that the necessary utility programs are
+installed, any of the above commands will extract the contents
+of &lt;file&gt;.tar.gz into the current directory.  All of the RTEMS
+components will be extracted into the subdirectory rtems-4.10.2.
+To view the contents of a component without restoring any files,
+use a command similar to the following:
+</P>
+<DL><DT><DD>
+<PRE>
+gzcat &lt;file&gt;.tgz | tar tvf -
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="relnotes00012.html">
+<LINK REV="Precedes" HREF="relnotes00010.html">
+<LINK REV="Subdocument" HREF="relnotes00008.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="relnotes00010.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="relnotes00008.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="relnotes00012.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Release Notes</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

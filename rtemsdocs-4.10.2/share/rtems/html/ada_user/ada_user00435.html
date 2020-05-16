@@ -1,0 +1,77 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/conf.texi line 920 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Configuring a System ITRON Initialization Task Table Configuration</TITLE>
+<LINK REL="Precedes" HREF="ada_user00436.html">
+<LINK REV="Precedes" HREF="ada_user00434.html">
+<LINK REV="Subdocument" HREF="ada_user00414.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00434.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00414.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00436.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>23.2.11: ITRON Initialization Task Table Configuration</H3>
+<P>
+The <CODE>rtems/confdefs.h</CODE> configuration system can automatically
+generate an ITRON Initialization Tasks Table named
+<CODE>ITRON_Initialization_tasks</CODE> with a single entry.  The following
+parameters control the generation of that table.
+</P>
+<UL>
+<LI><CODE>CONFIGURE_ITRON_INIT_TASK_TABLE</CODE> is defined
+if the user wishes to use a ITRON API Initialization
+Tasks Table.  The application may choose to use the initialization
+tasks or threads table from another API.  By default, this
+field is not defined as the user MUST select their own
+API for initialization tasks.
+
+<LI><CODE>CONFIGURE_ITRON_HAS_OWN_INIT_TASK_TABLE</CODE>
+is defined if the user wishes to define their own ITRON API Initialization
+Tasks Table.  This table should be named <CODE>ITRON_Initialization_tasks</CODE>.
+By default, this is not defined.
+
+<LI><CODE>CONFIGURE_ITRON_INIT_TASK_ENTRY_POINT</CODE>
+is the entry point (a.k.a. function name)
+of the single initialization task defined by the
+ITRON API Initialization Tasks Table.  By default
+the value is <CODE>ITRON_Init</CODE>.
+
+<LI><CODE>CONFIGURE_ITRON_INIT_TASK_ATTRIBUTES</CODE>
+is the attribute set
+of the single initialization task defined by the
+ITRON API Initialization Tasks Table.  By default
+the value is <CODE>TA_HLNG</CODE>.
+
+<LI><CODE>CONFIGURE_ITRON_INIT_TASK_PRIORITY</CODE>
+is the initial priority
+of the single initialization task defined by the
+ITRON API Initialization Tasks Table.  By default
+the value is <CODE>1</CODE> which is the highest priority
+in the ITRON API.
+
+<LI><CODE>CONFIGURE_ITRON_INIT_TASK_STACK_SIZE</CODE>
+is the stack size of the single initialization task defined by the
+ITRON API Initialization Tasks Table.  By default
+value is the configured minimum stack size.
+
+</UL>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00436.html">
+<LINK REV="Precedes" HREF="ada_user00434.html">
+<LINK REV="Subdocument" HREF="ada_user00414.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00434.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00414.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00436.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

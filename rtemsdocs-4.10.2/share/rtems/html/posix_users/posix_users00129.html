@@ -1,0 +1,122 @@
+<HTML>
+<!-- created Dec 13 2011 from io.texi line 306 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Input and Output Primitives Manager read - Reads from a file</TITLE>
+<LINK REL="Precedes" HREF="posix_users00130.html">
+<LINK REV="Precedes" HREF="posix_users00128.html">
+<LINK REV="Subdocument" HREF="posix_users00124.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00128.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00124.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00130.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<H3>5.4.5: read - Reads from a file</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+#include &lt;unistd.h&gt;
+
+int read(
+  int           fildes,
+  void         *buf,
+  unsigned int  nbyte
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<P>
+On error, this routine returns -1 and sets <CODE>errno</CODE> to one of
+the following:
+</P>
+<DL>
+<DT><STRONG>EAGAIN</STRONG>
+<DD>
+The O_NONBLOCK flag is set for a file descriptor and the process
+would be delayed in the I/O operation.
+
+<DT><STRONG>EBADF</STRONG>
+<DD>
+Invalid file descriptor
+
+<DT><STRONG>EINTR</STRONG>
+<DD>
+Function was interrupted by a signal.
+
+<DT><STRONG>EIO</STRONG>
+<DD>
+Input or output error
+
+<DT><STRONG>EINVAL</STRONG>
+<DD>
+Bad buffer pointer
+
+</DL>
+<H3>DESCRIPTION:</H3>
+<P>
+The <CODE>read()</CODE> function reads <CODE>nbyte</CODE> bytes from the file
+associated with <CODE>fildes</CODE> into the buffer pointed to by <CODE>buf</CODE>.
+</P>
+<P>
+The <CODE>read()</CODE> function returns the number of bytes actually read
+and placed in the buffer. This will be less than <CODE>nbyte</CODE> if:
+</P>
+<UL>
+<LI>The number of bytes left in the file is less than <CODE>nbyte</CODE>.
+
+<LI>The <CODE>read()</CODE> request was interrupted by a signal.
+
+<LI>The file is a pipe or FIFO or special file with less than <CODE>nbytes</CODE>
+immediately available for reading.
+
+</UL>
+<P>
+When attempting to read from any empty pipe or FIFO:
+</P>
+<UL>
+<LI>If no process has the pipe open for writing, zero is returned to
+indicate end-of-file.
+
+<LI>If some process has the pipe open for writing and O_NONBLOCK is set,
+-1 is returned and <CODE>errno</CODE> is set to EAGAIN.
+
+<LI>If some process has the pipe open for writing and O_NONBLOCK is clear,
+<CODE>read()</CODE> waits for some data to be written or the pipe to be closed.
+
+</UL>
+<P>
+When attempting to read from a file other than a pipe or FIFO and no data
+is available.
+</P>
+<UL>
+<LI>If O_NONBLOCK is set, -1 is returned and <CODE>errno</CODE> is set to EAGAIN.
+
+<LI>If O_NONBLOCK is clear, <CODE>read()</CODE> waits for some data to become
+available.
+
+<LI>The O_NONBLOCK flag is ignored if data is available.
+
+</UL>
+<H3>NOTES:</H3>
+<P>
+NONE
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="posix_users00130.html">
+<LINK REV="Precedes" HREF="posix_users00128.html">
+<LINK REV="Subdocument" HREF="posix_users00124.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00128.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00124.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00130.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

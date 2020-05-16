@@ -1,0 +1,42 @@
+<HTML>
+<!-- created Dec 13 2011 from task.texi line 81 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Task Manager Task Manager Task Control Block</TITLE>
+<LINK REL="Precedes" HREF="itron00009.html">
+<LINK REV="Precedes" HREF="itron00007.html">
+<LINK REV="Subdocument" HREF="itron00004.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00007.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00004.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00009.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<H3>1.2.2: Task Manager Task Control Block</H3>
+<P>
+ The Task Control Block (TCB) is a defined data structure which contains all the information that is pertinent to the execution of a task. During system initialization, implementation reserves a TCB for each task configured. A TCB is allocated upon creation of the task and is returned to the TCB free list upon deletion of the task.
+</P>
+<P>
+The TCB's elements are modified as a result of system calls made by the application in response to external and internal stimuli. The TCB contains a task's name, ID, current priority, current and starting states, TCB user extension pointer, scheduling control structures, as well as data required by a blocked task.
+</P>
+<P>
+A task's context is stored in the TCB when a task switch occurs. When the task regains control of the processor, its context is restored from the TCB. When a task is restarted, the initial state of the task is restored from the starting context area in the task's TCB.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="itron00009.html">
+<LINK REV="Precedes" HREF="itron00007.html">
+<LINK REV="Subdocument" HREF="itron00004.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00007.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00004.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00009.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,81 @@
+<HTML>
+<!-- created Dec 13 2011 from task.texi line 955 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Task Manager TASK_IDENT - Get ID of a task</TITLE>
+<LINK REL="Precedes" HREF="c_user00075.html">
+<LINK REV="Precedes" HREF="c_user00073.html">
+<LINK REV="Subdocument" HREF="c_user00053.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00073.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00053.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00075.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H3>5.4.2: TASK_IDENT - Get ID of a task</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+rtems_status_code rtems_task_ident(
+  rtems_name  name,
+  uint32_t    node,
+  rtems_id   *id
+);
+</PRE>
+</DL>
+<H3>DIRECTIVE STATUS CODES:</H3>
+<P>
+<CODE>RTEMS_SUCCESSFUL</CODE> - task identified successfully<BR>
+
+<CODE>RTEMS_INVALID_ADDRESS</CODE> - <CODE>id</CODE> is NULL<BR>
+
+<CODE>RTEMS_INVALID_NAME</CODE> - invalid task name<BR>
+
+<CODE>RTEMS_INVALID_NODE</CODE> - invalid node id
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This directive obtains the task id associated with the task name
+specified in name.  A task may obtain its own id by specifying
+<CODE>RTEMS_SELF</CODE> or its own task name in name.  If the task name is not
+unique, then the task id returned will match one of the tasks
+with that name.  However, this task id is not guaranteed to
+correspond to the desired task.  The task id, returned in id, is
+used in other task related directives to access the task.
+</P>
+<H3>NOTES:</H3>
+<P>
+This directive will not cause the running task to be preempted.
+</P>
+<P>
+If node is <CODE>RTEMS_SEARCH_ALL_NODES</CODE>, all nodes are searched with the
+local node being searched first.  All other nodes are searched
+with the lowest numbered node searched first.
+</P>
+<P>
+If node is a valid node number which does not represent the
+local node, then only the tasks exported by the designated node
+are searched.
+</P>
+<P>
+This directive does not generate activity on remote nodes.  It
+accesses only the local copy of the global object table.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00075.html">
+<LINK REV="Precedes" HREF="c_user00073.html">
+<LINK REV="Subdocument" HREF="c_user00053.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00073.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00053.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00075.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

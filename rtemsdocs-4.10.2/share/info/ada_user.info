@@ -1,0 +1,561 @@
+This is ada_user.info, produced by makeinfo version 4.13 from
+ada_user.texi.
+
+INFO-DIR-SECTION RTEMS On-Line Manual
+START-INFO-DIR-ENTRY
+* RTEMS Ada User: (ada_user).          The Ada User's Guide
+END-INFO-DIR-ENTRY
+
+
+Indirect:
+ada_user.info-1: 217
+ada_user.info-2: 298017
+ada_user.info-3: 598006
+
+Tag Table:
+(Indirect)
+Node: List of Figures217
+Node: Preface714
+Node: Overview9657
+Node: Overview Introduction10161
+Node: Overview Real-time Application Systems11267
+Node: Overview Real-time Executive13531
+Node: Overview RTEMS Application Architecture16275
+Ref: fig:RTEMS-App-Arch16869
+Node: Overview RTEMS Internal Architecture18126
+Ref: fig:rtems-layers19040
+Node: Overview User Customization and Extensibility19942
+Node: Overview Portability21052
+Node: Overview Memory Requirements21639
+Node: Overview Audience22772
+Node: Overview Conventions23896
+Node: Overview Manual Organization24735
+Node: Key Concepts28609
+Node: Key Concepts Introduction28938
+Node: Key Concepts Objects29359
+Node: Key Concepts Object Names30534
+Node: Key Concepts Object IDs31619
+Node: Key Concepts Thirty-Two Object ID Format32632
+Ref: fig:Object-Id-3233051
+Node: Key Concepts Sixteen Bit Object ID Format34057
+Ref: fig:Object-Id-1634481
+Node: Key Concepts Object ID Description35275
+Node: Key Concepts Communication and Synchronization37486
+Node: Key Concepts Time39236
+Node: Key Concepts Memory Management41854
+Node: RTEMS Data Types43167
+Node: RTEMS Data Types Introduction43425
+Node: RTEMS Data Types List of Data Types43886
+Node: Initialization Manager53522
+Node: Initialization Manager Introduction53889
+Node: Initialization Manager Background54900
+Node: Initialization Manager Initialization Tasks55327
+Node: Initialization Manager System Initialization56777
+Node: Initialization Manager The Idle Task57696
+Node: Initialization Manager Initialization Manager Failure58474
+Node: Initialization Manager Operations60053
+Node: Initialization Manager Initializing RTEMS60393
+Node: Initialization Manager Shutting Down RTEMS62993
+Node: Initialization Manager Directives63542
+Node: Initialization Manager INITIALIZE_DATA_STRUCTURES - Initialize RTEMS Data Structures64467
+Node: Initialization Manager INITIALIZE_BEFORE_DRIVERS - Perform Initialization Before Device Drivers65870
+Node: Initialization Manager INITIALIZE_DEVICE_DRIVERS - Initialize Device Drivers67291
+Node: Initialization Manager INITIALIZE_START_MULTITASKING - Complete Initialization and Start Multitasking68787
+Node: Initialization Manager SHUTDOWN_EXECUTIVE - Shutdown RTEMS70025
+Node: Task Manager71065
+Node: Task Manager Introduction71375
+Node: Task Manager Background72678
+Node: Task Manager Task Definition73234
+Node: Task Manager Task Control Block74352
+Node: Task Manager Task States75649
+Node: Task Manager Task Priority76663
+Node: Task Manager Task Mode77794
+Node: Task Manager Accessing Task Arguments80669
+Node: Task Manager Floating Point Considerations81384
+Node: Task Manager Per Task Variables84430
+Node: Task Manager Building a Task Attribute Set86458
+Node: Task Manager Building a Mode and Mask87996
+Node: Task Manager Operations90116
+Node: Task Manager Creating Tasks90672
+Node: Task Manager Obtaining Task IDs91304
+Node: Task Manager Starting and Restarting Tasks91981
+Node: Task Manager Suspending and Resuming Tasks93678
+Node: Task Manager Delaying the Currently Executing Task94852
+Node: Task Manager Changing Task Priority95824
+Node: Task Manager Changing Task Mode96581
+Node: Task Manager Notepad Locations97125
+Node: Task Manager Task Deletion97867
+Node: Task Manager Directives99268
+Node: Task Manager TASK_CREATE - Create a task100708
+Node: Task Manager TASK_IDENT - Get ID of a task105815
+Node: Task Manager TASK_SELF - Obtain ID of caller107524
+Node: Task Manager TASK_START - Start a task108176
+Node: Task Manager TASK_RESTART - Restart a task109922
+Node: Task Manager TASK_DELETE - Delete a task112124
+Node: Task Manager TASK_SUSPEND - Suspend a task114050
+Node: Task Manager TASK_RESUME - Resume a task115487
+Node: Task Manager TASK_IS_SUSPENDED - Determine if a task is Suspended116819
+Node: Task Manager TASK_SET_PRIORITY - Set task priority117791
+Node: Task Manager TASK_MODE - Change the current task mode119921
+Node: Task Manager TASK_GET_NOTE - Get task notepad entry122477
+Node: Task Manager TASK_SET_NOTE - Set task notepad entry123833
+Node: Task Manager TASK_WAKE_AFTER - Wake up after interval125148
+Node: Task Manager TASK_WAKE_WHEN - Wake up when specified126445
+Node: Task Manager ITERATE_OVER_ALL_THREADS - Iterate Over Tasks127614
+Node: Task Manager TASK_VARIABLE_ADD - Associate per task variable128718
+Node: Task Manager TASK_VARIABLE_GET - Obtain value of a per task variable130855
+Node: Task Manager TASK_VARIABLE_DELETE - Remove per task variable132510
+Node: Interrupt Manager133494
+Node: Interrupt Manager Introduction133846
+Node: Interrupt Manager Background134744
+Node: Interrupt Manager Processing an Interrupt135104
+Node: Interrupt Manager RTEMS Interrupt Levels138144
+Node: Interrupt Manager Disabling of Interrupts by RTEMS138864
+Node: Interrupt Manager Operations140057
+Node: Interrupt Manager Establishing an ISR140382
+Node: Interrupt Manager Directives Allowed from an ISR141056
+Node: Interrupt Manager Directives143685
+Node: Interrupt Manager INTERRUPT_CATCH - Establish an ISR144435
+Node: Interrupt Manager INTERRUPT_DISABLE - Disable Interrupts145527
+Node: Interrupt Manager INTERRUPT_ENABLE - Enable Interrupts146313
+Node: Interrupt Manager INTERRUPT_FLASH - Flash Interrupts147243
+Node: Interrupt Manager INTERRUPT_IS_IN_PROGRESS - Is an ISR in Progress148192
+Node: Clock Manager149058
+Node: Clock Manager Introduction149384
+Node: Clock Manager Background150329
+Node: Clock Manager Required Support150700
+Node: Clock Manager Time and Date Data Structures151407
+Node: Clock Manager Clock Tick and Timeslicing153026
+Node: Clock Manager Delays154132
+Node: Clock Manager Timeouts154728
+Node: Clock Manager Operations155264
+Node: Clock Manager Announcing a Tick155560
+Node: Clock Manager Setting the Time156583
+Node: Clock Manager Obtaining the Time157087
+Node: Clock Manager Directives158489
+Node: Clock Manager CLOCK_SET - Set date and time159573
+Node: Clock Manager CLOCK_GET - Get date and time information160986
+Node: Clock Manager CLOCK_GET_TOD - Get date and time in TOD format163362
+Node: Clock Manager CLOCK_GET_TOD_TIMEVAL - Get date and time in timeval format164678
+Node: Clock Manager CLOCK_GET_SECONDS_SINCE_EPOCH - Get seconds since epoch166052
+Node: Clock Manager CLOCK_GET_TICKS_PER_SECOND - Get ticks per second167471
+Node: Clock Manager CLOCK_GET_TICKS_SINCE_BOOT - Get ticks since boot168553
+Node: Clock Manager CLOCK_GET_UPTIME - Get the time since boot169875
+Node: Clock Manager CLOCK_SET_NANOSECONDS_EXTENSION - Install the nanoseconds since last tick handler170859
+Node: Clock Manager CLOCK_TICK - Announce a clock tick172246
+Node: Timer Manager173378
+Node: Timer Manager Introduction173686
+Node: Timer Manager Background174554
+Node: Timer Manager Required Support174877
+Node: Timer Manager Timers175160
+Node: Timer Manager Timer Server176260
+Node: Timer Manager Timer Service Routines177523
+Node: Timer Manager Operations178210
+Node: Timer Manager Creating a Timer178733
+Node: Timer Manager Obtaining Timer IDs179215
+Node: Timer Manager Initiating an Interval Timer179910
+Node: Timer Manager Initiating a Time of Day Timer180645
+Node: Timer Manager Canceling a Timer181350
+Node: Timer Manager Resetting a Timer181874
+Node: Timer Manager Initiating the Timer Server182551
+Node: Timer Manager Deleting a Timer183194
+Node: Timer Manager Directives183790
+Node: Timer Manager TIMER_CREATE - Create a timer184812
+Node: Timer Manager TIMER_IDENT - Get ID of a timer185861
+Node: Timer Manager TIMER_CANCEL - Cancel a timer186966
+Node: Timer Manager TIMER_DELETE - Delete a timer187832
+Node: Timer Manager TIMER_FIRE_AFTER - Fire timer after interval188767
+Node: Timer Manager TIMER_FIRE_WHEN - Fire timer when specified190058
+Node: Timer Manager TIMER_INITIATE_SERVER - Initiate server for task-based timers191477
+Node: Timer Manager TIMER_SERVER_FIRE_AFTER - Fire task-based timer after interval192924
+Node: Timer Manager TIMER_SERVER_FIRE_WHEN - Fire task-based timer when specified194452
+Node: Timer Manager TIMER_RESET - Reset an interval timer196053
+Node: Semaphore Manager197552
+Node: Semaphore Manager Introduction197895
+Node: Semaphore Manager Background198605
+Node: Semaphore Manager Nested Resource Access201068
+Node: Semaphore Manager Priority Inversion202126
+Node: Semaphore Manager Priority Inheritance203077
+Node: Semaphore Manager Priority Ceiling204607
+Node: Semaphore Manager Building a Semaphore Attribute Set206923
+Ref: fig:semaphore-attributes209385
+Node: Semaphore Manager Building a SEMAPHORE_OBTAIN Option Set209485
+Node: Semaphore Manager Operations210703
+Node: Semaphore Manager Creating a Semaphore211160
+Node: Semaphore Manager Obtaining Semaphore IDs212410
+Node: Semaphore Manager Acquiring a Semaphore213184
+Node: Semaphore Manager Releasing a Semaphore214824
+Node: Semaphore Manager Deleting a Semaphore215703
+Node: Semaphore Manager Directives216375
+Node: Semaphore Manager SEMAPHORE_CREATE - Create a semaphore217199
+Node: Semaphore Manager SEMAPHORE_IDENT - Get ID of a semaphore220586
+Node: Semaphore Manager SEMAPHORE_DELETE - Delete a semaphore222269
+Node: Semaphore Manager SEMAPHORE_OBTAIN - Acquire a semaphore224097
+Node: Semaphore Manager SEMAPHORE_RELEASE - Release a semaphore227682
+Node: Semaphore Manager SEMAPHORE_FLUSH - Unblock all tasks waiting on a semaphore229581
+Node: Message Manager231301
+Node: Message Manager Introduction231655
+Node: Message Manager Background232585
+Node: Message Manager Messages232965
+Node: Message Manager Message Queues233391
+Node: Message Manager Building a Message Queue Attribute Set234236
+Node: Message Manager Building a MESSAGE_QUEUE_RECEIVE Option Set235728
+Node: Message Manager Operations236790
+Node: Message Manager Creating a Message Queue237289
+Node: Message Manager Obtaining Message Queue IDs238287
+Node: Message Manager Receiving a Message239018
+Node: Message Manager Sending a Message240164
+Node: Message Manager Broadcasting a Message241155
+Node: Message Manager Deleting a Message Queue241715
+Node: Message Manager Directives242592
+Node: Message Manager MESSAGE_QUEUE_CREATE - Create a queue243669
+Node: Message Manager MESSAGE_QUEUE_IDENT - Get ID of a queue246482
+Node: Message Manager MESSAGE_QUEUE_DELETE - Delete a queue248188
+Node: Message Manager MESSAGE_QUEUE_SEND - Put message at rear of a queue250227
+Node: Message Manager MESSAGE_QUEUE_URGENT - Put message at front of a queue252183
+Node: Message Manager MESSAGE_QUEUE_BROADCAST - Broadcast N messages to a queue254166
+Node: Message Manager MESSAGE_QUEUE_RECEIVE - Receive message from a queue256281
+Node: Message Manager MESSAGE_QUEUE_GET_NUMBER_PENDING - Get number of messages pending on a queue259574
+Node: Message Manager MESSAGE_QUEUE_FLUSH - Flush all messages on a queue260888
+Node: Event Manager262063
+Node: Event Manager Introduction262392
+Node: Event Manager Background262821
+Node: Event Manager Event Sets263145
+Node: Event Manager Building an Event Set or Condition264870
+Node: Event Manager Building an EVENT_RECEIVE Option Set265810
+Node: Event Manager Operations267327
+Node: Event Manager Sending an Event Set267727
+Node: Event Manager Receiving an Event Set268581
+Node: Event Manager Determining the Pending Event Set269628
+Node: Event Manager Receiving all Pending Events270168
+Node: Event Manager Directives270830
+Node: Event Manager EVENT_SEND - Send event set to a task271372
+Node: Event Manager EVENT_RECEIVE - Receive event condition273049
+Node: Signal Manager275770
+Node: Signal Manager Introduction276093
+Node: Signal Manager Background276506
+Node: Signal Manager Signal Manager Definitions276889
+Node: Signal Manager A Comparison of ASRs and ISRs278120
+Node: Signal Manager Building a Signal Set279065
+Node: Signal Manager Building an ASR Mode280024
+Node: Signal Manager Operations281975
+Node: Signal Manager Establishing an ASR282299
+Node: Signal Manager Sending a Signal Set283707
+Node: Signal Manager Processing an ASR285183
+Node: Signal Manager Directives286032
+Node: Signal Manager SIGNAL_CATCH - Establish an ASR286558
+Node: Signal Manager SIGNAL_SEND - Send signal set to a task288500
+Node: Partition Manager290246
+Node: Partition Manager Introduction290594
+Node: Partition Manager Background291222
+Node: Partition Manager Partition Manager Definitions291553
+Node: Partition Manager Building a Partition Attribute Set292509
+Node: Partition Manager Operations293623
+Node: Partition Manager Creating a Partition294072
+Node: Partition Manager Obtaining Partition IDs294870
+Node: Partition Manager Acquiring a Buffer295644
+Node: Partition Manager Releasing a Buffer296207
+Node: Partition Manager Deleting a Partition296682
+Node: Partition Manager Directives297245
+Node: Partition Manager PARTITION_CREATE - Create a partition298017
+Node: Partition Manager PARTITION_IDENT - Get ID of a partition301128
+Node: Partition Manager PARTITION_DELETE - Delete a partition302854
+Node: Partition Manager PARTITION_GET_BUFFER - Get buffer from a partition304341
+Node: Partition Manager PARTITION_RETURN_BUFFER - Return buffer to a partition305699
+Node: Region Manager306986
+Node: Region Manager Introduction307328
+Node: Region Manager Background308097
+Node: Region Manager Region Manager Definitions308437
+Node: Region Manager Building an Attribute Set309935
+Node: Region Manager Building an Option Set311152
+Node: Region Manager Operations312306
+Node: Region Manager Creating a Region312852
+Node: Region Manager Obtaining Region IDs314092
+Node: Region Manager Adding Memory to a Region314815
+Node: Region Manager Acquiring a Segment315431
+Node: Region Manager Releasing a Segment316470
+Node: Region Manager Obtaining the Size of a Segment317125
+Node: Region Manager Changing the Size of a Segment317629
+Node: Region Manager Deleting a Region318254
+Node: Region Manager Directives318983
+Node: Region Manager REGION_CREATE - Create a region319886
+Node: Region Manager REGION_IDENT - Get ID of a region322313
+Node: Region Manager REGION_DELETE - Delete a region323447
+Node: Region Manager REGION_EXTEND - Add memory to a region324519
+Node: Region Manager REGION_GET_SEGMENT - Get segment from a region325733
+Node: Region Manager REGION_RETURN_SEGMENT - Return segment to a region328695
+Node: Region Manager REGION_GET_SEGMENT_SIZE - Obtain size of a segment330320
+Node: Region Manager REGION_RESIZE_SEGMENT - Change size of a segment331517
+Node: Dual-Ported Memory Manager333020
+Node: Dual-Ported Memory Manager Introduction333449
+Node: Dual-Ported Memory Manager Background334201
+Node: Dual-Ported Memory Manager Operations335193
+Node: Dual-Ported Memory Manager Creating a Port335637
+Node: Dual-Ported Memory Manager Obtaining Port IDs336404
+Node: Dual-Ported Memory Manager Converting an Address337155
+Node: Dual-Ported Memory Manager Deleting a DPMA Port337870
+Node: Dual-Ported Memory Manager Directives338332
+Node: Dual-Ported Memory Manager PORT_CREATE - Create a port339178
+Node: Dual-Ported Memory Manager PORT_IDENT - Get ID of a port340764
+Node: Dual-Ported Memory Manager PORT_DELETE - Delete a port341924
+Node: Dual-Ported Memory Manager PORT_EXTERNAL_TO_INTERNAL - Convert external to internal address342953
+Node: Dual-Ported Memory Manager PORT_INTERNAL_TO_EXTERNAL - Convert internal to external address344215
+Node: I/O Manager345491
+Node: I/O Manager Introduction345828
+Node: I/O Manager Background346703
+Node: I/O Manager Device Driver Table347174
+Node: I/O Manager Major and Minor Device Numbers348333
+Node: I/O Manager Device Names349121
+Node: I/O Manager Device Driver Environment349559
+Node: I/O Manager Runtime Driver Registration350627
+Node: I/O Manager Device Driver Interface351610
+Node: I/O Manager Device Driver Initialization352791
+Node: I/O Manager Operations353601
+Node: I/O Manager Register and Lookup Name353894
+Node: I/O Manager Accessing an Device Driver354662
+Node: I/O Manager Directives355263
+Node: I/O Manager IO_REGISTER_DRIVER - Register a device driver356201
+Node: I/O Manager IO_UNREGISTER_DRIVER - Unregister a device driver357918
+Node: I/O Manager IO_INITIALIZE - Initialize a device driver358679
+Node: I/O Manager IO_REGISTER_NAME - Register a device360087
+Node: I/O Manager IO_LOOKUP_NAME - Lookup a device360984
+Node: I/O Manager IO_OPEN - Open a device361848
+Node: I/O Manager IO_CLOSE - Close a device362912
+Node: I/O Manager IO_READ - Read from a device363982
+Node: I/O Manager IO_WRITE - Write to a device365125
+Node: I/O Manager IO_CONTROL - Special device services366266
+Node: Fatal Error Manager367621
+Node: Fatal Error Manager Introduction367979
+Node: Fatal Error Manager Background368365
+Node: Fatal Error Manager Operations370061
+Node: Fatal Error Manager Announcing a Fatal Error370333
+Node: Fatal Error Manager Directives372355
+Node: Fatal Error Manager FATAL_ERROR_OCCURRED - Invoke the fatal error handler372903
+Node: Scheduling Concepts374137
+Node: Scheduling Concepts Introduction374508
+Node: Scheduling Concepts Scheduling Mechanisms376398
+Node: Scheduling Concepts Task Priority and Scheduling377770
+Node: Scheduling Concepts Preemption378893
+Node: Scheduling Concepts Timeslicing379718
+Node: Scheduling Concepts Manual Round-Robin380893
+Node: Scheduling Concepts Dispatching Tasks381610
+Node: Scheduling Concepts Task State Transitions383249
+Ref: fig:RTEMS-Task-States384494
+Node: Rate Monotonic Manager391380
+Node: Rate Monotonic Manager Introduction391756
+Node: Rate Monotonic Manager Background393040
+Node: Rate Monotonic Manager Rate Monotonic Manager Required Support394055
+Node: Rate Monotonic Manager Period Statistics394456
+Node: Rate Monotonic Manager Rate Monotonic Manager Definitions397417
+Node: Rate Monotonic Manager Rate Monotonic Scheduling Algorithm399362
+Node: Rate Monotonic Manager Schedulability Analysis403053
+Node: Rate Monotonic Manager Assumptions403924
+Node: Rate Monotonic Manager Processor Utilization Rule405024
+Node: Rate Monotonic Manager Processor Utilization Rule Example406238
+Node: Rate Monotonic Manager First Deadline Rule407756
+Node: Rate Monotonic Manager First Deadline Rule Example409041
+Node: Rate Monotonic Manager Relaxation of Assumptions412743
+Node: Rate Monotonic Manager Further Reading414836
+Node: Rate Monotonic Manager Operations415890
+Node: Rate Monotonic Manager Creating a Rate Monotonic Period416551
+Node: Rate Monotonic Manager Manipulating a Period417299
+Node: Rate Monotonic Manager Obtaining the Status of a Period418645
+Node: Rate Monotonic Manager Canceling a Period419545
+Node: Rate Monotonic Manager Deleting a Rate Monotonic Period420085
+Node: Rate Monotonic Manager Examples420748
+Node: Rate Monotonic Manager Simple Periodic Task421102
+Node: Rate Monotonic Manager Task with Multiple Periods423162
+Node: Rate Monotonic Manager Directives426538
+Node: Rate Monotonic Manager RATE_MONOTONIC_CREATE - Create a rate monotonic period427868
+Node: Rate Monotonic Manager RATE_MONOTONIC_IDENT - Get ID of a period429077
+Node: Rate Monotonic Manager RATE_MONOTONIC_CANCEL - Cancel a period430275
+Node: Rate Monotonic Manager RATE_MONOTONIC_DELETE - Delete a rate monotonic period431407
+Node: Rate Monotonic Manager RATE_MONOTONIC_PERIOD - Conclude current/Start next period432539
+Node: Rate Monotonic Manager RATE_MONOTONIC_GET_STATUS - Obtain status from a period434259
+Node: Rate Monotonic Manager RATE_MONOTONIC_GET_STATISTICS - Obtain statistics from a period436431
+Node: Rate Monotonic Manager RATE_MONOTONIC_RESET_STATISTICS - Reset statistics for a period437632
+Node: Rate Monotonic Manager RATE_MONOTONIC_RESET_ALL_STATISTICS - Reset statistics for all periods438666
+Node: Rate Monotonic Manager RATE_MONOTONIC_REPORT_STATISTICS - Print period statistics report439535
+Node: Barrier Manager440385
+Node: Barrier Manager Introduction440751
+Node: Barrier Manager Background441365
+Node: Barrier Manager Automatic Versus Manual Barriers442414
+Node: Barrier Manager Building a Barrier Attribute Set443413
+Node: Barrier Manager Operations445140
+Node: Barrier Manager Creating a Barrier445564
+Node: Barrier Manager Obtaining Barrier IDs446128
+Node: Barrier Manager Waiting at a Barrier446865
+Node: Barrier Manager Releasing a Barrier447850
+Node: Barrier Manager Deleting a Barrier448342
+Node: Barrier Manager Directives448995
+Node: Barrier Manager BARRIER_CREATE - Create a barrier449694
+Node: Barrier Manager BARRIER_IDENT - Get ID of a barrier452059
+Node: Barrier Manager BARRIER_DELETE - Delete a barrier453203
+Node: Barrier Manager BARRIER_OBTAIN - Acquire a barrier454505
+Node: Barrier Manager BARRIER_RELEASE - Release a barrier456813
+Node: Board Support Packages457828
+Node: Board Support Packages Introduction458310
+Node: Board Support Packages Reset and Initialization458931
+Node: Board Support Packages Interrupt Stack Requirements462573
+Node: Board Support Packages Processors with a Separate Interrupt Stack463478
+Node: Board Support Packages Processors Without a Separate Interrupt Stack464545
+Node: Board Support Packages Device Drivers465543
+Node: Board Support Packages Clock Tick Device Driver466459
+Node: Board Support Packages User Extensions468382
+Node: Board Support Packages Multiprocessor Communications Interface (MPCI)469717
+Node: Board Support Packages Tightly-Coupled Systems470724
+Node: Board Support Packages Loosely-Coupled Systems472126
+Node: Board Support Packages Systems with Mixed Coupling473142
+Node: Board Support Packages Heterogeneous Systems474086
+Node: User Extensions Manager474849
+Node: User Extensions Manager Introduction475235
+Node: User Extensions Manager Background475863
+Node: User Extensions Manager Extension Sets476654
+Node: User Extensions Manager TCB Extension Area479711
+Node: User Extensions Manager Extensions481930
+Node: User Extensions Manager TASK_CREATE Extension482973
+Node: User Extensions Manager TASK_START Extension484355
+Node: User Extensions Manager TASK_RESTART Extension485415
+Node: User Extensions Manager TASK_DELETE Extension486428
+Node: User Extensions Manager TASK_SWITCH Extension487652
+Node: User Extensions Manager TASK_BEGIN Extension488764
+Node: User Extensions Manager TASK_EXITTED Extension489791
+Node: User Extensions Manager FATAL Error Extension490975
+Node: User Extensions Manager Order of Invocation492097
+Node: User Extensions Manager Operations493918
+Node: User Extensions Manager Creating an Extension Set494331
+Node: User Extensions Manager Obtaining Extension Set IDs494965
+Node: User Extensions Manager Deleting an Extension Set495800
+Node: User Extensions Manager Directives496424
+Node: User Extensions Manager EXTENSION_CREATE - Create a extension set497114
+Node: User Extensions Manager EXTENSION_IDENT - Get ID of a extension set498341
+Node: User Extensions Manager EXTENSION_DELETE - Delete a extension set499610
+Node: Configuring a System500730
+Node: Configuring a System Introduction501675
+Node: Configuring a System Automatic Generation of System Configuration502806
+Node: Configuring a System Library Support Definitions506687
+Node: Configuring a System Basic System Information510184
+Node: Configuring a System Idle Task Configuration516680
+Node: Configuring a System Device Driver Table518215
+Node: Configuring a System Multiprocessing Configuration522871
+Node: Configuring a System Classic API Configuration524455
+Node: Configuring a System Classic API Initialization Tasks Table Configuration526618
+Node: Configuring a System POSIX API Configuration529337
+Node: Configuring a System POSIX Initialization Threads Table Configuration531857
+Node: Configuring a System ITRON API Configuration533536
+Node: Configuring a System ITRON Initialization Task Table Configuration535297
+Node: Configuring a System Ada Tasks537369
+Node: Configuring a System Configuration Table538610
+Node: Configuring a System RTEMS API Configuration Table550122
+Node: Configuring a System POSIX API Configuration Table556899
+Node: Configuring a System CPU Dependent Information Table565488
+Node: Configuring a System Initialization Task Table566292
+Node: Configuring a System Driver Address Table568432
+Node: Configuring a System User Extensions Table570792
+Node: Configuring a System Multiprocessor Configuration Table576162
+Node: Configuring a System Multiprocessor Communications Interface Table581586
+Node: Configuring a System Determining Memory Requirements584533
+Node: Configuring a System Sizing the RTEMS RAM Workspace587712
+Node: Multiprocessing Manager591628
+Node: Multiprocessing Manager Introduction592095
+Node: Multiprocessing Manager Background594422
+Node: Multiprocessing Manager Nodes596145
+Node: Multiprocessing Manager Global Objects597104
+Node: Multiprocessing Manager Global Object Table598006
+Node: Multiprocessing Manager Remote Operations599239
+Node: Multiprocessing Manager Proxies602140
+Node: Multiprocessing Manager Multiprocessor Configuration Table603271
+Node: Multiprocessing Manager Multiprocessor Communications Interface Layer603842
+Node: Multiprocessing Manager INITIALIZATION606734
+Node: Multiprocessing Manager GET_PACKET608075
+Node: Multiprocessing Manager RETURN_PACKET609137
+Node: Multiprocessing Manager RECEIVE_PACKET609839
+Node: Multiprocessing Manager SEND_PACKET610675
+Node: Multiprocessing Manager Supporting Heterogeneous Environments612157
+Node: Multiprocessing Manager Operations615946
+Node: Multiprocessing Manager Announcing a Packet616255
+Node: Multiprocessing Manager Directives616746
+Node: Multiprocessing Manager MULTIPROCESSING_ANNOUNCE - Announce the arrival of a packet617370
+Node: Stack Bounds Checker618315
+Node: Stack Bounds Checker Introduction618714
+Node: Stack Bounds Checker Background619238
+Node: Stack Bounds Checker Task Stack619524
+Node: Stack Bounds Checker Execution620569
+Node: Stack Bounds Checker Operations622412
+Node: Stack Bounds Checker Initializing the Stack Bounds Checker622878
+Node: Stack Bounds Checker Checking for Blown Task Stack623763
+Node: Stack Bounds Checker Reporting Task Stack Usage624367
+Node: Stack Bounds Checker When a Task Overflows the Stack625502
+Node: Stack Bounds Checker Routines626507
+Node: Stack Bounds Checker STACK_CHECKER_IS_BLOWN - Has Current Task Blown Its Stack627129
+Node: Stack Bounds Checker STACK_CHECKER_REPORT_USAGE - Report Task Stack Usage628161
+Node: CPU Usage Statistics628818
+Node: CPU Usage Statistics Introduction629209
+Node: CPU Usage Statistics Background629751
+Node: CPU Usage Statistics Operations631006
+Node: CPU Usage Statistics Report CPU Usage Statistics631341
+Node: CPU Usage Statistics Reset CPU Usage Statistics633855
+Node: CPU Usage Statistics Directives634245
+Node: CPU Usage Statistics cpu_usage_report - Report CPU Usage Statistics634865
+Node: CPU Usage Statistics cpu_usage_reset - Reset CPU Usage Statistics635524
+Node: Object Services636280
+Node: Object Services Introduction636623
+Node: Object Services Background638051
+Node: Object Services APIs638333
+Node: Object Services Object Classes639042
+Node: Object Services Object Names639645
+Node: Object Services Operations640489
+Node: Object Services Decomposing and Recomposing an Object Id640817
+Node: Object Services Printing an Object Id642315
+Node: Object Services Directives643329
+Node: Object Services BUILD_NAME - Build object name from characters644618
+Node: Object Services OBJECT_GET_CLASSIC_NAME - Lookup name from id645620
+Node: Object Services OBJECT_GET_NAME - Obtain object name as string646596
+Node: Object Services OBJECT_SET_NAME - Set object name647617
+Node: Object Services OBJECT_ID_GET_API - Obtain API from Id649032
+Node: Object Services OBJECT_ID_GET_CLASS - Obtain Class from Id649843
+Node: Object Services OBJECT_ID_GET_NODE - Obtain Node from Id650687
+Node: Object Services OBJECT_ID_GET_INDEX - Obtain Index from Id651518
+Node: Object Services BUILD_ID - Build Object Id From Components652358
+Node: Object Services OBJECT_ID_API_MINIMUM - Obtain Minimum API Value653403
+Node: Object Services OBJECT_ID_API_MAXIMUM - Obtain Maximum API Value654187
+Node: Object Services OBJECT_API_MINIMUM_CLASS - Obtain Minimum Class Value654982
+Node: Object Services OBJECT_API_MAXIMUM_CLASS - Obtain Maximum Class Value655985
+Node: Object Services OBJECT_GET_API_NAME - Obtain API Name656977
+Node: Object Services OBJECT_GET_API_CLASS_NAME - Obtain Class Name657937
+Node: Object Services OBJECT_GET_CLASS_INFORMATION - Obtain Class Information659119
+Node: Chains660346
+Node: Chains Introduction660623
+Node: Chains Background662558
+Node: Chains Nodes663359
+Node: Chains Controls664249
+Node: Chains Operations665155
+Node: Chains Multi-threading665399
+Node: Chains Creating a Chain666067
+Node: Chains Iterating a Chain666934
+Node: Chains Directives667992
+Node: Chains Initialize Chain With Nodes668764
+Node: Chains Initialize Empty669455
+Node: Chains Is Null Node ?669899
+Node: Chains Head670300
+Node: Chains Tail670635
+Node: Chains Are Two Nodes Equal ?670976
+Node: Chains Is the Chain Empty671454
+Node: Chains Is this the First Node on the Chain ?671931
+Node: Chains Is this the Last Node on the Chain ?672477
+Node: Chains Does this Chain have only One Node ?673037
+Node: Chains Is this Node the Chain Head ?673589
+Node: Chains Is this Node the Chain Tail ?674116
+Node: Chains Extract a Node674621
+Node: Chains Get the First Node675174
+Node: Chains Insert a Node675902
+Node: Chains Append a Node676441
+Node: Chains Prepend a Node676946
+Node: Directive Status Codes677462
+Node: Example Application678942
+Node: Glossary679161
+Node: Top700545
+Node: Command and Variable Index701467
+Node: Concept Index733597
+
+End Tag Table

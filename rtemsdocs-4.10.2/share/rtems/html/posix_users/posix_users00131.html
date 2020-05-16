@@ -1,0 +1,181 @@
+<HTML>
+<!-- created Dec 13 2011 from io.texi line 490 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Input and Output Primitives Manager fcntl - Manipulates an open file descriptor</TITLE>
+<LINK REL="Precedes" HREF="posix_users00132.html">
+<LINK REV="Precedes" HREF="posix_users00130.html">
+<LINK REV="Subdocument" HREF="posix_users00124.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00130.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00124.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00132.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<H3>5.4.7: fcntl - Manipulates an open file descriptor</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+#include &lt;sys/types.h&gt;
+#include &lt;fcntl.h&gt;
+#include &lt;unistd.h&gt;
+
+int fcntl(
+  int fildes,
+  int cmd
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<DL>
+<DT><STRONG>EACCESS</STRONG>
+<DD>
+Search permission is denied for a direcotry in a file's path
+prefix.
+
+<DT><STRONG>EAGAIN</STRONG>
+<DD>
+The O_NONBLOCK flag is set for a file descriptor and the process
+would be delayed in the I/O operation.
+
+<DT><STRONG>EBADF</STRONG>
+<DD>
+Invalid file descriptor
+
+<DT><STRONG>EDEADLK</STRONG>
+<DD>
+An <CODE>fcntl</CODE> with function F_SETLKW would cause a deadlock.
+
+<DT><STRONG>EINTR</STRONG>
+<DD>
+The functioin was interrupted by a signal.
+
+<DT><STRONG>EINVAL</STRONG>
+<DD>
+Invalid argument
+
+<DT><STRONG>EMFILE</STRONG>
+<DD>
+Too many file descriptor or in use by the process.
+
+<DT><STRONG>ENOLCK</STRONG>
+<DD>
+No locks available
+
+</DL>
+<H3>DESCRIPTION:</H3>
+<P>
+<CODE>fcntl()</CODE> performs one of various miscellaneous operations on
+<CODE>fd</CODE>. The operation in question is determined by <CODE>cmd</CODE>:
+</P>
+<DL>
+<DT><STRONG>F_DUPFD</STRONG>
+<DD>
+Makes <CODE>arg</CODE> be a copy of <CODE>fd</CODE>, closing <CODE>fd</CODE> first if necessary.
+
+<P>
+The same functionality can be more easily achieved by using <CODE>dup2()</CODE>.
+</P>
+<P>
+The old and new descriptors may be used interchangeably. They share locks,
+file position pointers and flags; for example, if the file position is
+modified by using <CODE>lseek()</CODE> on one of the descriptors, the position is
+also changed for the other.
+</P>
+<P>
+The two descriptors do not share the close-on-exec flag, however. The
+close-on-exec flag of the copy is off, meaning that it will be closed on
+exec.
+</P>
+<P>
+On success, the new descriptor is returned.
+</P>
+<DT><STRONG>F_GETFD</STRONG>
+<DD>
+Read the close-on-exec flag. If the low-order bit is 0, the file will
+remain open across exec, otherwise it will be closed.
+
+<DT><STRONG>F_SETFD</STRONG>
+<DD>
+Set the close-on-exec flag to the value specified by <CODE>arg</CODE> (only the least
+significant bit is used).
+
+<DT><STRONG>F_GETFL</STRONG>
+<DD>
+Read the descriptor's flags (all flags (as set by open()) are returned).
+
+<DT><STRONG>F_SETFL</STRONG>
+<DD>
+Set the descriptor's flags to the value specified by <CODE>arg</CODE>. Only
+<CODE>O_APPEND</CODE> and <CODE>O_NONBLOCK</CODE> may be set.
+
+<P>
+The flags are shared between copies (made with <CODE>dup()</CODE> etc.) of the same
+file descriptor.
+</P>
+<P>
+The flags and their semantics are described in <CODE>open()</CODE>.
+</P>
+<DT><STRONG>F_GETLK, F_SETLK and F_SETLKW</STRONG>
+<DD>
+Manage discretionary file locks. The third argument <CODE>arg</CODE> is a pointer to a
+struct flock (that may be overwritten by this call).
+
+<DT><STRONG>F_GETLK</STRONG>
+<DD>
+Return the flock structure that prevents us from obtaining the lock, or set the
+<CODE>l_type</CODE> field of the lock to <CODE>F_UNLCK</CODE> if there is no obstruction.
+
+<DT><STRONG>F_SETLK</STRONG>
+<DD>
+The lock is set (when <CODE>l_type</CODE> is <CODE>F_RDLCK</CODE> or <CODE>F_WRLCK</CODE>) or
+cleared (when it is <CODE>F_UNLCK</CODE>. If lock is held by someone else, this
+call returns -1 and sets <CODE>errno</CODE> to EACCES or EAGAIN.
+
+<DT><STRONG>F_SETLKW</STRONG>
+<DD>
+Like <CODE>F_SETLK</CODE>, but instead of returning an error we wait for the lock to
+be released.
+
+<DT><STRONG>F_GETOWN</STRONG>
+<DD>
+Get the process ID (or process group) of the owner of a socket.
+
+<P>
+Process groups are returned as negative values.
+</P>
+<DT><STRONG>F_SETOWN</STRONG>
+<DD>
+Set the process or process group that owns a socket.
+
+<P>
+For these commands, ownership means receiving <CODE>SIGIO</CODE> or <CODE>SIGURG</CODE>
+signals.
+</P>
+<P>
+Process groups are specified using negative values.
+</P>
+</DL>
+<H3>NOTES:</H3>
+<P>
+The errors returned by <CODE>dup2</CODE> are different from those returned by
+<CODE>F_DUPFD</CODE>.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="posix_users00132.html">
+<LINK REV="Precedes" HREF="posix_users00130.html">
+<LINK REV="Subdocument" HREF="posix_users00124.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00130.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00124.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00132.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

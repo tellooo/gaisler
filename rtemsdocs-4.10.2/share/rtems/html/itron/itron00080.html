@@ -1,0 +1,109 @@
+<HTML>
+<!-- created Dec 13 2011 from eventflags.texi line 862 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Eventflags Manager ref_flg - Reference Eventflag Status</TITLE>
+<LINK REL="Precedes" HREF="">
+<LINK REV="Precedes" HREF="itron00079.html">
+<LINK REV="Subdocument" HREF="itron00069.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00079.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00069.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="next"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<H3>4.4.8: ref_flg - Reference Eventflag Status</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+ER ref_flg(
+  T_RFLG *pk_rflg,
+  ID flgid );
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<P>
+<CODE>E_OK</CODE> - Normal Completion
+</P>
+<P>
+<CODE>E_ID</CODE> - Invalid ID number (flgid was invalid or could not be used)
+</P>
+<P>
+<CODE>E_NOEXS</CODE> - Object does not exist (the eventflag specified by flgid
+does not exist)
+</P>
+<P>
+<CODE>E_OACV</CODE> - Object access violation (A flgid less than -4 was
+specified from a user task.  This is implementation dependent.)
+</P>
+<P>
+<CODE>E_PAR</CODE> - Parameter error (the packet address for the return
+parameters could not be used)
+</P>
+<P>
+<CODE>EN_OBJNO</CODE> - An object number which could not be accessed on the
+target node is specified.
+</P>
+<P>
+<CODE>EN_CTXID</CODE> - Specified an object on another node when the system call
+was issued from a task in dispatch disabled state or from a
+task-independent portion
+</P>
+<P>
+<CODE>EN_RPAR</CODE> - A value outside the range supported by the requesting
+node and/or transmission packet format was returned as a parameter (a
+value outside supported range was specified for exinf, wtsk and/or flgptn)
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This system call refers to the state of the eventflag specified by
+<CODE>flgid</CODE>, and returns its current flag pattern (<CODE>flgptn</CODE>),
+waiting task information (<CODE>wtsk</CODE>), and its extended information
+(<CODE>exinf</CODE>).
+</P>
+<P>
+Depending on the implementation, <CODE>wtsk</CODE> may be returned as the ID
+(non-zero) of the task waiting for the eventflag.  If there are multiple
+tasks waiting for the eventflag (only when attribute is <CODE>TA_WMUL</CODE>),
+the ID of the task at the head of the queue is returned.
+</P>
+<P>
+An <CODE>E_NOEXS</CODE> error will result if the eventflag specified to
+<CODE>ref_flg</CODE> does not exist.
+</P>
+<H3>NOTES:</H3>
+<P>
+Multiprocessing is not supported. Thus none of the &quot;<CODE>EN_</CODE>&quot; status
+codes will be returned.
+</P>
+<P>
+Although both <CODE>ref_flg</CODE> and <CODE>pol_flg</CODE> can be used to find an
+eventflag's pattern (<CODE>flgptn</CODE>) without causing the issuing task to
+wait, <CODE>ref_flg</CODE> simply reads the eventflag's pattern (<CODE>flgptn</CODE>)
+while <CODE>pol_flg</CODE> functions is identical to <CODE>wai_flg</CODE> when wait
+release conditions are satisfied (it clears the eventflag if
+<CODE>TWF_CLR</CODE> is specified).
+</P>
+<P>
+Depending on the implementation, additional information besides
+<CODE>wtsk</CODE> and <CODE>flgptn</CODE> (such as eventflag attributes,
+<CODE>flgatr</CODE>) may also be referred.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="">
+<LINK REV="Precedes" HREF="itron00079.html">
+<LINK REV="Subdocument" HREF="itron00069.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00079.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00069.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="next"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

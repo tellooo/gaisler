@@ -1,0 +1,118 @@
+<HTML>
+<!-- created Dec 13 2011 from interrupts.texi line 416 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Interrupts Interrupt Dispatching</TITLE>
+<LINK REL="Precedes" HREF="porting00035.html">
+<LINK REV="Precedes" HREF="porting00033.html">
+<LINK REV="Subdocument" HREF="porting00019.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00033.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00019.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00035.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<H3>5.5.2: Interrupt Dispatching</H3>
+<P>
+The <CODE>_ISR_Handler</CODE> routine provides the RTEMS interrupt management.
+</P>
+<DL><DT><DD>
+<PRE>
+void _ISR_Handler()
+</PRE>
+</DL>
+<P>
+This discussion ignores a lot of the ugly details in a real implementation
+such as saving enough registers/state to be able to do something real.
+Keep in mind that the goal is to invoke a user's ISR handler which is
+written in C.  That ISR handler uses a known set of registers thus
+allowing the ISR to preserve only those that would normally be corrupted
+by a subroutine call.
+</P>
+<P>
+Also note that the exact order is to a large extent flexible.  Hardware
+will dictate a sequence for a certain subset of <CODE>_ISR_Handler</CODE> while
+requirements for setting the RTEMS state variables that indicate the
+interrupt nest level (<CODE>_ISR_Nest_level</CODE>) and dispatching disable
+level (<CODE>_Thread_Dispatch_disable_level</CODE>) will also
+restrict the allowable order.
+</P>
+<P>
+Upon entry to <CODE>_ISR_Handler</CODE>, <CODE>_Thread_Dispatch_disable_level</CODE> is
+zero if the interrupt occurred while outside an RTEMS service call.
+Conversely, it will be non-zero if interrupting an RTEMS service
+call.  Thus, <CODE>_Thread_Dispatch_disable_level</CODE> will always be
+greater than or equal to <CODE>_ISR_Nest_level</CODE> and not strictly
+equal.
+</P>
+<P>
+Upon entry to the &quot;common&quot; <CODE>_ISR_Handler</CODE>, the vector number must be
+available.  On some CPUs the hardware puts either the vector number or the
+offset into the vector table for this ISR in a known place.  If the
+hardware does not provide this information, then the assembly portion of
+RTEMS for this port will contain a set of distinct interrupt entry points
+which somehow place the vector number in a known place (which is safe if
+another interrupt nests this one) and branches to <CODE>_ISR_Handler</CODE>.
+</P>
+<DL><DT><DD>
+<PRE>
+save some or all context on stack
+may need to save some special interrupt information for exit
+
+#if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
+    if ( _ISR_Nest_level == 0 )
+        switch to software interrupt stack
+#endif
+_ISR_Nest_level++;
+_Thread_Dispatch_disable_level++;
+(*_ISR_Vector_table[ vector ])( vector );
+--_ISR_Nest_level;
+if ( _ISR_Nest_level )
+    goto the label &quot;exit interrupt (simple case)&quot;
+#if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
+    restore stack
+#endif
+
+if ( _Thread_Dispatch_disable_level )
+   _ISR_Signals_to_thread_executing = FALSE;
+    goto the label &quot;exit interrupt (simple case)&quot;
+
+if ( _Context_Switch_necessary || _ISR_Signals_to_thread_executing )
+   _ISR_Signals_to_thread_executing = FALSE;
+   call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
+   prepare to get out of interrupt
+   return from interrupt  (maybe to _ISR_Dispatch)
+
+LABEL &quot;exit interrupt (simple case):
+ prepare to get out of interrupt
+ return from interrupt
+</PRE>
+</DL>
+<P>
+Some ports have the special routine <CODE>_ISR_Dispatch</CODE> because
+the CPU has a special &quot;interrupt mode&quot; and RTEMS must switch back
+to the task stack and/or non-interrupt mode before invoking
+<CODE>_Thread_Dispatch</CODE>.  For example, consider the MC68020 where
+upon return from the outermost interrupt, the CPU must switch
+from the interrupt stack to the master stack before invoking
+<CODE>_Thread_Dispatch</CODE>.  <CODE>_ISR_Dispatch</CODE> is the special port
+specific wrapper for <CODE>_Thread_Dispatch</CODE> used in this case.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="porting00035.html">
+<LINK REV="Precedes" HREF="porting00033.html">
+<LINK REV="Subdocument" HREF="porting00019.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00033.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00019.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00035.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

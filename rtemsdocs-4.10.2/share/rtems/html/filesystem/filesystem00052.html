@@ -1,0 +1,75 @@
+<HTML>
+<!-- created Dec 13 2011 from fsrequirements.texi line 927 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>File Handler Table Functions</TITLE>
+<LINK REL="Precedes" HREF="filesystem00069.html">
+<LINK REV="Precedes" HREF="filesystem00068.html">
+<LINK REV="Subdocument" HREF="filesystem00047.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="filesystem00068.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="filesystem00047.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00069.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<H3>5.4.2: File Handler Table Functions</H3>
+<MENU>
+<LI><A HREF="filesystem00069.html">open Handler</A>
+<LI><A HREF="filesystem00070.html">close Handler</A>
+<LI><A HREF="filesystem00071.html">read Handler</A>
+<LI><A HREF="filesystem00072.html">write Handler</A>
+<LI><A HREF="filesystem00073.html">ioctl Handler</A>
+<LI><A HREF="filesystem00074.html">lseek Handler</A>
+<LI><A HREF="filesystem00075.html">fstat Handler</A>
+<LI><A HREF="filesystem00076.html">fchmod Handler</A>
+<LI><A HREF="filesystem00077.html">ftruncate Handler</A>
+<LI><A HREF="filesystem00078.html">fpathconf Handler</A>
+<LI><A HREF="filesystem00079.html">fsync Handler</A>
+<LI><A HREF="filesystem00080.html">fdatasync Handler</A>
+<LI><A HREF="filesystem00081.html">fcntl Handler</A>
+</MENU>
+<P>
+Handler table functions are defined in a <CODE>rtems_filesystem_file_handlers_r</CODE>
+structure. It defines functions that are specific to a node type in a given
+filesystem. One table exists for each of the filesystem's node types. The
+structure definition appears below. It is followed by general developmental
+information on each of the functions associated with regular files contained
+in this function management structure.
+</P>
+<DL><DT><DD>
+<PRE>
+typedef struct {
+  rtems_filesystem_open_t           open;
+  rtems_filesystem_close_t          close;
+  rtems_filesystem_read_t           read;
+  rtems_filesystem_write_t          write;
+  rtems_filesystem_ioctl_t          ioctl;
+  rtems_filesystem_lseek_t          lseek;
+  rtems_filesystem_fstat_t          fstat;
+  rtems_filesystem_fchmod_t         fchmod;
+  rtems_filesystem_ftruncate_t      ftruncate;
+  rtems_filesystem_fpathconf_t      fpathconf;
+  rtems_filesystem_fsync_t          fsync;
+  rtems_filesystem_fdatasync_t      fdatasync;
+  rtems_filesystem_fcntl_t          fcntl;
+} rtems_filesystem_file_handlers_r;
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="filesystem00069.html">
+<LINK REV="Precedes" HREF="filesystem00068.html">
+<LINK REV="Subdocument" HREF="filesystem00047.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="filesystem00068.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="filesystem00047.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00069.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

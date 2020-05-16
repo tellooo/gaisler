@@ -1,0 +1,71 @@
+<HTML>
+<!-- created Dec 13 2011 from i386.texi line 372 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Intel/AMD x86 Specific Information System Reset</TITLE>
+<LINK REL="Precedes" HREF="cpu_supplement00079.html">
+<LINK REV="Precedes" HREF="cpu_supplement00067.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00067.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00067.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00067.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00079.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<H3>5.6.1: System Reset</H3>
+<P>
+An RTEMS based application is initiated when the i386 processor is reset.
+When the i386 is reset,
+</P>
+<UL>
+<LI>The EAX register is set to indicate the results of the processor's
+power-up self test.  If the self-test was not executed, the contents of
+this register are undefined.  Otherwise, a non-zero value indicates the
+processor is faulty and a zero value indicates a successful self-test.
+
+<LI>The DX register holds a component identifier and revision level.  DH
+contains 3 to indicate an i386 component and DL contains a unique revision
+level indicator.
+
+<LI>Control register zero (CR0) is set such that the processor is in real
+mode with paging disabled.  Other portions of CR0 are used to indicate the
+presence of a numeric coprocessor.
+
+<LI>All bits in the extended flags register (EFLAG) which are not
+permanently set are cleared.  This inhibits all maskable interrupts.
+
+<LI>The Interrupt Descriptor Register (IDTR) is set to point at address
+zero.
+
+<LI>All segment registers are set to zero.
+
+<LI>The instruction pointer is set to 0x0000FFF0.  The first instruction
+executed after a reset is actually at 0xFFFFFFF0 because the i386 asserts
+the upper twelve address until the first intersegment (FAR) JMP or CALL
+instruction.  When a JMP or CALL is executed, the upper twelve address
+lines are lowered and the processor begins executing in the first megabyte
+of memory.
+
+</UL>
+<P>
+Typically, an intersegment JMP to the application's initialization code is
+placed at address 0xFFFFFFF0.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="cpu_supplement00079.html">
+<LINK REV="Precedes" HREF="cpu_supplement00067.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00067.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00067.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00067.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00079.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

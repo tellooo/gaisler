@@ -1,0 +1,220 @@
+<HTML>
+<!-- created Dec 13 2011 from conf.texi line 1414 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Configuring a System POSIX API Configuration Table</TITLE>
+<LINK REL="Precedes" HREF="c_user00418.html">
+<LINK REV="Precedes" HREF="c_user00416.html">
+<LINK REV="Subdocument" HREF="c_user00043.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00416.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00043.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00418.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H2>23.5: POSIX API Configuration Table</H2>
+<P>
+The POSIX API Configuration Table is used to configure the
+managers which constitute the POSIX API for a particular application.
+For example, the user can configure the maximum number of threads for
+this application. The POSIX API Configuration Table is defined in
+the following C structure:
+</P>
+<DL><DT><DD>
+<PRE>
+typedef struct {
+  void       *(*thread_entry)(void *);
+} posix_initialization_threads_table;
+
+typedef struct {
+  int                                 maximum_threads;
+  int                                 maximum_mutexes;
+  int                                 maximum_condition_variables;
+  int                                 maximum_keys;
+  int                                 maximum_timers;
+  int                                 maximum_queued_signals;
+  int                                 maximum_message_queues;
+  int                                 maximum_message_queue_descriptors;
+  int                                 maximum_semaphores;
+  int                                 maximum_barriers;
+  int                                 maximum_rwlocks;
+  int                                 maximum_spinlocks;
+  int                                 number_of_initialization_threads;
+  posix_initialization_threads_table *User_initialization_tasks_table;
+} posix_api_configuration_table;
+</PRE>
+</DL>
+<DL>
+<DT><STRONG>maximum_threads</STRONG>
+<DD>
+is the maximum number of threads that
+can be concurrently active (created) in the system including
+initialization threads.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro <CODE>CONFIGURE_MAXIMUM_POSIX_THREADS</CODE>.
+If not defined by the application, then the
+<CODE>CONFIGURE_MAXIMUM_POSIX_THREADS</CODE> macro defaults to 0.
+
+<DT><STRONG>maximum_mutexes</STRONG>
+<DD>
+is the maximum number of mutexes that can be concurrently
+active in the system.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro <CODE>CONFIGURE_MAXIMUM_POSIX_MUTEXES</CODE>.
+If not defined by the application, then the
+<CODE>CONFIGURE_MAXIMUM_POSIX_MUTEXES</CODE> macro defaults to 0.
+
+<DT><STRONG>maximum_condition_variables</STRONG>
+<DD>
+is the maximum number of condition variables that can be
+concurrently active in the system.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro <CODE>CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES</CODE>.
+If not defined by the application, then the
+<CODE>CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES</CODE> macro defaults to 0.
+
+<DT><STRONG>maximum_keys</STRONG>
+<DD>
+is the maximum number of keys that can be concurrently active in the system.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro <CODE>CONFIGURE_MAXIMUM_POSIX_KEYS</CODE>.
+If not defined by the application, then the
+<CODE>CONFIGURE_MAXIMUM_POSIX_KEYS</CODE> macro defaults to 0.
+
+<DT><STRONG>maximum_timers</STRONG>
+<DD>
+is the maximum number of POSIX timers that can be concurrently active
+in the system.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro <CODE>CONFIGURE_MAXIMUM_POSIX_TIMERS</CODE>.
+If not defined by the application, then the
+<CODE>CONFIGURE_MAXIMUM_POSIX_TIMERS</CODE> macro defaults to 0.
+
+<DT><STRONG>maximum_queued_signals</STRONG>
+<DD>
+is the maximum number of queued signals that can be concurrently
+pending in the system.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the setting of the macro <CODE>CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS</CODE>.
+If not defined by the application, then the
+<CODE>CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS</CODE> macro defaults to 0.
+
+<DT><STRONG>maximum_message_queues</STRONG>
+<DD>
+is the maximum number of POSIX message queues that can be concurrently
+active in the system.  When using the <CODE>rtems/confdefs.h</CODE>
+mechanism for configuring an RTEMS application, the
+value for this field corresponds to the setting of the macro
+<CODE>CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES</CODE>.  If not defined by the
+application, then the <CODE>CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES</CODE>
+macro defaults to 0.
+
+<DT><STRONG>maximum_message_queue_descriptors</STRONG>
+<DD>
+is the maximum number of POSIX message queue descriptors
+that can be concurrently active in the system.  When using the
+<CODE>rtems/confdefs.h</CODE> mechanism for configuring an RTEMS application,
+the value for this field corresponds to the setting of the macro
+<CODE>CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS</CODE>.
+If not defined by the application, then the
+<CODE>CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS</CODE> macro defaults
+to the value of <CODE>CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES</CODE>
+
+<DT><STRONG>maximum_semaphores</STRONG>
+<DD>
+is the maximum number of POSIX semaphore that can be concurrently
+active in the system.  When using the <CODE>rtems/confdefs.h</CODE>
+mechanism for configuring an RTEMS application, the
+value for this field corresponds to the setting of the macro
+<CODE>CONFIGURE_MAXIMUM_POSIX_SEMAPHORES</CODE>.  If not defined by the
+application, then the <CODE>CONFIGURE_MAXIMUM_POSIX_SEMAPHORES</CODE>
+macro defaults to 0.
+
+<DT><STRONG>maximum_barriers</STRONG>
+<DD>
+is the maximum number of POSIX barriers that can be concurrently
+active in the system.  When using the <CODE>rtems/confdefs.h</CODE>
+mechanism for configuring an RTEMS application, the
+value for this field corresponds to the setting of the macro
+<CODE>CONFIGURE_MAXIMUM_POSIX_BARRIERS</CODE>.  If not defined by the
+application, then the <CODE>CONFIGURE_MAXIMUM_POSIX_BARRIERS</CODE>
+macro defaults to 0.
+
+<DT><STRONG>maximum_rwlocks</STRONG>
+<DD>
+is the maximum number of POSIX rwlocks that can be concurrently
+active in the system.  When using the <CODE>rtems/confdefs.h</CODE>
+mechanism for configuring an RTEMS application, the
+value for this field corresponds to the setting of the macro
+<CODE>CONFIGURE_MAXIMUM_POSIX_SPINLOCKS</CODE>.  If not defined by the
+application, then the <CODE>CONFIGURE_MAXIMUM_POSIX_SPINLOCKS</CODE>
+macro defaults to 0.
+
+<DT><STRONG>maximum_spinlocks</STRONG>
+<DD>
+is the maximum number of POSIX spinlocks that can be concurrently
+active in the system.  When using the <CODE>rtems/confdefs.h</CODE>
+mechanism for configuring an RTEMS application, the
+value for this field corresponds to the setting of the macro
+<CODE>CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES</CODE>.  If not defined by the
+application, then the <CODE>CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES</CODE>
+macro defaults to 0.
+
+<DT><STRONG>number_of_initialization_threads</STRONG>
+<DD>
+is the number of initialization threads configured.  At least one
+initialization threads must be configured.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the user must define the
+<CODE>CONFIGURE_POSIX_INIT_THREAD_TABLE</CODE> to indicate that there
+is one or more POSIX initialization thread.  If the application
+only has one POSIX initialization thread, then the automatically
+generated POSIX Initialization Thread Table will be sufficient.  The following
+macros correspond to the single initialization task:
+
+<UL>
+<LI><CODE>CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT</CODE> - is the entry
+point of the thread.  If this macro is not defined by the application,
+then this defaults to the C routine <CODE>POSIX_Init</CODE>.
+
+<LI><CODE>CONFIGURE_POSIX_INIT_TASK_STACK_SIZE</CODE> - is the stack size
+of the single initialization thread.  If this macro is not defined
+by the application, then this defaults to twice the configured
+minimum stack size.
+
+</UL>
+<DT><STRONG>User_initialization_threads_table</STRONG>
+<DD>
+is the address of the Initialization Threads Table. This table contains the
+information needed to create and start each of the initialization threads.
+The format of each entry in this table is defined in the
+<CODE>posix_initialization_threads_table</CODE> structure.
+When using the <CODE>rtems/confdefs.h</CODE> mechanism for configuring
+an RTEMS application, the value for this field corresponds
+to the address of the <CODE>POSIX_Initialization_threads</CODE> structure.
+
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00418.html">
+<LINK REV="Precedes" HREF="c_user00416.html">
+<LINK REV="Subdocument" HREF="c_user00043.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00416.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00043.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00418.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,92 @@
+<HTML>
+<!-- created Dec 13 2011 from files.texi line 1709 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Files and Directories Manager access - Check permissions for a file</TITLE>
+<LINK REL="Precedes" HREF="posix_users00110.html">
+<LINK REV="Precedes" HREF="posix_users00108.html">
+<LINK REV="Subdocument" HREF="posix_users00084.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00108.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00084.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00110.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<H3>4.4.24: access - Check permissions for a file</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+#include &lt;unistd.h&gt;
+
+int access(
+  const char *pathname,
+  int         mode
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<DL>
+<DT><STRONG>EACCES</STRONG>
+<DD>
+The requested access would be denied, either to the file itself or
+one of the directories in <CODE>pathname</CODE>.
+
+<DT><STRONG>EFAULT</STRONG>
+<DD>
+<CODE>pathname</CODE> points outside your accessible address space.
+
+<DT><STRONG>EINVAL</STRONG>
+<DD>
+<CODE>Mode</CODE> was incorrectly specified.
+
+<DT><STRONG>ENAMETOOLONG</STRONG>
+<DD>
+<CODE>pathname</CODE> is too long.
+
+<DT><STRONG>ENOENT</STRONG>
+<DD>
+A directory component in <CODE>pathname</CODE> would have been accessible but
+does not exist or was a dangling symbolic link.
+
+<DT><STRONG>ENOTDIR</STRONG>
+<DD>
+A component used as a directory in <CODE>pathname</CODE> is not, in fact,
+a directory.
+
+<DT><STRONG>ENOMEM</STRONG>
+<DD>
+Insufficient kernel memory was available.
+
+</DL>
+<H3>DESCRIPTION:</H3>
+<P>
+<CODE>Access</CODE> checks whether the process would be allowed to read, write or
+test for existence of the file (or other file system object) whose name is
+<CODE>pathname</CODE>. If <CODE>pathname</CODE> is a symbolic link permissions of the
+file referred by this symbolic link are tested.
+</P>
+<P>
+<CODE>Mode</CODE> is a mask consisting of one or more of R_OK, W_OK, X_OK and F_OK.
+</P>
+<H3>NOTES:</H3>
+<P>
+NONE
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="posix_users00110.html">
+<LINK REV="Precedes" HREF="posix_users00108.html">
+<LINK REV="Subdocument" HREF="posix_users00084.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00108.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00084.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00110.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

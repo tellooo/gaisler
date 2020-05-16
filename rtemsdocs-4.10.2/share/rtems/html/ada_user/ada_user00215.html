@@ -1,0 +1,103 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/event.texi line 334 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Event Manager EVENT_RECEIVE - Receive event condition</TITLE>
+<LINK REL="Precedes" HREF="ada_user00216.html">
+<LINK REV="Precedes" HREF="ada_user00214.html">
+<LINK REV="Subdocument" HREF="ada_user00206.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00214.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00206.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00216.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>11.4.2: EVENT_RECEIVE - Receive event condition</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+procedure Event_Receive (
+   Event_In   : in     RTEMS.Event_Set;
+   Option_Set : in     RTEMS.Option;
+   Ticks      : in     RTEMS.Interval;
+   Event_Out  :    out RTEMS.Event_Set;
+   Result     :    out RTEMS.Status_Codes
+);
+</PRE>
+</DL>
+<H3>DIRECTIVE STATUS CODES:</H3>
+<P>
+<CODE>RTEMS.SUCCESSFUL</CODE> - event received successfully<BR>
+
+<CODE>RTEMS.UNSATISFIED</CODE> - input event not satisfied (<CODE>RTEMS.NO_WAIT</CODE>)<BR>
+
+<CODE>RTEMS.INVALID_ADDRESS</CODE> - <CODE>event_out</CODE> is NULL<BR>
+
+<CODE>RTEMS.TIMEOUT</CODE> - timed out waiting for event
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This directive attempts to receive the event
+condition specified in event_in.  If event_in is set to
+<CODE>RTEMS.PENDING_EVENTS</CODE>, then the current pending events are returned in
+event_out and left pending.  The <CODE>RTEMS.WAIT</CODE> and <CODE>RTEMS.NO_WAIT</CODE> options in the
+option_set parameter are used to specify whether or not the task
+is willing to wait for the event condition to be satisfied.
+<CODE>RTEMS.EVENT_ANY</CODE> and <CODE>RTEMS.EVENT_ALL</CODE> are used in the option_set parameter are
+used to specify whether a single event or the complete event set
+is necessary to satisfy the event condition.  The event_out
+parameter is returned to the calling task with the value that
+corresponds to the events in event_in that were satisfied.
+</P>
+<P>
+If pending events satisfy the event condition, then
+event_out is set to the satisfied events and the pending events
+in the event condition are cleared.  If the event condition is
+not satisfied and <CODE>RTEMS.NO_WAIT</CODE> is specified, then event_out is set to
+the currently satisfied events.  If the calling task chooses to
+wait, then it will block waiting for the event condition.
+</P>
+<P>
+If the calling task must wait for the event condition
+to be satisfied, then the timeout parameter is used to specify
+the maximum interval to wait.  If it is set to <CODE>RTEMS.NO_TIMEOUT</CODE>, then
+the calling task will wait forever.
+</P>
+<H3>NOTES:</H3>
+<P>
+This directive only affects the events specified in
+event_in.  Any pending events that do not correspond to any of
+the events specified in event_in will be left pending.
+</P>
+<P>
+The following event receive option constants are defined by
+RTEMS:
+</P>
+<UL>
+<LI><CODE>RTEMS.WAIT</CODE> 	task will wait for event (default)
+<LI><CODE>RTEMS.NO_WAIT</CODE> 	task should not wait
+<LI><CODE>RTEMS.EVENT_ALL</CODE> 	return after all events (default)
+<LI><CODE>RTEMS.EVENT_ANY</CODE> 	return after any events
+</UL>
+
+<P>
+A clock tick is required to support the functionality of this directive.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00216.html">
+<LINK REV="Precedes" HREF="ada_user00214.html">
+<LINK REV="Subdocument" HREF="ada_user00206.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00214.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00206.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00216.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

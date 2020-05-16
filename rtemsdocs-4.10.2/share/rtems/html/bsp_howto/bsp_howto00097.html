@@ -1,0 +1,61 @@
+<HTML>
+<!-- created Dec 13 2011 from ide-ctrl.texi line 25 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>IDE Controller Driver Introduction</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00098.html">
+<LINK REV="Precedes" HREF="bsp_howto00096.html">
+<LINK REV="Subdocument" HREF="bsp_howto00096.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00096.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00096.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00098.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H2>13.1: Introduction</H2>
+<P>
+The IDE Controller driver is responsible for providing an
+interface to an IDE Controller.  The capabilities provided by this
+driver are:
+</P>
+<UL>
+<LI>Read IDE Controller register
+<LI>Write IDE Controller register
+<LI>Read data block through IDE Controller Data Register
+<LI>Write data block through IDE Controller Data Register
+</UL>
+
+<P>
+The reference implementation for an IDE Controller driver can
+be found in <CODE>$RTEMS_SRC_ROOT/c/src/libchip/ide</CODE>. This driver
+is based on the libchip concept and allows to work with any of the IDE
+Controller chips simply by appropriate configuration of BSP. Drivers for a
+particular IDE Controller chips locate in the following directories: drivers
+for well-known IDE Controller chips locate into
+<CODE>$RTEMS_SRC_ROOT/c/src/libchip/ide</CODE>, drivers for IDE Controller chips
+integrated with CPU locate into
+<CODE>$RTEMS_SRC_ROOT/c/src/lib/libcpu/myCPU</CODE> and
+drivers for custom IDE Controller chips (for example, implemented on FPGA)
+locate into <CODE>$RTEMS_SRC_ROOT/c/src/lib/libbsp/myBSP</CODE>.
+There is a README file in these directories for each supported
+IDE Controller chip. Each of these README explains how to configure a BSP
+for that particular IDE Controller chip.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00098.html">
+<LINK REV="Precedes" HREF="bsp_howto00096.html">
+<LINK REV="Subdocument" HREF="bsp_howto00096.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00096.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00096.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00098.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,96 @@
+<HTML>
+<!-- created Dec 13 2011 from fsrequirements.texi line 27 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>General</TITLE>
+<LINK REL="Precedes" HREF="filesystem00045.html">
+<LINK REV="Precedes" HREF="filesystem00043.html">
+<LINK REV="Subdocument" HREF="filesystem00043.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="filesystem00043.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="filesystem00043.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00045.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<H2>5.1: General</H2>
+<P>
+The RTEMS filesystem framework was intended to be compliant with the
+POSIX Files and Directories interface standard. The following filesystem
+characteristics resulted in a functional switching layer.
+</P>
+<DL><DT><DD>
+<PRE>
+Figure of the Filesystem Functional Layering goes here.
+This figure includes networking and disk caching layering.
+</PRE>
+</DL>
+<OL>
+<LI>Application programs are presented with a standard set of POSIX
+compliant functions that allow them to interface with the files, devices
+and directories in the filesystem. The interfaces to these routines do
+not reflect the type of subordinate filesystem implementation in which
+the file will be found.
+
+<LI>The filesystem framework developed under RTEMS allows for mounting
+filesystem of different types under the base filesystem.
+
+<LI>The mechanics of locating file information may be quite different
+between filesystem types.
+
+<LI>The process of locating a file may require crossing filesystem
+boundaries.
+
+<LI>The transitions between filesystem and the processing required to
+access information in different filesystem is not visible at the level
+of the POSIX function call.
+
+<LI>The POSIX interface standard provides file access by character
+pathname to the file in some functions and through an integer file
+descriptor in other functions.
+
+<LI>The nature of the integer file descriptor and its associated
+processing is operating system and filesystem specific.
+
+<LI>Directory and device information must be processed with some of the
+same routines that apply to files.
+
+<LI>The form and content of directory and device information differs
+greatly from that of a regular file.
+
+<LI>Files, directories and devices represent elements (nodes) of a tree
+hierarchy.
+
+<LI>The rules for processing each of the node types that exist under the
+filesystem are node specific but are still not reflected in the POSIX
+interface routines.
+
+</OL>
+<DL><DT><DD>
+<PRE>
+Figure of the Filesystem Functional Layering goes here.
+This figure focuses on the Base Filesystem and IMFS.
+</PRE>
+</DL>
+<DL><DT><DD>
+<PRE>
+Figure of the IMFS Memfile control blocks
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="filesystem00045.html">
+<LINK REV="Precedes" HREF="filesystem00043.html">
+<LINK REV="Subdocument" HREF="filesystem00043.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="filesystem00043.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="filesystem00043.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00045.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

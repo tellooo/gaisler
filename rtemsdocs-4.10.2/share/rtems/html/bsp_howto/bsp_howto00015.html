@@ -1,0 +1,92 @@
+<HTML>
+<!-- created Dec 13 2011 from linkcmds.texi line 41 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Linker Script Program Sections</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00016.html">
+<LINK REV="Precedes" HREF="bsp_howto00014.html">
+<LINK REV="Subdocument" HREF="bsp_howto00013.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00014.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00013.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00016.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H2>4.2: Program Sections</H2>
+<P>
+An embedded systems programmer must be much more aware of the
+placement of their executable image in memory than the average
+applications programmer.  A program destined to be embedded as well
+as the target system have some specific properties that must be
+taken into account. Embedded machines often mean average performances
+and small memory usage.  It is the memory usage that concerns us
+when examining the linker command file.
+</P>
+<P>
+Two types of memories have to be distinguished:
+</P>
+<UL>
+<LI>RAM - volatile offering read and write access
+<LI>ROM - non-volatile but read only
+</UL>
+
+<P>
+Even though RAM and ROM can be found in every personal computer,
+one generally doesn't care about them.  In a personal computer,
+a program is nearly always stored on disk and executed in RAM.  Things
+are a bit different for embedded targets: the target will execute the
+program each time it is rebooted or switched on.   The application
+program is stored in non-volatile memory such as ROM, PROM, EEPROM,
+or Flash. On the other hand, data processing occurs in RAM.
+</P>
+<P>
+This leads us to the structure of an embedded program.  In rough terms,
+an embedded program is made of sections.  It is the responsibility of
+the application programmer to place these sections in the appropriate
+place in target memory.  To make this clearer, if using the COFF
+object file format on the Motorola m68k family of microprocessors,
+the following sections will be present:
+</P>
+<UL>
+<LI><STRONG>code (<CODE>.text</CODE>) section</STRONG>:
+is the program's code and it should not be modified.
+This section may be placed in ROM.
+
+<LI><STRONG>non-initialized data (<CODE>.bss</CODE>) section</STRONG>:
+holds uninitialized variables of the program. It can stay in RAM.
+
+<LI><STRONG>initialized data (<CODE>.data</CODE>) section</STRONG>:
+holds the initialized program data which may be modified during the
+program's life.  This means they have to be in RAM.
+On the other hand, these variables must be set to predefined values, and
+those predefined values have to be stored in ROM.
+
+</UL>
+<P>
+<STRONG>NOTE:</STRONG> Many programs and support libraries unknowingly assume that the
+<CODE>.bss</CODE> section and, possibly, the application heap are initialized
+to zero at program start.  This is not required by the ISO/ANSI C Standard
+but is such a common requirement that most BSPs do this.
+</P>
+<P>
+That brings us up to the notion of the image of an executable: it consists
+of the set of the sections that together constitute the application.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00016.html">
+<LINK REV="Precedes" HREF="bsp_howto00014.html">
+<LINK REV="Subdocument" HREF="bsp_howto00013.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00014.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00013.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00016.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

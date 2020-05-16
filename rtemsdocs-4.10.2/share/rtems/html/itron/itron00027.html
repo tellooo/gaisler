@@ -1,0 +1,90 @@
+<HTML>
+<!-- created Dec 13 2011 from task.texi line 721 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Task Manager rel_wai - Release Wait of Other Task</TITLE>
+<LINK REL="Precedes" HREF="itron00028.html">
+<LINK REV="Precedes" HREF="itron00026.html">
+<LINK REV="Subdocument" HREF="itron00006.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00026.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00006.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00028.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<H3>1.4.11: rel_wai - Release Wait of Other Task</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+ER rel_wai(
+  ID tskid
+);
+</PRE>
+</DL>
+<H3>STATUS CODES:</H3>
+<P>
+<CODE>E_OK</CODE> - Normal Completion
+</P>
+<P>
+<CODE>E_ID</CODE> - Invalid ID Number (tskid was invalid or could not be used)
+</P>
+<P>
+<CODE>E_NOEXS</CODE> - Object does not exist (the task specified by tskid does not exist)
+</P>
+<P>
+<CODE>E_OACV</CODE> - Object access violation (A tskid less than -4 was specified from a user task.  This is implementation dependent.)
+</P>
+<P>
+<CODE>E_OBJ</CODE> - Invalid object state (the target task is not in WAIT state (including when it is in DORMANT state or when the issuing task specifies itself))
+</P>
+<P>
+<CODE>EN_OBJNO</CODE> - An object number which could not be accessed on the target node is specified.
+</P>
+<P>
+<CODE>EN_CTXID</CODE> - Specified an object on another node when the system call was issued from a task in dispatch disabled state or from a task-independent portion
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This system call forcibly releases WAIT state (not including SUSPEND state)
+of the task specified by tskid.
+</P>
+<P>
+An E_RLWAI error is returned to the task whose WAIT state has been released using rel_wai.
+</P>
+<P>
+Wait release requests by rel_wai are not queued.  In other words, if the task specified by tskid is already in WAIT state, the WAIT state is released, otherwise an E_OBJ error will be returned to the issuer.  An E_OBJ error will also result when a task specifies itself to this system call.
+</P>
+<P>
+Rel_wai does not release SUSPEND state.  If rel_wai is issued on a task in WAIT-SUSPEND state, WAIT will be released but SUSPEND will continue for that task. When SUSPEND should also be released, the frsm_tsk system call must be issued separately.
+</P>
+<H3>NOTES:</H3>
+<P>
+A function similar to timeout can be implemented using an alarm handler which issues this system call on tasks specified time after they have entered WAIT state.
+</P>
+<P>
+Rel_wai and wup_tsk differ in the following points.
+</P>
+<UL>
+<LI>Wup_tsk can only release the WAIT state by slp_tsk or tslp_tsk, while rel_wai can release WAIT states caused by these and other calls (including wai_flg, wai_sem, rcv_msg, get_blk, etc.).
+<LI>As seen from the target task, releasing WAIT state with wup_tsk results in a normal completion (E_OK), whereas releasing WAIT state with rel_wai results in an error (E_RLWAI).
+<LI>When wup_tsk is used, a request is queued even if neither slp_tsk nor tslp_tsk have been executed on the target task yet.  When rel_wai is used to the task which is not in WAIT state, an E_OBJ error will result.
+</UL>
+
+<P><HR>
+<LINK REL="Precedes" HREF="itron00028.html">
+<LINK REV="Precedes" HREF="itron00026.html">
+<LINK REV="Subdocument" HREF="itron00006.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="itron00026.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="itron00006.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="itron00028.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS ITRON 3.0 API User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

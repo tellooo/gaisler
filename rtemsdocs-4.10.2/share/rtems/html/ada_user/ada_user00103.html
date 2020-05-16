@@ -1,0 +1,54 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/intr.texi line 391 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Interrupt Manager INTERRUPT_DISABLE - Disable Interrupts</TITLE>
+<LINK REL="Precedes" HREF="ada_user00104.html">
+<LINK REV="Precedes" HREF="ada_user00102.html">
+<LINK REV="Subdocument" HREF="ada_user00096.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00102.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00096.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00104.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>6.4.2: INTERRUPT_DISABLE - Disable Interrupts</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+function Interrupt_Disable return RTEMS.ISR_Level;
+</PRE>
+</DL>
+<H3>DIRECTIVE STATUS CODES:</H3>
+<P>
+NONE
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This directive disables all maskable interrupts and returns
+the previous <CODE>level</CODE>.  A later invocation of the
+<CODE>rtems.interrupt_enable</CODE> directive should be used to
+restore the interrupt level.
+</P>
+<H3>NOTES:</H3>
+<P>
+This directive will not cause the calling task to be preempted.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00104.html">
+<LINK REV="Precedes" HREF="ada_user00102.html">
+<LINK REV="Subdocument" HREF="ada_user00096.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00102.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00096.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00104.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

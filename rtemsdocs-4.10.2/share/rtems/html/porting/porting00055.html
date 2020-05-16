@@ -1,0 +1,58 @@
+<HTML>
+<!-- created Dec 13 2011 from taskcontext.texi line 535 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Task Context Management Start of Floating Point Context Area Macro</TITLE>
+<LINK REL="Precedes" HREF="porting00056.html">
+<LINK REV="Precedes" HREF="porting00054.html">
+<LINK REV="Subdocument" HREF="porting00041.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00054.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00041.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00056.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<H3>6.4.6: Start of Floating Point Context Area Macro</H3>
+<P>
+The _CPU_Context_Fp_start macro is used in the XXX routine and allows the initial pointer into a  floating point context area (used to save the floating point context) to be at an arbitrary place in the floating point context area.  This is necessary because some FP units are designed to have their context saved as a stack which grows into lower addresses.  Other FP units can be saved by simply moving registers into offsets from the base of the context area.  Finally some FP units provide a &quot;dump context&quot; instruction which could fill in from high to low or low to high based on the whim of the CPU designers.  Regardless, the address at which that floating point context area pointer should start within the actual floating point context area varies between ports and this macro provides a clean way of addressing this.
+</P>
+<P>
+This is a common implementation of the _CPU_Context_Fp_start routine which
+is suitable for many processors.  In particular, RISC processors tend to
+use this implementation since the floating point context is saved as a
+sequence of store operations.
+</P>
+<DL><DT><DD>
+<PRE>
+#define _CPU_Context_Fp_start( _base, _offset ) \
+   ( (void *) _Addresses_Add_offset( (_base), (_offset) ) )
+</PRE>
+</DL>
+<P>
+In contrast, the m68k treats the floating point context area as a stack
+which grows downward in memory.  Thus the following implementation of
+_CPU_Context_Fp_start is used in that port:
+</P>
+<DL><DT><DD>
+<PRE>
+XXX insert m68k version here
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="porting00056.html">
+<LINK REV="Precedes" HREF="porting00054.html">
+<LINK REV="Subdocument" HREF="porting00041.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00054.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00041.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00056.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,80 @@
+<HTML>
+<!-- created Dec 13 2011 from taskcontext.texi line 444 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Task Context Management CPU_USE_DEFERRED_FP_SWITCH Macro Setting</TITLE>
+<LINK REL="Precedes" HREF="porting00053.html">
+<LINK REV="Precedes" HREF="porting00051.html">
+<LINK REV="Subdocument" HREF="porting00041.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00051.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00041.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00053.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<H3>6.4.3: CPU_USE_DEFERRED_FP_SWITCH Macro Setting</H3>
+<P>
+The CPU_USE_DEFERRED_FP_SWITCH macro is set based upon the answer to the
+following question:  Should the saving of the floating point registers be
+deferred until a context switch is made to another different floating
+point task?  If the floating point context will not be stored until
+necessary, then this macro should be set to TRUE.  When set to TRUE, the
+floating point context of a task will remain in the floating point
+registers and not disturbed until another floating point task is switched
+to.
+</P>
+<P>
+If the CPU_USE_DEFERRED_FP_SWITCH is set to FALSE, then the floating point
+context is saved each time a floating point task is switched out and
+restored when the next floating point task is restored.  The state of the
+floating point registers between those two operations is not specified.
+</P>
+<P>
+There are a couple of known cases where the port should not defer saving
+the floating point context.  The first case is when the compiler generates
+instructions that use the FPU when floating point is not actually used.
+This occurs on the HP PA-RISC for example when an integer multiply is
+performed.  On the PowerPC, the printf routine includes a save of a
+floating point register to support printing floating point numbers even if
+the path that actually prints the floating point number is not invoked.
+In both of these cases, deferred floating point context switches can not
+be used.  If the floating point context has to be saved as part of
+interrupt dispatching, then it may also be necessary to disable deferred
+context switches.
+</P>
+<P>
+Setting this flag to TRUE results in using a different algorithm for
+deciding when to save and restore the floating point context.  The
+deferred FP switch algorithm minimizes the number of times the FP context
+is saved and restored.  The FP context is not saved until a context switch
+is made to another, different FP task.  Thus in a system with only one FP
+task, the FP context will never be saved or restored.
+</P>
+<P>
+The following illustrates setting the CPU_USE_DEFERRED_FP_SWITCH macro on
+a processor family such as the M68K or i386 which can use deferred
+floating point context switches.
+</P>
+<DL><DT><DD>
+<PRE>
+#define CPU_USE_DEFERRED_FP_SWITCH       TRUE
+</PRE>
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="porting00053.html">
+<LINK REV="Precedes" HREF="porting00051.html">
+<LINK REV="Subdocument" HREF="porting00041.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00051.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00041.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00053.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

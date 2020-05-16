@@ -1,0 +1,79 @@
+<HTML>
+<!-- created Dec 13 2011 from sparc.texi line 1151 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>SPARC Specific Information Processor Initialization</TITLE>
+<LINK REL="Precedes" HREF="">
+<LINK REV="Precedes" HREF="cpu_supplement00210.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00184.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00210.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00184.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="next"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<H3>11.6.2: Processor Initialization</H3>
+<P>
+It is the responsibility of the application's
+initialization code to initialize the TBR and install trap
+handlers for at least the register window overflow and register
+window underflow conditions.  Traps should be enabled before
+invoking any subroutines to allow for register window
+management.  However, interrupts should be disabled by setting
+the Processor Interrupt Level (pil) field of the psr to 15.
+RTEMS installs it's own Trap Table as part of initialization
+which is initialized with the contents of the Trap Table in
+place when the <CODE>rtems_initialize_executive</CODE> directive was invoked.
+Upon completion of executive initialization, interrupts are
+enabled.
+</P>
+<P>
+If this SPARC implementation supports on-chip caching
+and this is to be utilized, then it should be enabled during the
+reset application initialization code.
+</P>
+<P>
+In addition to the requirements described in the
+Board Support Packages chapter of the C
+Applications Users Manual for the reset code
+which is executed before the call to
+<CODE>rtems_initialize_executive</CODE>, the SPARC version has the following
+specific requirements:
+</P>
+<UL>
+<LI>Must leave the S bit of the status register set so that
+the SPARC remains in the supervisor state.
+
+<LI>Must set stack pointer (sp) such that a minimum stack
+size of MINIMUM_STACK_SIZE bytes is provided for the
+<CODE>rtems_initialize_executive</CODE> directive.
+
+<LI>Must disable all external interrupts (i.e. set the pil
+to 15).
+
+<LI>Must enable traps so window overflow and underflow
+conditions can be properly handled.
+
+<LI>Must initialize the SPARC's initial trap table with at
+least trap handlers for register window overflow and register
+window underflow.
+</UL>
+
+<P><HR>
+<LINK REL="Precedes" HREF="">
+<LINK REV="Precedes" HREF="cpu_supplement00210.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00184.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00210.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00184.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="next"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

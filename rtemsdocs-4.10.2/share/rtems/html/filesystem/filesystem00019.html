@@ -1,0 +1,91 @@
+<HTML>
+<!-- created Dec 13 2011 from syscalls.texi line 216 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>close</TITLE>
+<LINK REL="Precedes" HREF="filesystem00020.html">
+<LINK REV="Precedes" HREF="filesystem00018.html">
+<LINK REV="Subdocument" HREF="filesystem00014.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="filesystem00018.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="filesystem00014.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00020.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<H2>4.5: close</H2>
+<H3>File:</H3>
+<P>
+close.c
+</P>
+<H3>Processing:</H3>
+<P>
+This routine will allow for the closing of both network connections and
+file system devices. If the file descriptor is associated with a network
+device, the appropriate network function handler will be selected from a
+table of previously registered network functions (rtems_libio_handlers)
+and that function will be invoked.
+</P>
+<P>
+If the file descriptor refers to an entry in the filesystem, the
+appropriate handler will be selected using information that has been
+placed in the file control block for the device (rtems_libio_t structure).
+</P>
+<H3>Development Comments:</H3>
+<P>
+rtems_file_descriptor_type examines some of the upper bits of the file
+descriptor index. If it finds that the upper bits are set in the file
+descriptor index, the device referenced is a network device.
+</P>
+<P>
+Network device handlers are obtained from a special registration table
+(rtems_libio_handlers) that is set up during network initialization. The
+network handler invoked and the status of the network handler will be
+returned to the calling process.
+</P>
+<P>
+If none of the upper bits are set in the file descriptor index, the file
+descriptor refers to an element of the RTEMS filesystem.
+</P>
+<P>
+The following sequence will be performed for any filesystem file
+descriptor:
+</P>
+<OL>
+<LI>Use the rtems_libio_iop() function to obtain the rtems_libio_t
+structure for the file descriptor
+
+<LI>Range check the file descriptor using rtems_libio_check_fd()
+
+<LI>Determine if there is actually a function in the selected handler
+table that processes the close() operation for the filesystem and node
+type selected.  This is generally done to avoid execution attempts on
+functions that have not been implemented.
+
+<LI>If the function has been defined it is invoked with the file control
+block pointer as its argument.
+
+<LI>The file control block that was associated with the open file
+descriptor is marked as free using rtems_libio_free().
+
+<LI>The return code from the close handler is then passed back to the
+calling program.
+
+</OL>
+<P><HR>
+<LINK REL="Precedes" HREF="filesystem00020.html">
+<LINK REV="Precedes" HREF="filesystem00018.html">
+<LINK REV="Subdocument" HREF="filesystem00014.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="filesystem00018.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="filesystem00014.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="filesystem00020.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

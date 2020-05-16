@@ -1,0 +1,56 @@
+<HTML>
+<!-- created Dec 13 2011 from arm.texi line 98 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>ARM Specific Information Interrupt Processing</TITLE>
+<LINK REL="Precedes" HREF="cpu_supplement00029.html">
+<LINK REV="Precedes" HREF="cpu_supplement00023.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00020.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00023.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00020.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00029.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<H2>2.4: Interrupt Processing</H2>
+<MENU>
+<LI><A HREF="cpu_supplement00029.html">ARM Specific Information Interrupt Levels</A>
+<LI><A HREF="cpu_supplement00030.html">ARM Specific Information Interrupt Stack</A>
+</MENU>
+<P>
+The ARMv5 (and compatible) architecture has seven exception types:
+</P>
+<UL>
+<LI>Reset
+<LI>Undefined
+<LI>Software Interrupt (SWI)
+<LI>Prefetch Abort
+<LI>Data Abort
+<LI>Interrupt (IRQ)
+<LI>Fast Interrupt (FIQ)
+
+</UL>
+<P>
+Of these types only the IRQ has explicit operating system support.  It is
+intentional that the FIQ is not supported by the operating system.  Without
+operating system support for the FIQ it is not necessary to disable them during
+critical sections of the system.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="cpu_supplement00029.html">
+<LINK REV="Precedes" HREF="cpu_supplement00023.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00020.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00023.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00020.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00029.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

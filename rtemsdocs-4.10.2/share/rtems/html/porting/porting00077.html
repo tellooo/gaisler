@@ -1,0 +1,58 @@
+<HTML>
+<!-- created Dec 13 2011 from codetuning.texi line 169 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Code Tuning Parameters Partition Element Alignment</TITLE>
+<LINK REL="Precedes" HREF="porting00078.html">
+<LINK REV="Precedes" HREF="porting00076.html">
+<LINK REV="Subdocument" HREF="porting00074.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00076.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00074.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00078.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<H3>9.4.3: Partition Element Alignment</H3>
+<P>
+The CPU_PARTITION_ALIGNMENT macro is set to indicate the byte alignment
+requirement for memory buffers allocated by the RTEMS Partition Manager
+that is part of the Classic API.  This alignment requirement may be
+stricter than that for the data types alignment specified by
+CPU_ALIGNMENT.  It is common for the partition to follow the same
+alignment requirement as CPU_ALIGNMENT.  If the CPU_ALIGNMENT is strict
+enough for the partition, then this should be set to CPU_ALIGNMENT.  This
+macro is necessary to ensure that allocated memory is properly aligned for
+use by high level language routines.
+</P>
+<P>
+The following example illustrates how the CPU_PARTITION_ALIGNMENT macro is
+set when the required alignment for elements from the RTEMS Partition
+Manager is the same as the basic CPU alignment requirements.
+</P>
+<DL><DT><DD>
+<PRE>
+#define CPU_PARTITION_ALIGNMENT    CPU_ALIGNMENT
+</PRE>
+</DL>
+<P>
+NOTE:  This does not have to be a power of 2.  It does have to be greater
+or equal to than CPU_ALIGNMENT.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="porting00078.html">
+<LINK REV="Precedes" HREF="porting00076.html">
+<LINK REV="Subdocument" HREF="porting00074.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="porting00076.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="porting00074.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="porting00078.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Porting Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

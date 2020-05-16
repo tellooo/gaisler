@@ -1,0 +1,73 @@
+<HTML>
+<!-- created Dec 13 2011 from overview.texi line 261 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Overview RTEMS Internal Architecture</TITLE>
+<LINK REL="Precedes" HREF="c_user00009.html">
+<LINK REV="Precedes" HREF="c_user00007.html">
+<LINK REV="Subdocument" HREF="c_user00003.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00007.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00003.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00009.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H2>1.5: RTEMS Internal Architecture</H2>
+<P>
+RTEMS can be viewed as a set of layered components that work in
+harmony to provide a set of services to a real-time application
+system.  The executive interface presented to the application is
+formed by grouping directives into logical sets called resource managers.
+Functions utilized by multiple managers such as scheduling,
+dispatching, and object management are provided in the executive
+core.  The executive core depends on a small set of CPU dependent routines.
+Together these components provide a powerful run time
+environment that promotes the development of efficient real-time
+application systems.  The following figure illustrates this organization:
+</P>
+<P>
+<STRONG><CENTER>RTEMS Layered Architecture</CENTER></STRONG>
+</P>
+<IMG SRC="rtemspie.png" WIDTH=500 HEIGHT=300 ALT="RTEMS Layered Architecture">
+<P>
+Subsequent chapters present a detailed description of the capabilities
+provided by each of the following RTEMS managers:
+</P>
+<UL>
+<LI>initialization
+<LI>task
+<LI>interrupt
+<LI>clock
+<LI>timer
+<LI>semaphore
+<LI>message
+<LI>event
+<LI>signal
+<LI>partition
+<LI>region
+<LI>dual ported memory
+<LI>I/O
+<LI>fatal error
+<LI>rate monotonic
+<LI>user extensions
+<LI>multiprocessing
+</UL>
+
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00009.html">
+<LINK REV="Precedes" HREF="c_user00007.html">
+<LINK REV="Subdocument" HREF="c_user00003.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00007.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00003.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00009.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

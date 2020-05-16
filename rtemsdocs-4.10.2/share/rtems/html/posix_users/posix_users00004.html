@@ -1,0 +1,44 @@
+<HTML>
+<!-- created Dec 13 2011 from process.texi line 49 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Process Creation and Execution Manager Background</TITLE>
+<LINK REL="Precedes" HREF="posix_users00005.html">
+<LINK REV="Precedes" HREF="posix_users00003.html">
+<LINK REV="Subdocument" HREF="posix_users00002.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00003.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00002.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00005.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<H2>1.2: Background</H2>
+<P>
+POSIX process functionality can not be completely
+supported by RTEMS.  This is because RTEMS provides no memory
+protection and implements a <EM>single process, multi-threaded execution model</EM>.  In this light, RTEMS provides none of the
+routines that are associated with the creation of new processes.
+However, since the entire RTEMS application (e.g. executable)
+is logically a single POSIX process, RTEMS is able to provide
+implementations of many operations on processes.  The rule of
+thumb is that those routines provide a meaningful result.
+For example, <CODE>getpid()</CODE> returns the node number.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="posix_users00005.html">
+<LINK REV="Precedes" HREF="posix_users00003.html">
+<LINK REV="Subdocument" HREF="posix_users00002.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="posix_users00003.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="posix_users00002.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="posix_users00005.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS POSIX API User's Guide </CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

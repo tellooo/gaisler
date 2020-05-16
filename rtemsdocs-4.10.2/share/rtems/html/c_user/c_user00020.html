@@ -1,0 +1,89 @@
+<HTML>
+<!-- created Dec 13 2011 from concepts.texi line 370 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Key Concepts Time</TITLE>
+<LINK REL="Precedes" HREF="c_user00021.html">
+<LINK REV="Precedes" HREF="c_user00019.html">
+<LINK REV="Subdocument" HREF="c_user00016.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00019.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00016.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00021.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<H2>2.4: Time</H2>
+<P>
+The development of responsive real-time applications
+requires an understanding of how RTEMS maintains and supports
+time-related operations.  The basic unit of time in RTEMS is
+known as a tick.  The frequency of clock ticks is completely
+application dependent and determines the granularity and
+accuracy of all interval and calendar time operations.
+</P>
+<P>
+By tracking time in units of ticks, RTEMS is capable
+of supporting interval timing functions such as task delays,
+timeouts, timeslicing, the delayed execution of timer service
+routines, and the rate monotonic scheduling of tasks.  An
+interval is defined as a number of ticks relative to the current
+time.  For example, when a task delays for an interval of ten
+ticks, it is implied that the task will not execute until ten
+clock ticks have occurred.
+All intervals are specified using data type
+<CODE>rtems_interval</CODE>.
+</P>
+<P>
+A characteristic of interval timing is that the
+actual interval period may be a fraction of a tick less than the
+interval requested.  This occurs because the time at which the
+delay timer is set up occurs at some time between two clock
+ticks.  Therefore, the first countdown tick occurs in less than
+the complete time interval for a tick.  This can be a problem if
+the clock granularity is large.
+</P>
+<P>
+The rate monotonic scheduling algorithm is a hard
+real-time scheduling methodology.  This methodology provides
+rules which allows one to guarantee that a set of independent
+periodic tasks will always meet their deadlines -- even under
+transient overload conditions.  The rate monotonic manager
+provides directives built upon the Clock Manager's interval
+timer support routines.
+</P>
+<P>
+Interval timing is not sufficient for the many
+applications which require that time be kept in wall time or
+true calendar form.  Consequently, RTEMS maintains the current
+date and time.  This allows selected time operations to be
+scheduled at an actual calendar date and time.  For example, a
+task could request to delay until midnight on New Year's Eve
+before lowering the ball at Times Square.
+The data type <CODE>rtems_time_of_day</CODE> is used to specify
+calendar time in RTEMS services.
+See <A HREF="c_user00027.html">Clock Manager Time and Date Data Structures</A>.
+</P>
+<P>
+Obviously, the directives which use intervals or wall
+time cannot operate without some external mechanism which
+provides a periodic clock tick.  This clock tick is typically
+provided by a real time clock or counter/timer device.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="c_user00021.html">
+<LINK REV="Precedes" HREF="c_user00019.html">
+<LINK REV="Subdocument" HREF="c_user00016.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="c_user00019.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="c_user00016.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="c_user00021.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS C User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

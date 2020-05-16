@@ -1,0 +1,69 @@
+<HTML>
+<!-- created Dec 13 2011 from general.texi line 342 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Port Specific Information Disabling of Interrupts by RTEMS</TITLE>
+<LINK REL="Precedes" HREF="cpu_supplement00007.html">
+<LINK REV="Precedes" HREF="cpu_supplement00017.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00006.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00017.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00006.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00007.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<H3>1.4.3: Disabling of Interrupts by RTEMS</H3>
+<P>
+During the execution of directive calls, critical sections of code may
+be executed.  When these sections are encountered, RTEMS disables all
+external interrupts before the execution of this section and restores
+them to the previous level upon completion of the section.  RTEMS has
+been optimized to ensure that interrupts are disabled for the shortest
+number of instructions possible.  Since the precise number of instructions
+and their execution time varies based upon target CPU family, CPU model,
+board memory speed, compiler version, and optimization level, it is
+not practical to provide the precise number for all possible RTEMS
+configurations.
+</P>
+<P>
+Historically, the measurements were made by hand analyzing and counting
+the execution time of instruction sequences during interrupt disable
+critical sections.  For reference purposes, on a 16 Mhz Motorola
+MC68020, the maximum interrupt disable period was typically approximately
+ten (10) to thirteen (13) microseconds.  This architecture was memory bound
+and had a slow bit scan instruction.  In contrast, during the same
+period a 14 Mhz SPARC would have a worst case disable time of approximately
+two (2) to three (3) microseconds because it had a single cycle bit scan
+instruction and used fewer cycles for memory accesses.
+</P>
+<P>
+If you are interested in knowing the worst case execution time for
+a particular version of RTEMS, please contact OAR Corporation and
+we will be happy to product the results as a consulting service.
+</P>
+<P>
+Non-maskable interrupts (NMI) cannot be disabled, and
+ISRs which execute at this level MUST NEVER issue RTEMS system
+calls.  If a directive is invoked, unpredictable results may
+occur due to the inability of RTEMS to protect its critical
+sections.  However, ISRs that make no system calls may safely
+execute as non-maskable interrupts.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="cpu_supplement00007.html">
+<LINK REV="Precedes" HREF="cpu_supplement00017.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00006.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00017.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00006.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00007.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

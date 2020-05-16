@@ -1,0 +1,105 @@
+<HTML>
+<!-- created Dec 13 2011 from preface.texi line 10 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Preface</TITLE>
+<LINK REL="Precedes" HREF="">
+<LINK REV="Precedes" HREF="index.html">
+<LINK REV="Subdocument" HREF="index.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="index.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="index.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="next"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<H1>Preface</H1>
+<P>
+This document describes the implementation of the RTEMS filesystem
+infrastructure.  This infrastructure supports the following
+capabilities:
+</P>
+<UL>
+<LI>Mountable file systems
+
+<LI>Hierarchical file system directory structure
+
+<LI>POSIX compliant set of routines for the manipulation of files and directories
+
+<LI>Individual file and directory support for the following:
+
+<OL>
+<LI>Permissions for read, write and execute
+
+<LI>User ID
+
+<LI>Group ID
+
+<LI>Access time
+
+<LI>Modification time
+
+<LI>Creation time
+
+</OL>
+<LI>Hard links to files and directories
+
+<LI>Symbolic links to files and directories
+
+</UL>
+<P>
+This has been implemented to provide the framework for a UNIX-like
+file system support. POSIX file and directory functions have been
+implemented that allow a standard method of accessing file, device and
+directory information within file systems. The file system concept that
+has been implemented allows for expansion and adaptation of the file
+system to a variety of existing and future data storage devices. To this
+end, file system mount and unmount capabilities have been included in this
+RTEMS framework.
+</P>
+<P>
+This framework slightly alters the manner in which devices are handled
+under RTEMS from that of public release 4.0.0 and earlier.  Devices that
+are defined under a given RTEMS configuration will now be registered as
+files in a mounted file system.  Access to these device drivers and their
+associated devices may now be performed through the traditional file system
+open(), read(), write(), lseek(), fstat() and ioctl() functions in addition
+to the interface provided by the IO Manager in the RTEMS Classic API.
+</P>
+<P>
+An In-Memory File System (IMFS) is included which provides full POSIX
+filesystem functionality yet is RAM based.  The IMFS maintains a
+node structure for each file, device, and directory in each mounted
+instantiation of its file system. The node structure is used to
+manage ownership, access rights, access time, modification time,
+and creation time.  A union of structures within the IMFS nodal
+structure provide for manipulation of file data, device selection,
+or directory content as required by the nodal type. Manipulation of
+these properties is accomplished through the POSIX set of file and
+directory functions.  In addition to being useful in its own right,
+the IMFS serves as a full featured example filesystem.
+</P>
+<P>
+The intended audience for this document is those persons implementing
+their own filesystem.  Users of the filesystem may find information
+on the implementation useful.  But the user interface to the filesystem
+is through the ISO/ANSI C Library and POSIX 1003.1b file and directory
+APIs.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="">
+<LINK REV="Precedes" HREF="index.html">
+<LINK REV="Subdocument" HREF="index.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="index.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="index.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A><IMG ALIGN=MIDDLE SRC="../images/missing-arrow.gif" ALT="next"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Filesystem Design Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,81 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/concepts.texi line 265 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Key Concepts Object ID Description</TITLE>
+<LINK REL="Precedes" HREF="ada_user00019.html">
+<LINK REV="Precedes" HREF="ada_user00026.html">
+<LINK REV="Subdocument" HREF="ada_user00018.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00026.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00018.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00019.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>2.2.3: Object ID Description</H3>
+<P>
+The components of an object ID make it possible
+to quickly locate any object in even the most complicated
+multiprocessor system.  Object ID's are associated with an
+object by RTEMS when the object is created and the corresponding
+ID is returned by the appropriate object create directive.  The
+object ID is required as input to all directives involving
+objects, except those which create an object or obtain the ID of
+an object.
+</P>
+<P>
+The object identification directives can be used to
+dynamically obtain a particular object's ID given its name.
+This mapping is accomplished by searching the name table
+associated with this object type.  If the name is non-unique,
+then the ID associated with the first occurrence of the name
+will be returned to the application.  Since object IDs are
+returned when the object is created, the object identification
+directives are not necessary in a properly designed single
+processor application.
+</P>
+<P>
+In addition, services are provided to portably examine the
+subcomponents of an RTEMS ID.  These services are
+described in detail later in this manual but are prototyped
+as follows:
+</P>
+<DL><DT><DD>
+<PRE>
+uint32_t rtems_object_id_get_api( rtems_id );
+uint32_t rtems_object_id_get_class( rtems_id );
+uint32_t rtems_object_id_get_node( rtems_id );
+uint32_t rtems_object_id_get_index( rtems_id );
+</PRE>
+</DL>
+<P>
+An object control block is a data structure defined
+by RTEMS which contains the information necessary to manage a
+particular object type.  For efficiency reasons, the format of
+each object type's control block is different.  However, many of
+the fields are similar in function.  The number of each type of
+control block is application dependent and determined by the
+values specified in the user's Configuration Table.  An object
+control block is allocated at object create time and freed when
+the object is deleted.  With the exception of user extension
+routines, object control blocks are not directly manipulated by
+user applications.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00019.html">
+<LINK REV="Precedes" HREF="ada_user00026.html">
+<LINK REV="Subdocument" HREF="ada_user00018.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00026.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00018.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00019.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

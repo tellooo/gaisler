@@ -1,0 +1,53 @@
+<HTML>
+<!-- created Dec 13 2011 from analog.texi line 79 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Analog Driver Analog Driver Configuration</TITLE>
+<LINK REL="Precedes" HREF="bsp_howto00148.html">
+<LINK REV="Precedes" HREF="bsp_howto00146.html">
+<LINK REV="Subdocument" HREF="bsp_howto00145.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00146.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00145.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00148.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<H2>18.2: Analog Driver Configuration</H2>
+<P>
+There is not a standard analog driver configuration table but some
+fields are common across different drivers.  The analog driver
+configuration table is typically an array of structures with each
+structure containing the information for a particular board.
+The following is a list of the type of information normally required
+to configure an analog board:
+</P>
+<DL>
+<DT><STRONG>board_offset</STRONG>
+<DD>
+is the base address of a board.
+
+<DT><STRONG>DAC_initial_values</STRONG>
+<DD>
+is an array of the voltages that should be written to each DAC
+during initialization.  This allows the driver to start the board
+in a known state.
+
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="bsp_howto00148.html">
+<LINK REV="Precedes" HREF="bsp_howto00146.html">
+<LINK REV="Subdocument" HREF="bsp_howto00145.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="bsp_howto00146.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="bsp_howto00145.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="bsp_howto00148.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>BSP and Device Driver Development Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,59 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/clock.texi line 730 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Clock Manager CLOCK_GET_UPTIME - Get the time since boot</TITLE>
+<LINK REL="Precedes" HREF="ada_user00127.html">
+<LINK REV="Precedes" HREF="ada_user00125.html">
+<LINK REV="Subdocument" HREF="ada_user00111.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00125.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00111.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00127.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>7.4.8: CLOCK_GET_UPTIME - Get the time since boot</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+procedure Clock_Get_Uptime (
+   Uptime :    out RTEMS.Timespec;
+   Result :    out RTEMS.Status_Codes
+);
+</PRE>
+</DL>
+<H3>DIRECTIVE STATUS CODES:</H3>
+<P>
+<CODE>RTEMS.SUCCESSFUL</CODE> - clock tick processed successfully<BR>
+
+<CODE>RTEMS.INVALID_ADDRESS</CODE> - <CODE>time_buffer</CODE> is NULL
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This directive returns the seconds and nanoseconds since the
+system was booted.  If the BSP supports nanosecond clock
+accuracy, the time reported will probably be different on every
+call.
+</P>
+<H3>NOTES:</H3>
+<P>
+This directive may be called from an ISR.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00127.html">
+<LINK REV="Precedes" HREF="ada_user00125.html">
+<LINK REV="Subdocument" HREF="ada_user00111.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00125.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00111.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00127.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

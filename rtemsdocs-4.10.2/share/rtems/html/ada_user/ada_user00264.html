@@ -1,0 +1,64 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/region.texi line 415 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Region Manager REGION_IDENT - Get ID of a region</TITLE>
+<LINK REL="Precedes" HREF="ada_user00265.html">
+<LINK REV="Precedes" HREF="ada_user00263.html">
+<LINK REV="Subdocument" HREF="ada_user00251.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00263.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00251.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00265.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>14.4.2: REGION_IDENT - Get ID of a region</H3>
+<H3>CALLING SEQUENCE:</H3>
+<DL><DT><DD>
+<PRE>
+procedure Region_Ident (
+   Name   : in     RTEMS.Name;
+   ID     :    out RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+</PRE>
+</DL>
+<H3>DIRECTIVE STATUS CODES:</H3>
+<P>
+<CODE>RTEMS.SUCCESSFUL</CODE> - region identified successfully<BR>
+
+<CODE>RTEMS.INVALID_ADDRESS</CODE> - <CODE>id</CODE> is NULL<BR>
+
+<CODE>RTEMS.INVALID_NAME</CODE> - region name not found
+</P>
+<H3>DESCRIPTION:</H3>
+<P>
+This directive obtains the region id associated with
+the region name to be acquired.  If the region name is not
+unique, then the region id will match one of the regions with
+that name.  However, this region id is not guaranteed to
+correspond to the desired region.  The region id is used to
+access this region in other region manager directives.
+</P>
+<H3>NOTES:</H3>
+<P>
+This directive will not cause the running task to be preempted.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00265.html">
+<LINK REV="Precedes" HREF="ada_user00263.html">
+<LINK REV="Subdocument" HREF="ada_user00251.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00263.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00251.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00265.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

@@ -1,0 +1,56 @@
+<HTML>
+<!-- created Dec 13 2011 from networkapp.texi line 61 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>System Configuration</TITLE>
+<LINK REL="Precedes" HREF="networking00019.html">
+<LINK REV="Precedes" HREF="networking00022.html">
+<LINK REV="Subdocument" HREF="networking00016.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="networking00022.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="networking00016.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="networking00019.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Network Supplement</CITE></P>
+<H2>3.2: System Configuration</H2>
+<P>
+The networking tasks allocate some RTEMS objects.  These
+must be accounted for in the application configuration table.  The following
+lists the requirements.
+</P>
+<DL>
+<DT><STRONG>TASKS</STRONG>
+<DD>
+One network task plus a receive and transmit task for each device.
+
+<DT><STRONG>SEMAPHORES</STRONG>
+<DD>
+One network semaphore plus one syslog mutex semaphore if the application uses
+openlog/syslog.
+
+<DT><STRONG>EVENTS</STRONG>
+<DD>
+The network stack uses <CODE>RTEMS_EVENT_24</CODE> and <CODE>RTEMS_EVENT_25</CODE>.
+This has no effect on the application configuration, but
+application tasks which call the network functions should not
+use these events for other purposes.
+
+</DL>
+<P><HR>
+<LINK REL="Precedes" HREF="networking00019.html">
+<LINK REV="Precedes" HREF="networking00022.html">
+<LINK REV="Subdocument" HREF="networking00016.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="networking00022.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="networking00016.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="networking00019.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Network Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

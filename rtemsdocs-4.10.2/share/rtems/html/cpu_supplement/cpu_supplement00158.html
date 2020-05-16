@@ -1,0 +1,83 @@
+<HTML>
+<!-- created Dec 13 2011 from powerpc.texi line 652 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>PowerPC Specific Information Vectoring of Interrupt Handler</TITLE>
+<LINK REL="Precedes" HREF="cpu_supplement00159.html">
+<LINK REV="Precedes" HREF="cpu_supplement00157.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00135.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00157.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00135.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00159.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<H3>9.4.2: Vectoring of Interrupt Handler</H3>
+<P>
+Upon determining that an exception can be taken the PowerPC automatically
+performs the following actions:
+</P>
+<UL>
+<LI>an instruction address is loaded into SRR0
+
+<LI>bits 33-36 and 42-47 of SRR1 are loaded with information
+specific to the exception.
+
+<LI>bits 0-32, 37-41, and 48-63 of SRR1 are loaded with corresponding
+bits from the MSR.
+
+<LI>the MSR is set based upon the exception type.
+
+<LI>instruction fetch and execution resumes, using the new MSR value, at a location specific to the execption type.
+
+</UL>
+<P>
+If the interrupt handler was installed as an RTEMS
+interrupt handler, then upon receipt of the interrupt, the
+processor passes control to the RTEMS interrupt handler which
+performs the following actions:
+</P>
+<UL>
+<LI>saves the state of the interrupted task on it's stack,
+
+<LI>saves all registers which are not normally preserved
+by the calling sequence so the user's interrupt service
+routine can be written in a high-level language.
+
+<LI>if this is the outermost (i.e. non-nested) interrupt,
+then the RTEMS interrupt handler switches from the current stack
+to the interrupt stack,
+
+<LI>enables exceptions,
+
+<LI>invokes the vectors to a user interrupt service routine (ISR).
+</UL>
+
+<P>
+Asynchronous interrupts are ignored while exceptions are
+disabled.  Synchronous interrupts which occur while are
+disabled result in the CPU being forced into an error mode.
+</P>
+<P>
+A nested interrupt is processed similarly with the
+exception that the current stack need not be switched to the
+interrupt stack.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="cpu_supplement00159.html">
+<LINK REV="Precedes" HREF="cpu_supplement00157.html">
+<LINK REV="Subdocument" HREF="cpu_supplement00135.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="cpu_supplement00157.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="cpu_supplement00135.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00159.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

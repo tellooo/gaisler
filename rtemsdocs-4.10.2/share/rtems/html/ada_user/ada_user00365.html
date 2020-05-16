@@ -1,0 +1,72 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/barrier.texi line 89 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Barrier Manager Building a Barrier Attribute Set</TITLE>
+<LINK REL="Precedes" HREF="ada_user00362.html">
+<LINK REV="Precedes" HREF="ada_user00364.html">
+<LINK REV="Subdocument" HREF="ada_user00361.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00364.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00361.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00362.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>20.2.2: Building a Barrier Attribute Set</H3>
+<P>
+In general, an attribute set is built by a bitwise OR
+of the desired attribute components.  The following table lists
+the set of valid barrier attributes:
+</P>
+<UL>
+<LI><CODE>RTEMS.BARRIER_AUTOMATIC_RELEASE</CODE> - automatically
+release the barrier when the configured number of tasks are blocked
+
+<LI><CODE>RTEMS.BARRIER_MANUAL_RELEASE</CODE> - only release
+the barrier when the application invokes the
+<CODE>rtems.barrier_release</CODE> directive.  (default)
+
+</UL>
+<P>
+<STRONG>NOTE</STRONG>: Barriers only support FIFO blocking order because all
+waiting tasks are released as a set.  Thus the released tasks
+will all become ready to execute at the same time and compete
+for the processor based upon their priority.
+</P>
+<P>
+Attribute values are specifically designed to be
+mutually exclusive, therefore bitwise OR and addition operations
+are equivalent as long as each attribute appears exactly once in
+the component list.  An attribute listed as a default is not
+required to appear in the attribute list, although it is a good
+programming practice to specify default attributes.  If all
+defaults are desired, the attribute
+<CODE>RTEMS.DEFAULT_ATTRIBUTES</CODE> should be
+specified on this call.
+</P>
+<P>
+This example demonstrates the attribute_set parameter needed to create a
+barrier with the automatic release policy.  The
+<CODE>attribute_set</CODE> parameter passed to the
+<CODE>rtems.barrier_create</CODE> directive will be
+<CODE>RTEMS.BARRIER_AUTOMATIC_RELEASE</CODE>.  In this case, the
+user must also specify the <EM>maximum_waiters</EM> parameter.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00362.html">
+<LINK REV="Precedes" HREF="ada_user00364.html">
+<LINK REV="Subdocument" HREF="ada_user00361.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00364.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00361.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00362.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

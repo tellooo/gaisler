@@ -1,0 +1,82 @@
+<HTML>
+<!-- created Dec 13 2011 from preface.texi line 10 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Preface</TITLE>
+<LINK REL="Precedes" HREF="cpu_supplement00002.html">
+<LINK REV="Precedes" HREF="index.html">
+<LINK REV="Subdocument" HREF="index.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="index.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="index.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00002.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<H1>Preface</H1>
+<P>
+The Real Time Executive for Multiprocessor Systems
+(RTEMS) is designed to be portable across multiple processor
+architectures.  However, the nature of real-time systems makes
+it essential that the application designer understand certain
+processor dependent implementation details.  These processor
+dependencies include calling convention, board support package
+issues, interrupt processing, exact RTEMS memory requirements,
+performance data, header files, and the assembly language
+interface to the executive.
+</P>
+<P>
+Each architecture represents a CPU family and usually there are
+a wide variety of CPU models within it.  These models share a
+common Instruction Set Architecture (ISA) which often varies
+based upon some well-defined rules.  There are often
+multiple implementations of the ISA and these may be from
+one or multiple vendors.
+</P>
+<P>
+On top of variations in the ISA, there may also be variations
+which occur when a CPU core implementation is combined with
+a set of peripherals to form a system on chip.  For example,
+there are many ARM CPU models from numerous semiconductor
+vendors and a wide variety of peripherals.  But at the
+ISA level, they share a common compatibility.
+</P>
+<P>
+RTEMS depends upon this core similarity across the CPU models
+and leverages that to minimize the source code that is specific
+to any particular CPU core implementation or CPU model.
+</P>
+<P>
+This manual is separate and distinct from the RTEMS Porting
+Guide.  That manual is a guide on porting RTEMS to a new
+architecture.  This manual is focused on the more mundane
+CPU architecture specific issues that may impact
+application development.  For example, if you need to write
+a subroutine in assembly language, it is critical to understand
+the calling conventions for the target architecture.
+</P>
+<P>
+The first chapter in this manual describes these issues 
+in general terms.  In a sense, it is posing the questions
+one should be aware may need to be answered and understood
+when porting an RTEMS application to a new architecture. 
+Each subsequent chapter gives the answers to those questions
+for a particular CPU architecture.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="cpu_supplement00002.html">
+<LINK REV="Precedes" HREF="index.html">
+<LINK REV="Subdocument" HREF="index.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="index.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="index.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="cpu_supplement00002.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS CPU Architecture Supplement</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>

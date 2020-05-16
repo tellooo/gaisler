@@ -1,0 +1,60 @@
+<HTML>
+<!-- created Dec 13 2011 from ../user/task.texi line 162 via texi2www -->
+<BODY BGCOLOR="FFFFFF">
+<A HREF="http://www.rtems.com" target="Text Frame">
+  <IMG align=right BORDER=0 SRC="../images/rtems_logo.jpg" ALT="RTEMS Logo"> </A>
+<H1>RTEMS 4.10.2 On-Line Library</H1>
+<HR>
+<HEAD>
+<TITLE>Task Manager Task Priority</TITLE>
+<LINK REL="Precedes" HREF="ada_user00058.html">
+<LINK REV="Precedes" HREF="ada_user00056.html">
+<LINK REV="Subdocument" HREF="ada_user00051.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00056.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00051.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00058.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<H3>5.2.4: Task Priority</H3>
+<P>
+A task's priority determines its importance in relation to the
+other tasks executing on the same processor.  RTEMS supports 255
+levels of priority ranging from 1 to 255.  The data type
+<CODE>rtems.task_priority</CODE> is used to store task
+priorities.
+</P>
+<P>
+Tasks of numerically
+smaller priority values are more important tasks than tasks of
+numerically larger priority values.  For example, a task at
+priority level 5 is of higher privilege than a task at priority
+level 10.  There is no limit to the number of tasks assigned to
+the same priority.
+</P>
+<P>
+Each task has a priority associated with it at all times.  The
+initial value of this priority is assigned at task creation
+time.  The priority of a task may be changed at any subsequent
+time.
+</P>
+<P>
+Priorities are used by the scheduler to determine which ready
+task will be allowed to execute.  In general, the higher the
+logical priority of a task, the more likely it is to receive
+processor execution time.
+</P>
+<P><HR>
+<LINK REL="Precedes" HREF="ada_user00058.html">
+<LINK REV="Precedes" HREF="ada_user00056.html">
+<LINK REV="Subdocument" HREF="ada_user00051.html">
+<LINK REV="Library" HREF="../index.html">
+</HEAD><BODY><P>
+<A HREF="ada_user00056.html"><IMG ALIGN=MIDDLE SRC="../images/prev-arrow.gif" ALT="PREV"></A>
+<A HREF="ada_user00051.html"> <IMG ALIGN=MIDDLE SRC="../images/up-arrow.gif" ALT="UP"></A>
+<A HREF="ada_user00058.html"><IMG ALIGN=MIDDLE SRC="../images/next-arrow.gif" ALT="NEXT"></A>
+<A HREF="../index.html"> <IMG ALIGN=MIDDLE SRC="../images/dir-arrow.gif" ALT="Bookshelf"></A>
+<CITE>RTEMS Ada User's Guide</CITE></P>
+<P>Copyright &copy; 1988-2008 <A HREF="http://www.oarcorp.com" target="Text Frame">OAR Corporation</A>
+</BODY></HTML>
